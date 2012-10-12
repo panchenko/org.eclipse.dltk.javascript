@@ -13,27 +13,27 @@ package org.eclipse.dltk.javascript.typeinfo;
 
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
-public enum DefaultMetaType implements MetaType {
+public abstract class DefaultMetaType implements MetaType {
 
-	DEFAULT;
+	public static final MetaType DEFAULT = new Instance();
 
-	public String getId() {
-		return MetaType.class.getName() + "." + name();
+	static class Instance extends DefaultMetaType {
+		public String getId() {
+			return MetaType.class.getName() + ".DEFAULT";
+		}
 	}
 
 	public IRType toRType(ITypeSystem typeSystem, Type type) {
-		// TODO (alex) compatibility
-		for (IRTypeFactory factory : TypeInfoManager.getRTypeFactories()) {
-			final IRType runtimeType = factory.create(type);
-			if (runtimeType != null) {
-				return runtimeType;
-			}
-		}
 		return new RSimpleType(typeSystem, type);
 	}
 
 	public IRType toRType(ITypeSystem typeSystem, IRTypeDeclaration declaration) {
 		return new RSimpleType(typeSystem, declaration);
+	}
+
+	@Override
+	public String toString() {
+		return getId();
 	}
 
 }

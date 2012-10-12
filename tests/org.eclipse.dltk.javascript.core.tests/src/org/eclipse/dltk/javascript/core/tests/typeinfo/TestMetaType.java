@@ -12,29 +12,17 @@
 package org.eclipse.dltk.javascript.core.tests.typeinfo;
 
 import org.eclipse.dltk.javascript.typeinfo.DefaultMetaType;
-import org.eclipse.dltk.javascript.typeinfo.IRType;
-import org.eclipse.dltk.javascript.typeinfo.IRTypeDeclaration;
-import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
-import org.eclipse.dltk.javascript.typeinfo.MetaType;
-import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
-public enum TestMetaType implements MetaType {
+public class TestMetaType extends DefaultMetaType {
 
-	INSTANCE;
+	public static final TestMetaType INSTANCE = new TestMetaType();
+
+	private TestMetaType() {
+	}
 
 	@Override
 	public String getId() {
-		return getClass().getName() + "." + name();
-	}
-
-	@Override
-	public IRType toRType(ITypeSystem typeSystem, Type type) {
-		return DefaultMetaType.DEFAULT.toRType(typeSystem, type);
-	}
-
-	@Override
-	public IRType toRType(ITypeSystem typeSystem, IRTypeDeclaration declaration) {
-		return DefaultMetaType.DEFAULT.toRType(typeSystem, declaration);
+		return TestMetaType.class.getName() + ".INSTANCE";
 	}
 
 }

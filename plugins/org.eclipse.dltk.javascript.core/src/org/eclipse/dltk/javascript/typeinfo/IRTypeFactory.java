@@ -13,23 +13,12 @@ package org.eclipse.dltk.javascript.typeinfo;
 
 import org.eclipse.dltk.annotations.ConfigurationElement;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
-import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 /**
  * Factory to create runtime type instance for the specified model object
  */
 @ConfigurationElement("runtimeTypeFactory")
 public interface IRTypeFactory {
-
-	/**
-	 * Converts the specified {@link Type} to the corresponding {@link IRType}.
-	 * This method is deprecated, use {@link MetaType} instead.
-	 * 
-	 * @param type
-	 * @return
-	 */
-	@Deprecated
-	IRType create(Type type);
 
 	IRType create(ITypeSystem typeSystem, JSType type);
 

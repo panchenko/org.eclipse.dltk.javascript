@@ -11,6 +11,11 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExecutableExtension;
@@ -63,13 +68,23 @@ public class MetaTypeFactory implements IExecutableExtensionFactory,
 		try {
 			final Class<?> clazz = bundle
 					.loadClass(className.substring(0, dot));
-			if (!clazz.isEnum()) {
-				throw new CoreException(new Status(IStatus.ERROR,
-						JavaScriptPlugin.PLUGIN_ID, 0, "Class "
-								+ clazz.getName() + " must be enum for "
-								+ getClass(), null));
-			}
 			final String name = className.substring(dot + 1);
+			if (!clazz.isEnum()) {
+				final Field field = clazz.getDeclaredField(name);
+				if (isConstField(field)) {
+					try {
+						return field.get(null);
+					} catch (IllegalAccessException e) {
+						throw new CoreException(new Status(IStatus.ERROR,
+								JavaScriptPlugin.PLUGIN_ID, 0, "Error reading "
+										+ field, e));
+					}
+				} else {
+					throw new CoreException(new Status(IStatus.ERROR,
+							JavaScriptPlugin.PLUGIN_ID, 0, "Field " + field
+									+ " must be public static final", null));
+				}
+			}
 			final Enum<?>[] entries = (Enum<?>[]) clazz.getEnumConstants();
 			for (Enum<?> entry : entries) {
 				if (name.equals(entry.name())) {
@@ -81,14 +96,32 @@ public class MetaTypeFactory implements IExecutableExtensionFactory,
 							+ " for " + getClass(), null));
 		} catch (ClassNotFoundException e) {
 			// fall-through and try the whole string
+		} catch (NoSuchFieldException e1) {
+			// fall-through and try the whole string
 		}
 		try {
 			final Class<?> clazz = bundle.loadClass(className);
 			if (!clazz.isEnum()) {
-				throw new CoreException(new Status(IStatus.ERROR,
-						JavaScriptPlugin.PLUGIN_ID, 0, "Class "
-								+ clazz.getName() + " must be enum for "
-								+ getClass(), null));
+				final List<Field> fields = new ArrayList<Field>();
+				for (Field field : clazz.getDeclaredFields()) {
+					if (isConstField(field)) {
+						fields.add(field);
+					}
+				}
+				if (fields.size() != 1) {
+					throw new CoreException(new Status(IStatus.ERROR,
+							JavaScriptPlugin.PLUGIN_ID, 0,
+							"Single public static final field expected in "
+									+ clazz.getName() + " for " + getClass(),
+							null));
+				}
+				try {
+					return fields.get(0).get(null);
+				} catch (IllegalAccessException e) {
+					throw new CoreException(new Status(IStatus.ERROR,
+							JavaScriptPlugin.PLUGIN_ID, 0, "Error reading "
+									+ fields.get(0), e));
+				}
 			}
 			final Object[] entries = clazz.getEnumConstants();
 			if (entries.length != 1) {
@@ -103,5 +136,10 @@ public class MetaTypeFactory implements IExecutableExtensionFactory,
 					JavaScriptPlugin.PLUGIN_ID, 0, "Class " + className
 							+ " not found for " + getClass(), e));
 		}
+	}
+
+	private boolean isConstField(Field field) {
+		return (field.getModifiers() & (Modifier.PUBLIC | Modifier.STATIC | Modifier.FINAL)) == (Modifier.PUBLIC
+				| Modifier.STATIC | Modifier.FINAL);
 	}
 }

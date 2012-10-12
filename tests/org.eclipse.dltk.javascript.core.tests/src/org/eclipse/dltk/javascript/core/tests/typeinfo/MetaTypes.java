@@ -12,29 +12,21 @@
 package org.eclipse.dltk.javascript.core.tests.typeinfo;
 
 import org.eclipse.dltk.javascript.typeinfo.DefaultMetaType;
-import org.eclipse.dltk.javascript.typeinfo.IRType;
-import org.eclipse.dltk.javascript.typeinfo.IRTypeDeclaration;
-import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
-import org.eclipse.dltk.javascript.typeinfo.MetaType;
-import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
-public enum MetaTypes implements MetaType {
+public abstract class MetaTypes extends DefaultMetaType {
 
-	ONE, TWO;
+	public static final MetaTypes ONE = new MetaTypes() {
+		@Override
+		public String getId() {
+			return MetaTypes.class.getName() + ".ONE";
+		}
+	};
 
-	@Override
-	public String getId() {
-		return getClass().getName() + "." + name();
-	}
-
-	@Override
-	public IRType toRType(ITypeSystem typeSystem, Type type) {
-		return DefaultMetaType.DEFAULT.toRType(typeSystem, type);
-	}
-
-	@Override
-	public IRType toRType(ITypeSystem typeSystem, IRTypeDeclaration declaration) {
-		return DefaultMetaType.DEFAULT.toRType(typeSystem, declaration);
-	}
+	public static final MetaTypes TWO = new MetaTypes() {
+		@Override
+		public String getId() {
+			return MetaTypes.class.getName() + ".TWO";
+		}
+	};
 
 }
