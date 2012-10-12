@@ -11,6 +11,10 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.parser.structure;
 
+import org.eclipse.dltk.internal.javascript.ti.JSDocSupport;
+import org.eclipse.dltk.internal.javascript.ti.JSMethod;
+import org.eclipse.dltk.internal.javascript.ti.JSVariable;
+import org.eclipse.dltk.javascript.ast.Argument;
 import org.eclipse.dltk.javascript.ast.CallExpression;
 import org.eclipse.dltk.javascript.ast.DecimalLiteral;
 import org.eclipse.dltk.javascript.ast.Expression;
@@ -25,41 +29,63 @@ import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.SetMethod;
 import org.eclipse.dltk.javascript.ast.StringLiteral;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
+import org.eclipse.dltk.javascript.parser.JSProblemReporter;
+import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
+import org.eclipse.dltk.javascript.typeinfo.ITypeChecker;
+import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
 
+@Structure3
 public class StructureReporter3 extends StructureReporterBase {
+
+	private JSDocSupport jsdocSupport = new JSDocSupport();
+	private final JSProblemReporter fReporter = null;
+	private final ITypeChecker fTypeChecker = null;
 
 	@Override
 	public IStructureNode visitScript(Script node) {
 		push(new ScriptScope());
+		// TODO visit scope declarations?
 		super.visitScript(node);
 		return pop();
 	}
 
 	@Override
 	public IStructureNode visitFunctionStatement(FunctionStatement node) {
+		final JSMethod method = new JSMethod(node, ReferenceSource.UNKNOWN);
+		jsdocSupport.processMethod(node, method, fReporter, fTypeChecker);
+		final FunctionNode functionNode;
 		if (node.isDeclaration()) {
-			final FunctionDeclaration declaration = new FunctionDeclaration(
-					peek(), node);
-			peek().addChild(declaration);
-			push(declaration);
+			functionNode = new FunctionDeclaration(peek(), node,
+					method.getType());
 		} else {
-			final FunctionExpression expression = new FunctionExpression(peek());
-			peek().addChild(expression);
-			push(expression);
+			functionNode = new FunctionExpression(peek(), method.getType());
 		}
+		for (Argument argument : node.getArguments()) {
+			final String name = argument.getArgumentName();
+			final IParameter parameter = method.getParameter(name);
+			functionNode.addChild(new ArgumentNode(functionNode, name,
+					parameter != null ? parameter.getType() : null));
+		}
+		peek().addChild(functionNode);
+		push(functionNode);
+		// TODO visit scope declarations?
 		super.visitFunctionStatement(node);
 		return pop();
 	}
 
 	@Override
 	protected void processVariable(VariableDeclaration declaration) {
-		final Variable variable = new Variable(peek(),
+		final JSVariable variable = new JSVariable(
 				declaration.getVariableName());
-		peek().addChild(variable);
+		jsdocSupport.processVariable(declaration, variable, fReporter,
+				fTypeChecker);
+		final VariableNode variableNode = new VariableNode(peek(),
+				declaration.getVariableName(), variable.getType());
+		peek().addChild(variableNode);
 		final Expression initializer = declaration.getInitializer();
 		if (initializer != null) {
 			push(new ValueScope(peek()));
-			variable.setValue(visit(initializer));
+			variableNode.setValue(visit(initializer));
 			pop();
 		}
 	}

@@ -3,6 +3,7 @@ package org.eclipse.dltk.internal.javascript.parser.structure;
 import java.util.ArrayList;
 import java.util.List;
 
+@Structure3
 public class ObjectDeclaration extends StructureNode {
 
 	public ObjectDeclaration(IScope parent) {

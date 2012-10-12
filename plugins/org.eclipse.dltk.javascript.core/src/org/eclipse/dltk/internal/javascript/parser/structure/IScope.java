@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.eclipse.dltk.javascript.ast.Identifier;
 
+@Structure3
 public interface IScope extends IStructureNode {
 
 	void addChild(IStructureNode child);

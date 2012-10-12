@@ -5,6 +5,7 @@ import java.util.Stack;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.javascript.ast.AbstractNavigationVisitor;
 
+@Structure3
 public class StructureReporterBase extends
 		AbstractNavigationVisitor<IStructureNode> {
 

@@ -3,6 +3,9 @@ package org.eclipse.dltk.internal.javascript.parser.structure;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.dltk.javascript.typeinfo.model.JSType;
+
+@Structure3
 public class PropertyDeclaration extends StructureNode implements IDeclaration {
 
 	private final String name;
@@ -15,6 +18,14 @@ public class PropertyDeclaration extends StructureNode implements IDeclaration {
 
 	public String getName() {
 		return name;
+	}
+
+	public JSType getType() {
+		if (value instanceof IDeclaration) {
+			return ((IDeclaration) value).getType();
+		} else {
+			return null;
+		}
 	}
 
 	public IStructureNode getValue() {

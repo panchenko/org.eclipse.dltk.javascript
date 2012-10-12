@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.eclipse.dltk.javascript.ast.Identifier;
 
+@Structure3
 public class Scope extends StructureNode implements IScope {
 
 	public Scope(IScope parent) {

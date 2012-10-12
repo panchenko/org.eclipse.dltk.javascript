@@ -11,8 +11,13 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.parser.structure;
 
+import org.eclipse.dltk.javascript.typeinfo.model.JSType;
+
+@Structure3
 public interface IDeclaration extends IStructureNode {
 
 	String getName();
+
+	JSType getType();
 
 }

@@ -3,6 +3,7 @@ package org.eclipse.dltk.internal.javascript.parser.structure;
 import java.util.Collections;
 import java.util.List;
 
+@Structure3
 public class StructureNode implements IStructureNode {
 	protected final IScope parent;
 

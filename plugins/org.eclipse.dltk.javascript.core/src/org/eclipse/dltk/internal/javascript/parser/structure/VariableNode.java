@@ -3,18 +3,27 @@ package org.eclipse.dltk.internal.javascript.parser.structure;
 import java.util.Collections;
 import java.util.List;
 
-public class Variable extends StructureNode implements IDeclaration {
+import org.eclipse.dltk.javascript.typeinfo.model.JSType;
+
+@Structure3
+public class VariableNode extends StructureNode implements IDeclaration {
 
 	private final String name;
+	private final JSType type;
 	private IStructureNode value;
 
-	public Variable(IScope parent, String name) {
+	public VariableNode(IScope parent, String name, JSType type) {
 		super(parent);
 		this.name = name;
+		this.type = type;
 	}
 
 	public String getName() {
 		return name;
+	}
+
+	public JSType getType() {
+		return type;
 	}
 
 	public IStructureNode getValue() {
