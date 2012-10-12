@@ -9,17 +9,17 @@ import org.eclipse.dltk.javascript.ast.AbstractNavigationVisitor;
 public class StructureReporterBase extends
 		AbstractNavigationVisitor<IStructureNode> {
 
-	private final Stack<IScope> parents = new Stack<IScope>();
+	private final Stack<IParentNode> parents = new Stack<IParentNode>();
 
-	protected void push(IScope declaration) {
+	protected void push(IParentNode declaration) {
 		parents.push(declaration);
 	}
 
-	protected IScope pop() {
+	protected IParentNode pop() {
 		return parents.pop();
 	}
 
-	protected IScope peek() {
+	protected IParentNode peek() {
 		return parents.peek();
 	}
 
@@ -28,7 +28,8 @@ public class StructureReporterBase extends
 		final IStructureNode value = super.visit(node);
 		if (value != null) {
 			if (!parents.isEmpty()) {
-				parents.peek().addNested(value);
+				// TODO skip VarDeclaration, PropertyDeclaration
+				parents.peek().getScope().addNested(value);
 			}
 		}
 		return value;

@@ -45,7 +45,7 @@ public class StructureParserTests extends TestCase {
 		parser.setRequestor(rec);
 		parser.parseSourceModule(new ModuleSource(code));
 		System.out.println("---");
-		// System.out.println(newRecorder.getRoot());
+		System.out.println(newRecorder.getRoot());
 		System.out.println(rec.getRoot());
 		System.out.println("------");
 		return rec.getRoot();

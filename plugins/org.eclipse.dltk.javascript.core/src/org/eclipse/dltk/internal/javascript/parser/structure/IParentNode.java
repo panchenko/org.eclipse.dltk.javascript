@@ -11,13 +11,14 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.parser.structure;
 
-import org.eclipse.dltk.javascript.typeinfo.model.JSType;
+import org.eclipse.dltk.javascript.ast.Identifier;
 
-@Structure3
-public interface IDeclaration {
+public interface IParentNode extends IStructureNode {
 
-	String getName();
+	void addLocalReference(Identifier node, IDeclaration resolved);
 
-	JSType getType();
+	void addMethodReference(String name);
+
+	void addFieldReference(String name);
 
 }

@@ -55,10 +55,9 @@ public class StructureReporter3 extends StructureReporterBase {
 		jsdocSupport.processMethod(node, method, fReporter, fTypeChecker);
 		final FunctionNode functionNode;
 		if (node.isDeclaration()) {
-			functionNode = new FunctionDeclaration(peek(), node,
-					method.getType());
+			functionNode = new FunctionDeclaration(peek(), node, method);
 		} else {
-			functionNode = new FunctionExpression(peek(), method.getType());
+			functionNode = new FunctionExpression(peek(), node, method);
 		}
 		for (Argument argument : node.getArguments()) {
 			final String name = argument.getArgumentName();
@@ -66,7 +65,7 @@ public class StructureReporter3 extends StructureReporterBase {
 			functionNode.addChild(new ArgumentNode(functionNode, name,
 					parameter != null ? parameter.getType() : null));
 		}
-		peek().addChild(functionNode);
+		peek().getScope().addChild(functionNode);
 		push(functionNode);
 		// TODO visit scope declarations?
 		super.visitFunctionStatement(node);
@@ -79,12 +78,12 @@ public class StructureReporter3 extends StructureReporterBase {
 				declaration.getVariableName());
 		jsdocSupport.processVariable(declaration, variable, fReporter,
 				fTypeChecker);
-		final VariableNode variableNode = new VariableNode(peek(),
-				declaration.getVariableName(), variable.getType());
-		peek().addChild(variableNode);
+		final VariableNode variableNode = new VariableNode(peek(), declaration,
+				variable.getType());
+		peek().getScope().addChild(variableNode);
 		final Expression initializer = declaration.getInitializer();
 		if (initializer != null) {
-			push(new ValueScope(peek()));
+			push(variableNode);
 			variableNode.setValue(visit(initializer));
 			pop();
 		}
@@ -96,10 +95,10 @@ public class StructureReporter3 extends StructureReporterBase {
 		for (ObjectInitializerPart part : node.getInitializers()) {
 			if (part instanceof GetMethod) {
 				visitMethod((GetMethod) part);
-				// TODO (alex) handle it
+				// TODO (alex) handle GetMethod
 			} else if (part instanceof SetMethod) {
 				visitMethod((SetMethod) part);
-				// TODO (alex) handle it
+				// TODO (alex) handle SetMethod
 			} else if (part instanceof PropertyInitializer) {
 				final PropertyInitializer pi = (PropertyInitializer) part;
 				final String name;
@@ -110,19 +109,15 @@ public class StructureReporter3 extends StructureReporterBase {
 				} else if (pi.getName() instanceof DecimalLiteral) {
 					name = ((DecimalLiteral) pi.getName()).getText();
 				} else {
-					name = null;
+					name = "";
 					visit(pi.getName());
 				}
-				final Expression value = pi.getValue();
-				push(new ValueScope(peek()));
-				final IStructureNode propertyValue = visit(value);
+				final PropertyDeclaration propertyDeclaration = new PropertyDeclaration(
+						peek(), name);
+				object.addChild(propertyDeclaration);
+				push(propertyDeclaration);
+				propertyDeclaration.setValue(visit(pi.getValue()));
 				pop();
-				if (name != null) {
-					final PropertyDeclaration propertyDeclaration = new PropertyDeclaration(
-							peek(), name);
-					object.addChild(propertyDeclaration);
-					propertyDeclaration.setValue(propertyValue);
-				}
 			}
 		}
 		return object;
@@ -148,7 +143,7 @@ public class StructureReporter3 extends StructureReporterBase {
 	@Override
 	public IStructureNode visitIdentifier(Identifier node) {
 		final String name = node.getName();
-		final IDeclaration resolved = peek().resolve(name);
+		final IDeclaration resolved = peek().getScope().resolve(name);
 		if (resolved != null) {
 			peek().addLocalReference(node, resolved);
 		} else {

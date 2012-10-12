@@ -3,15 +3,16 @@ package org.eclipse.dltk.internal.javascript.parser.structure;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.dltk.compiler.ISourceElementRequestor;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
 @Structure3
-public class PropertyDeclaration extends StructureNode implements IDeclaration {
+public class PropertyDeclaration extends ParentNode implements IDeclaration {
 
 	private final String name;
 	private IStructureNode value;
 
-	public PropertyDeclaration(IScope parent, String name) {
+	public PropertyDeclaration(IParentNode parent, String name) {
 		super(parent);
 		this.name = name;
 	}
@@ -49,9 +50,18 @@ public class PropertyDeclaration extends StructureNode implements IDeclaration {
 		if (value != null) {
 			sb.append(value);
 		} else {
-			sb.append("<property>");
+			sb.append("<property?>");
 		}
 		return sb.toString();
+	}
+
+	public void reportStructure(ISourceElementRequestor requestor,
+			boolean allowDeclarations) {
+		if (allowDeclarations) {
+
+		}
+		// TODO Auto-generated method stub
+
 	}
 
 }

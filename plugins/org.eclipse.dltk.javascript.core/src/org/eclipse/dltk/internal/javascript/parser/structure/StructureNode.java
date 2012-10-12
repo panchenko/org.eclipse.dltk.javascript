@@ -3,11 +3,14 @@ package org.eclipse.dltk.internal.javascript.parser.structure;
 import java.util.Collections;
 import java.util.List;
 
-@Structure3
-public class StructureNode implements IStructureNode {
-	protected final IScope parent;
+import org.eclipse.dltk.compiler.ISourceElementRequestor;
+import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
-	public StructureNode(IScope parent) {
+@Structure3
+public abstract class StructureNode implements IStructureNode {
+	protected final IParentNode parent;
+
+	public StructureNode(IParentNode parent) {
 		this.parent = parent;
 	}
 
@@ -15,12 +18,23 @@ public class StructureNode implements IStructureNode {
 		return Collections.emptyList();
 	}
 
-	public boolean isScope() {
-		return false;
+	public IParentNode getParent() {
+		return parent;
 	}
 
-	public IScope getParent() {
-		return parent;
+	public IScope getScope() {
+		return parent.getScope();
+	}
+
+	protected String typeToModel(JSType type) {
+		return type != null ? type.getName() : null;
+	}
+
+	protected void reportChildrenStructure(ISourceElementRequestor requestor,
+			boolean allowDeclarations) {
+		for (IStructureNode child : getChildren()) {
+			child.reportStructure(requestor, allowDeclarations);
+		}
 	}
 
 }

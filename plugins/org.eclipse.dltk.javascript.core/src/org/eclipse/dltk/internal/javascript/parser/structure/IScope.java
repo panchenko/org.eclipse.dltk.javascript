@@ -2,10 +2,10 @@ package org.eclipse.dltk.internal.javascript.parser.structure;
 
 import java.util.List;
 
-import org.eclipse.dltk.javascript.ast.Identifier;
+import org.eclipse.dltk.annotations.Nullable;
 
 @Structure3
-public interface IScope extends IStructureNode {
+public interface IScope extends IParentNode {
 
 	void addChild(IStructureNode child);
 
@@ -13,12 +13,7 @@ public interface IScope extends IStructureNode {
 
 	List<IStructureNode> getNested();
 
-	void addLocalReference(Identifier node, IDeclaration resolved);
-
-	void addMethodReference(String name);
-
-	void addFieldReference(String name);
-
+	@Nullable
 	IDeclaration resolve(String name);
 
 }

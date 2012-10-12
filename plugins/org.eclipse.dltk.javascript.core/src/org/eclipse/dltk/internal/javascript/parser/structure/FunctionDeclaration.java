@@ -1,27 +1,31 @@
 package org.eclipse.dltk.internal.javascript.parser.structure;
 
+import org.eclipse.dltk.core.ISourceNode;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
-import org.eclipse.dltk.javascript.typeinfo.model.JSType;
+import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 
 @Structure3
 public class FunctionDeclaration extends FunctionNode implements IDeclaration {
 
-	private final String name;
-
-	public FunctionDeclaration(IScope parent, FunctionStatement function,
-			JSType type) {
-		super(parent, type);
-		this.name = function.getFunctionName();
+	public FunctionDeclaration(IParentNode parent, FunctionStatement function,
+			IMethod method) {
+		super(parent, function, method);
 	}
 
+	@Override
 	public String getName() {
-		return name;
+		return function.getFunctionName();
+	}
+
+	@Override
+	protected ISourceNode getNameNode() {
+		return function.getIdentifier();
 	}
 
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder();
-		sb.append(name);
+		sb.append(getName());
 		sb.append('(');
 		sb.append(argumentsToString());
 		sb.append(")");
