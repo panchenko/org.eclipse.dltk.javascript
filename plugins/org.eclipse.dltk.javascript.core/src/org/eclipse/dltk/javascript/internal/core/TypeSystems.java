@@ -20,6 +20,6 @@ public class TypeSystems {
 	public static final ITypeSystem WEAK_TYPE_SYSTEM = new StaticTypeSystem(
 			"WEAK");
 
-	public static final ITypeSystem GLOABL = new StaticTypeSystem("GLOBAL");
+	public static final ITypeSystem GLOBAL = new StaticTypeSystem("GLOBAL");
 
 }

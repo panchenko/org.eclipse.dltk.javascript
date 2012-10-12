@@ -252,16 +252,16 @@ public class RTypes {
 	}
 
 	public static final IRSimpleType FUNCTION = (IRSimpleType) simple(
-			TypeSystems.GLOABL, Types.FUNCTION);
+			TypeSystems.GLOBAL, Types.FUNCTION);
 
-	public static final IRType STRING = simple(TypeSystems.GLOABL, Types.STRING);
+	public static final IRType STRING = simple(TypeSystems.GLOBAL, Types.STRING);
 
-	public static final IRType NUMBER = simple(TypeSystems.GLOABL, Types.NUMBER);
+	public static final IRType NUMBER = simple(TypeSystems.GLOBAL, Types.NUMBER);
 
-	public static final IRType BOOLEAN = simple(TypeSystems.GLOABL,
+	public static final IRType BOOLEAN = simple(TypeSystems.GLOBAL,
 			Types.BOOLEAN);
 
-	public static final IRType OBJECT = simple(TypeSystems.GLOABL, Types.OBJECT);
+	public static final IRType OBJECT = simple(TypeSystems.GLOBAL, Types.OBJECT);
 
 	public static List<IRType> convert(ITypeSystem typeSystem, List<JSType> args) {
 		final int size = args.size();
