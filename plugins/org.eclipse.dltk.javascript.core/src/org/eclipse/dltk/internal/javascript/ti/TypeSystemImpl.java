@@ -96,8 +96,37 @@ public class TypeSystemImpl implements ITypeSystem {
 	private final Map<Type, RTypeDeclaration> declarations = new HashMap<Type, RTypeDeclaration>();
 
 	public IRTypeDeclaration convert(Type type) {
+		return convert0(resolveType(type));
+	}
+
+	final IRTypeDeclaration convert0(Type type) {
+		final ITypeSystem preferred = type.getMetaType()
+				.getPreferredTypeSystem(type);
+		if (preferred != null && preferred != this) {
+			if (preferred instanceof TypeSystemImpl) {
+				return ((TypeSystemImpl) preferred).convert1(type);
+			} else {
+				return preferred.convert(type);
+			}
+		}
+		return convert1(type);
+	}
+
+	final IRTypeDeclaration convert1(Type type) {
 		synchronized (lock) {
-			return convertType(type, new HashSet<Type>());
+			return convertType(type, null);
+		}
+	}
+
+	/**
+	 * Clears the cached data of this type system.
+	 */
+	public void reset() {
+		synchronized (lock) {
+			declarations.clear();
+			parameterized.clear();
+			contextualized.clear();
+			values.clear();
 		}
 	}
 
@@ -107,6 +136,9 @@ public class TypeSystemImpl implements ITypeSystem {
 			if (declaration != null) {
 				return declaration;
 			}
+		}
+		if (processedTypes == null) {
+			processedTypes = new HashSet<Type>();
 		}
 		if (!processedTypes.add(type)) {
 			return null;
@@ -131,9 +163,12 @@ public class TypeSystemImpl implements ITypeSystem {
 					declaration.setSuperType(parameterizeType(generic, RTypes
 							.convert(this, ((ParameterizedType) superType)
 									.getActualTypeArguments())));
-				} else {
+				} else if (declaration.isParameterized()) {
 					declaration.setSuperType(parameterizeType(generic,
 							declaration.getActualTypeArguments()));
+				} else {
+					declaration.setSuperType(convertType(generic,
+							processedTypes));
 				}
 			} else {
 				declaration.setSuperType(convertType(superType.getTarget(),
@@ -304,12 +339,11 @@ public class TypeSystemImpl implements ITypeSystem {
 	 */
 	public IRTypeDeclaration parameterize(Type target, List<IRType> parameters) {
 		target = resolveType(target);
+		if (!(target instanceof GenericType)) {
+			return convert0(target);
+		}
 		synchronized (lock) {
-			if (target instanceof GenericType) {
-				return parameterizeType((GenericType) target, parameters);
-			} else {
-				return convertType(target, new HashSet<Type>());
-			}
+			return parameterizeType((GenericType) target, parameters);
 		}
 	}
 

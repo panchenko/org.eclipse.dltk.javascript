@@ -44,4 +44,10 @@ public interface MetaType {
 	 */
 	IRType toRType(ITypeSystem typeSystem, IRTypeDeclaration declaration);
 
+	/**
+	 * Returns the preferred type system for converting the specified type to
+	 * {@link IRTypeDeclaration} or <code>null</code> if no preference.
+	 */
+	ITypeSystem getPreferredTypeSystem(Type type);
+
 }

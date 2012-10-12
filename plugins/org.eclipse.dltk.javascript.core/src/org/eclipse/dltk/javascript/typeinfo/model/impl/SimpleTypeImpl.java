@@ -131,7 +131,7 @@ public class SimpleTypeImpl extends EObjectImpl implements SimpleType {
 		if (t.isProxy() && typeSystem != null) {
 			t = typeSystem.resolveType(t);
 		}
-		return RTypes.simple(t);
+		return RTypes.simple(typeSystem, t);
     }
 
 	@Override

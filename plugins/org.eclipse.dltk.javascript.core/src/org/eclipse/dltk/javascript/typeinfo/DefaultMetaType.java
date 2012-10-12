@@ -11,7 +11,10 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo;
 
+import org.eclipse.dltk.javascript.core.Types;
+import org.eclipse.dltk.javascript.internal.core.TypeSystems;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
+import org.eclipse.emf.ecore.resource.Resource;
 
 public abstract class DefaultMetaType implements MetaType {
 
@@ -34,6 +37,14 @@ public abstract class DefaultMetaType implements MetaType {
 	@Override
 	public String toString() {
 		return getId();
+	}
+
+	public ITypeSystem getPreferredTypeSystem(Type type) {
+		final Resource resource = type.eResource();
+		if (resource != null && resource == Types.OBJECT.eResource()) {
+			return TypeSystems.GLOBAL;
+		}
+		return null;
 	}
 
 }

@@ -147,7 +147,7 @@ public class ClassTypeImpl extends EObjectImpl implements ClassType {
 		if (t != null && t.isProxy() && typeSystem != null) {
 			t = typeSystem.resolveType(t);
 		}
-		return RTypes.classType(t);
+		return RTypes.classType(typeSystem, t);
     }
 
     /**
