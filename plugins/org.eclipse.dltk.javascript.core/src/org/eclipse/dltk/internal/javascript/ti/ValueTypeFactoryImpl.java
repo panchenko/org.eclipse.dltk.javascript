@@ -34,28 +34,12 @@ public class ValueTypeFactoryImpl implements IValueTypeFactory, ITypeNames {
 		return new ConstantValue(type);
 	}
 
-	public IValueReference createObject(IValueParent parent) {
-		return create(parent, OBJECT);
-	}
-
 	public IValueReference createArray(IValueParent parent) {
 		return create(parent, ARRAY);
 	}
 
-	public IValueReference createBoolean(IValueParent parent) {
-		return create(parent, BOOLEAN);
-	}
-
-	public IValueReference createNumber(IValueParent parent) {
-		return create(parent, NUMBER);
-	}
-
 	public IValueReference createRegExp(IValueParent parent) {
 		return create(parent, REGEXP);
-	}
-
-	public IValueReference createString(IValueParent parent) {
-		return create(parent, STRING);
 	}
 
 	public IValueReference createXML(IValueParent parent) {

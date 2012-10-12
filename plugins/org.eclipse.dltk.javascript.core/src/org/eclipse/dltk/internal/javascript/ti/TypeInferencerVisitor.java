@@ -269,16 +269,16 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				|| op == JSParser.LTE || op == JSParser.NSAME
 				|| op == JSParser.SAME || op == JSParser.NEQ
 				|| op == JSParser.EQ) {
-			return context.getFactory().createBoolean(peekContext());
+			return ConstantValue.of(RTypes.BOOLEAN);
 		} else if (isNumber(left) && isNumber(right)) {
-			return context.getFactory().createNumber(peekContext());
+			return ConstantValue.of(RTypes.NUMBER);
 		} else if (op == JSParser.ADD) {
 			if (isString(left) || isString(right)) {
-				return context.getFactory().createString(peekContext());
+				return ConstantValue.of(RTypes.STRING);
 			}
 			return left;
 		} else if (JSParser.INSTANCEOF == op) {
-			return context.getFactory().createBoolean(peekContext());
+			return ConstantValue.of(RTypes.BOOLEAN);
 		} else if (JSParser.LOR == op) {
 			final JSTypeSet typeSet = JSTypeSet.create();
 			if (left != null) {
@@ -372,7 +372,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	@Override
 	public IValueReference visitBooleanLiteral(BooleanLiteral node) {
-		return context.getFactory().createBoolean(peekContext());
+		return ConstantValue.of(RTypes.BOOLEAN);
 	}
 
 	@Override
@@ -400,7 +400,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 						return new ConstantValue(type);
 					}
 				} else {
-					return ConstantValue.valueOf(method.getType());
+					return ConstantValue.of(method.getType());
 				}
 			} else {
 				final IRType expressionType = JavaScriptValidations
@@ -408,7 +408,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				if (expressionType != null) {
 					if (expressionType instanceof IRFunctionType) {
 						return ConstantValue
-								.valueOf(((IRFunctionType) expressionType)
+								.of(((IRFunctionType) expressionType)
 										.getReturnType());
 					} else if (expressionType instanceof IRClassType) {
 						final IRTypeDeclaration target = ((IRClassType) expressionType)
@@ -713,7 +713,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	@Override
 	public IValueReference visitDecimalLiteral(DecimalLiteral node) {
-		return context.getFactory().createNumber(peekContext());
+		return ConstantValue.of(RTypes.NUMBER);
 	}
 
 	@Override
@@ -786,7 +786,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	public IValueReference visitForInStatement(ForInStatement node) {
 		final IValueReference item = visit(node.getItem());
 		if (item != null) {
-			assign(item, context.getFactory().createString(peekContext()));
+			assign(item, ConstantValue.of(RTypes.STRING));
 		}
 		visit(node.getIterator());
 		visit(node.getBody());
@@ -1166,8 +1166,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				}
 			} else {
 				result.value = new AnonymousNewValue();
-				result.value.setValue(context.getFactory().createObject(
-						contextValueCollection));
+				result.value.setValue(ConstantValue.of(RTypes.OBJECT));
 			}
 		}
 		return result;
@@ -1314,7 +1313,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	@Override
 	public IValueReference visitStringLiteral(StringLiteral node) {
-		return context.getFactory().createString(peekContext());
+		return ConstantValue.of(RTypes.STRING);
 	}
 
 	@Override
@@ -1368,16 +1367,16 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	public IValueReference visitUnaryOperation(UnaryOperation node) {
 		if (node.getOperation() == JSParser.NOT) {
 			visit(node.getExpression());
-			return context.getFactory().createBoolean(peekContext());
+			return ConstantValue.of(RTypes.BOOLEAN);
 		} else if (node.getOperation() == JSParser.DELETE) {
 			final IValueReference value = visit(node.getExpression());
 			if (value != null) {
 				value.delete();
 			}
-			return context.getFactory().createBoolean(peekContext());
+			return ConstantValue.of(RTypes.BOOLEAN);
 		} else if (node.getOperation() == JSParser.TYPEOF) {
 			visit(node.getExpression());
-			return context.getFactory().createString(peekContext());
+			return ConstantValue.of(RTypes.STRING);
 		} else if (node.getOperation() == JSParser.VOID) {
 			visit(node.getExpression());
 			return null;

@@ -19,23 +19,12 @@ public interface IValueTypeFactory {
 
 	IValueReference create(IValueParent parent, IRType type);
 
-	IValueReference createObject(IValueParent parent);
-
-	@Deprecated
-	IValueReference createString(IValueParent parent);
-
 	@Deprecated
 	IValueReference createRegExp(IValueParent parent);
-
-	@Deprecated
-	IValueReference createNumber(IValueParent parent);
 
 	IValueReference createXML(IValueParent parent);
 
 	IValueReference createXMLList(IValueParent parent);
-
-	@Deprecated
-	IValueReference createBoolean(IValueParent parent);
 
 	@Deprecated
 	IValueReference createArray(IValueParent parent);

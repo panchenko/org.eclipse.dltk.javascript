@@ -869,7 +869,7 @@ public class TypeInfoValidator implements IBuildParticipant,
 					pushExpressionValidator(new CallExpressionValidator(
 							peekFunctionScope(), node, reference, arguments,
 							methods));
-					return ConstantValue.valueOf(method.getType());
+					return ConstantValue.of(method.getType());
 				}
 			} else {
 				pushExpressionValidator(new CallExpressionValidator(
@@ -880,7 +880,7 @@ public class TypeInfoValidator implements IBuildParticipant,
 				if (expressionType != null) {
 					if (expressionType instanceof IRFunctionType) {
 						return ConstantValue
-								.valueOf(((IRFunctionType) expressionType)
+								.of(((IRFunctionType) expressionType)
 										.getReturnType());
 					} else if (expressionType instanceof IRClassType) {
 						final IRTypeDeclaration target = ((IRClassType) expressionType)
