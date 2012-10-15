@@ -9,9 +9,9 @@
  * Contributors:
  *     NumberFour AG - initial API and Implementation (Alex Panchenko)
  *******************************************************************************/
-package org.eclipse.dltk.internal.javascript.parser.structure;
+package org.eclipse.dltk.javascript.structure;
 
-@Structure3
+
 public class ScriptScope extends Scope {
 
 	public ScriptScope() {

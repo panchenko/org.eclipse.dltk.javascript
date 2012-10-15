@@ -1,11 +1,10 @@
-package org.eclipse.dltk.internal.javascript.parser.structure;
+package org.eclipse.dltk.javascript.structure;
 
 import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
-@Structure3
 public abstract class StructureNode implements IStructureNode {
 	protected final IParentNode parent;
 

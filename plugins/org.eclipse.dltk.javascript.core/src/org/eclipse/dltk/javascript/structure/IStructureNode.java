@@ -9,15 +9,19 @@
  * Contributors:
  *     NumberFour AG - initial API and Implementation (Alex Panchenko)
  *******************************************************************************/
-package org.eclipse.dltk.internal.javascript.parser.structure;
+package org.eclipse.dltk.javascript.structure;
 
-import org.eclipse.dltk.javascript.typeinfo.model.JSType;
+import java.util.List;
 
-@Structure3
-public interface IDeclaration extends IStructureNode {
+public interface IStructureNode {
 
-	String getName();
+	List<? extends IStructureNode> getChildren();
 
-	JSType getType();
+	IParentNode getParent();
+
+	IScope getScope();
+
+	void reportStructure(IStructureRequestor requestor,
+			boolean allowDeclarations);
 
 }

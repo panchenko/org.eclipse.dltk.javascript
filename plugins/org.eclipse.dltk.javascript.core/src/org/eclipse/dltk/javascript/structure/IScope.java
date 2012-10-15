@@ -9,16 +9,21 @@
  * Contributors:
  *     NumberFour AG - initial API and Implementation (Alex Panchenko)
  *******************************************************************************/
-package org.eclipse.dltk.internal.javascript.parser.structure;
+package org.eclipse.dltk.javascript.structure;
 
-import org.eclipse.dltk.javascript.ast.Identifier;
+import java.util.List;
 
-public interface IParentNode extends IStructureNode {
+import org.eclipse.dltk.annotations.Nullable;
 
-	void addLocalReference(Identifier node, IDeclaration resolved);
+public interface IScope extends IParentNode {
 
-	void addMethodReference(String name);
+	void addChild(IStructureNode child);
 
-	void addFieldReference(String name);
+	void addNested(IStructureNode node);
+
+	List<IStructureNode> getNested();
+
+	@Nullable
+	IDeclaration resolve(String name);
 
 }

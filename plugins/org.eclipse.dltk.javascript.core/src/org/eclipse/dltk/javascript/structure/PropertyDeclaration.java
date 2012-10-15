@@ -1,4 +1,4 @@
-package org.eclipse.dltk.internal.javascript.parser.structure;
+package org.eclipse.dltk.javascript.structure;
 
 import java.util.Collections;
 import java.util.List;
@@ -8,7 +8,6 @@ import org.eclipse.dltk.core.ISourceNode;
 import org.eclipse.dltk.javascript.ast.PropertyInitializer;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
-@Structure3
 public class PropertyDeclaration extends ParentNode implements IDeclaration {
 
 	private final String name;
@@ -76,7 +75,7 @@ public class PropertyDeclaration extends ParentNode implements IDeclaration {
 				info.nameSourceStart = initializer.getName().start();
 				info.nameSourceEnd = initializer.getName().end();
 				// info.type = typeToModel(type);
-				requestor.enterField(info);
+				requestor.enterField(info, initializer.getName(), null);
 				reportChildrenStructure(requestor, allowDeclarations);
 				requestor.exitField(initializer.end() - 1);
 			}

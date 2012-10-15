@@ -15,14 +15,15 @@ import org.eclipse.dltk.compiler.ISourceElementRequestor;
 import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.compiler.problem.IProblemReporter;
 import org.eclipse.dltk.core.ISourceElementParser;
-import org.eclipse.dltk.internal.javascript.parser.structure.IScope;
-import org.eclipse.dltk.internal.javascript.parser.structure.IStructureNode;
-import org.eclipse.dltk.internal.javascript.parser.structure.ObjectDeclaration;
-import org.eclipse.dltk.internal.javascript.parser.structure.ScriptScope;
 import org.eclipse.dltk.internal.javascript.parser.structure.StructureReporter3;
 import org.eclipse.dltk.internal.javascript.parser.structure.StructureRequestor;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.parser.JavaScriptParserUtil;
+import org.eclipse.dltk.javascript.structure.IScope;
+import org.eclipse.dltk.javascript.structure.IStructureNode;
+import org.eclipse.dltk.javascript.structure.ObjectDeclaration;
+import org.eclipse.dltk.javascript.structure.ScriptScope;
+import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
 
 public class JavaScriptSourceElementParser3 implements ISourceElementParser {
 
@@ -39,7 +40,8 @@ public class JavaScriptSourceElementParser3 implements ISourceElementParser {
 
 	public void parseSourceModule(IModuleSource module) {
 		final Script script = parse(module);
-		final StructureReporter3 reporter = new StructureReporter3();
+		final StructureReporter3 reporter = new StructureReporter3(
+				new ReferenceSource(module.getModelElement()));
 		fRequestor.enterModule();
 		final IStructureNode node = reporter.visit(script);
 		node.reportStructure(new StructureRequestor(fRequestor), true);

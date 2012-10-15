@@ -12,9 +12,6 @@
 package org.eclipse.dltk.javascript.structure;
 
 import org.eclipse.dltk.ast.ASTNode;
-import org.eclipse.dltk.internal.javascript.parser.structure.IStructureNode;
-import org.eclipse.dltk.internal.javascript.parser.structure.IStructureRequestor;
-import org.eclipse.dltk.internal.javascript.parser.structure.StructureNode;
 import org.eclipse.dltk.internal.javascript.parser.structure.StructureReporter3;
 
 /**

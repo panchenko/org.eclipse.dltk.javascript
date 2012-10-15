@@ -1,8 +1,7 @@
-package org.eclipse.dltk.internal.javascript.parser.structure;
+package org.eclipse.dltk.javascript.structure;
 
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
-@Structure3
 public class ArgumentNode extends StructureNode implements IDeclaration {
 
 	private final String name;

@@ -30,21 +30,36 @@ import org.eclipse.dltk.javascript.ast.SetMethod;
 import org.eclipse.dltk.javascript.ast.StringLiteral;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.parser.JSProblemReporter;
+import org.eclipse.dltk.javascript.structure.ArgumentNode;
+import org.eclipse.dltk.javascript.structure.FunctionDeclaration;
+import org.eclipse.dltk.javascript.structure.FunctionExpression;
+import org.eclipse.dltk.javascript.structure.FunctionNode;
+import org.eclipse.dltk.javascript.structure.IDeclaration;
+import org.eclipse.dltk.javascript.structure.IStructureNode;
+import org.eclipse.dltk.javascript.structure.IStructureVisitor;
+import org.eclipse.dltk.javascript.structure.ObjectDeclaration;
+import org.eclipse.dltk.javascript.structure.PropertyDeclaration;
+import org.eclipse.dltk.javascript.structure.ScriptScope;
+import org.eclipse.dltk.javascript.structure.VariableNode;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.ITypeChecker;
 import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
 
-@Structure3
-public class StructureReporter3 extends StructureReporterBase {
+public class StructureReporter3 extends StructureReporterBase implements
+		IStructureVisitor {
 
 	private JSDocSupport jsdocSupport = new JSDocSupport();
 	private final JSProblemReporter fReporter = null;
 	private final ITypeChecker fTypeChecker = null;
 
+	public StructureReporter3(ReferenceSource source) {
+		super(source);
+	}
+
 	@Override
 	public IStructureNode visitScript(Script node) {
 		push(new ScriptScope());
-		// TODO visit scope declarations?
+		// TODO visit scope declarations first?
 		super.visitScript(node);
 		return pop();
 	}

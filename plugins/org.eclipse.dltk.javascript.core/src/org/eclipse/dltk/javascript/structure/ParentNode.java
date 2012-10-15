@@ -1,8 +1,7 @@
-package org.eclipse.dltk.internal.javascript.parser.structure;
+package org.eclipse.dltk.javascript.structure;
 
 import org.eclipse.dltk.javascript.ast.Identifier;
 
-@Structure3
 public abstract class ParentNode extends StructureNode implements IParentNode {
 
 	public ParentNode(IParentNode parent) {

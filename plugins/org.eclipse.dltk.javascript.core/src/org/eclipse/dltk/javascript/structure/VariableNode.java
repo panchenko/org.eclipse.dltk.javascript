@@ -1,4 +1,4 @@
-package org.eclipse.dltk.internal.javascript.parser.structure;
+package org.eclipse.dltk.javascript.structure;
 
 import java.util.Collections;
 import java.util.List;
@@ -7,7 +7,6 @@ import org.eclipse.dltk.compiler.IElementRequestor.FieldInfo;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
-@Structure3
 public class VariableNode extends ParentNode implements IDeclaration {
 
 	private final JSType type;
@@ -64,7 +63,7 @@ public class VariableNode extends ParentNode implements IDeclaration {
 			info.nameSourceStart = declaration.getIdentifier().start();
 			info.nameSourceEnd = declaration.getIdentifier().end();
 			info.type = typeToModel(type);
-			requestor.enterField(info);
+			requestor.enterField(info, declaration.getIdentifier(), type);
 			reportChildrenStructure(requestor, allowDeclarations);
 			requestor.exitField(declaration.end() - 1);
 		} else {

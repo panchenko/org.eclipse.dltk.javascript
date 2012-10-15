@@ -1,9 +1,8 @@
-package org.eclipse.dltk.internal.javascript.parser.structure;
+package org.eclipse.dltk.javascript.structure;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Structure3
 public class Scope extends ParentNode implements IScope {
 
 	public Scope(IParentNode parent) {

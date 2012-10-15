@@ -47,6 +47,7 @@ import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 import org.eclipse.dltk.javascript.parser.JavaScriptParserUtil;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
+import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
 
 public class JavaScriptMatchLocator implements IMatchLocator,
 		IModelElementVisitor, IModelElementVisitorExtension {
@@ -78,12 +79,13 @@ public class JavaScriptMatchLocator implements IMatchLocator,
 
 		final MatchingCollectorSourceElementRequestor matchingCollectorRequestor = new MatchingCollectorSourceElementRequestor(
 				new MatchingCollector<MatchingNode>(predicate, nodeSet));
-		StructureReporter3 visitor = new StructureReporter3();
 		for (SearchDocument document : searchDocuments) {
 			// TODO report progress
 			final ISourceModule module = moduleFactory.create(document);
 			if (module == null)
 				continue;
+			StructureReporter3 visitor = new StructureReporter3(
+					new ReferenceSource(module));
 			nodeSet.clear();
 			inferencer2.setModelElement(module);
 			final Script script = JavaScriptParserUtil.parse(module);

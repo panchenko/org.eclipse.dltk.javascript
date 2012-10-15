@@ -9,12 +9,11 @@
  * Contributors:
  *     NumberFour AG - initial API and Implementation (Alex Panchenko)
  *******************************************************************************/
-package org.eclipse.dltk.internal.javascript.parser.structure;
+package org.eclipse.dltk.javascript.structure;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Structure3
 public class ObjectDeclaration extends StructureNode {
 
 	public ObjectDeclaration(IParentNode parent) {

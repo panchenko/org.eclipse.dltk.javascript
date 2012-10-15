@@ -1,10 +1,9 @@
-package org.eclipse.dltk.internal.javascript.parser.structure;
+package org.eclipse.dltk.javascript.structure;
 
 import org.eclipse.dltk.core.ISourceNode;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 
-@Structure3
 public class FunctionExpression extends FunctionNode {
 
 	public FunctionExpression(IParentNode parent, FunctionStatement function,
