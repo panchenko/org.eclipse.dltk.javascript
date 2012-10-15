@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.dltk.annotations.ConfigurationElement;
@@ -210,6 +211,36 @@ public class TypeInfoManager {
 
 	public static ITypeInferenceHandlerFactory[] getNodeHandlerFactories() {
 		return nodeHandlerManager.getInstances();
+	}
+
+	/**
+	 * Creates extensions of the specified type for the specified context.
+	 * 
+	 * @param context
+	 *            can be adapted to {@link ITypeInfoContext} or
+	 *            {@link ReferenceSource}
+	 * @param extensionClass
+	 *            extension type, see {@link ITypeInferenceExtensionFactory} for
+	 *            the list of supported extensions.
+	 * @param arg
+	 *            extension specific parameter, can be <code>null</code>
+	 * @see ITypeInferenceExtensionFactory
+	 */
+	@SuppressWarnings("unchecked")
+	public static <E> List<E> createExtensions(IAdaptable context,
+			Class<E> extensionClass, Object arg) {
+		final List<E> extensions = new ArrayList<E>();
+		for (ITypeInferenceHandlerFactory factory : TypeInfoManager
+				.getNodeHandlerFactories()) {
+			if (factory instanceof ITypeInferenceExtensionFactory) {
+				final Object extension = ((ITypeInferenceExtensionFactory) factory)
+						.createExtension(context, extensionClass, arg);
+				if (extension != null && extensionClass.isInstance(extension)) {
+					extensions.add((E) extension);
+				}
+			}
+		}
+		return extensions;
 	}
 
 	public static IRTypeFactory[] getRTypeFactories() {

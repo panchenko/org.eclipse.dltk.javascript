@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo;
 
+import org.eclipse.core.runtime.IAdaptable;
+
 /**
  * This interface could be optionally implemented by
  * {@link ITypeInferenceHandlerFactory}.
@@ -18,14 +20,20 @@ package org.eclipse.dltk.javascript.typeinfo;
 public interface ITypeInferenceExtensionFactory {
 
 	/**
+	 * Creates extension of the specified type for the specified context.
+	 * Returns the extension created or null.
+	 * 
 	 * @param context
-	 * @param visitor
+	 *            can be adapted to {@link ITypeInfoContext} or
+	 *            {@link ReferenceSource}
 	 * @param extensionClass
 	 *            e.g.
 	 *            {@link org.eclipse.dltk.javascript.validation.IValidatorExtension}
+	 * @param arg
+	 *            extension specific parameter, can be <code>null</code>
 	 * @return
 	 */
-	Object createExtension(ITypeInfoContext context,
-			ITypeInferencerVisitor visitor, Class<?> extensionClass);
+	Object createExtension(IAdaptable context, Class<?> extensionClass,
+			Object arg);
 
 }

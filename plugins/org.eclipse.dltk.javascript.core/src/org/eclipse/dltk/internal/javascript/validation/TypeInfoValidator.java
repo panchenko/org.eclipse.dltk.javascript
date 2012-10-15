@@ -101,6 +101,7 @@ import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.MemberPredicates;
 import org.eclipse.dltk.javascript.typeinfo.RTypes;
 import org.eclipse.dltk.javascript.typeinfo.TypeCompatibility;
+import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
@@ -534,7 +535,8 @@ public class TypeInfoValidator implements IBuildParticipant,
 			variables.clear();
 			functionScopes.clear();
 			functionScopes.add(new FunctionScope());
-			final List<IValidatorExtension> extensions = createExtensions(IValidatorExtension.class);
+			final List<IValidatorExtension> extensions = TypeInfoManager
+					.createExtensions(context, IValidatorExtension.class, null);
 			if (!extensions.isEmpty()) {
 				this.extensions = extensions
 						.toArray(new IValidatorExtension[extensions.size()]);

@@ -66,6 +66,7 @@ import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.MemberPredicate;
 import org.eclipse.dltk.javascript.typeinfo.MemberPredicates;
 import org.eclipse.dltk.javascript.typeinfo.RTypeMemberQuery;
+import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.dltk.javascript.typeinfo.TypeMode;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
@@ -129,8 +130,9 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 							position);
 				}
 				final Reporter reporter = new Reporter(inferencer2, path
-						.lastSegment(), position, visitor
-						.createValidatorExtensions());
+						.lastSegment(), position, TypeInfoManager
+						.createExtensions(inferencer2,
+								IValidatorExtension.class, null));
 				if (calculator.isMember() && !path.isEmpty()
 						&& path.lastSegment() != null) {
 					doCompletionOnMember(inferencer2, visitor.getCollection(),
@@ -173,7 +175,8 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		ITypeSystem.CURRENT.runWith(inferencer2, new Runnable() {
 			public void run() {
 				final Reporter reporter = new Reporter(inferencer2, prefix,
-						offset, visitor.createValidatorExtensions());
+						offset, TypeInfoManager.createExtensions(inferencer2,
+								IValidatorExtension.class, null));
 				doGlobalCompletion(visitor.getCollection(), reporter);
 			}
 		});
@@ -192,10 +195,9 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		setSourceRange(offset - prefix.length(), offset);
 		final TypeInferencer2 inferencer2 = new TypeInferencer2();
 		inferencer2.setModelElement(module);
-		final CompletionVisitor visitor = new CompletionVisitor(inferencer2,
-				offset);
 		final Reporter reporter = new Reporter(inferencer2, prefix, offset,
-				visitor.createValidatorExtensions());
+				TypeInfoManager.createExtensions(inferencer2,
+						IValidatorExtension.class, null));
 		for (IRMember member : memers) {
 			final String name = member.getName();
 			if (reporter.matches(name)) {

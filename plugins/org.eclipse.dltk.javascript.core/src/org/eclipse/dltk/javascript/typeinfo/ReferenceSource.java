@@ -11,10 +11,11 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo;
 
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.ISourceModule;
 
-public class ReferenceSource {
+public class ReferenceSource implements IAdaptable {
 
 	public static final ReferenceSource UNKNOWN = new ReferenceSource(null) {
 		@Override
@@ -41,6 +42,14 @@ public class ReferenceSource {
 	@Override
 	public String toString() {
 		return modelElement != null ? modelElement.getElementName() : "null";
+	}
+
+	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
+		if (adapter == ReferenceSource.class) {
+			return this;
+		} else {
+			return null;
+		}
 	}
 
 }

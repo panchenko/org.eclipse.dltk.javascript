@@ -25,7 +25,6 @@ import org.eclipse.dltk.javascript.typeinference.IFunctionValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinfo.ITypeChecker;
-import org.eclipse.dltk.javascript.typeinfo.ITypeInferenceExtensionFactory;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInferenceHandler;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInferenceHandlerFactory;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInferencerVisitor;
@@ -105,22 +104,6 @@ public abstract class TypeInferencerVisitorBase extends
 			}
 		}
 		return handlers;
-	}
-
-	@SuppressWarnings("unchecked")
-	protected <E> List<E> createExtensions(Class<E> extensionClass) {
-		final List<E> extensions = new ArrayList<E>();
-		for (ITypeInferenceHandlerFactory factory : TypeInfoManager
-				.getNodeHandlerFactories()) {
-			if (factory instanceof ITypeInferenceExtensionFactory) {
-				final Object extension = ((ITypeInferenceExtensionFactory) factory)
-						.createExtension(context, this, extensionClass);
-				if (extension != null && extensionClass.isInstance(extension)) {
-					extensions.add((E) extension);
-				}
-			}
-		}
-		return extensions;
 	}
 
 	@Override

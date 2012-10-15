@@ -37,6 +37,7 @@ import org.eclipse.dltk.javascript.typeinfo.IElementResolver;
 import org.eclipse.dltk.javascript.typeinfo.IMemberEvaluator;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.IRMember;
+import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 import org.eclipse.dltk.javascript.typeinfo.ITypeProvider;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
@@ -514,6 +515,16 @@ public class TypeInferencer2 extends TypeSystemImpl implements
 		}
 		return className + "(" + source + ","
 				+ (v != null ? v.getClass().getSimpleName() : null) + ")";
+	}
+
+	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
+		if (adapter == ITypeInfoContext.class || adapter == ITypeSystem.class) {
+			return this;
+		} else if (adapter == ReferenceSource.class) {
+			return getSource();
+		} else {
+			return null;
+		}
 	}
 
 }
