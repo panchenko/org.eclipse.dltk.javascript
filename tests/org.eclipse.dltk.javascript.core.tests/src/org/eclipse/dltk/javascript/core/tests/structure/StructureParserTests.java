@@ -223,4 +223,28 @@ public class StructureParserTests extends TestCase {
 		}
 	}
 
+	public void testGlobalObjectLiteral() {
+		final StringList code = new StringList();
+		code.add("var POINT = {");
+		code.add("  /** @return {Point} */");
+		code.add("  copy: function() {},");
+		code.add("  x: 1,");
+		code.add("  y: 2");
+		code.add("}");
+		parse(code.toString());
+	}
+
+	public void testLocalObjectLiteral() {
+		final StringList code = new StringList();
+		code.add("function test() {");
+		code.add("  var POINT = {");
+		code.add("    /** @return {Point} */");
+		code.add("    copy: function() {},");
+		code.add("    x: 1,");
+		code.add("    y: 2");
+		code.add("  }");
+		code.add("}");
+		parse(code.toString());
+	}
+
 }

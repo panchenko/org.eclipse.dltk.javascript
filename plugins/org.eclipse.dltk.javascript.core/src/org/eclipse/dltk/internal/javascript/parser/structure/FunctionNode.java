@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.dltk.compiler.IElementRequestor.MethodInfo;
-import org.eclipse.dltk.compiler.ISourceElementRequestor;
 import org.eclipse.dltk.core.ISourceNode;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
@@ -58,7 +57,7 @@ public abstract class FunctionNode extends Scope {
 	}
 
 	@Override
-	public void reportStructure(ISourceElementRequestor requestor,
+	public void reportStructure(IStructureRequestor requestor,
 			boolean allowDeclarations) {
 		if (allowDeclarations) {
 			final MethodInfo info = new MethodInfo();
@@ -80,7 +79,7 @@ public abstract class FunctionNode extends Scope {
 			}
 			info.returnType = typeToModel(getType());
 			info.isConstructor = method.isConstructor();
-			requestor.enterMethod(info);
+			requestor.enterMethod(info, function.getName(), function, method);
 			super.reportStructure(requestor, false);
 			requestor.exitMethod(function.end() - 1);
 		} else {

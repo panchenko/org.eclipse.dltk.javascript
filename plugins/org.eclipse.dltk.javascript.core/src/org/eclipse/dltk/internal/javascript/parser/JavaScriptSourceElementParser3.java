@@ -20,6 +20,7 @@ import org.eclipse.dltk.internal.javascript.parser.structure.IStructureNode;
 import org.eclipse.dltk.internal.javascript.parser.structure.ObjectDeclaration;
 import org.eclipse.dltk.internal.javascript.parser.structure.ScriptScope;
 import org.eclipse.dltk.internal.javascript.parser.structure.StructureReporter3;
+import org.eclipse.dltk.internal.javascript.parser.structure.StructureRequestor;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.parser.JavaScriptParserUtil;
 
@@ -41,7 +42,7 @@ public class JavaScriptSourceElementParser3 implements ISourceElementParser {
 		final StructureReporter3 reporter = new StructureReporter3();
 		fRequestor.enterModule();
 		final IStructureNode node = reporter.visit(script);
-		node.reportStructure(fRequestor, true);
+		node.reportStructure(new StructureRequestor(fRequestor), true);
 		fRequestor.exitModule(script.sourceEnd());
 		if (DEBUG) {
 			print(node, true, 0);

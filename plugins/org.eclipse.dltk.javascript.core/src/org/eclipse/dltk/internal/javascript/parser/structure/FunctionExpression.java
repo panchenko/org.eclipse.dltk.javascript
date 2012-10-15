@@ -14,14 +14,20 @@ public class FunctionExpression extends FunctionNode {
 
 	@Override
 	protected String getName() {
-		// TODO Auto-generated method stub
-		return "<anonymous>";
+		if (parent instanceof PropertyDeclaration) {
+			return ((PropertyDeclaration) parent).getName();
+		} else {
+			return "<anonymous>";
+		}
 	}
 
 	@Override
 	protected ISourceNode getNameNode() {
-		// TODO Auto-generated method stub
-		return function.getFunctionKeyword();
+		if (parent instanceof PropertyDeclaration) {
+			return ((PropertyDeclaration) parent).getNameNode();
+		} else {
+			return function.getFunctionKeyword();
+		}
 	}
 
 	@Override

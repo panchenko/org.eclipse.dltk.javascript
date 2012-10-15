@@ -3,18 +3,23 @@ package org.eclipse.dltk.internal.javascript.parser.structure;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.dltk.compiler.ISourceElementRequestor;
+import org.eclipse.dltk.compiler.IElementRequestor.FieldInfo;
+import org.eclipse.dltk.core.ISourceNode;
+import org.eclipse.dltk.javascript.ast.PropertyInitializer;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
 @Structure3
 public class PropertyDeclaration extends ParentNode implements IDeclaration {
 
 	private final String name;
+	private final PropertyInitializer initializer;
 	private IStructureNode value;
 
-	public PropertyDeclaration(IParentNode parent, String name) {
+	public PropertyDeclaration(IParentNode parent, String name,
+			PropertyInitializer initializer) {
 		super(parent);
 		this.name = name;
+		this.initializer = initializer;
 	}
 
 	public String getName() {
@@ -37,6 +42,10 @@ public class PropertyDeclaration extends ParentNode implements IDeclaration {
 		this.value = value;
 	}
 
+	public ISourceNode getNameNode() {
+		return initializer.getName();
+	}
+
 	public List<IStructureNode> getChildren() {
 		return value != null ? Collections.singletonList(value) : Collections
 				.<IStructureNode> emptyList();
@@ -55,13 +64,23 @@ public class PropertyDeclaration extends ParentNode implements IDeclaration {
 		return sb.toString();
 	}
 
-	public void reportStructure(ISourceElementRequestor requestor,
+	public void reportStructure(IStructureRequestor requestor,
 			boolean allowDeclarations) {
 		if (allowDeclarations) {
-
+			if (value instanceof FunctionNode) {
+				value.reportStructure(requestor, allowDeclarations);
+			} else {
+				final FieldInfo info = new FieldInfo();
+				info.declarationStart = initializer.start();
+				info.name = getName();
+				info.nameSourceStart = initializer.getName().start();
+				info.nameSourceEnd = initializer.getName().end();
+				// info.type = typeToModel(type);
+				requestor.enterField(info);
+				reportChildrenStructure(requestor, allowDeclarations);
+				requestor.exitField(initializer.end() - 1);
+			}
 		}
-		// TODO Auto-generated method stub
-
 	}
 
 }

@@ -113,7 +113,7 @@ public class StructureReporter3 extends StructureReporterBase {
 					visit(pi.getName());
 				}
 				final PropertyDeclaration propertyDeclaration = new PropertyDeclaration(
-						peek(), name);
+						peek(), name, (PropertyInitializer) part);
 				object.addChild(propertyDeclaration);
 				push(propertyDeclaration);
 				propertyDeclaration.setValue(visit(pi.getValue()));
@@ -145,7 +145,15 @@ public class StructureReporter3 extends StructureReporterBase {
 		final String name = node.getName();
 		final IDeclaration resolved = peek().getScope().resolve(name);
 		if (resolved != null) {
-			peek().addLocalReference(node, resolved);
+			if (resolved.getParent() instanceof ScriptScope) {
+				if (resolved instanceof FunctionDeclaration) {
+					peek().addMethodReference(name);
+				} else {
+					peek().addFieldReference(name);
+				}
+			} else {
+				peek().addLocalReference(node, resolved);
+			}
 		} else {
 			if (node.getParent() instanceof CallExpression) {
 				peek().addMethodReference(name);

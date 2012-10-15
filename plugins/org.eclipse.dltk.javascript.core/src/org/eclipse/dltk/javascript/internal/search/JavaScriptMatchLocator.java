@@ -41,7 +41,7 @@ import org.eclipse.dltk.core.search.matching.ModuleFactory;
 import org.eclipse.dltk.core.search.matching2.IMatchingPredicate;
 import org.eclipse.dltk.core.search.matching2.MatchLevel;
 import org.eclipse.dltk.core.search.matching2.MatchingCollector;
-import org.eclipse.dltk.internal.javascript.parser.structure.StructureReporter2;
+import org.eclipse.dltk.internal.javascript.parser.structure.StructureReporter3;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
@@ -78,8 +78,7 @@ public class JavaScriptMatchLocator implements IMatchLocator,
 
 		final MatchingCollectorSourceElementRequestor matchingCollectorRequestor = new MatchingCollectorSourceElementRequestor(
 				new MatchingCollector<MatchingNode>(predicate, nodeSet));
-		StructureReporter2 visitor = new StructureReporter2(inferencer2,
-				matchingCollectorRequestor);
+		StructureReporter3 visitor = new StructureReporter3();
 		for (SearchDocument document : searchDocuments) {
 			// TODO report progress
 			final ISourceModule module = moduleFactory.create(document);

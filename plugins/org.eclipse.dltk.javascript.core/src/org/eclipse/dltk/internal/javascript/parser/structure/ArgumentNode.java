@@ -1,6 +1,5 @@
 package org.eclipse.dltk.internal.javascript.parser.structure;
 
-import org.eclipse.dltk.compiler.ISourceElementRequestor;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
 @Structure3
@@ -31,7 +30,7 @@ public class ArgumentNode extends StructureNode implements IDeclaration {
 		return sb.toString();
 	}
 
-	public void reportStructure(ISourceElementRequestor requestor,
+	public void reportStructure(IStructureRequestor requestor,
 			boolean allowDeclarations) {
 		// empty
 	}

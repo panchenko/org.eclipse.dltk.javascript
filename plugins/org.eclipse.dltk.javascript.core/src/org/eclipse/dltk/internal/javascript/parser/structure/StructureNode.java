@@ -3,7 +3,6 @@ package org.eclipse.dltk.internal.javascript.parser.structure;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.dltk.compiler.ISourceElementRequestor;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
 @Structure3
@@ -30,7 +29,7 @@ public abstract class StructureNode implements IStructureNode {
 		return type != null ? type.getName() : null;
 	}
 
-	protected void reportChildrenStructure(ISourceElementRequestor requestor,
+	protected void reportChildrenStructure(IStructureRequestor requestor,
 			boolean allowDeclarations) {
 		for (IStructureNode child : getChildren()) {
 			child.reportStructure(requestor, allowDeclarations);

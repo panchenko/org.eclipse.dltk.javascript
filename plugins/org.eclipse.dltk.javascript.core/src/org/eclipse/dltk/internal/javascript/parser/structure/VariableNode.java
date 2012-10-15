@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.dltk.compiler.IElementRequestor.FieldInfo;
-import org.eclipse.dltk.compiler.ISourceElementRequestor;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
@@ -56,7 +55,7 @@ public class VariableNode extends ParentNode implements IDeclaration {
 		return sb.toString();
 	}
 
-	public void reportStructure(ISourceElementRequestor requestor,
+	public void reportStructure(IStructureRequestor requestor,
 			boolean allowDeclarations) {
 		if (allowDeclarations) {
 			final FieldInfo info = new FieldInfo();

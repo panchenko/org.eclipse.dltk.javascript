@@ -3,8 +3,6 @@ package org.eclipse.dltk.internal.javascript.parser.structure;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.dltk.compiler.ISourceElementRequestor;
-
 @Structure3
 public class Scope extends ParentNode implements IScope {
 
@@ -60,19 +58,18 @@ public class Scope extends ParentNode implements IScope {
 		return "<Script>";
 	}
 
-	public void reportStructure(ISourceElementRequestor requestor,
+	public void reportStructure(IStructureRequestor requestor,
 			boolean allowDeclarations) {
 		reportChildrenStructure(requestor, allowDeclarations);
 	}
 
 	@Override
-	protected void reportChildrenStructure(ISourceElementRequestor requestor,
+	protected void reportChildrenStructure(IStructureRequestor requestor,
 			boolean allowDeclarations) {
 		super.reportChildrenStructure(requestor, allowDeclarations);
 		for (IStructureNode child : getNested()) {
 			child.reportStructure(requestor, false);
 		}
-		// TODO (alex) report references
 	}
 
 }
