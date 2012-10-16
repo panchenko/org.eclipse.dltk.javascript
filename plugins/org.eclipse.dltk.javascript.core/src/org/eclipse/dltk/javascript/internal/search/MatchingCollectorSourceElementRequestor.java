@@ -19,8 +19,8 @@ import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTag;
 import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTags;
+import org.eclipse.dltk.javascript.structure.IDeclaration;
 import org.eclipse.dltk.javascript.structure.IStructureRequestor;
-import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
@@ -44,17 +44,16 @@ public class MatchingCollectorSourceElementRequestor implements
 		nodes.clear();
 	}
 
-	public void acceptLocalReference(Identifier node, IValueReference reference) {
-		nodes.add(new LocalVariableReferenceNode(node, reference.getLocation()));
+	public void acceptLocalReference(Identifier node, IDeclaration target) {
+		nodes.add(new LocalVariableReferenceNode(node, target.getLocation()));
 	}
 
-	public void acceptFieldReference(Identifier node, IValueReference reference) {
-		nodes.add(new FieldReferenceNode(node, reference));
+	public void acceptFieldReference(Identifier node) {
+		nodes.add(new FieldReferenceNode(node, null));
 	}
 
-	public void acceptMethodReference(Identifier node, int argCount,
-			IValueReference reference) {
-		nodes.add(new MethodReferenceNode(node, reference));
+	public void acceptMethodReference(Identifier node, int argCount) {
+		nodes.add(new MethodReferenceNode(node, null));
 	}
 
 	public void enterNamespace(String[] namespace) {

@@ -231,7 +231,13 @@ public class StructureParserTests extends TestCase {
 		code.add("  x: 1,");
 		code.add("  y: 2");
 		code.add("}");
-		parse(code.toString());
+		final Root actual = parse(code.toString());
+
+		final Root expected = new Root();
+		expected.add(new Field("POINT").add(
+				new Method("copy").setType("Point"), new Field("x"), new Field(
+						"y")));
+		assertEquals(expected, actual);
 	}
 
 	public void testLocalObjectLiteral() {
@@ -244,7 +250,10 @@ public class StructureParserTests extends TestCase {
 		code.add("    y: 2");
 		code.add("  }");
 		code.add("}");
-		parse(code.toString());
+
+		final Root expected = new Root();
+		expected.add(new Method("test"));
+		assertEquals(expected, parse(code.toString()));
 	}
 
 }

@@ -17,8 +17,8 @@ public interface IParentNode extends IStructureNode {
 
 	void addLocalReference(Identifier node, IDeclaration resolved);
 
-	void addMethodReference(String name);
+	void addMethodReference(Identifier identifier, int argCount);
 
-	void addFieldReference(String name);
+	void addFieldReference(Identifier identifier);
 
 }

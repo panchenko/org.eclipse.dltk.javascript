@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.structure;
 
+import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
 public interface IDeclaration extends IStructureNode {
@@ -18,5 +19,7 @@ public interface IDeclaration extends IStructureNode {
 	String getName();
 
 	JSType getType();
+
+	ReferenceLocation getLocation();
 
 }

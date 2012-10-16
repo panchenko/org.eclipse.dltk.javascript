@@ -2,6 +2,7 @@ package org.eclipse.dltk.javascript.structure;
 
 import org.eclipse.dltk.core.ISourceNode;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
+import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 
 public class FunctionDeclaration extends FunctionNode implements IDeclaration {
@@ -19,6 +20,10 @@ public class FunctionDeclaration extends FunctionNode implements IDeclaration {
 	@Override
 	protected ISourceNode getNameNode() {
 		return function.getIdentifier();
+	}
+
+	public ReferenceLocation getLocation() {
+		return method.getLocation();
 	}
 
 	@Override

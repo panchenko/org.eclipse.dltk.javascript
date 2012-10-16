@@ -5,19 +5,22 @@ import java.util.List;
 
 import org.eclipse.dltk.compiler.IElementRequestor.FieldInfo;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
+import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
 public class VariableNode extends ParentNode implements IDeclaration {
 
 	private final JSType type;
 	private final VariableDeclaration declaration;
+	private final ReferenceLocation location;
 	private IStructureNode value;
 
 	public VariableNode(IParentNode parent, VariableDeclaration declaration,
-			JSType type) {
+			JSType type, ReferenceLocation location) {
 		super(parent);
 		this.declaration = declaration;
 		this.type = type;
+		this.location = location;
 	}
 
 	public String getName() {
@@ -26,6 +29,10 @@ public class VariableNode extends ParentNode implements IDeclaration {
 
 	public JSType getType() {
 		return type;
+	}
+
+	public ReferenceLocation getLocation() {
+		return location;
 	}
 
 	public IStructureNode getValue() {

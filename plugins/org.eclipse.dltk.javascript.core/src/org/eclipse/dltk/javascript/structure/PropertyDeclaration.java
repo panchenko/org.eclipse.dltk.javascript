@@ -6,19 +6,22 @@ import java.util.List;
 import org.eclipse.dltk.compiler.IElementRequestor.FieldInfo;
 import org.eclipse.dltk.core.ISourceNode;
 import org.eclipse.dltk.javascript.ast.PropertyInitializer;
+import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
 public class PropertyDeclaration extends ParentNode implements IDeclaration {
 
 	private final String name;
 	private final PropertyInitializer initializer;
+	private final ReferenceLocation location;
 	private IStructureNode value;
 
 	public PropertyDeclaration(IParentNode parent, String name,
-			PropertyInitializer initializer) {
+			PropertyInitializer initializer, ReferenceLocation location) {
 		super(parent);
 		this.name = name;
 		this.initializer = initializer;
+		this.location = location;
 	}
 
 	public String getName() {
@@ -31,6 +34,10 @@ public class PropertyDeclaration extends ParentNode implements IDeclaration {
 		} else {
 			return null;
 		}
+	}
+
+	public ReferenceLocation getLocation() {
+		return location;
 	}
 
 	public IStructureNode getValue() {

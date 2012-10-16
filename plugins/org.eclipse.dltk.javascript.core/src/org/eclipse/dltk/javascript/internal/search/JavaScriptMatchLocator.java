@@ -46,7 +46,7 @@ import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 import org.eclipse.dltk.javascript.parser.JavaScriptParserUtil;
-import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
+import org.eclipse.dltk.javascript.structure.IStructureNode;
 import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
 
 public class JavaScriptMatchLocator implements IMatchLocator,
@@ -87,15 +87,10 @@ public class JavaScriptMatchLocator implements IMatchLocator,
 			StructureReporter3 visitor = new StructureReporter3(
 					new ReferenceSource(module));
 			nodeSet.clear();
-			inferencer2.setModelElement(module);
 			final Script script = JavaScriptParserUtil.parse(module);
-			inferencer2.setVisitor(visitor);
-			inferencer2.doInferencing(script);
-			ITypeSystem.CURRENT.runWith(inferencer2, new Runnable() {
-				public void run() {
-					matchingCollectorRequestor.report();
-				}
-			});
+			final IStructureNode structureNode = visitor.visitScript(script);
+			structureNode.reportStructure(matchingCollectorRequestor, true);
+			matchingCollectorRequestor.report();
 			if (!nodeSet.isEmpty()) {
 				resolvePotentialMatches(nodeSet);
 				participant = document.getParticipant();

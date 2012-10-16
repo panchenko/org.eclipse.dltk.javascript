@@ -13,7 +13,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 public abstract class FunctionNode extends Scope {
 
 	final FunctionStatement function;
-	private final IMethod method;
+	final IMethod method;
 
 	public FunctionNode(IParentNode parent, FunctionStatement function,
 			IMethod method) {
