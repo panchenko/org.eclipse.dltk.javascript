@@ -38,6 +38,10 @@ public abstract class FunctionNode extends Scope {
 		return method.getType();
 	}
 
+	public int start() {
+		return getNameNode().start();
+	}
+
 	protected String argumentsToString() {
 		final StringBuilder sb = new StringBuilder();
 		for (ArgumentNode argument : getArguments()) {

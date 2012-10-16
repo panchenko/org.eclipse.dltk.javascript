@@ -1,6 +1,8 @@
 package org.eclipse.dltk.javascript.structure;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.eclipse.dltk.javascript.ast.Identifier;
@@ -11,7 +13,7 @@ public abstract class ParentNode extends StructureNode implements IParentNode {
 		super(parent);
 	}
 
-	static abstract class NodeReference {
+	static abstract class NodeReference implements IStructureNode {
 
 		final Identifier identifier;
 
@@ -19,7 +21,26 @@ public abstract class ParentNode extends StructureNode implements IParentNode {
 			this.identifier = identifier;
 		}
 
-		abstract void reportStructure(IStructureRequestor requestor);
+		public int start() {
+			return identifier.start();
+		}
+
+		public boolean isManyChildren() {
+			return false;
+		}
+
+		public List<? extends IStructureNode> getChildren() {
+			return Collections.emptyList();
+		}
+
+		public IParentNode getParent() {
+			return null;
+		}
+
+		public IScope getScope() {
+			return null;
+		}
+
 	}
 
 	static class LocalReference extends NodeReference {
@@ -31,8 +52,8 @@ public abstract class ParentNode extends StructureNode implements IParentNode {
 			this.declaration = declaration;
 		}
 
-		@Override
-		void reportStructure(IStructureRequestor requestor) {
+		public void reportStructure(IStructureRequestor requestor,
+				boolean allowDeclarations) {
 			requestor.acceptLocalReference(identifier, declaration);
 		}
 	}
@@ -43,8 +64,8 @@ public abstract class ParentNode extends StructureNode implements IParentNode {
 			super(identifier);
 		}
 
-		@Override
-		void reportStructure(IStructureRequestor requestor) {
+		public void reportStructure(IStructureRequestor requestor,
+				boolean allowDeclarations) {
 			requestor.acceptFieldReference(identifier);
 		}
 	}
@@ -58,8 +79,8 @@ public abstract class ParentNode extends StructureNode implements IParentNode {
 			this.argCount = argCount;
 		}
 
-		@Override
-		void reportStructure(IStructureRequestor requestor) {
+		public void reportStructure(IStructureRequestor requestor,
+				boolean allowDeclarations) {
 			requestor.acceptMethodReference(identifier, argCount);
 		}
 	}
@@ -92,11 +113,22 @@ public abstract class ParentNode extends StructureNode implements IParentNode {
 	@Override
 	protected void reportChildrenStructure(IStructureRequestor requestor,
 			boolean allowDeclarations) {
-		super.reportChildrenStructure(requestor, allowDeclarations);
 		if (references != null) {
-			for (NodeReference reference : references) {
-				reference.reportStructure(requestor);
+			final List<? extends IStructureNode> children = getChildren();
+			final List<IStructureNode> nodes = new ArrayList<IStructureNode>(
+					children.size() + references.size());
+			nodes.addAll(children);
+			nodes.addAll(references);
+			Collections.sort(nodes, new Comparator<IStructureNode>() {
+				public int compare(IStructureNode o1, IStructureNode o2) {
+					return o1.start() - o2.start();
+				}
+			});
+			for (IStructureNode node : nodes) {
+				node.reportStructure(requestor, allowDeclarations);
 			}
+		} else {
+			super.reportChildrenStructure(requestor, allowDeclarations);
 		}
 	}
 

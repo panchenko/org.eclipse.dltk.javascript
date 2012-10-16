@@ -22,4 +22,8 @@ public class ScriptScope extends Scope {
 		return "<Script>";
 	}
 
+	public int start() {
+		return -1;
+	}
+
 }

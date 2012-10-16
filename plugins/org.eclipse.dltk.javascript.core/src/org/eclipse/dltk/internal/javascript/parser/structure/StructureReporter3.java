@@ -135,17 +135,16 @@ public class StructureReporter3 extends
 	protected void processVariable(VariableDeclaration declaration) {
 		final JSVariable variable = new JSVariable(
 				declaration.getVariableName());
+		variable.setLocation(declaration.getInitializer() != null ? ReferenceLocation
+				.create(referenceSource, declaration.start(),
+						declaration.end(), declaration.getIdentifier().start(),
+						declaration.getIdentifier().end())
+				: ReferenceLocation.create(referenceSource,
+						declaration.start(), declaration.end()));
 		jsdocSupport.processVariable(declaration, variable, fReporter,
 				fTypeChecker);
 		final VariableNode variableNode = new VariableNode(peek(), declaration,
-				variable,
-				declaration.getInitializer() != null ? ReferenceLocation
-						.create(referenceSource, declaration.start(),
-								declaration.end(), declaration.getIdentifier()
-										.start(), declaration.getIdentifier()
-										.end())
-						: ReferenceLocation.create(referenceSource,
-								declaration.start(), declaration.end()));
+				variable);
 		peek().getScope().addChild(variableNode);
 		final Expression initializer = declaration.getInitializer();
 		if (initializer != null) {
@@ -188,7 +187,7 @@ public class StructureReporter3 extends
 				pop();
 			}
 		}
-		return object;
+		return !object.getChildren().isEmpty() ? object : null;
 	}
 
 	@Override

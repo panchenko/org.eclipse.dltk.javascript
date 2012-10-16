@@ -40,6 +40,10 @@ public class PropertyDeclaration extends ParentNode implements IDeclaration {
 		return location;
 	}
 
+	public int start() {
+		return location.getDeclarationStart();
+	}
+
 	public IStructureNode getValue() {
 		return value;
 	}

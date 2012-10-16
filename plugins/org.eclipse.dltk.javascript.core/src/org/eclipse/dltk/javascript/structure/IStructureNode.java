@@ -15,6 +15,11 @@ import java.util.List;
 
 public interface IStructureNode {
 
+	/**
+	 * Returns the start offset of the corresponding AST node(s).
+	 */
+	int start();
+
 	List<? extends IStructureNode> getChildren();
 
 	IParentNode getParent();

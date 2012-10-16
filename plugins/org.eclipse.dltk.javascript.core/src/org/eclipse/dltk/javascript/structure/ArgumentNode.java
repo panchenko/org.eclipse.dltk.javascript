@@ -29,6 +29,10 @@ public class ArgumentNode extends StructureNode implements IDeclaration {
 		return location;
 	}
 
+	public int start() {
+		return location.getDeclarationStart();
+	}
+
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder();

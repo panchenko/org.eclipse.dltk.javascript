@@ -26,6 +26,10 @@ public interface IStructureHandler {
 		public void reportStructure(IStructureRequestor requestor,
 				boolean allowDeclarations) {
 		}
+
+		public int start() {
+			return -1;
+		}
 	};
 
 	IStructureNode handle(ASTNode node);

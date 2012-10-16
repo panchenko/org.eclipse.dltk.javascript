@@ -14,15 +14,14 @@ public class VariableNode extends ParentNode implements IDeclaration {
 
 	private final IVariable variable;
 	private final VariableDeclaration declaration;
-	private final ReferenceLocation location;
+
 	private IStructureNode value;
 
 	public VariableNode(IParentNode parent, VariableDeclaration declaration,
-			IVariable variable, ReferenceLocation location) {
+			IVariable variable) {
 		super(parent);
 		this.declaration = declaration;
 		this.variable = variable;
-		this.location = location;
 	}
 
 	public String getName() {
@@ -34,7 +33,11 @@ public class VariableNode extends ParentNode implements IDeclaration {
 	}
 
 	public ReferenceLocation getLocation() {
-		return location;
+		return variable.getLocation();
+	}
+
+	public int start() {
+		return getLocation().getDeclarationStart();
 	}
 
 	public IStructureNode getValue() {

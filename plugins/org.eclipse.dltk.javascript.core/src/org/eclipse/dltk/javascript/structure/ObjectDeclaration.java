@@ -16,11 +16,11 @@ import java.util.List;
 
 public class ObjectDeclaration extends StructureNode {
 
+	private final List<IStructureNode> children = new ArrayList<IStructureNode>();
+
 	public ObjectDeclaration(IParentNode parent) {
 		super(parent);
 	}
-
-	private final List<IStructureNode> children = new ArrayList<IStructureNode>();
 
 	public void addChild(PropertyDeclaration propertyDeclaration) {
 		children.add(propertyDeclaration);
@@ -29,6 +29,10 @@ public class ObjectDeclaration extends StructureNode {
 	@Override
 	public List<IStructureNode> getChildren() {
 		return children;
+	}
+
+	public int start() {
+		return !children.isEmpty() ? children.get(0).start() : 0;
 	}
 
 	@Override
