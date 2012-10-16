@@ -73,8 +73,9 @@ public abstract class FunctionNode extends Scope {
 
 	@Override
 	public void reportStructure(IStructureRequestor requestor,
-			boolean allowDeclarations) {
-		if (allowDeclarations) {
+			IStructureContext context) {
+		final boolean allowed = context.allowMethods();
+		if (allowed) {
 			final MethodInfo info = new MethodInfo();
 			info.declarationStart = function.start();
 			info.name = getName();
@@ -101,10 +102,10 @@ public abstract class FunctionNode extends Scope {
 			info.returnType = typeToModel(getType());
 			info.isConstructor = method.isConstructor();
 			requestor.enterMethod(info, function.getName(), function, method);
-			super.reportStructure(requestor, false);
+		}
+		super.reportStructure(requestor, context.setAllowFields(false));
+		if (allowed) {
 			requestor.exitMethod(function.end() - 1);
-		} else {
-			super.reportStructure(requestor, allowDeclarations);
 		}
 	}
 

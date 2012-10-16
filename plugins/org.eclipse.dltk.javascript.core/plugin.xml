@@ -41,7 +41,7 @@
    <extension
          point="org.eclipse.dltk.core.sourceElementParsers">
       <parser
-            class="org.eclipse.dltk.internal.javascript.parser.JavaScriptSourceElementParser3"
+            class="org.eclipse.dltk.internal.javascript.parser.structure.JavaScriptSourceElementParser3"
             nature="org.eclipse.dltk.javascript.core.nature"
             priority="0">
       </parser>

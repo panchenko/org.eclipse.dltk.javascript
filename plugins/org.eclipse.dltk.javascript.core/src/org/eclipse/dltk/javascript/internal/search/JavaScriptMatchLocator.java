@@ -41,6 +41,7 @@ import org.eclipse.dltk.core.search.matching.ModuleFactory;
 import org.eclipse.dltk.core.search.matching2.IMatchingPredicate;
 import org.eclipse.dltk.core.search.matching2.MatchLevel;
 import org.eclipse.dltk.core.search.matching2.MatchingCollector;
+import org.eclipse.dltk.internal.javascript.parser.structure.StructureContext;
 import org.eclipse.dltk.internal.javascript.parser.structure.StructureReporter3;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.javascript.ast.Script;
@@ -89,7 +90,8 @@ public class JavaScriptMatchLocator implements IMatchLocator,
 			nodeSet.clear();
 			final Script script = JavaScriptParserUtil.parse(module);
 			final IStructureNode structureNode = visitor.visitScript(script);
-			structureNode.reportStructure(matchingCollectorRequestor, true);
+			structureNode.reportStructure(matchingCollectorRequestor,
+					StructureContext.ROOT);
 			matchingCollectorRequestor.report();
 			if (!nodeSet.isEmpty()) {
 				resolvePotentialMatches(nodeSet);

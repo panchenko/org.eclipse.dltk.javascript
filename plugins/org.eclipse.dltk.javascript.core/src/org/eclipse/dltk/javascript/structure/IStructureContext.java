@@ -11,27 +11,12 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.structure;
 
-import org.eclipse.dltk.ast.ASTNode;
-import org.eclipse.dltk.internal.javascript.parser.structure.StructureReporter3;
+public interface IStructureContext {
 
-/**
- * Handler which can be used as plugin for {@link StructureReporter3}.
- */
-public interface IStructureHandler {
+	boolean allowMethods();
 
-	/**
-	 * The special value to return if next handler should be called
-	 */
-	public static final IStructureNode CONTINUE = new StructureNode(null) {
-		public void reportStructure(IStructureRequestor requestor,
-				IStructureContext context) {
-		}
+	boolean allowFields();
 
-		public int start() {
-			return -1;
-		}
-	};
-
-	IStructureNode handle(ASTNode node);
+	IStructureContext setAllowFields(boolean value);
 
 }

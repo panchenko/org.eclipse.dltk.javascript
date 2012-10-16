@@ -9,26 +9,27 @@
  * Contributors:
  *     NumberFour AG - initial API and Implementation (Alex Panchenko)
  *******************************************************************************/
-package org.eclipse.dltk.javascript.structure;
+package org.eclipse.dltk.internal.javascript.parser.structure;
 
-import java.util.List;
+import org.eclipse.dltk.javascript.structure.IStructureContext;
 
-public interface IStructureNode {
+public class StructureContext implements IStructureContext {
 
-	/**
-	 * Returns the start offset of the corresponding AST node(s).
-	 */
-	int start();
+	public static final StructureContext ROOT = new StructureContext();
 
-	List<? extends IStructureNode> getChildren();
+	public boolean allowMethods() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
-	IParentNode getParent();
+	public boolean allowFields() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
-	IScope getScope();
-
-	boolean isManyChildren();
-
-	void reportStructure(IStructureRequestor requestor,
-			IStructureContext context);
+	public IStructureContext setAllowFields(boolean value) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

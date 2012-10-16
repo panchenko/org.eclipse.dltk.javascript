@@ -33,9 +33,9 @@ public abstract class StructureNode implements IStructureNode {
 	}
 
 	protected void reportChildrenStructure(IStructureRequestor requestor,
-			boolean allowDeclarations) {
+			IStructureContext context) {
 		for (IStructureNode child : getChildren()) {
-			child.reportStructure(requestor, allowDeclarations);
+			child.reportStructure(requestor, context);
 		}
 	}
 

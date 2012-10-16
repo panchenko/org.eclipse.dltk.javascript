@@ -42,7 +42,7 @@ public class ArgumentNode extends StructureNode implements IDeclaration {
 	}
 
 	public void reportStructure(IStructureRequestor requestor,
-			boolean allowDeclarations) {
+			IStructureContext context) {
 		// empty
 	}
 

@@ -48,8 +48,8 @@ public abstract class Scope extends ParentNode implements IScope {
 	}
 
 	public void reportStructure(IStructureRequestor requestor,
-			boolean allowDeclarations) {
-		reportChildrenStructure(requestor, allowDeclarations);
+			IStructureContext context) {
+		reportChildrenStructure(requestor, context);
 	}
 
 }

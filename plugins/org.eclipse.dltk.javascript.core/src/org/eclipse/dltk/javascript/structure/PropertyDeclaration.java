@@ -75,11 +75,13 @@ public class PropertyDeclaration extends ParentNode implements IDeclaration {
 	}
 
 	public void reportStructure(IStructureRequestor requestor,
-			boolean allowDeclarations) {
-		if (allowDeclarations) {
-			if (value instanceof FunctionNode) {
-				value.reportStructure(requestor, allowDeclarations);
-			} else {
+			IStructureContext context) {
+		if (value instanceof FunctionNode) {
+			if (context.allowMethods()) {
+				value.reportStructure(requestor, context);
+			}
+		} else {
+			if (context.allowFields()) {
 				final FieldInfo info = new FieldInfo();
 				info.declarationStart = initializer.start();
 				info.name = getName();
@@ -87,7 +89,7 @@ public class PropertyDeclaration extends ParentNode implements IDeclaration {
 				info.nameSourceEnd = initializer.getName().end() - 1;
 				// info.type = typeToModel(type);
 				requestor.enterField(info, initializer.getName(), null);
-				reportChildrenStructure(requestor, allowDeclarations);
+				reportChildrenStructure(requestor, context);
 				requestor.exitField(initializer.end() - 1);
 			}
 		}

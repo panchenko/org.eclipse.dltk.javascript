@@ -12,7 +12,7 @@
 package org.eclipse.dltk.javascript.core.tests.structure;
 
 import org.eclipse.dltk.compiler.env.IModuleSource;
-import org.eclipse.dltk.internal.javascript.parser.JavaScriptSourceElementParser3;
+import org.eclipse.dltk.internal.javascript.parser.structure.JavaScriptSourceElementParser3;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
 

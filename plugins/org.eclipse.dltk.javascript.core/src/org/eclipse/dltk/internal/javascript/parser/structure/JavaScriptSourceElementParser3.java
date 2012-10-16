@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010 xored software, Inc.
+ * Copyright (c) 2012 NumberFour AG
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,16 +7,14 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
+ *     NumberFour AG - initial API and Implementation (Alex Panchenko)
  *******************************************************************************/
-package org.eclipse.dltk.internal.javascript.parser;
+package org.eclipse.dltk.internal.javascript.parser.structure;
 
 import org.eclipse.dltk.compiler.ISourceElementRequestor;
 import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.compiler.problem.IProblemReporter;
 import org.eclipse.dltk.core.ISourceElementParser;
-import org.eclipse.dltk.internal.javascript.parser.structure.StructureReporter3;
-import org.eclipse.dltk.internal.javascript.parser.structure.StructureRequestor;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.parser.JavaScriptParserUtil;
 import org.eclipse.dltk.javascript.structure.IStructureNode;
@@ -42,7 +40,8 @@ public class JavaScriptSourceElementParser3 implements ISourceElementParser {
 				new ReferenceSource(module.getModelElement()));
 		fRequestor.enterModule();
 		final IStructureNode node = reporter.visit(script);
-		node.reportStructure(new StructureRequestor(fRequestor), true);
+		node.reportStructure(new StructureRequestor(fRequestor),
+				StructureContext.ROOT);
 		fRequestor.exitModule(script.sourceEnd());
 		if (DEBUG) {
 			print(node, true, 0);

@@ -46,8 +46,8 @@ public class ObjectDeclaration extends StructureNode {
 	}
 
 	public void reportStructure(IStructureRequestor requestor,
-			boolean allowDeclarations) {
-		reportChildrenStructure(requestor, allowDeclarations);
+			IStructureContext context) {
+		reportChildrenStructure(requestor, context);
 	}
 
 }

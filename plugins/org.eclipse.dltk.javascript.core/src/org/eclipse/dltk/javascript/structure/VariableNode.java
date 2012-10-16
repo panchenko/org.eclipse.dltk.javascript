@@ -67,8 +67,9 @@ public class VariableNode extends ParentNode implements IDeclaration {
 	}
 
 	public void reportStructure(IStructureRequestor requestor,
-			boolean allowDeclarations) {
-		if (allowDeclarations) {
+			IStructureContext context) {
+		final boolean allowed = context.allowFields();
+		if (allowed) {
 			final FieldInfo info = new FieldInfo();
 			info.declarationStart = declaration.start();
 			info.name = getName();
@@ -83,10 +84,10 @@ public class VariableNode extends ParentNode implements IDeclaration {
 			}
 			requestor.enterField(info, declaration.getIdentifier(),
 					variable.getType());
-			reportChildrenStructure(requestor, allowDeclarations);
+		}
+		reportChildrenStructure(requestor, context);
+		if (allowed) {
 			requestor.exitField(declaration.end() - 1);
-		} else {
-			reportChildrenStructure(requestor, allowDeclarations);
 		}
 	}
 

@@ -53,7 +53,7 @@ public abstract class ParentNode extends StructureNode implements IParentNode {
 		}
 
 		public void reportStructure(IStructureRequestor requestor,
-				boolean allowDeclarations) {
+				IStructureContext context) {
 			requestor.acceptLocalReference(identifier, declaration);
 		}
 	}
@@ -65,7 +65,7 @@ public abstract class ParentNode extends StructureNode implements IParentNode {
 		}
 
 		public void reportStructure(IStructureRequestor requestor,
-				boolean allowDeclarations) {
+				IStructureContext context) {
 			requestor.acceptFieldReference(identifier);
 		}
 	}
@@ -80,7 +80,7 @@ public abstract class ParentNode extends StructureNode implements IParentNode {
 		}
 
 		public void reportStructure(IStructureRequestor requestor,
-				boolean allowDeclarations) {
+				IStructureContext context) {
 			requestor.acceptMethodReference(identifier, argCount);
 		}
 	}
@@ -112,7 +112,7 @@ public abstract class ParentNode extends StructureNode implements IParentNode {
 
 	@Override
 	protected void reportChildrenStructure(IStructureRequestor requestor,
-			boolean allowDeclarations) {
+			IStructureContext context) {
 		if (references != null) {
 			final List<? extends IStructureNode> children = getChildren();
 			final List<IStructureNode> nodes = new ArrayList<IStructureNode>(
@@ -125,10 +125,10 @@ public abstract class ParentNode extends StructureNode implements IParentNode {
 				}
 			});
 			for (IStructureNode node : nodes) {
-				node.reportStructure(requestor, allowDeclarations);
+				node.reportStructure(requestor, context);
 			}
 		} else {
-			super.reportChildrenStructure(requestor, allowDeclarations);
+			super.reportChildrenStructure(requestor, context);
 		}
 	}
 
