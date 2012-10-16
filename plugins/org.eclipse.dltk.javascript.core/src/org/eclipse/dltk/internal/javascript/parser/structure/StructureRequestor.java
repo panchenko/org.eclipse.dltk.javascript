@@ -77,10 +77,6 @@ public class StructureRequestor implements IStructureRequestor {
 		requestor.enterField(fieldInfo);
 	}
 
-	public void updateField(FieldInfo fieldInfo, int flags) {
-		requestor.updateField(fieldInfo, flags);
-	}
-
 	public boolean enterFieldCheckDuplicates(FieldInfo fieldInfo,
 			Expression identifier, JSType type) {
 		return requestor.enterFieldCheckDuplicates(fieldInfo);

@@ -30,22 +30,11 @@ public class StructureParserTests extends TestCase {
 	protected Root parse(String code) {
 		System.out.println(code.trim());
 		System.out.println("---");
-		final ISourceElementParser p = new JavaScriptSourceElementParser3() {
-			@Override
-			protected Script parse(IModuleSource module) {
-				final JavaScriptParser parser = new JavaScriptParser();
-				return parser.parse(module, fReporter);
-			}
-		};
-		final Recorder newRecorder = new Recorder();
-		p.setRequestor(newRecorder);
-		p.parseSourceModule(new ModuleSource(code));
 		Recorder rec = new Recorder();
 		ISourceElementParser parser = createParser();
 		parser.setRequestor(rec);
 		parser.parseSourceModule(new ModuleSource(code));
 		System.out.println("---");
-		System.out.println(newRecorder.getRoot());
 		System.out.println(rec.getRoot());
 		System.out.println("------");
 		return rec.getRoot();

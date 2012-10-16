@@ -150,7 +150,7 @@ public class StructureReporter3 extends
 		jsdocSupport.processVariable(declaration, variable, fReporter,
 				fTypeChecker);
 		final VariableNode variableNode = new VariableNode(peek(), declaration,
-				variable.getType(),
+				variable,
 				declaration.getInitializer() != null ? ReferenceLocation
 						.create(referenceSource, declaration.start(),
 								declaration.end(), declaration.getIdentifier()

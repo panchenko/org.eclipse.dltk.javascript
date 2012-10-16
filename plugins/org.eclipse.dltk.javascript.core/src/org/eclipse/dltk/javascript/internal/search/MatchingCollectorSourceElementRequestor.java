@@ -111,9 +111,6 @@ public class MatchingCollectorSourceElementRequestor implements
 		nodes.add(new FieldDeclarationNode(identifier, type));
 	}
 
-	public void updateField(FieldInfo fieldInfo, int flags) {
-	}
-
 	public boolean enterFieldCheckDuplicates(FieldInfo fieldInfo,
 			Expression identifier, JSType type) {
 		enterField(fieldInfo, identifier, type);
