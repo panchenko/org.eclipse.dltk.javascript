@@ -126,7 +126,9 @@ public class TypeSystemImpl implements ITypeSystem {
 			declarations.clear();
 			parameterized.clear();
 			contextualized.clear();
-			values.clear();
+			if (values != null) {
+				values.clear();
+			}
 		}
 	}
 
