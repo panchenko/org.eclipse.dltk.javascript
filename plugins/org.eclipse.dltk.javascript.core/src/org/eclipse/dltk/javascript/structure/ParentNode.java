@@ -85,6 +85,10 @@ public abstract class ParentNode extends StructureNode implements IParentNode {
 		addReference(new FieldReference(identifier));
 	}
 
+	public boolean isStructureKnown() {
+		return true;
+	}
+
 	@Override
 	protected void reportChildrenStructure(IStructureRequestor requestor,
 			boolean allowDeclarations) {

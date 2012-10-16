@@ -16,6 +16,10 @@ public abstract class StructureNode implements IStructureNode {
 		return Collections.emptyList();
 	}
 
+	public boolean isManyChildren() {
+		return false;
+	}
+
 	public IParentNode getParent() {
 		return parent;
 	}

@@ -21,6 +21,8 @@ public interface IStructureNode {
 
 	IScope getScope();
 
+	boolean isManyChildren();
+
 	void reportStructure(IStructureRequestor requestor,
 			boolean allowDeclarations);
 

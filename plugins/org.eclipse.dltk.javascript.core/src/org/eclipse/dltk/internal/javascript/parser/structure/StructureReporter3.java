@@ -14,12 +14,12 @@ package org.eclipse.dltk.internal.javascript.parser.structure;
 import java.util.List;
 import java.util.Stack;
 
+import org.eclipse.dltk.annotations.Nullable;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.internal.javascript.ti.JSDocSupport;
 import org.eclipse.dltk.internal.javascript.ti.JSMethod;
 import org.eclipse.dltk.internal.javascript.ti.JSVariable;
 import org.eclipse.dltk.javascript.ast.AbstractNavigationVisitor;
-import org.eclipse.dltk.javascript.ast.Argument;
 import org.eclipse.dltk.javascript.ast.CallExpression;
 import org.eclipse.dltk.javascript.ast.DecimalLiteral;
 import org.eclipse.dltk.javascript.ast.Expression;
@@ -35,7 +35,6 @@ import org.eclipse.dltk.javascript.ast.SetMethod;
 import org.eclipse.dltk.javascript.ast.StringLiteral;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.parser.JSProblemReporter;
-import org.eclipse.dltk.javascript.structure.ArgumentNode;
 import org.eclipse.dltk.javascript.structure.FunctionDeclaration;
 import org.eclipse.dltk.javascript.structure.FunctionExpression;
 import org.eclipse.dltk.javascript.structure.FunctionNode;
@@ -49,7 +48,6 @@ import org.eclipse.dltk.javascript.structure.PropertyDeclaration;
 import org.eclipse.dltk.javascript.structure.ScriptScope;
 import org.eclipse.dltk.javascript.structure.VariableNode;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
-import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.ITypeChecker;
 import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
@@ -79,30 +77,29 @@ public class StructureReporter3 extends
 		for (IStructureHandler handler : handlers) {
 			final IStructureNode value = handler.handle(node);
 			if (value != IStructureHandler.CONTINUE) {
-				if (value != null) {
-					if (!parents.isEmpty()) {
-						// TODO skip VarDeclaration, PropertyDeclaration
-						parents.peek().getScope().addNested(value);
-					}
-				}
-				return value;
+				return addToParent(value);
 			}
 		}
-		final IStructureNode value = super.visit(node);
+		return addToParent(super.visit(node));
+	}
+
+	private IStructureNode addToParent(@Nullable final IStructureNode value) {
 		if (value != null) {
 			if (!parents.isEmpty()) {
-				// TODO skip VarDeclaration, PropertyDeclaration
-				parents.peek().getScope().addNested(value);
+				final IParentNode parent = parents.peek();
+				if (!parent.isStructureKnown()) {
+					parent.getScope().addChild(value);
+				}
 			}
 		}
 		return value;
 	}
 
-	protected void push(IParentNode declaration) {
+	public void push(IParentNode declaration) {
 		parents.push(declaration);
 	}
 
-	protected IParentNode pop() {
+	public IParentNode pop() {
 		return parents.pop();
 	}
 
@@ -128,15 +125,6 @@ public class StructureReporter3 extends
 		} else {
 			functionNode = new FunctionExpression(peek(), node, method);
 		}
-		for (Argument argument : node.getArguments()) {
-			final String name = argument.getArgumentName();
-			final IParameter parameter = method.getParameter(name);
-			functionNode.addChild(new ArgumentNode(functionNode, name,
-					parameter != null ? parameter.getType() : null,
-					ReferenceLocation.create(referenceSource, argument.start(),
-							argument.end())));
-		}
-		peek().getScope().addChild(functionNode);
 		push(functionNode);
 		// TODO visit scope declarations?
 		super.visitFunctionStatement(node);

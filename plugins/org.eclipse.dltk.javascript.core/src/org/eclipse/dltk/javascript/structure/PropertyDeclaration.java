@@ -80,7 +80,7 @@ public class PropertyDeclaration extends ParentNode implements IDeclaration {
 				info.declarationStart = initializer.start();
 				info.name = getName();
 				info.nameSourceStart = initializer.getName().start();
-				info.nameSourceEnd = initializer.getName().end();
+				info.nameSourceEnd = initializer.getName().end() - 1;
 				// info.type = typeToModel(type);
 				requestor.enterField(info, initializer.getName(), null);
 				reportChildrenStructure(requestor, allowDeclarations);

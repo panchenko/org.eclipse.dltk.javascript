@@ -32,6 +32,11 @@ public class ObjectDeclaration extends StructureNode {
 	}
 
 	@Override
+	public boolean isManyChildren() {
+		return true;
+	}
+
+	@Override
 	public String toString() {
 		return "<object>";
 	}

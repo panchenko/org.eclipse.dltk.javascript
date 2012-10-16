@@ -19,9 +19,7 @@ import org.eclipse.dltk.internal.javascript.parser.structure.StructureReporter3;
 import org.eclipse.dltk.internal.javascript.parser.structure.StructureRequestor;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.parser.JavaScriptParserUtil;
-import org.eclipse.dltk.javascript.structure.IScope;
 import org.eclipse.dltk.javascript.structure.IStructureNode;
-import org.eclipse.dltk.javascript.structure.ObjectDeclaration;
 import org.eclipse.dltk.javascript.structure.ScriptScope;
 import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
 
@@ -52,7 +50,7 @@ public class JavaScriptSourceElementParser3 implements ISourceElementParser {
 	}
 
 	private void print(IStructureNode node, boolean printable, int level) {
-		if (node instanceof IScope || node instanceof ObjectDeclaration) {
+		if (node.isManyChildren()) {
 			final int nextLevel = node instanceof ScriptScope ? level
 					: level + 1;
 			for (IStructureNode child : node.getChildren()) {
@@ -61,15 +59,6 @@ public class JavaScriptSourceElementParser3 implements ISourceElementParser {
 				}
 				System.out.println(child);
 				print(child, true, nextLevel);
-			}
-			if (node instanceof IScope) {
-				for (IStructureNode child : ((IScope) node).getNested()) {
-					for (int i = 0; i < nextLevel; ++i) {
-						System.out.print('\t');
-					}
-					System.out.println(child);
-					print(child, true, nextLevel);
-				}
 			}
 		} else {
 			for (IStructureNode child : node.getChildren()) {

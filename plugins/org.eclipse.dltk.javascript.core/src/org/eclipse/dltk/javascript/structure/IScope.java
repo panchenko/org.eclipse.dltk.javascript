@@ -11,17 +11,11 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.structure;
 
-import java.util.List;
-
 import org.eclipse.dltk.annotations.Nullable;
 
 public interface IScope extends IParentNode {
 
 	void addChild(IStructureNode child);
-
-	void addNested(IStructureNode node);
-
-	List<IStructureNode> getNested();
 
 	@Nullable
 	IDeclaration resolve(String name);

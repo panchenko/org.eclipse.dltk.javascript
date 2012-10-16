@@ -21,4 +21,6 @@ public interface IParentNode extends IStructureNode {
 
 	void addFieldReference(Identifier identifier);
 
+	boolean isStructureKnown();
+
 }

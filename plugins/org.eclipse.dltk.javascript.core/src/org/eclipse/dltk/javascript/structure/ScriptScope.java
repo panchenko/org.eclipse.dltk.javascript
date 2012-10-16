@@ -11,11 +11,15 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.structure;
 
-
 public class ScriptScope extends Scope {
 
 	public ScriptScope() {
 		super(null);
+	}
+
+	@Override
+	public String toString() {
+		return "<Script>";
 	}
 
 }

@@ -3,7 +3,7 @@ package org.eclipse.dltk.javascript.structure;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Scope extends ParentNode implements IScope {
+public abstract class Scope extends ParentNode implements IScope {
 
 	public Scope(IParentNode parent) {
 		super(parent);
@@ -14,30 +14,25 @@ public class Scope extends ParentNode implements IScope {
 		return this;
 	}
 
+	public boolean isStructureKnown() {
+		return false;
+	}
+
 	private final List<IStructureNode> children = new ArrayList<IStructureNode>();
 
 	public void addChild(IStructureNode child) {
-		if (!children.contains(child)) {
-			children.add(child);
-			nested.remove(child);
-		}
-	}
-
-	private final List<IStructureNode> nested = new ArrayList<IStructureNode>();
-
-	public void addNested(IStructureNode node) {
-		if (!children.contains(node) && !nested.contains(node)) {
-			nested.add(node);
-		}
-	}
-
-	public List<IStructureNode> getNested() {
-		return nested;
+		assert child != null;
+		children.add(child);
 	}
 
 	@Override
 	public List<? extends IStructureNode> getChildren() {
 		return children;
+	}
+
+	@Override
+	public boolean isManyChildren() {
+		return true;
 	}
 
 	public IDeclaration resolve(String name) {
@@ -52,23 +47,9 @@ public class Scope extends ParentNode implements IScope {
 		return parent != null ? parent.getScope().resolve(name) : null;
 	}
 
-	@Override
-	public String toString() {
-		return "<Script>";
-	}
-
 	public void reportStructure(IStructureRequestor requestor,
 			boolean allowDeclarations) {
 		reportChildrenStructure(requestor, allowDeclarations);
-	}
-
-	@Override
-	protected void reportChildrenStructure(IStructureRequestor requestor,
-			boolean allowDeclarations) {
-		super.reportChildrenStructure(requestor, allowDeclarations);
-		for (IStructureNode child : getNested()) {
-			child.reportStructure(requestor, false);
-		}
 	}
 
 }

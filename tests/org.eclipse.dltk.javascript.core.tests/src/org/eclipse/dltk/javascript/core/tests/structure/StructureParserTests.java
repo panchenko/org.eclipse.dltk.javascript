@@ -13,13 +13,9 @@ package org.eclipse.dltk.javascript.core.tests.structure;
 
 import junit.framework.TestCase;
 
-import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.compiler.env.ModuleSource;
 import org.eclipse.dltk.core.ISourceElementParser;
 import org.eclipse.dltk.core.tests.util.StringList;
-import org.eclipse.dltk.internal.javascript.parser.JavaScriptSourceElementParser3;
-import org.eclipse.dltk.javascript.ast.Script;
-import org.eclipse.dltk.javascript.parser.JavaScriptParser;
 
 public class StructureParserTests extends TestCase {
 

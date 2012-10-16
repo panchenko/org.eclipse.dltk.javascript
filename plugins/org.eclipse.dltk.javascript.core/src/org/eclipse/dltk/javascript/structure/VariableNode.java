@@ -70,7 +70,7 @@ public class VariableNode extends ParentNode implements IDeclaration {
 			info.declarationStart = declaration.start();
 			info.name = getName();
 			info.nameSourceStart = declaration.getIdentifier().start();
-			info.nameSourceEnd = declaration.getIdentifier().end();
+			info.nameSourceEnd = declaration.getIdentifier().end() - 1;
 			info.type = typeToModel(variable.getType());
 			if (variable.getVisibility() != null) {
 				info.modifiers |= variable.getVisibility().getFlags();
