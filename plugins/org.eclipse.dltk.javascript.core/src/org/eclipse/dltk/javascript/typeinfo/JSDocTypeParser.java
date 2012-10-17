@@ -428,8 +428,8 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 				property.setName(name);
 				skipSpaces(input);
 				if (optional) {
-					// todo test if it ends on ] ?
-					input.consume();
+					match(input, ']');
+					skipSpaces(input);
 					property.setOptional(true);
 				}
 
