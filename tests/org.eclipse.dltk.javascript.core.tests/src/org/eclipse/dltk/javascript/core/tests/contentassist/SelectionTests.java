@@ -21,12 +21,12 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.dltk.codeassist.ISelectionEngine;
 import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.core.DLTKLanguageManager;
-import org.eclipse.dltk.core.IField;
 import org.eclipse.dltk.core.ILocalVariable;
 import org.eclipse.dltk.core.IMethod;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.IScriptProject;
 import org.eclipse.dltk.core.ISourceRange;
+import org.eclipse.dltk.core.ISourceReference;
 import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.core.ScriptModelUtil;
 import org.eclipse.dltk.core.search.IDLTKSearchConstants;
@@ -185,8 +185,9 @@ public class SelectionTests extends AbstractModelTests {
 		IModelElement[] elements = select(module,
 				lastPositionInFile("aa", module, false));
 		assertEquals(1, elements.length);
-		final IField local = (IField) elements[0];
-		final ISourceRange nameRange = local.getNameRange();
+		final IModelElement local = elements[0];
+		final ISourceRange nameRange = ((ISourceReference) local)
+				.getNameRange();
 		final String contents = module.getSourceContents();
 		assertEquals(contents.indexOf("aa"), nameRange.getOffset());
 	}

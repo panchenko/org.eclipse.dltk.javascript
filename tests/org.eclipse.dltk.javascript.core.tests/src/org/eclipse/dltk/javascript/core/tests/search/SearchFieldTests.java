@@ -12,21 +12,18 @@
 package org.eclipse.dltk.javascript.core.tests.search;
 
 import static org.eclipse.dltk.javascript.core.tests.AllTests.PLUGIN_ID;
-import static org.eclipse.dltk.javascript.core.tests.contentassist.AbstractContentAssistTest.lastPositionInFile;
 import static org.eclipse.dltk.javascript.core.tests.contentassist.AbstractContentAssistTest.firstPositionInFile;
+import static org.eclipse.dltk.javascript.core.tests.contentassist.AbstractContentAssistTest.lastPositionInFile;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.core.IField;
 import org.eclipse.dltk.core.IModelElement;
-import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.core.search.FieldDeclarationMatch;
 import org.eclipse.dltk.core.search.FieldReferenceMatch;
-import org.eclipse.dltk.core.tests.model.AbstractSingleProjectSearchTests;
 import org.eclipse.dltk.core.tests.model.TestSearchResults;
-import org.eclipse.dltk.javascript.core.tests.contentassist.SelectionTests;
 
-public class SearchFieldTests extends AbstractSingleProjectSearchTests {
+public class SearchFieldTests extends AbstractSearchTest {
 
 	public SearchFieldTests(String testName) {
 		super(PLUGIN_ID, testName, "selection");
@@ -36,13 +33,9 @@ public class SearchFieldTests extends AbstractSingleProjectSearchTests {
 		return new Suite(SearchFieldTests.class);
 	}
 
-	private IModuleSource getModule(String path) throws ModelException {
-		return (IModuleSource) getSourceModule(getProjectName(), "src", path);
-	}
-
 	public void testFieldAA() throws CoreException {
 		IModuleSource module = getModule("fields.js");
-		IModelElement[] elements = new SelectionTests(null).select(module,
+		IModelElement[] elements = select(module,
 				lastPositionInFile("aa", module, false));
 		assertEquals(1, elements.length);
 		final IField field = (IField) elements[0];
@@ -54,7 +47,7 @@ public class SearchFieldTests extends AbstractSingleProjectSearchTests {
 
 	public void testLazyFieldCC() throws CoreException {
 		IModuleSource module = getModule("fields.js");
-		IModelElement[] elements = new SelectionTests(null).select(module,
+		IModelElement[] elements = select(module,
 				firstPositionInFile("cc", module, false));
 		assertEquals(1, elements.length);
 		final IField field = (IField) elements[0];
