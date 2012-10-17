@@ -13,63 +13,40 @@ package org.eclipse.dltk.internal.javascript.parser.structure;
 
 import java.util.Stack;
 
-import org.eclipse.dltk.javascript.structure.FunctionNode;
-import org.eclipse.dltk.javascript.structure.IDeclaration;
 import org.eclipse.dltk.javascript.structure.IStructureContext;
 import org.eclipse.dltk.javascript.structure.IStructureNode;
+import org.eclipse.dltk.utils.IntList;
 
 public class StructureContext implements IStructureContext {
 
-	private static enum ContextState {
-		ROOT {
-			@Override
-			public ContextState enter(IStructureNode node) {
-				if (node instanceof FunctionNode) {
-					return FUNCTION;
-				} else if (node instanceof IDeclaration) {
-					return FIELD;
-				}
-				return super.enter(node);
-			}
-		},
-		FIELD, OBJECT, FUNCTION, END {
-			@Override
-			public boolean allow(IStructureNode node) {
-				return false;
-			}
-		};
-
-		public ContextState enter(IStructureNode node) {
-			// TODO Auto-generated method stub
-			return this;
-		}
-
-		public boolean allow(IStructureNode node) {
-			return true;
-		}
-	}
-
+	private int currentMask;
 	private final Stack<IStructureNode> nodes = new Stack<IStructureNode>();
-	private final Stack<ContextState> states = new Stack<ContextState>();
+	private final IntList masks = new IntList();
 
 	public boolean allow(IStructureNode node) {
-		return state().allow(node);
-	}
-
-	private ContextState state() {
-		return states.isEmpty() ? ContextState.ROOT : states.peek();
+		return true;
 	}
 
 	public void enter(IStructureNode node) {
 		nodes.push(node);
-		final ContextState state = state();
-		states.push(state.enter(node));
 	}
 
 	public void leave(IStructureNode node) {
 		final IStructureNode value = nodes.pop();
 		assert value == node;
-		states.pop();
+	}
+
+	public boolean allow(int mask) {
+		return (currentMask & mask) == 0;
+	}
+
+	public void pushMask(int mask) {
+		masks.add(currentMask);
+		currentMask |= mask;
+	}
+
+	public void popMask() {
+		currentMask = masks.removeAt(masks.size() - 1);
 	}
 
 }

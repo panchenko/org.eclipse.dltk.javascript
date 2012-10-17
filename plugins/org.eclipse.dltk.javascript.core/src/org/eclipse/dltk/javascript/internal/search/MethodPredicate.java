@@ -79,7 +79,7 @@ public class MethodPredicate extends AbstractMatchingPredicate<MatchingNode> {
 			if (!references)
 				return null;
 			final MethodReferenceNode mNode = (MethodReferenceNode) node;
-			final ReferenceLocation location = mNode.getReferenceLocation();
+			final ReferenceLocation location = mNode.location;
 			if (location != null && nameStart != -1 && nameEnd != -1) {
 				if (location.getNameStart() == nameStart
 						&& location.getNameEnd() == nameEnd
@@ -94,7 +94,7 @@ public class MethodPredicate extends AbstractMatchingPredicate<MatchingNode> {
 				return null;
 			// also test if the field does reference that function.
 			final FieldReferenceNode mNode = (FieldReferenceNode) node;
-			final ReferenceLocation location = mNode.getReferenceLocation();
+			final ReferenceLocation location = mNode.location;
 			if (location != null && nameStart != -1 && nameEnd != -1) {
 				if (location.getNameStart() == nameStart
 						&& location.getNameEnd() == nameEnd

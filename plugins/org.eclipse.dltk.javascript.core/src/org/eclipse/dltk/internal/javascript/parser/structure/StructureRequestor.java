@@ -4,7 +4,6 @@ import org.eclipse.dltk.compiler.IElementRequestor.FieldInfo;
 import org.eclipse.dltk.compiler.IElementRequestor.MethodInfo;
 import org.eclipse.dltk.compiler.IElementRequestor.TypeInfo;
 import org.eclipse.dltk.compiler.ISourceElementRequestor;
-import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.Identifier;
@@ -25,8 +24,7 @@ public class StructureRequestor implements IStructureRequestor {
 	public void acceptLocalReference(Identifier node, IDeclaration target) {
 	}
 
-	public void enterLocal(Identifier identifier, ISourceModule module,
-			JSType type) {
+	public void enterLocal(Identifier identifer, JSType type) {
 	}
 
 	public void exitLocal(int sourceEnd) {

@@ -45,7 +45,9 @@ import org.eclipse.dltk.internal.javascript.parser.structure.StructureContext;
 import org.eclipse.dltk.internal.javascript.parser.structure.StructureReporter3;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.javascript.ast.Script;
+import org.eclipse.dltk.javascript.core.JSBindings;
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
+import org.eclipse.dltk.javascript.internal.core.TemporaryBindings;
 import org.eclipse.dltk.javascript.parser.JavaScriptParserUtil;
 import org.eclipse.dltk.javascript.structure.IStructureNode;
 import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
@@ -78,21 +80,28 @@ public class JavaScriptMatchLocator implements IMatchLocator,
 			return;
 		}
 
-		final MatchingCollectorSourceElementRequestor matchingCollectorRequestor = new MatchingCollectorSourceElementRequestor(
-				new MatchingCollector<MatchingNode>(predicate, nodeSet));
+		final MatchingCollector<MatchingNode> matchingCollector = new MatchingCollector<MatchingNode>(
+				predicate, nodeSet);
+		final MatchingCollectorSourceElementRequestor structureRequestor = new MatchingCollectorSourceElementRequestor();
 		for (SearchDocument document : searchDocuments) {
 			// TODO report progress
 			final ISourceModule module = moduleFactory.create(document);
 			if (module == null)
 				continue;
-			StructureReporter3 visitor = new StructureReporter3(
+			structureRequestor.enterModule(module);
+			final StructureReporter3 visitor = new StructureReporter3(
 					new ReferenceSource(module));
 			nodeSet.clear();
 			final Script script = JavaScriptParserUtil.parse(module);
 			final IStructureNode structureNode = visitor.visitScript(script);
-			structureNode.reportStructure(matchingCollectorRequestor,
+			structureNode.reportStructure(structureRequestor,
 					new StructureContext());
-			matchingCollectorRequestor.report();
+			if (structureRequestor.needsTypeInference()) {
+				final JSBindings bindings = TemporaryBindings.build(
+						inferencer2, module, script);
+				structureRequestor.resolveReferences(bindings);
+			}
+			structureRequestor.report(matchingCollector);
 			if (!nodeSet.isEmpty()) {
 				resolvePotentialMatches(nodeSet);
 				participant = document.getParticipant();
@@ -139,6 +148,7 @@ public class JavaScriptMatchLocator implements IMatchLocator,
 
 	protected void report(MatchingNode node, IModelElement element)
 			throws CoreException {
+		// TODO (alex) make virtual function
 		if (node instanceof FieldDeclarationNode) {
 			requestor.acceptSearchMatch(new FieldDeclarationMatch(element,
 					SearchMatch.A_ACCURATE, node.sourceStart(), length(node),

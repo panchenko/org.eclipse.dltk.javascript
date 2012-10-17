@@ -103,9 +103,9 @@ public abstract class FunctionNode extends Scope {
 			info.isConstructor = method.isConstructor();
 			requestor.enterMethod(info, function.getName(), function, method);
 		}
-		context.enter(this);
+		context.pushMask(IStructureContext.GLOBALS);
 		super.reportStructure(requestor, context);
-		context.leave(this);
+		context.popMask();
 		if (allowed) {
 			requestor.exitMethod(function.end() - 1);
 		}

@@ -13,7 +13,6 @@ package org.eclipse.dltk.javascript.core;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
@@ -27,12 +26,11 @@ import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.core.builder.IBuildContext;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
-import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
-import org.eclipse.dltk.internal.javascript.ti.TypeInferencerVisitor;
 import org.eclipse.dltk.internal.javascript.validation.TypeInfoValidator;
 import org.eclipse.dltk.javascript.ast.JSNode;
 import org.eclipse.dltk.javascript.ast.Script;
+import org.eclipse.dltk.javascript.internal.core.CollectingVisitor;
 import org.eclipse.dltk.javascript.internal.core.CoreMessages;
 import org.eclipse.dltk.javascript.parser.JavaScriptParserUtil;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
@@ -55,23 +53,6 @@ public class JSBindings implements Map<ASTNode, IValueReference> {
 
 	protected boolean isCacheable() {
 		return true;
-	}
-
-	private static class CollectingVisitor extends TypeInferencerVisitor {
-		final Map<ASTNode, IValueReference> bindings = new HashMap<ASTNode, IValueReference>();
-
-		public CollectingVisitor(ITypeInferenceContext context) {
-			super(context);
-		}
-
-		@Override
-		public IValueReference visit(ASTNode node) {
-			final IValueReference reference = super.visit(node);
-			if (reference != null && node != null) {
-				bindings.put(node, reference);
-			}
-			return reference;
-		}
 	}
 
 	/**
@@ -295,5 +276,7 @@ public class JSBindings implements Map<ASTNode, IValueReference> {
 		}
 		return v.entrySet;
 	}
+
+
 
 }

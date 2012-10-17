@@ -12,23 +12,11 @@
 package org.eclipse.dltk.javascript.internal.search;
 
 import org.eclipse.dltk.javascript.ast.Identifier;
-import org.eclipse.dltk.javascript.typeinference.IValueReference;
-import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 
-public class FieldReferenceNode extends AbstractMatchingNode<Identifier> {
+public class FieldReferenceNode extends MemberReferenceNode {
 
-	private final IValueReference reference;
-	/**
-	 * @param node
-	 */
-	public FieldReferenceNode(Identifier node, IValueReference reference) {
+	public FieldReferenceNode(Identifier node) {
 		super(node);
-		this.reference = reference;
 	}
 
-	ReferenceLocation getReferenceLocation() {
-		if (reference != null)
-			return reference.getLocation();
-		return null;
-	}
 }

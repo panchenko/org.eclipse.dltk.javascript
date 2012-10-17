@@ -13,10 +13,18 @@ package org.eclipse.dltk.javascript.structure;
 
 public interface IStructureContext {
 
+	int GLOBALS = 1;
+
+	boolean allow(int mask);
+
 	boolean allow(IStructureNode node);
 
 	void enter(IStructureNode node);
 
 	void leave(IStructureNode node);
+
+	void pushMask(int globals2);
+
+	void popMask();
 
 }

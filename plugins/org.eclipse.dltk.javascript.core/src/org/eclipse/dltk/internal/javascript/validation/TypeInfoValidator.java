@@ -65,6 +65,7 @@ import org.eclipse.dltk.javascript.ast.UnaryOperation;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.core.JSBindings;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
+import org.eclipse.dltk.javascript.internal.core.TemporaryBindings;
 import org.eclipse.dltk.javascript.internal.core.ThreadTypeSystemImpl;
 import org.eclipse.dltk.javascript.parser.ISuppressWarningsState;
 import org.eclipse.dltk.javascript.parser.JSParser;
@@ -156,21 +157,9 @@ public class TypeInfoValidator implements IBuildParticipant,
 		typeChecker.validate();
 		if (hasDependents) {
 			context.set(TypeInfoValidator.ATTR_BINDINGS, visitor.bindings);
-			saveCachedBindings(script, new ValidatorBindings(inferencer,
+			saveCachedBindings(script, new TemporaryBindings(inferencer,
 					visitor.bindings));
 			((ThreadTypeSystemImpl) ITypeSystem.CURRENT).set(inferencer);
-		}
-	}
-
-	private static class ValidatorBindings extends JSBindings {
-		public ValidatorBindings(ITypeSystem typeSystem,
-				Map<ASTNode, IValueReference> nodeMap) {
-			super(typeSystem, nodeMap);
-		}
-
-		@Override
-		protected boolean isCacheable() {
-			return false;
 		}
 	}
 
