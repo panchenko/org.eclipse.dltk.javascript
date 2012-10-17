@@ -196,10 +196,8 @@ public class StructureReporter3 extends
 		if (property instanceof Identifier) {
 			final Identifier identifier = (Identifier) property;
 			if (isCallExpression(node)) {
-				peek().addMethodReference(
-						identifier,
-						((CallExpression) node.getParent()).getArguments()
-								.size());
+				peek().addMethodReference(identifier,
+						getCallArgumentCount(node));
 			} else {
 				peek().addFieldReference(identifier);
 			}
@@ -214,22 +212,22 @@ public class StructureReporter3 extends
 		final String name = node.getName();
 		final IDeclaration resolved = peek().getScope().resolve(name);
 		if (resolved != null) {
-			// if (resolved.getParent() instanceof ScriptScope) {
-			// // TODO (alex) option to treat it always as local or not
-			// if (resolved instanceof FunctionDeclaration) {
-			// peek().addMethodReference(node);
-			// } else {
-			// peek().addFieldReference(name);
-			// }
-			// } else {
-			peek().addLocalReference(node, resolved);
-			// }
+			if (resolved.getParent() instanceof ScriptScope) {
+				// TODO (alex) option to treat it always as local or not
+				if (resolved instanceof FunctionNode) {
+					peek().addMethodReference(
+							node,
+							isCallExpression(node) ? getCallArgumentCount(node)
+									: 0);
+				} else {
+					peek().addFieldReference(node);
+				}
+			} else {
+				peek().addLocalReference(node, resolved);
+			}
 		} else {
 			if (isCallExpression(node)) {
-				peek().addMethodReference(
-						node,
-						((CallExpression) node.getParent()).getArguments()
-								.size());
+				peek().addMethodReference(node, getCallArgumentCount(node));
 			} else {
 				peek().addFieldReference(node);
 			}
@@ -241,6 +239,10 @@ public class StructureReporter3 extends
 		final ASTNode parent = node.getParent();
 		return parent instanceof CallExpression
 				&& ((CallExpression) parent).getExpression() == node;
+	}
+
+	private int getCallArgumentCount(Expression node) {
+		return ((CallExpression) node.getParent()).getArguments().size();
 	}
 
 }
