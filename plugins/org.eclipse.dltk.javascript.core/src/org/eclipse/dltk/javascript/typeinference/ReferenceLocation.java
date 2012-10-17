@@ -14,6 +14,7 @@ package org.eclipse.dltk.javascript.typeinference;
 import java.text.MessageFormat;
 
 import org.eclipse.dltk.core.ISourceModule;
+import org.eclipse.dltk.core.ISourceNode;
 import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
 
 public abstract class ReferenceLocation {
@@ -182,8 +183,15 @@ public abstract class ReferenceLocation {
 				nameStart, nameEnd);
 	}
 
+	public static ReferenceLocation create(ReferenceSource source,
+			int declarationStart, int declarationEnd, ISourceNode nameNode) {
+		return create(source, declarationStart, declarationEnd,
+				nameNode.start(), nameNode.end());
+	}
+
 	public static ReferenceLocation create(ReferenceSource source, int start,
 			int end) {
 		return new RangeLocation(source, start, end);
 	}
+
 }

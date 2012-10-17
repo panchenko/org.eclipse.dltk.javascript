@@ -47,7 +47,9 @@ public class ObjectDeclaration extends StructureNode {
 
 	public void reportStructure(IStructureRequestor requestor,
 			IStructureContext context) {
+		context.enter(this);
 		reportChildrenStructure(requestor, context);
+		context.leave(this);
 	}
 
 }

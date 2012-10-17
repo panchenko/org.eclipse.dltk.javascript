@@ -91,7 +91,7 @@ public class JavaScriptMatchLocator implements IMatchLocator,
 			final Script script = JavaScriptParserUtil.parse(module);
 			final IStructureNode structureNode = visitor.visitScript(script);
 			structureNode.reportStructure(matchingCollectorRequestor,
-					StructureContext.ROOT);
+					new StructureContext());
 			matchingCollectorRequestor.report();
 			if (!nodeSet.isEmpty()) {
 				resolvePotentialMatches(nodeSet);

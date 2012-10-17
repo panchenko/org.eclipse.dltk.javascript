@@ -137,8 +137,7 @@ public class StructureReporter3 extends
 				declaration.getVariableName());
 		variable.setLocation(declaration.getInitializer() != null ? ReferenceLocation
 				.create(referenceSource, declaration.start(),
-						declaration.end(), declaration.getIdentifier().start(),
-						declaration.getIdentifier().end())
+						declaration.end(), declaration.getIdentifier())
 				: ReferenceLocation.create(referenceSource,
 						declaration.start(), declaration.end()));
 		jsdocSupport.processVariable(declaration, variable, fReporter,
@@ -179,8 +178,8 @@ public class StructureReporter3 extends
 				}
 				final PropertyDeclaration propertyDeclaration = new PropertyDeclaration(
 						peek(), name, pi, ReferenceLocation.create(
-								referenceSource, pi.start(), pi.end(), pi
-										.getName().start(), pi.getName().end()));
+								referenceSource, pi.start(), pi.end(),
+								pi.getName()));
 				object.addChild(propertyDeclaration);
 				push(propertyDeclaration);
 				propertyDeclaration.setValue(visit(pi.getValue()));

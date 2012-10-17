@@ -41,7 +41,7 @@ public class JavaScriptSourceElementParser3 implements ISourceElementParser {
 		fRequestor.enterModule();
 		final IStructureNode node = reporter.visit(script);
 		node.reportStructure(new StructureRequestor(fRequestor),
-				StructureContext.ROOT);
+				new StructureContext());
 		fRequestor.exitModule(script.sourceEnd());
 		if (DEBUG) {
 			print(node, true, 0);

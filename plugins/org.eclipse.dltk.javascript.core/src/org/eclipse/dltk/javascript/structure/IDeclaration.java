@@ -18,6 +18,8 @@ public interface IDeclaration extends IStructureNode {
 
 	String getName();
 
+	DeclarationKind getKind();
+
 	JSType getType();
 
 	ReferenceLocation getLocation();

@@ -13,6 +13,12 @@ package org.eclipse.dltk.javascript.structure;
 
 import java.util.List;
 
+import org.eclipse.dltk.compiler.ISourceElementRequestor;
+
+/**
+ * Node in the module structure. Used to build intermediate structure, which is
+ * then reported to {@link ISourceElementRequestor}.
+ */
 public interface IStructureNode {
 
 	/**

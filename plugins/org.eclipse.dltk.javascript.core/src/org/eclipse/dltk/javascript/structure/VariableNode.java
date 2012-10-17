@@ -28,6 +28,10 @@ public class VariableNode extends ParentNode implements IDeclaration {
 		return declaration.getVariableName();
 	}
 
+	public DeclarationKind getKind() {
+		return DeclarationKind.FIELD;
+	}
+
 	public JSType getType() {
 		return variable.getType();
 	}
@@ -68,7 +72,7 @@ public class VariableNode extends ParentNode implements IDeclaration {
 
 	public void reportStructure(IStructureRequestor requestor,
 			IStructureContext context) {
-		final boolean allowed = context.allowFields();
+		final boolean allowed = context.allow(this);
 		if (allowed) {
 			final FieldInfo info = new FieldInfo();
 			info.declarationStart = declaration.start();
@@ -85,7 +89,9 @@ public class VariableNode extends ParentNode implements IDeclaration {
 			requestor.enterField(info, declaration.getIdentifier(),
 					variable.getType());
 		}
+		context.enter(this);
 		reportChildrenStructure(requestor, context);
+		context.leave(this);
 		if (allowed) {
 			requestor.exitField(declaration.end() - 1);
 		}

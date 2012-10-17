@@ -11,12 +11,6 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.structure;
 
-public interface IStructureContext {
-
-	boolean allow(IStructureNode node);
-
-	void enter(IStructureNode node);
-
-	void leave(IStructureNode node);
-
+public enum DeclarationKind {
+	TYPE, FUNCTION, FIELD, OTHER;
 }

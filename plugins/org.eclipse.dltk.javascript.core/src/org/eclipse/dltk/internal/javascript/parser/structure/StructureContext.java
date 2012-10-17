@@ -11,25 +11,67 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.parser.structure;
 
+import java.util.Stack;
+
+import org.eclipse.dltk.javascript.structure.DeclarationKind;
+import org.eclipse.dltk.javascript.structure.FunctionNode;
+import org.eclipse.dltk.javascript.structure.IDeclaration;
 import org.eclipse.dltk.javascript.structure.IStructureContext;
+import org.eclipse.dltk.javascript.structure.IStructureNode;
 
 public class StructureContext implements IStructureContext {
 
-	public static final StructureContext ROOT = new StructureContext();
+	private static enum ContextState {
+		ROOT {
+			@Override
+			public ContextState enter(IStructureNode node) {
+				if (node instanceof FunctionNode) {
+					return FUNCTION;
+				} else if (node instanceof IDeclaration
+						&& ((IDeclaration) node).getKind() == DeclarationKind.FIELD) {
+					return FIELD;
+				}
+				return super.enter(node);
+			}
+		},
+		FIELD, OBJECT, FUNCTION, END {
+			@Override
+			public boolean allow(IStructureNode node) {
+				return false;
+			}
+		};
 
-	public boolean allowMethods() {
-		// TODO Auto-generated method stub
-		return false;
+		public ContextState enter(IStructureNode node) {
+			// TODO Auto-generated method stub
+			return this;
+		}
+
+		public boolean allow(IStructureNode node) {
+			return true;
+		}
 	}
 
-	public boolean allowFields() {
-		// TODO Auto-generated method stub
-		return false;
+	private final Stack<IStructureNode> nodes = new Stack<IStructureNode>();
+	private final Stack<ContextState> states = new Stack<ContextState>();
+
+	public boolean allow(IStructureNode node) {
+		return state().allow(node);
 	}
 
-	public IStructureContext setAllowFields(boolean value) {
-		// TODO Auto-generated method stub
-		return null;
+	private ContextState state() {
+		return states.isEmpty() ? ContextState.ROOT : states.peek();
+	}
+
+	public void enter(IStructureNode node) {
+		nodes.push(node);
+		final ContextState state = state();
+		states.push(state.enter(node));
+	}
+
+	public void leave(IStructureNode node) {
+		final IStructureNode value = nodes.pop();
+		assert value == node;
+		states.pop();
 	}
 
 }
