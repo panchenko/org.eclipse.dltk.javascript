@@ -12,14 +12,18 @@
 package org.eclipse.dltk.javascript.typeinfo;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.dltk.annotations.Internal;
 import org.eclipse.dltk.compiler.CharOperation;
 import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
@@ -163,7 +167,8 @@ public abstract class TypeCache {
 	 * @param typeName
 	 * @return
 	 */
-	private Type getType(String context, String typeName, boolean force) {
+	@Internal
+	Type getType(String context, String typeName, boolean force) {
 		Type type = TypeInfoModelLoader.getInstance().getType(typeName);
 		if (type != null) {
 			return type;
@@ -253,7 +258,8 @@ public abstract class TypeCache {
 	 * @param resourceContext
 	 * @return
 	 */
-	private String getContextOf(Resource resourceContext) {
+	@Internal
+	String getContextOf(Resource resourceContext) {
 		final URI uri = resourceContext.getURI();
 		if (uri != null && isPrefixOf(baseURI, uri)) {
 			if (baseURI.segmentCount() == uri.segmentCount()) {
@@ -352,6 +358,40 @@ public abstract class TypeCache {
 			super.doUnload();
 		}
 
+		/**
+		 * This method is overridden to return only direct contents of the list
+		 * (i.e. types). We are not interested in making proxies out of
+		 * properties and methods. Other callers of this method are not used
+		 * here.
+		 */
+		@Override
+		protected TreeIterator<EObject> getAllProperContents(
+				List<EObject> contents) {
+			return new ForwardingTreeIterator<EObject>(contents.iterator());
+		}
+	}
+
+	private static class ForwardingTreeIterator<E> implements TreeIterator<E> {
+		private final Iterator<E> delegate;
+
+		public ForwardingTreeIterator(Iterator<E> delegate) {
+			this.delegate = delegate;
+		}
+
+		public boolean hasNext() {
+			return delegate.hasNext();
+		}
+
+		public E next() {
+			return delegate.next();
+		}
+
+		public void remove() {
+			delegate.remove();
+		}
+
+		public void prune() {
+		}
 	}
 
 }
