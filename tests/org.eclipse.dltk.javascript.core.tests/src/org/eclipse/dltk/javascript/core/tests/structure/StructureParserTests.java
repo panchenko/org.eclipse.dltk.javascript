@@ -124,8 +124,8 @@ public class StructureParserTests extends TestCase {
 	public void testObjectInitializerFunctionReference() {
 		Root root = parse("function hello() { var a = {b: function(){}} }");
 		assertEquals(
-				new Root(new Method("hello").add(new Field("a").add(new Method(
-						"b")))), root);
+				new Root(new Method("hello").skip().add(
+						new Field("a").add(new Method("b")))), root);
 	}
 
 	public void testThisVariableUnnamedFunctionReferenceWithArgumentAssignment() {

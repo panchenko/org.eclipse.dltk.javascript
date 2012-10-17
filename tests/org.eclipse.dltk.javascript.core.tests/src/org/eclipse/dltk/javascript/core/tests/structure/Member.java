@@ -66,7 +66,7 @@ public abstract class Member {
 
 		final Member origin;
 
-		public SkipMember(Member origin) {
+		SkipMember(Member origin) {
 			super("<skip>");
 			this.origin = origin;
 		}
