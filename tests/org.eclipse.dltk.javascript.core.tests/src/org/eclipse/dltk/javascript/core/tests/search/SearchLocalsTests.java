@@ -18,14 +18,11 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.core.ILocalVariable;
 import org.eclipse.dltk.core.IModelElement;
-import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.core.search.LocalVariableDeclarationMatch;
 import org.eclipse.dltk.core.search.LocalVariableReferenceMatch;
-import org.eclipse.dltk.core.tests.model.AbstractSingleProjectSearchTests;
 import org.eclipse.dltk.core.tests.model.TestSearchResults;
-import org.eclipse.dltk.javascript.core.tests.contentassist.SelectionTests;
 
-public class SearchLocalsTests extends AbstractSingleProjectSearchTests {
+public class SearchLocalsTests extends AbstractSearchTest {
 
 	public SearchLocalsTests(String testName) {
 		super(PLUGIN_ID, testName, "selection");
@@ -35,17 +32,13 @@ public class SearchLocalsTests extends AbstractSingleProjectSearchTests {
 		return new Suite(SearchLocalsTests.class);
 	}
 
-	private IModuleSource getModule(String path) throws ModelException {
-		return (IModuleSource) getSourceModule(getProjectName(), "src", path);
-	}
-	
 	public void testLocalVariableReference() throws CoreException {
 		IModuleSource module = getModule("locals.js");
-		IModelElement[] elements = new SelectionTests(null).select(module,
+		IModelElement[] elements = select(module,
 				lastPositionInFile("beta", module, false));
 		assertEquals(1, elements.length);
-		final ILocalVariable method = (ILocalVariable) elements[0];
-		final TestSearchResults results = search(method, ALL_OCCURRENCES);
+		final ILocalVariable var = (ILocalVariable) elements[0];
+		final TestSearchResults results = search(var, ALL_OCCURRENCES);
 		assertEquals(3, results.size());
 		assertTrue(results.getMatch(0) instanceof LocalVariableDeclarationMatch);
 		assertTrue(results.getMatch(1) instanceof LocalVariableReferenceMatch);
@@ -54,14 +47,14 @@ public class SearchLocalsTests extends AbstractSingleProjectSearchTests {
 
 	public void testLocalVariableAsArgumentReference() throws CoreException {
 		IModuleSource module = getModule("locals.js");
-		IModelElement[] elements = new SelectionTests(null).select(module,
+		IModelElement[] elements = select(module,
 				lastPositionInFile("alpha", module, false));
 		assertEquals(1, elements.length);
-		final ILocalVariable method = (ILocalVariable) elements[0];
-		final TestSearchResults results = search(method, ALL_OCCURRENCES);
+		final ILocalVariable var = (ILocalVariable) elements[0];
+		final TestSearchResults results = search(var, ALL_OCCURRENCES);
 		assertEquals(2, results.size());
 		assertTrue(results.getMatch(0) instanceof LocalVariableDeclarationMatch);
 		assertTrue(results.getMatch(1) instanceof LocalVariableReferenceMatch);
 	}
-	
+
 }

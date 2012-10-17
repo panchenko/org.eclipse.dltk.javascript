@@ -18,15 +18,12 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.core.IMethod;
 import org.eclipse.dltk.core.IModelElement;
-import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.core.search.MethodDeclarationMatch;
 import org.eclipse.dltk.core.search.MethodReferenceMatch;
 import org.eclipse.dltk.core.tests.Skip;
-import org.eclipse.dltk.core.tests.model.AbstractSingleProjectSearchTests;
 import org.eclipse.dltk.core.tests.model.TestSearchResults;
-import org.eclipse.dltk.javascript.core.tests.contentassist.SelectionTests;
 
-public class SearchFunctionTests extends AbstractSingleProjectSearchTests {
+public class SearchFunctionTests extends AbstractSearchTest {
 
 	public SearchFunctionTests(String testName) {
 		super(PLUGIN_ID, testName, "selection");
@@ -36,13 +33,9 @@ public class SearchFunctionTests extends AbstractSingleProjectSearchTests {
 		return new Suite(SearchFunctionTests.class);
 	}
 
-	private IModuleSource getModule(String path) throws ModelException {
-		return (IModuleSource) getSourceModule(getProjectName(), "src", path);
-	}
-
 	public void testFunctionGlobalField() throws CoreException {
 		IModuleSource module = getModule("functions.js");
-		IModelElement[] elements = new SelectionTests(null).select(module,
+		IModelElement[] elements = select(module,
 				lastPositionInFile("fun1", module, false));
 		assertEquals(1, elements.length);
 		final IMethod method = (IMethod) elements[0];
@@ -54,7 +47,7 @@ public class SearchFunctionTests extends AbstractSingleProjectSearchTests {
 
 	public void testFunctionLocalField() throws CoreException {
 		IModuleSource module = getModule("functions.js");
-		IModelElement[] elements = new SelectionTests(null).select(module,
+		IModelElement[] elements = select(module,
 				lastPositionInFile("fun2", module, false));
 		assertEquals(1, elements.length);
 		final IMethod method = (IMethod) elements[0];
@@ -66,7 +59,7 @@ public class SearchFunctionTests extends AbstractSingleProjectSearchTests {
 
 	public void testFunctionLocalFieldWithDoubleName() throws CoreException {
 		IModuleSource module = getModule("functions.js");
-		IModelElement[] elements = new SelectionTests(null).select(module,
+		IModelElement[] elements = select(module,
 				lastPositionInFile("fun4", module, false));
 		assertEquals(0, elements.length);
 	}
@@ -74,7 +67,7 @@ public class SearchFunctionTests extends AbstractSingleProjectSearchTests {
 	@Skip
 	public void testFunctionThisField() throws CoreException {
 		IModuleSource module = getModule("functions.js");
-		IModelElement[] elements = new SelectionTests(null).select(module,
+		IModelElement[] elements = select(module,
 				lastPositionInFile("fun5", module, false));
 		assertEquals(1, elements.length);
 		final IMethod method = (IMethod) elements[0];
@@ -86,7 +79,7 @@ public class SearchFunctionTests extends AbstractSingleProjectSearchTests {
 
 	public void testFunctionThisFieldOuterCall() throws CoreException {
 		IModuleSource module = getModule("functions.js");
-		IModelElement[] elements = new SelectionTests(null).select(module,
+		IModelElement[] elements = select(module,
 				lastPositionInFile("fun6", module, false));
 		assertEquals(1, elements.length);
 		final IMethod method = (IMethod) elements[0];
@@ -98,7 +91,7 @@ public class SearchFunctionTests extends AbstractSingleProjectSearchTests {
 
 	public void testFunctionThisFieldWithInnerFunction() throws CoreException {
 		IModuleSource module = getModule("functions.js");
-		IModelElement[] elements = new SelectionTests(null).select(module,
+		IModelElement[] elements = select(module,
 				lastPositionInFile("fun8", module, false));
 		assertEquals(0, elements.length);
 	}
@@ -106,14 +99,14 @@ public class SearchFunctionTests extends AbstractSingleProjectSearchTests {
 	public void testFunctionThisFieldWithInnerFunctionCall()
 			throws CoreException {
 		IModuleSource module = getModule("functions.js");
-		IModelElement[] elements = new SelectionTests(null).select(module,
+		IModelElement[] elements = select(module,
 				lastPositionInFile("funA", module, false));
 		assertEquals(0, elements.length);
 	}
 
 	public void testGlobalInitializerFunctionField() throws CoreException {
 		IModuleSource module = getModule("functions.js");
-		IModelElement[] elements = new SelectionTests(null).select(module,
+		IModelElement[] elements = select(module,
 				lastPositionInFile("funB", module, false));
 		assertEquals(1, elements.length);
 		final IMethod method = (IMethod) elements[0];
@@ -125,7 +118,7 @@ public class SearchFunctionTests extends AbstractSingleProjectSearchTests {
 
 	public void testLocalInitializerFunctionField() throws CoreException {
 		IModuleSource module = getModule("functions.js");
-		IModelElement[] elements = new SelectionTests(null).select(module,
+		IModelElement[] elements = select(module,
 				lastPositionInFile("funC", module, false));
 		assertEquals(1, elements.length);
 		final IMethod method = (IMethod) elements[0];
