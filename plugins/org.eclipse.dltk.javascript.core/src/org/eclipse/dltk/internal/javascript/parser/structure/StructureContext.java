@@ -13,7 +13,6 @@ package org.eclipse.dltk.internal.javascript.parser.structure;
 
 import java.util.Stack;
 
-import org.eclipse.dltk.javascript.structure.DeclarationKind;
 import org.eclipse.dltk.javascript.structure.FunctionNode;
 import org.eclipse.dltk.javascript.structure.IDeclaration;
 import org.eclipse.dltk.javascript.structure.IStructureContext;
@@ -27,8 +26,7 @@ public class StructureContext implements IStructureContext {
 			public ContextState enter(IStructureNode node) {
 				if (node instanceof FunctionNode) {
 					return FUNCTION;
-				} else if (node instanceof IDeclaration
-						&& ((IDeclaration) node).getKind() == DeclarationKind.FIELD) {
+				} else if (node instanceof IDeclaration) {
 					return FIELD;
 				}
 				return super.enter(node);

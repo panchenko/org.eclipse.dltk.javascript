@@ -21,10 +21,6 @@ public class ArgumentNode extends StructureNode implements IDeclaration {
 		return name;
 	}
 
-	public DeclarationKind getKind() {
-		return DeclarationKind.OTHER;
-	}
-
 	public JSType getType() {
 		return type;
 	}

@@ -28,11 +28,6 @@ public class PropertyDeclaration extends ParentNode implements IDeclaration {
 		return name;
 	}
 
-	public DeclarationKind getKind() {
-		return value instanceof IDeclaration ? ((IDeclaration) value).getKind()
-				: DeclarationKind.OTHER;
-	}
-
 	public JSType getType() {
 		if (value instanceof IDeclaration) {
 			return ((IDeclaration) value).getType();

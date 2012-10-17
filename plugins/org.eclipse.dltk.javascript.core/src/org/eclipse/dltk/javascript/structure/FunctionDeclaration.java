@@ -17,10 +17,6 @@ public class FunctionDeclaration extends FunctionNode implements IDeclaration {
 		return function.getFunctionName();
 	}
 
-	public DeclarationKind getKind() {
-		return DeclarationKind.FUNCTION;
-	}
-
 	@Override
 	protected ISourceNode getNameNode() {
 		return function.getIdentifier();

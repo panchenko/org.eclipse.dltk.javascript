@@ -28,10 +28,6 @@ public class VariableNode extends ParentNode implements IDeclaration {
 		return declaration.getVariableName();
 	}
 
-	public DeclarationKind getKind() {
-		return DeclarationKind.FIELD;
-	}
-
 	public JSType getType() {
 		return variable.getType();
 	}
