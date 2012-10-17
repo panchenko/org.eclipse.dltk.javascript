@@ -11,30 +11,13 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.parser.structure;
 
-import java.util.Stack;
-
 import org.eclipse.dltk.javascript.structure.IStructureContext;
-import org.eclipse.dltk.javascript.structure.IStructureNode;
 import org.eclipse.dltk.utils.IntList;
 
 public class StructureContext implements IStructureContext {
 
 	private int currentMask;
-	private final Stack<IStructureNode> nodes = new Stack<IStructureNode>();
 	private final IntList masks = new IntList();
-
-	public boolean allow(IStructureNode node) {
-		return true;
-	}
-
-	public void enter(IStructureNode node) {
-		nodes.push(node);
-	}
-
-	public void leave(IStructureNode node) {
-		final IStructureNode value = nodes.pop();
-		assert value == node;
-	}
 
 	public boolean allow(int mask) {
 		return (currentMask & mask) == 0;

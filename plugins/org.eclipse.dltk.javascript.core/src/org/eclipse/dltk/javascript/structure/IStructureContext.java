@@ -18,14 +18,15 @@ public interface IStructureContext {
 
 	boolean allow(int mask);
 
-	boolean allow(IStructureNode node);
+	/**
+	 * Adds the specified mask to the current and remembers the previous mask on
+	 * the stack.
+	 */
+	void pushMask(int mask);
 
-	void enter(IStructureNode node);
-
-	void leave(IStructureNode node);
-
-	void pushMask(int globals2);
-
+	/**
+	 * Restores the previously pushed mask from the stack.
+	 */
 	void popMask();
 
 }

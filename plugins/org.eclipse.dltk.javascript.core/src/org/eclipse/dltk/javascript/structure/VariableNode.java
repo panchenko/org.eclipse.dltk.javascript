@@ -88,9 +88,7 @@ public class VariableNode extends ParentNode implements IDeclaration {
 			requestor.enterLocal(declaration.getIdentifier(),
 					variable.getType());
 		}
-		context.enter(this);
 		reportChildrenStructure(requestor, context);
-		context.leave(this);
 		if (isField) {
 			requestor.exitField(declaration.end() - 1);
 		} else {

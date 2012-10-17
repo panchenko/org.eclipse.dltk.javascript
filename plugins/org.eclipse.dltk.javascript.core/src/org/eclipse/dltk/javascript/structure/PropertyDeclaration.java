@@ -81,9 +81,7 @@ public class PropertyDeclaration extends ParentNode implements IDeclaration {
 			context.pushMask(IStructureContext.METHOD);
 		}
 		if (value instanceof FunctionNode) {
-			context.enter(value);
 			value.reportStructure(requestor, context);
-			context.leave(value);
 		} else {
 			if (allowed) {
 				final FieldInfo info = new FieldInfo();
