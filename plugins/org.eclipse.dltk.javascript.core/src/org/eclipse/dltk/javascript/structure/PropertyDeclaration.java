@@ -76,12 +76,15 @@ public class PropertyDeclaration extends ParentNode implements IDeclaration {
 
 	public void reportStructure(IStructureRequestor requestor,
 			IStructureContext context) {
+		final boolean allowed = context.allow(IStructureContext.FIELD);
+		if (!allowed) {
+			context.pushMask(IStructureContext.METHOD);
+		}
 		if (value instanceof FunctionNode) {
 			context.enter(value);
 			value.reportStructure(requestor, context);
 			context.leave(value);
 		} else {
-			final boolean allowed = context.allow(this);
 			if (allowed) {
 				final FieldInfo info = new FieldInfo();
 				info.declarationStart = initializer.start();
@@ -95,6 +98,9 @@ public class PropertyDeclaration extends ParentNode implements IDeclaration {
 			if (allowed) {
 				requestor.exitField(initializer.end() - 1);
 			}
+		}
+		if (!allowed) {
+			context.popMask();
 		}
 	}
 

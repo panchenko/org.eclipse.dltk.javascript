@@ -68,7 +68,7 @@ public class VariableNode extends ParentNode implements IDeclaration {
 
 	public void reportStructure(IStructureRequestor requestor,
 			IStructureContext context) {
-		final boolean isField = context.allow(IStructureContext.GLOBALS);
+		final boolean isField = context.allow(IStructureContext.FIELD);
 		if (isField) {
 			final FieldInfo info = new FieldInfo();
 			info.declarationStart = declaration.start();

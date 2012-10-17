@@ -125,6 +125,9 @@ public class StructureReporter3 extends
 		} else {
 			functionNode = new FunctionExpression(peek(), node, method);
 		}
+		method.setLocation(ReferenceLocation.create(referenceSource,
+				node.start(), node.end(), functionNode.getNameNode()));
+		functionNode.buildArgumentNodes();
 		push(functionNode);
 		// TODO visit scope declarations?
 		super.visitFunctionStatement(node);

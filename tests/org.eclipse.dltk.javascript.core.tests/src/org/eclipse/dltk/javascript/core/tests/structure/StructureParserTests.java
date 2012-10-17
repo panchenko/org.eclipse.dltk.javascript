@@ -59,8 +59,8 @@ public class StructureParserTests extends TestCase {
 	public void testMethodFieldMethod() {
 		Root root = parse("function hello() { var a = { z: function() { } } }");
 		assertEquals(
-				new Root(new Method("hello").add(new Field("a").add(new Method(
-						"z")))), root);
+				new Root(new Method("hello").skip().add(
+						new Field("a").add(new Method("z")))), root);
 	}
 
 	public void testMethodMethod() {

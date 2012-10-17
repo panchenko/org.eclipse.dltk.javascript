@@ -52,7 +52,7 @@ public class SearchLocalsTests extends AbstractSearchTest {
 		assertEquals(1, elements.length);
 		final ILocalVariable var = (ILocalVariable) elements[0];
 		final TestSearchResults results = search(var, ALL_OCCURRENCES);
-		assertEquals(2, results.size());
+		assertEquals(results.toString(), 2, results.size());
 		assertTrue(results.getMatch(0) instanceof LocalVariableDeclarationMatch);
 		assertTrue(results.getMatch(1) instanceof LocalVariableReferenceMatch);
 	}

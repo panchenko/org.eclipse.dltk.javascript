@@ -26,7 +26,11 @@ public abstract class Member {
 
 	public Member add(Member... children) {
 		for (Member child : children) {
-			this.children.add(child);
+			if (child instanceof SkipMember) {
+				this.children.add(((SkipMember) child).origin);
+			} else {
+				this.children.add(child);
+			}
 		}
 		return this;
 	}
@@ -57,4 +61,20 @@ public abstract class Member {
 	protected boolean equals0(Member other) {
 		return name.equals(other.name);
 	}
+
+	private static class SkipMember extends Member {
+
+		final Member origin;
+
+		public SkipMember(Member origin) {
+			super("<skip>");
+			this.origin = origin;
+		}
+
+	}
+
+	public Member skip() {
+		return new SkipMember(this);
+	}
+
 }

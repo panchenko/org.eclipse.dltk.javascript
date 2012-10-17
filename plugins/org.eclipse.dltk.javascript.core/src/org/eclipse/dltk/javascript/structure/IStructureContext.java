@@ -13,7 +13,8 @@ package org.eclipse.dltk.javascript.structure;
 
 public interface IStructureContext {
 
-	int GLOBALS = 1;
+	int FIELD = 1;
+	int METHOD = 2;
 
 	boolean allow(int mask);
 

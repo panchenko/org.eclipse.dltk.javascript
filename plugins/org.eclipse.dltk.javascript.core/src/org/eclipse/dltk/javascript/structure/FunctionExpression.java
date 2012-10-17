@@ -21,7 +21,7 @@ public class FunctionExpression extends FunctionNode {
 	}
 
 	@Override
-	protected ISourceNode getNameNode() {
+	public ISourceNode getNameNode() {
 		if (parent instanceof PropertyDeclaration) {
 			return ((PropertyDeclaration) parent).getNameNode();
 		} else {

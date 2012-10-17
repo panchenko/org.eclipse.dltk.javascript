@@ -18,7 +18,7 @@ public class FunctionDeclaration extends FunctionNode implements IDeclaration {
 	}
 
 	@Override
-	protected ISourceNode getNameNode() {
+	public ISourceNode getNameNode() {
 		return function.getIdentifier();
 	}
 

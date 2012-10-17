@@ -24,6 +24,9 @@ public abstract class FunctionNode extends Scope {
 		super(parent);
 		this.function = function;
 		this.method = method;
+	}
+
+	public void buildArgumentNodes() {
 		for (Argument argument : function.getArguments()) {
 			final String name = argument.getArgumentName();
 			final IParameter parameter = method.getParameter(name);
@@ -74,7 +77,7 @@ public abstract class FunctionNode extends Scope {
 	@Override
 	public void reportStructure(IStructureRequestor requestor,
 			IStructureContext context) {
-		final boolean allowed = context.allow(this);
+		final boolean allowed = context.allow(IStructureContext.METHOD);
 		if (allowed) {
 			final MethodInfo info = new MethodInfo();
 			info.declarationStart = function.start();
@@ -103,7 +106,7 @@ public abstract class FunctionNode extends Scope {
 			info.isConstructor = method.isConstructor();
 			requestor.enterMethod(info, function.getName(), function, method);
 		}
-		context.pushMask(IStructureContext.GLOBALS);
+		context.pushMask(IStructureContext.FIELD);
 		super.reportStructure(requestor, context);
 		context.popMask();
 		if (allowed) {
@@ -113,6 +116,6 @@ public abstract class FunctionNode extends Scope {
 
 	protected abstract String getName();
 
-	protected abstract ISourceNode getNameNode();
+	public abstract ISourceNode getNameNode();
 
 }
