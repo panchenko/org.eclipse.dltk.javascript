@@ -108,7 +108,7 @@ import org.eclipse.dltk.javascript.internal.parser.NodeTransformerManager;
 import org.eclipse.dltk.javascript.parser.JSParser.program_return;
 import org.eclipse.dltk.utils.IntList;
 
-public class JSTransformer extends JSVisitor<ASTNode> {
+public class JSTransformer {
 
 	private final NodeTransformer[] transformers;
 	private final List<Token> tokens;
@@ -142,6 +142,238 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		this.tokens = tokens;
 		this.ignoreUnknown = ignoreUnknown;
 		tokenOffsets = prepareOffsetMap(tokens);
+	}
+
+	protected final ASTNode visitNode(Tree node) {
+		ASTNode accept = visit(node);
+		if (accept == null) {
+			for (int i = 0; i < node.getChildCount(); i++) {
+				visitNode(node.getChild(i));
+			}
+		}
+		return accept;
+	}
+
+	private ASTNode internalVisit(Tree node) {
+		assert node != null;
+		switch (node.getType()) {
+
+		case JSParser.Identifier:
+		case JSParser.WXML:
+		case JSParser.GET:
+		case JSParser.SET:
+		case JSParser.EACH:
+		case JSParser.NAMESPACE:
+			return visitIdentifier(node);
+
+		case JSParser.BLOCK:
+			return visitBlock(node);
+
+		case JSParser.TRUE:
+		case JSParser.FALSE:
+			return visitBooleanLiteral(node);
+
+		case JSParser.THIS:
+			return visitThis(node);
+
+		case JSParser.DecimalLiteral:
+			return visitDecimalLiteral(node);
+
+		case JSParser.StringLiteral:
+			return visitStringLiteral(node);
+
+		case JSParser.BYFIELD:
+			return visitByField(node);
+
+		case JSParser.BYINDEX:
+			return visitByIndex(node);
+
+		case JSParser.EXPR:
+			return visitExpression(node);
+
+		case JSParser.CALL:
+			return visitCall(node);
+
+		case JSParser.NULL:
+			return visitNull(node);
+
+			// arithmetic
+		case JSParser.ADD:
+		case JSParser.SUB:
+		case JSParser.MUL:
+		case JSParser.DIV:
+		case JSParser.MOD:
+			// assign
+		case JSParser.ASSIGN:
+		case JSParser.ADDASS:
+		case JSParser.SUBASS:
+		case JSParser.MULASS:
+		case JSParser.DIVASS:
+		case JSParser.MODASS:
+			// conditional
+		case JSParser.LT:
+		case JSParser.GT:
+		case JSParser.LTE:
+		case JSParser.GTE:
+			// bitwise
+		case JSParser.AND:
+		case JSParser.OR:
+		case JSParser.XOR:
+		case JSParser.ANDASS:
+		case JSParser.XORASS:
+		case JSParser.ORASS:
+		case JSParser.SHL:
+		case JSParser.SHR:
+		case JSParser.SHU:
+		case JSParser.SHLASS:
+		case JSParser.SHRASS:
+		case JSParser.SHUASS:
+			// logical
+		case JSParser.LOR:
+		case JSParser.LAND:
+		case JSParser.SAME:
+		case JSParser.EQ:
+		case JSParser.NEQ:
+		case JSParser.NSAME:
+			// special
+		case JSParser.IN:
+		case JSParser.INSTANCEOF:
+			return visitBinaryOperation(node);
+
+		case JSParser.PINC:
+		case JSParser.PDEC:
+		case JSParser.INC:
+		case JSParser.DEC:
+		case JSParser.NEG:
+		case JSParser.POS:
+		case JSParser.NOT:
+		case JSParser.INV:
+		case JSParser.DELETE:
+		case JSParser.TYPEOF:
+		case JSParser.VOID:
+			return visitUnaryOperation(node);
+
+		case JSParser.RETURN:
+			return visitReturn(node);
+
+		case JSParser.SWITCH:
+			return visitSwitch(node);
+
+		case JSParser.DEFAULT:
+			return visitDefault(node);
+
+		case JSParser.CASE:
+			return visitCase(node);
+
+		case JSParser.BREAK:
+			return visitBreak(node);
+
+		case JSParser.CONTINUE:
+			return visitContinue(node);
+
+		case JSParser.DO:
+			return visitDoWhile(node);
+
+		case JSParser.WHILE:
+			return visitWhile(node);
+
+		case JSParser.FOR:
+			return visitFor(node);
+
+		case JSParser.OBJECT:
+			return visitObjectInitializer(node);
+
+		case JSParser.NAMEDVALUE:
+			return visitPropertyInitializer(node);
+
+		case JSParser.FOREACH:
+			return visitForEachInStatement(node);
+
+		case JSParser.IF:
+			return visitIf(node);
+
+		case JSParser.QUE:
+			return visitConditional(node);
+
+		case JSParser.PAREXPR:
+			return visitParenthesizedExpression(node);
+
+		case JSParser.TRY:
+			return visitTry(node);
+
+		case JSParser.THROW:
+			return visitThrow(node);
+
+		case JSParser.CATCH:
+			return visitCatch(node);
+
+		case JSParser.FINALLY:
+			return visitFinally(node);
+
+		case JSParser.NEW:
+			return visitNew(node);
+
+		case JSParser.ARRAY:
+			return visitArray(node);
+
+		case JSParser.CEXPR:
+			return visitCommaExpression(node);
+
+		case JSParser.RegularExpressionLiteral:
+			return visitRegExp(node);
+
+		case JSParser.WITH:
+			return visitWith(node);
+
+		case JSParser.LABELLED:
+			return visitLabelled(node);
+
+		case JSParser.GETTER:
+			return visitGet(node);
+
+		case JSParser.SETTER:
+			return visitSet(node);
+
+		case JSParser.VAR:
+			return visitVarDeclaration(node);
+
+		case JSParser.CONST:
+			return visitConst(node);
+
+		case JSParser.FUNCTION:
+		case JSParser.FUNCTION_DECLARATION:
+			return visitFunction(node);
+
+		case JSParser.XML_LITERAL:
+			return visitXmlLiteral(node);
+
+		case JSParser.DEFAULT_XML_NAMESPACE:
+			return visitNamespace(node);
+
+		case JSParser.XmlAttribute:
+			return visitXmlAttribute(node);
+
+		case JSParser.ALLCHILDREN:
+			return visitGetAllChildren(node);
+
+		case JSParser.LOCALNAME:
+			return visitGetLocalName(node);
+
+		case JSParser.HexIntegerLiteral:
+			return visitHexIntegerLiteral(node);
+
+		case JSParser.OctalIntegerLiteral:
+			return visitOctalIntegerLiteral(node);
+
+		case JSParser.YIELD:
+			return visitYield(node);
+
+		case JSParser.EMPTY_STATEMENT:
+			return visitEmptyStatement(node);
+
+		default:
+			return visitUnknown(node);
+		}
 	}
 
 	public void setReporter(Reporter reporter) {
@@ -196,7 +428,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		try {
 			checkRecursionDepth();
 			ASTNode result = visitNode(node);
-			Assert.isNotNull(result, node.toString());
+			if (result == null)
+				throw new AssertionFailedException("null argument:" + node); //$NON-NLS-1$
 			return result;
 		} catch (AssertionFailedException e) {
 			if (ignoreUnknown) {
@@ -278,7 +511,12 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 	}
 
 	private final Expression transformExpression(Tree node, ASTNode parent) {
-		return (Expression) transformNode(node, parent);
+		final ASTNode transformed = transformNode(node, parent);
+		if (transformed == null || transformed instanceof Expression) {
+			return (Expression) transformed;
+		} else {
+			return createErrorExpression(node);
+		}
 	}
 
 	private Statement transformStatementNode(Tree node, ASTNode parent) {
@@ -303,8 +541,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 				}
 			}
 
-			Assert.isTrue(expression.sourceStart() >= 0);
-			Assert.isTrue(expression.sourceEnd() > 0);
+			assert expression.sourceStart() >= 0;
+			assert expression.sourceEnd() > 0;
 
 			voidExpression.setStart(expression.sourceStart());
 			voidExpression.setEnd(Math.max(expression.sourceEnd(),
@@ -314,9 +552,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		}
 	}
 
-	@Override
 	protected ASTNode visit(Tree tree) {
-		final ASTNode node = super.visit(tree);
+		final ASTNode node = internalVisit(tree);
 		if (node != null && transformers.length != 0) {
 			final ASTNode parent = getParent();
 			for (NodeTransformer transformer : transformers) {
@@ -349,15 +586,16 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		}
 	}
 
-	@Override
 	protected ASTNode visitUnknown(Tree node) {
 		if (ignoreUnknown) {
 			return createErrorExpression(node);
 		}
-		return super.visitUnknown(node);
+		throw new UnsupportedOperationException("Unknown token "
+				+ JSParser.tokenNames[node.getType()] + " (" + node.getText()
+				+ ")");
 	}
 
-	private ASTNode createErrorExpression(Tree node) {
+	private ErrorExpression createErrorExpression(Tree node) {
 		if (node != null) {
 			ErrorExpression error = new ErrorExpression(getParent(),
 					node.getText());
@@ -369,7 +607,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		}
 	}
 
-	@Override
 	protected ASTNode visitBinaryOperation(Tree node) {
 		if (node.getType() == JSParser.MUL) {
 			switch (node.getChildCount()) {
@@ -411,7 +648,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return operation;
 	}
 
-	@Override
 	protected ASTNode visitBlock(Tree node) {
 
 		StatementBlock block = new StatementBlock(getParent());
@@ -453,7 +689,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return keyword;
 	}
 
-	@Override
 	protected ASTNode visitBreak(Tree node) {
 		BreakStatement statement = new BreakStatement(getParent());
 		statement.setBreakKeyword(createKeyword(node, Keywords.BREAK));
@@ -485,7 +720,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return statement;
 	}
 
-	@Override
 	protected ASTNode visitCall(Tree node) {
 		CallExpression call = new CallExpression(getParent());
 
@@ -522,7 +756,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return call;
 	}
 
-	@Override
 	protected ASTNode visitCase(Tree node) {
 		CaseClause caseClause = new CaseClause(getParent());
 
@@ -554,7 +787,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return caseClause;
 	}
 
-	@Override
 	protected ASTNode visitDecimalLiteral(Tree node) {
 		DecimalLiteral number = new DecimalLiteral(getParent());
 		number.setText(node.getText());
@@ -564,7 +796,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return number;
 	}
 
-	@Override
 	protected ASTNode visitDefault(Tree node) {
 		DefaultClause defaultClause = new DefaultClause(getParent());
 
@@ -584,7 +815,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return defaultClause;
 	}
 
-	@Override
 	protected ASTNode visitExpression(Tree node) {
 		if (node.getChildCount() > 0)
 			return transformNode(node.getChild(0), getParent());
@@ -592,7 +822,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 			return new EmptyExpression(getParent());
 	}
 
-	@Override
 	protected ASTNode visitFor(Tree node) {
 		switch (node.getChild(0).getType()) {
 		case JSParser.FORSTEP:
@@ -723,7 +952,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return argument;
 	}
 
-	@Override
 	protected ASTNode visitFunction(Tree node) {
 		FunctionStatement fn = new FunctionStatement(getParent(),
 				node.getType() == JSParser.FUNCTION_DECLARATION);
@@ -796,7 +1024,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return fn;
 	}
 
-	@Override
 	protected ASTNode visitIdentifier(Tree node) {
 
 		Identifier id = new Identifier(getParent());
@@ -809,7 +1036,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return id;
 	}
 
-	@Override
 	protected ASTNode visitReturn(Tree node) {
 
 		ReturnStatement returnStatement = new ReturnStatement(getParent());
@@ -841,7 +1067,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return returnStatement;
 	}
 
-	@Override
 	protected ASTNode visitStringLiteral(Tree node) {
 
 		StringLiteral literal = new StringLiteral(getParent());
@@ -854,7 +1079,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return literal;
 	}
 
-	@Override
 	protected ASTNode visitSwitch(Tree node) {
 
 		SwitchStatement statement = new SwitchStatement(getParent());
@@ -917,7 +1141,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return statement;
 	}
 
-	@Override
 	protected ASTNode visitUnaryOperation(Tree node) {
 
 		UnaryOperation operation = new UnaryOperation(getParent());
@@ -965,7 +1188,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 		}
 
-		Assert.isTrue(operation.getOperationPosition() > -1);
+		assert operation.getOperationPosition() > -1;
 
 		operation
 				.setExpression(transformExpression(node.getChild(0), operation));
@@ -975,7 +1198,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return operation;
 	}
 
-	@Override
 	protected ASTNode visitContinue(Tree node) {
 		ContinueStatement statement = new ContinueStatement(getParent());
 		statement.setContinueKeyword(createKeyword(node, Keywords.CONTINUE));
@@ -1052,7 +1274,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return declaration;
 	}
 
-	@Override
 	protected ASTNode visitVarDeclaration(Tree node) {
 		VariableStatement var = new VariableStatement(getParent());
 		locateDocumentation(var, node);
@@ -1097,7 +1318,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		}
 	}
 
-	@Override
 	protected ASTNode visitObjectInitializer(Tree node) {
 
 		ObjectInitializer initializer = new ObjectInitializer(getParent());
@@ -1139,7 +1359,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return initializer;
 	}
 
-	@Override
 	protected ASTNode visitPropertyInitializer(Tree node) {
 
 		PropertyInitializer initializer = new PropertyInitializer(getParent());
@@ -1159,7 +1378,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return initializer;
 	}
 
-	@Override
 	protected ASTNode visitForEachInStatement(Tree node) {
 		ForEachInStatement statement = new ForEachInStatement(getParent());
 
@@ -1223,7 +1441,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return node.getTokenStopIndex();
 	}
 
-	@Override
 	protected ASTNode visitByField(Tree node) {
 
 		PropertyExpression property = new PropertyExpression(getParent());
@@ -1245,8 +1462,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 			property.setProperty(error);
 		}
 
-		Assert.isTrue(property.getObject().sourceStart() >= 0);
-		Assert.isTrue(property.getProperty().sourceEnd() > 0);
+		assert property.getObject().sourceStart() >= 0;
+		assert property.getProperty().sourceEnd() > 0;
 
 		property.setStart(property.getObject().sourceStart());
 		property.setEnd(property.getProperty().sourceEnd());
@@ -1254,7 +1471,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return property;
 	}
 
-	@Override
 	protected ASTNode visitWhile(Tree node) {
 
 		WhileStatement statement = new WhileStatement(getParent());
@@ -1280,7 +1496,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return statement;
 	}
 
-	@Override
 	protected ASTNode visitIf(Tree node) {
 
 		IfStatement ifStatement = new IfStatement(getParent());
@@ -1324,7 +1539,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return ifStatement;
 	}
 
-	@Override
 	protected ASTNode visitDoWhile(Tree node) {
 		DoWhileStatement statement = new DoWhileStatement(getParent());
 
@@ -1363,7 +1577,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return statement;
 	}
 
-	@Override
 	protected ASTNode visitConditional(Tree node) {
 
 		ConditionalOperator operator = new ConditionalOperator(getParent());
@@ -1386,7 +1599,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return operator;
 	}
 
-	@Override
 	protected ASTNode visitParenthesizedExpression(Tree node) {
 
 		final ParenthesizedExpression expression = new ParenthesizedExpression(
@@ -1411,7 +1623,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return expression;
 	}
 
-	@Override
 	protected ASTNode visitTry(Tree node) {
 
 		TryStatement statement = new TryStatement(getParent());
@@ -1461,7 +1672,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return statement;
 	}
 
-	@Override
 	protected ASTNode visitThrow(Tree node) {
 
 		ThrowStatement statement = new ThrowStatement(getParent());
@@ -1481,7 +1691,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return statement;
 	}
 
-	@Override
 	protected ASTNode visitNew(Tree node) {
 		final NewExpression expression = new NewExpression(getParent());
 		expression.setNewKeyword(createKeyword(node, Keywords.NEW));
@@ -1502,7 +1711,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return expression;
 	}
 
-	@Override
 	protected ASTNode visitCatch(Tree node) {
 
 		CatchClause catchClause = new CatchClause(getParent());
@@ -1542,7 +1750,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return catchClause;
 	}
 
-	@Override
 	protected ASTNode visitFinally(Tree node) {
 
 		FinallyClause finallyClause = new FinallyClause(getParent());
@@ -1560,7 +1767,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return finallyClause;
 	}
 
-	@Override
 	protected ASTNode visitArray(Tree node) {
 		final int itemCount = node.getChildCount() - 1;
 		ArrayInitializer array = new ArrayInitializer(getParent(), itemCount);
@@ -1588,7 +1794,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return array;
 	}
 
-	@Override
 	protected ASTNode visitByIndex(Tree node) {
 
 		GetArrayItemExpression item = new GetArrayItemExpression(getParent());
@@ -1616,7 +1821,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return item;
 	}
 
-	@Override
 	protected ASTNode visitCommaExpression(Tree node) {
 
 		CommaExpression expression = new CommaExpression(getParent());
@@ -1642,7 +1846,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return expression;
 	}
 
-	@Override
 	protected ASTNode visitRegExp(Tree node) {
 		RegExpLiteral regexp = new RegExpLiteral(getParent());
 		regexp.setText(node.getText());
@@ -1653,7 +1856,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return regexp;
 	}
 
-	@Override
 	protected ASTNode visitWith(Tree node) {
 
 		WithStatement statement = new WithStatement(getParent());
@@ -1679,7 +1881,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return statement;
 	}
 
-	@Override
 	protected ASTNode visitThis(Tree node) {
 
 		ThisExpression expression = new ThisExpression(getParent());
@@ -1690,7 +1891,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return expression;
 	}
 
-	@Override
 	protected ASTNode visitLabelled(Tree node) {
 		LabelledStatement statement = new LabelledStatement(getParent());
 
@@ -1721,7 +1921,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return statement;
 	}
 
-	@Override
 	protected ASTNode visitGet(Tree node) {
 
 		GetMethod method = new GetMethod(getParent());
@@ -1745,7 +1944,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return method;
 	}
 
-	@Override
 	protected ASTNode visitSet(Tree node) {
 		SetMethod method = new SetMethod(getParent());
 
@@ -1770,7 +1968,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return method;
 	}
 
-	@Override
 	protected ASTNode visitNull(Tree node) {
 
 		NullExpression expression = new NullExpression(getParent());
@@ -1781,7 +1978,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return expression;
 	}
 
-	@Override
 	protected ASTNode visitConst(Tree node) {
 		ConstStatement declaration = new ConstStatement(getParent());
 		declaration.setConstKeyword(createKeyword(node, Keywords.CONST));
@@ -1823,7 +2019,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		}
 	}
 
-	@Override
 	protected ASTNode visitBooleanLiteral(Tree node) {
 
 		BooleanLiteral bool = new BooleanLiteral(getParent(), node.getText());
@@ -1834,7 +2029,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return bool;
 	}
 
-	@Override
 	protected ASTNode visitXmlLiteral(Tree node) {
 		final XmlLiteral xml = new XmlLiteral(getParent());
 		final List<XmlFragment> fragments = new ArrayList<XmlFragment>();
@@ -1871,7 +2065,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return xml;
 	}
 
-	@Override
 	protected ASTNode visitNamespace(Tree node) {
 
 		DefaultXmlNamespaceStatement statement = new DefaultXmlNamespaceStatement(
@@ -1907,7 +2100,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return statement;
 	}
 
-	@Override
 	protected ASTNode visitXmlAttribute(Tree node) {
 
 		XmlAttributeIdentifier id = new XmlAttributeIdentifier(getParent());
@@ -1929,7 +2121,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return asterisk;
 	}
 
-	@Override
 	protected ASTNode visitGetAllChildren(Tree node) {
 		GetAllChildrenExpression expression = new GetAllChildrenExpression(
 				getParent());
@@ -1943,8 +2134,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 				getRealTokenStopIndex(node.getChild(0)) + 1, node.getChild(1)
 						.getTokenStartIndex()));
 
-		Assert.isTrue(expression.getObject().sourceStart() >= 0);
-		Assert.isTrue(expression.getProperty().sourceEnd() > 0);
+		assert expression.getObject().sourceStart() >= 0;
+		assert expression.getProperty().sourceEnd() > 0;
 
 		expression.setStart(expression.getObject().sourceStart());
 		expression.setEnd(expression.getProperty().sourceEnd());
@@ -1952,7 +2143,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return expression;
 	}
 
-	@Override
 	protected ASTNode visitGetLocalName(Tree node) {
 		GetLocalNameExpression expression = new GetLocalNameExpression(
 				getParent());
@@ -1967,8 +2157,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 				getRealTokenStopIndex(node.getChild(0)) + 1, node.getChild(1)
 						.getTokenStartIndex()));
 
-		Assert.isTrue(expression.getNamespace().sourceStart() >= 0);
-		Assert.isTrue(expression.getLocalName().sourceEnd() > 0);
+		assert expression.getNamespace().sourceStart() >= 0;
+		assert expression.getLocalName().sourceEnd() > 0;
 
 		expression.setStart(expression.getNamespace().sourceStart());
 		expression.setEnd(expression.getLocalName().sourceEnd());
@@ -1976,7 +2166,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return expression;
 	}
 
-	@Override
 	protected ASTNode visitHexIntegerLiteral(Tree node) {
 		DecimalLiteral number = new DecimalLiteral(getParent());
 		number.setText(node.getText());
@@ -1986,7 +2175,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return number;
 	}
 
-	@Override
 	protected ASTNode visitOctalIntegerLiteral(Tree node) {
 		DecimalLiteral number = new DecimalLiteral(getParent());
 		number.setText(node.getText());
@@ -1996,7 +2184,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return number;
 	}
 
-	@Override
 	protected ASTNode visitYield(Tree node) {
 		YieldOperator expression = new YieldOperator(getParent());
 
@@ -2011,7 +2198,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return expression;
 	}
 
-	@Override
 	protected ASTNode visitEmptyStatement(Tree node) {
 		final EmptyStatement statement = new EmptyStatement(getParent());
 		statement.setStart(getTokenOffset(node.getTokenStartIndex()));
