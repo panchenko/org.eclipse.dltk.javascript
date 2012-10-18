@@ -180,7 +180,6 @@ public class StructureParserTests extends TestCase {
 	}
 
 	public void testObjectLiterals() {
-		// TODO (alex) add expected values & asserts
 		{
 			final StringList code = new StringList();
 			code.add("function a(){");
@@ -192,7 +191,7 @@ public class StructureParserTests extends TestCase {
 			code.add("    }");
 			code.add("  }");
 			code.add("}");
-			parse(code.toString());
+			assertEquals(new Root(new Method("a")), parse(code.toString()));
 		}
 		{
 			final StringList code = new StringList();
@@ -205,7 +204,7 @@ public class StructureParserTests extends TestCase {
 			code.add("    }");
 			code.add("  }");
 			code.add(")");
-			parse(code.toString());
+			assertEquals(new Root(new MethodRef("a")), parse(code.toString()));
 		}
 	}
 
