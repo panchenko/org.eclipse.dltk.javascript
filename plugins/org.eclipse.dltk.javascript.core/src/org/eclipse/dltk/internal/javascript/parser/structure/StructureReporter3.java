@@ -29,6 +29,7 @@ import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.GetMethod;
 import org.eclipse.dltk.javascript.ast.Identifier;
+import org.eclipse.dltk.javascript.ast.JSNode;
 import org.eclipse.dltk.javascript.ast.ObjectInitializer;
 import org.eclipse.dltk.javascript.ast.ObjectInitializerPart;
 import org.eclipse.dltk.javascript.ast.PropertyExpression;
@@ -141,6 +142,14 @@ public class StructureReporter3 extends
 
 	@Override
 	protected void processVariable(VariableDeclaration declaration) {
+		if (declaration.getInitializer() instanceof FunctionStatement) {
+			peek().getScope().addChild(
+					buildFunctionDeclarationFromAssignment(declaration,
+							(FunctionStatement) declaration.getInitializer(),
+							Collections.<Expression> singletonList(declaration
+									.getIdentifier())));
+			return;
+		}
 		final JSVariable variable = new JSVariable(
 				declaration.getVariableName());
 		variable.setLocation(declaration.getInitializer() != null ? ReferenceLocation
@@ -272,6 +281,7 @@ public class StructureReporter3 extends
 			final Expression left = node.getLeftExpression();
 			if (left instanceof Identifier) {
 				return buildFunctionDeclarationFromAssignment(node,
+						(FunctionStatement) node.getRightExpression(),
 						Collections.singletonList(left));
 			} else if (left instanceof PropertyExpression) {
 				final List<Expression> path = ((PropertyExpression) left)
@@ -280,17 +290,16 @@ public class StructureReporter3 extends
 					path.remove(0);
 				}
 				if (isValidPath(path)) {
-					return buildFunctionDeclarationFromAssignment(node, path);
+					return buildFunctionDeclarationFromAssignment(node,
+							(FunctionStatement) node.getRightExpression(), path);
 				}
 			}
 		}
 		return super.visitBinaryOperation(node);
 	}
 
-	private IStructureNode buildFunctionDeclarationFromAssignment(
-			BinaryOperation node, final List<Expression> path) {
-		final FunctionStatement function = (FunctionStatement) node
-				.getRightExpression();
+	private IStructureNode buildFunctionDeclarationFromAssignment(JSNode node,
+			FunctionStatement function, final List<Expression> path) {
 		final JSMethod method = new JSMethod(function, ReferenceSource.UNKNOWN);
 		jsdocSupport.processMethod(function, method, fReporter, fTypeChecker);
 		final FunctionNode functionNode = new FunctionDeclarationExpressionLike(

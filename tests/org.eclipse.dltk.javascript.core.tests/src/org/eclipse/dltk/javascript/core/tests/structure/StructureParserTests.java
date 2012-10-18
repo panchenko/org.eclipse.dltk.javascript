@@ -136,7 +136,14 @@ public class StructureParserTests extends TestCase {
 		Root root = parse("function hello() { var x = function(a){this.b =a;}}");
 		assertEquals(
 				new Root(new Method("hello").add(new Method("x", new Parameter(
-						"a")).add(new Field("b")))), root);
+						"a")).add(new FieldRef("b")))), root);
+	}
+
+	public void testVariableInitializedWithFunction() {
+		Root root = parse("var x = function(a) {this.b = a;}");
+		assertEquals(
+				new Root(new Method("x", new Parameter("a")).add(new FieldRef(
+						"b"))), root);
 	}
 
 	public void testManyFunctionCalls() {
