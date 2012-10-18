@@ -424,6 +424,13 @@ public class JSTransformer {
 	}
 
 	private ASTNode transformNode(Tree node, ASTNode parent) {
+		if (node == null) {
+			if (ignoreUnknown) {
+				return createErrorExpression(node);
+			} else {
+				Assert.isNotNull(node);
+			}
+		}
 		parents.push(parent);
 		try {
 			checkRecursionDepth();
