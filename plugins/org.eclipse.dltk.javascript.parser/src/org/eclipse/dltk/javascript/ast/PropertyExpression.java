@@ -12,6 +12,9 @@
 
 package org.eclipse.dltk.javascript.ast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
@@ -88,6 +91,23 @@ public class PropertyExpression extends Expression implements Documentable {
 		buffer.append(property.toSourceString(indentationString));
 
 		return buffer.toString();
+	}
+
+	public List<Expression> getPath() {
+		final List<Expression> path = new ArrayList<Expression>();
+		addToPath(object, path);
+		path.add(property);
+		return path;
+	}
+
+	private static void addToPath(Expression object, List<Expression> path) {
+		if (object instanceof PropertyExpression) {
+			final PropertyExpression pe = (PropertyExpression) object;
+			addToPath(pe.object, path);
+			path.add(pe.property);
+		} else {
+			path.add(object);
+		}
 	}
 
 }

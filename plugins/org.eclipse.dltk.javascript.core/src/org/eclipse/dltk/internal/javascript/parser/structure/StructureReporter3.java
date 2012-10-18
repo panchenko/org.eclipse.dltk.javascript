@@ -11,15 +11,18 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.parser.structure;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 
 import org.eclipse.dltk.annotations.Nullable;
 import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.core.ISourceNode;
 import org.eclipse.dltk.internal.javascript.ti.JSDocSupport;
 import org.eclipse.dltk.internal.javascript.ti.JSMethod;
 import org.eclipse.dltk.internal.javascript.ti.JSVariable;
 import org.eclipse.dltk.javascript.ast.AbstractNavigationVisitor;
+import org.eclipse.dltk.javascript.ast.BinaryOperation;
 import org.eclipse.dltk.javascript.ast.CallExpression;
 import org.eclipse.dltk.javascript.ast.DecimalLiteral;
 import org.eclipse.dltk.javascript.ast.Expression;
@@ -33,9 +36,11 @@ import org.eclipse.dltk.javascript.ast.PropertyInitializer;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.SetMethod;
 import org.eclipse.dltk.javascript.ast.StringLiteral;
+import org.eclipse.dltk.javascript.ast.ThisExpression;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.ast.VariableStatement;
 import org.eclipse.dltk.javascript.ast.VoidExpression;
+import org.eclipse.dltk.javascript.parser.JSParser;
 import org.eclipse.dltk.javascript.parser.JSProblemReporter;
 import org.eclipse.dltk.javascript.structure.FunctionDeclaration;
 import org.eclipse.dltk.javascript.structure.FunctionExpression;
@@ -242,7 +247,9 @@ public class StructureReporter3 extends
 	public IStructureNode visitVoidExpression(VoidExpression node) {
 		final Expression expression = node.getExpression();
 		if (expression instanceof FunctionStatement
-				|| expression instanceof VariableStatement) {
+				|| expression instanceof VariableStatement
+				|| expression instanceof BinaryOperation
+				&& isAssignmentOfFunction((BinaryOperation) expression)) {
 			visit(expression);
 		} else {
 			final ExpressionNode expressionNode = new ExpressionNode(peek());
@@ -251,6 +258,81 @@ public class StructureReporter3 extends
 			pop();
 		}
 		return null;
+	}
+
+	private boolean isAssignmentOfFunction(BinaryOperation operation) {
+		return operation.getOperation() == JSParser.ASSIGN
+				&& operation.getRightExpression() instanceof FunctionStatement;
+	}
+
+	@Override
+	public IStructureNode visitBinaryOperation(BinaryOperation node) {
+		if (node.getOperation() == JSParser.ASSIGN
+				&& node.getRightExpression() instanceof FunctionStatement) {
+			final Expression left = node.getLeftExpression();
+			if (left instanceof Identifier) {
+				return buildFunctionDeclarationFromAssignment(node,
+						Collections.singletonList(left));
+			} else if (left instanceof PropertyExpression) {
+				final List<Expression> path = ((PropertyExpression) left)
+						.getPath();
+				if (path.get(0) instanceof ThisExpression) {
+					path.remove(0);
+				}
+				if (isValidPath(path)) {
+					return buildFunctionDeclarationFromAssignment(node, path);
+				}
+			}
+		}
+		return super.visitBinaryOperation(node);
+	}
+
+	private IStructureNode buildFunctionDeclarationFromAssignment(
+			BinaryOperation node, final List<Expression> path) {
+		final FunctionStatement function = (FunctionStatement) node
+				.getRightExpression();
+		final JSMethod method = new JSMethod(function, ReferenceSource.UNKNOWN);
+		jsdocSupport.processMethod(function, method, fReporter, fTypeChecker);
+		final FunctionNode functionNode = new FunctionDeclarationExpressionLike(
+				peek(), function, method, joinPath(path), getNameNode(path));
+		method.setLocation(ReferenceLocation.create(referenceSource,
+				node.start(), node.end(), functionNode.getNameNode()));
+		functionNode.buildArgumentNodes();
+		push(functionNode);
+		// TODO visit scope declarations?
+		super.visitFunctionStatement(function);
+		return pop();
+	}
+
+	private static ISourceNode getNameNode(List<Expression> path) {
+		if (path.size() == 1) {
+			return path.get(0);
+		}
+		return new NameNode(path.get(0).start(), path.get(path.size() - 1)
+				.end());
+	}
+
+	private static String joinPath(List<Expression> path) {
+		if (path.size() == 1) {
+			return ((Identifier) path.get(0)).getName();
+		}
+		final StringBuilder sb = new StringBuilder();
+		for (Expression expression : path) {
+			if (sb.length() != 0) {
+				sb.append('.');
+			}
+			sb.append(((Identifier) expression).getName());
+		}
+		return sb.toString();
+	}
+
+	private boolean isValidPath(List<Expression> path) {
+		for (Expression expression : path) {
+			if (!(expression instanceof Identifier)) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	private boolean isCallExpression(Expression node) {
