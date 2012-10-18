@@ -258,7 +258,7 @@ public class StructureReporter3 extends
 		if (expression instanceof FunctionStatement
 				|| expression instanceof VariableStatement
 				|| expression instanceof BinaryOperation
-				&& isAssignmentOfFunction((BinaryOperation) expression)) {
+				&& isAssignment((BinaryOperation) expression)) {
 			visit(expression);
 		} else {
 			final ExpressionNode expressionNode = new ExpressionNode(peek());
@@ -269,30 +269,42 @@ public class StructureReporter3 extends
 		return null;
 	}
 
-	private boolean isAssignmentOfFunction(BinaryOperation operation) {
-		return operation.getOperation() == JSParser.ASSIGN
-				&& operation.getRightExpression() instanceof FunctionStatement;
+	private boolean isAssignment(BinaryOperation operation) {
+		return operation.getOperation() == JSParser.ASSIGN;
 	}
 
 	@Override
 	public IStructureNode visitBinaryOperation(BinaryOperation node) {
-		if (node.getOperation() == JSParser.ASSIGN
-				&& node.getRightExpression() instanceof FunctionStatement) {
+		if (node.getOperation() == JSParser.ASSIGN) {
 			final Expression left = node.getLeftExpression();
-			if (left instanceof Identifier) {
-				return buildFunctionDeclarationFromAssignment(node,
-						(FunctionStatement) node.getRightExpression(),
-						Collections.singletonList(left));
-			} else if (left instanceof PropertyExpression) {
+			final Expression right = node.getRightExpression();
+			if (left instanceof PropertyExpression) {
 				final List<Expression> path = ((PropertyExpression) left)
 						.getPath();
+				boolean thisReference = false;
 				if (path.get(0) instanceof ThisExpression) {
 					path.remove(0);
+					thisReference = true;
 				}
 				if (isValidPath(path)) {
-					return buildFunctionDeclarationFromAssignment(node,
-							(FunctionStatement) node.getRightExpression(), path);
+					if (right instanceof FunctionStatement) {
+						return buildFunctionDeclarationFromAssignment(node,
+								(FunctionStatement) right, path);
+					} else if (thisReference) {
+						final FieldNode fieldNode = new FieldNode(peek(), node,
+								joinPath(path), ReferenceLocation.create(
+										referenceSource, node.start(),
+										node.end(), getNameNode(path)));
+						push(fieldNode);
+						visit(right);
+						return pop();
+					}
 				}
+			} else if (left instanceof Identifier
+					&& right instanceof FunctionStatement) {
+				return buildFunctionDeclarationFromAssignment(node,
+						(FunctionStatement) right,
+						Collections.singletonList(left));
 			}
 		}
 		return super.visitBinaryOperation(node);

@@ -97,6 +97,7 @@ public class JavaScriptMatchLocator implements IMatchLocator,
 			structureNode.reportStructure(structureRequestor,
 					new StructureContext());
 			if (structureRequestor.needsTypeInference()) {
+				// TODO (alex) should be in resolvePotentialMatches()
 				final JSBindings bindings = TemporaryBindings.build(
 						inferencer2, module, script);
 				structureRequestor.resolveReferences(bindings);

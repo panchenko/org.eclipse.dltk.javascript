@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.compiler.IElementRequestor.FieldInfo;
 import org.eclipse.dltk.compiler.IElementRequestor.MethodInfo;
 import org.eclipse.dltk.compiler.IElementRequestor.TypeInfo;
@@ -17,6 +18,7 @@ import org.eclipse.dltk.javascript.ast.Comment;
 import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.Identifier;
+import org.eclipse.dltk.javascript.ast.PropertyExpression;
 import org.eclipse.dltk.javascript.core.JSBindings;
 import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTag;
 import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTags;
@@ -108,14 +110,8 @@ public class MatchingCollectorSourceElementRequestor implements
 	}
 
 	public void enterField(FieldInfo fieldInfo, Expression identifier,
-			JSType type) {
+			JSType type, boolean local) {
 		nodes.add(new FieldDeclarationNode(identifier, type));
-	}
-
-	public boolean enterFieldCheckDuplicates(FieldInfo fieldInfo,
-			Expression identifier, JSType type) {
-		enterField(fieldInfo, identifier, type);
-		return true;
 	}
 
 	public void enterLocal(Identifier identifier, JSType type) {
@@ -148,6 +144,16 @@ public class MatchingCollectorSourceElementRequestor implements
 				final IValueReference reference = bindings.get(refNode.node);
 				if (reference != null) {
 					refNode.location = reference.getLocation();
+				} else {
+					final ASTNode parent = refNode.node.getParent();
+					if (parent instanceof PropertyExpression
+							&& ((PropertyExpression) parent).getProperty() == refNode.node) {
+						final IValueReference parentReference = bindings
+								.get(parent);
+						if (parentReference != null) {
+							refNode.location = parentReference.getLocation();
+						}
+					}
 				}
 			}
 		}

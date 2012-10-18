@@ -75,9 +75,6 @@ public class Recorder extends SourceElementRequestorAdaptor implements
 
 	@Override
 	public void acceptFieldReference(String fieldName, int sourcePosition) {
-		if (fieldName.startsWith("!!!")) {
-			return;
-		}
 		peek().add(new FieldRef(fieldName));
 	}
 

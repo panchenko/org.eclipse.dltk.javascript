@@ -30,10 +30,8 @@ public interface IStructureRequestor {
 
 	void exitField(int sourceEnd);
 
-	void enterField(FieldInfo fieldInfo, Expression identifier, JSType type);
-
-	boolean enterFieldCheckDuplicates(FieldInfo fieldInfo,
-			Expression identifier, JSType type);
+	void enterField(FieldInfo fieldInfo, Expression identifier, JSType type,
+			boolean local);
 
 	void acceptLocalReference(Identifier node, IDeclaration target);
 

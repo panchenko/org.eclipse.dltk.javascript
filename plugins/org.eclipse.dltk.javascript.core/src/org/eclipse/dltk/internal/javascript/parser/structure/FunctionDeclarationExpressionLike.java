@@ -12,6 +12,7 @@
 package org.eclipse.dltk.internal.javascript.parser.structure;
 
 import org.eclipse.dltk.core.ISourceNode;
+import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.structure.FunctionDeclaration;
 import org.eclipse.dltk.javascript.structure.IParentNode;
@@ -38,6 +39,14 @@ class FunctionDeclarationExpressionLike extends FunctionDeclaration {
 	@Override
 	public ISourceNode getNameNode() {
 		return nameNode;
+	}
+
+	@Override
+	protected Expression getStructureNameNode() {
+		if (nameNode instanceof Expression) {
+			return (Expression) nameNode;
+		}
+		return super.getStructureNameNode();
 	}
 
 }

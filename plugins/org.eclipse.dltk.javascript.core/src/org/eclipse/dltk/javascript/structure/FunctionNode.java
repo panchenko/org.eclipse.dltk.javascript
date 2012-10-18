@@ -19,6 +19,7 @@ import org.eclipse.dltk.compiler.IElementRequestor.MethodInfo;
 import org.eclipse.dltk.core.ISourceNode;
 import org.eclipse.dltk.internal.javascript.parser.JSModifiers;
 import org.eclipse.dltk.javascript.ast.Argument;
+import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
@@ -115,7 +116,8 @@ public abstract class FunctionNode extends Scope {
 			}
 			info.returnType = typeToModel(getType());
 			info.isConstructor = method.isConstructor();
-			requestor.enterMethod(info, function.getName(), function, method);
+			requestor.enterMethod(info, getStructureNameNode(), function,
+					method);
 		}
 		context.pushMask(IStructureContext.FIELD);
 		super.reportStructure(requestor, context);
@@ -123,6 +125,10 @@ public abstract class FunctionNode extends Scope {
 		if (allowed) {
 			requestor.exitMethod(function.end() - 1);
 		}
+	}
+
+	protected Expression getStructureNameNode() {
+		return function.getName();
 	}
 
 	protected abstract String getName();

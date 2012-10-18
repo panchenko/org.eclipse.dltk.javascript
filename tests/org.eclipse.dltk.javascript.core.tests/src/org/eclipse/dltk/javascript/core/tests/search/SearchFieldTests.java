@@ -17,7 +17,6 @@ import static org.eclipse.dltk.javascript.core.tests.contentassist.AbstractConte
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.dltk.compiler.env.IModuleSource;
-import org.eclipse.dltk.core.IField;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.search.FieldDeclarationMatch;
 import org.eclipse.dltk.core.search.FieldReferenceMatch;
@@ -34,25 +33,29 @@ public class SearchFieldTests extends AbstractSearchTest {
 	}
 
 	public void testFieldAA() throws CoreException {
+		if (notYetImplemented())
+			return;
 		IModuleSource module = getModule("fields.js");
 		IModelElement[] elements = select(module,
 				lastPositionInFile("aa", module, false));
 		assertEquals(1, elements.length);
-		final IField field = (IField) elements[0];
+		final IModelElement field = elements[0];
 		final TestSearchResults results = search(field, ALL_OCCURRENCES);
-		assertEquals(2, results.size());
+		assertEquals(results.toString(), 2, results.size());
 		assertTrue(results.getMatch(0) instanceof FieldDeclarationMatch);
 		assertTrue(results.getMatch(1) instanceof FieldReferenceMatch);
 	}
 
 	public void testLazyFieldCC() throws CoreException {
+		if (notYetImplemented())
+			return;
 		IModuleSource module = getModule("fields.js");
 		IModelElement[] elements = select(module,
 				firstPositionInFile("cc", module, false));
 		assertEquals(1, elements.length);
-		final IField field = (IField) elements[0];
+		final IModelElement field = elements[0];
 		final TestSearchResults results = search(field, ALL_OCCURRENCES);
-		assertEquals(2, results.size());
+		assertEquals(results.toString(), 2, results.size());
 		assertTrue(results.getMatch(0) instanceof FieldReferenceMatch);
 		assertTrue(results.getMatch(1) instanceof FieldDeclarationMatch);
 	}

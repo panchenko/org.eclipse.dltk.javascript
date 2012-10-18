@@ -102,6 +102,19 @@ public class MethodPredicate extends AbstractMatchingPredicate<MatchingNode> {
 					return matchName(mNode.node.getName());
 				}
 			}
+		} else if (node instanceof LocalVariableReferenceNode) {
+			if (!references)
+				return null;
+			// also test if the field does reference that function.
+			final LocalVariableReferenceNode varNode = (LocalVariableReferenceNode) node;
+			final ReferenceLocation location = varNode.declarationLoc;
+			if (location != null && nameStart != -1 && nameEnd != -1) {
+				if (location.getNameStart() == nameStart
+						&& location.getNameEnd() == nameEnd
+						&& isSame(location.getSourceModule())) {
+					return matchName(varNode.node.getName());
+				}
+			}
 		}
 		return null;
 	}

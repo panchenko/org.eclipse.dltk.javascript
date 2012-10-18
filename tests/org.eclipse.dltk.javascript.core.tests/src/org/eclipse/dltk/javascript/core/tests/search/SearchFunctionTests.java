@@ -34,6 +34,8 @@ public class SearchFunctionTests extends AbstractSearchTest {
 	}
 
 	public void testFunctionGlobalField() throws CoreException {
+		if (notYetImplemented())
+			return;
 		IModuleSource module = getModule("functions.js");
 		IModelElement[] elements = select(module,
 				lastPositionInFile("fun1", module, false));
@@ -46,6 +48,8 @@ public class SearchFunctionTests extends AbstractSearchTest {
 	}
 
 	public void testFunctionLocalField() throws CoreException {
+		if (notYetImplemented())
+			return;
 		IModuleSource module = getModule("functions.js");
 		IModelElement[] elements = select(module,
 				lastPositionInFile("fun2", module, false));
@@ -105,6 +109,8 @@ public class SearchFunctionTests extends AbstractSearchTest {
 	}
 
 	public void testGlobalInitializerFunctionField() throws CoreException {
+		if (notYetImplemented())
+			return;
 		IModuleSource module = getModule("functions.js");
 		IModelElement[] elements = select(module,
 				lastPositionInFile("funB", module, false));
@@ -117,11 +123,13 @@ public class SearchFunctionTests extends AbstractSearchTest {
 	}
 
 	public void testLocalInitializerFunctionField() throws CoreException {
+		if (notYetImplemented())
+			return;
 		IModuleSource module = getModule("functions.js");
 		IModelElement[] elements = select(module,
 				lastPositionInFile("funC", module, false));
 		assertEquals(1, elements.length);
-		final IMethod method = (IMethod) elements[0];
+		final IModelElement method = elements[0];
 		final TestSearchResults results = search(method, ALL_OCCURRENCES);
 		assertEquals(2, results.size());
 		assertTrue(results.getMatch(0) instanceof MethodDeclarationMatch);

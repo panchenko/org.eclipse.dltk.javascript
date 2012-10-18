@@ -52,6 +52,12 @@ public abstract class ParentNode extends StructureNode implements IParentNode {
 			return null;
 		}
 
+		@Override
+		public String toString() {
+			return getClass().getSimpleName() + "(" + identifier.getName()
+					+ ")";
+		}
+
 	}
 
 	static class LocalReference extends NodeReference {
