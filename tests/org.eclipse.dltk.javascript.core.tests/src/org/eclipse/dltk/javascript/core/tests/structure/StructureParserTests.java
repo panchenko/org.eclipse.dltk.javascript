@@ -179,7 +179,8 @@ public class StructureParserTests extends TestCase {
 		assertFalse(new Root(a).equals(parse(code.toString())));
 	}
 
-	public void testQQQ() {
+	public void testObjectLiterals() {
+		// TODO (alex) add expected values & asserts
 		{
 			final StringList code = new StringList();
 			code.add("function a(){");

@@ -44,6 +44,7 @@ public class JavaScriptSourceElementParser3 implements ISourceElementParser {
 				new StructureContext());
 		fRequestor.exitModule(script.sourceEnd());
 		if (DEBUG) {
+			// TODO (alex) remove before merging to master.
 			print(node, true, 0);
 		}
 	}
