@@ -11,11 +11,11 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.parser.tests;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.dltk.ast.utils.ASTUtil;
 import org.eclipse.dltk.javascript.ast.CallExpression;
+import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.NewExpression;
 import org.eclipse.dltk.javascript.ast.PropertyExpression;
@@ -51,6 +51,10 @@ public class NewTests extends AbstractJSParserTest {
 		PropertyExpression property = (PropertyExpression) call.getExpression();
 		assertIdentifier("a", property.getObject());
 		assertIdentifier("b", property.getProperty());
+		final List<Expression> path = property.getPath();
+		assertEquals(2, path.size());
+		assertIdentifier("a", path.get(0));
+		assertIdentifier("b", path.get(1));
 	}
 
 	public void testNewPath3() {
@@ -76,6 +80,11 @@ public class NewTests extends AbstractJSParserTest {
 		assertIdentifier("a", property2.getObject());
 		assertIdentifier("b", property2.getProperty());
 		assertIdentifier("c", property.getProperty());
+		final List<Expression> path = property.getPath();
+		assertEquals(3, path.size());
+		assertIdentifier("a", path.get(0));
+		assertIdentifier("b", path.get(1));
+		assertIdentifier("c", path.get(2));
 	}
 
 	public void testNewNew() {

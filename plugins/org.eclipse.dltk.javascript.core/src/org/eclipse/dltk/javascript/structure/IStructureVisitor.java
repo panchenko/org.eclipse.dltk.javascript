@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010 xored software, Inc.
+ * Copyright (c) 2012 NumberFour AG
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,21 +7,18 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
+ *     NumberFour AG - initial API and Implementation (Alex Panchenko)
  *******************************************************************************/
-package org.eclipse.dltk.internal.javascript.parser.structure;
+package org.eclipse.dltk.javascript.structure;
 
-import java.util.List;
+import org.eclipse.dltk.javascript.ast.INodeVisitor;
 
-interface ReferenceIterator {
+public interface IStructureVisitor extends INodeVisitor<IStructureNode> {
 
-	boolean hasNext();
+	IParentNode peek();
 
-	void moveNext();
+	void push(IParentNode declaration);
 
-	ReferenceKey current();
+	IParentNode pop();
 
-	List<Object> getValues();
-
-	void remove(String name, int start, int end);
 }

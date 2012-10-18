@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010 xored software, Inc.
+ * Copyright (c) 2012 NumberFour AG
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,15 +7,19 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
+ *     NumberFour AG - initial API and Implementation (Alex Panchenko)
  *******************************************************************************/
-package org.eclipse.dltk.internal.javascript.parser.structure;
+package org.eclipse.dltk.javascript.structure;
 
-class MethodRef {
-	final int argCount;
+import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
+import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
-	public MethodRef(int argCount) {
-		this.argCount = argCount;
-	}
+public interface IDeclaration extends IStructureNode {
+
+	String getName();
+
+	JSType getType();
+
+	ReferenceLocation getLocation();
 
 }

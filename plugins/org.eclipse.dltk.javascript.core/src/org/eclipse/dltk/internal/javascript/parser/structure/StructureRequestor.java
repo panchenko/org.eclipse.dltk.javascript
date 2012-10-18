@@ -1,43 +1,51 @@
 package org.eclipse.dltk.internal.javascript.parser.structure;
 
+import java.util.Stack;
+
 import org.eclipse.dltk.compiler.IElementRequestor.FieldInfo;
+import org.eclipse.dltk.compiler.IElementRequestor.ImportInfo;
 import org.eclipse.dltk.compiler.IElementRequestor.MethodInfo;
 import org.eclipse.dltk.compiler.IElementRequestor.TypeInfo;
 import org.eclipse.dltk.compiler.ISourceElementRequestor;
-import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.Identifier;
-import org.eclipse.dltk.javascript.typeinference.IValueReference;
+import org.eclipse.dltk.javascript.structure.IDeclaration;
+import org.eclipse.dltk.javascript.structure.IStructureRequestor;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
 public class StructureRequestor implements IStructureRequestor {
 
+	private static enum ElementType {
+		FIELD, FIELD_LOCAL
+	}
+
 	private final ISourceElementRequestor requestor;
+	private final Stack<ElementType> elementTypes = new Stack<ElementType>();
 
 	public StructureRequestor(ISourceElementRequestor requestor) {
 		this.requestor = requestor;
-
 	}
 
-	public void acceptLocalReference(Identifier node, IValueReference reference) {
+	public void acceptImport(ImportInfo importInfo) {
+		requestor.acceptImport(importInfo);
 	}
 
-	public void enterLocal(Identifier identifier, ISourceModule module,
-			JSType type) {
+	public void acceptLocalReference(Identifier node, IDeclaration target) {
+	}
+
+	public void enterLocal(Identifier identifer, JSType type) {
 	}
 
 	public void exitLocal(int sourceEnd) {
 	}
 
-	public void acceptFieldReference(Identifier node, IValueReference reference) {
-		requestor.acceptFieldReference(node.getName(), node.sourceStart() - 1);
-
+	public void acceptFieldReference(Identifier node) {
+		requestor.acceptFieldReference(node.getName(), node.sourceStart());
 	}
 
-	public void acceptMethodReference(Identifier node, int argCount,
-			IValueReference reference) {
+	public void acceptMethodReference(Identifier node, int argCount) {
 		requestor.acceptMethodReference(node.getName(), argCount,
 				node.sourceStart(), node.sourceEnd() - 1);
 	}
@@ -70,21 +78,20 @@ public class StructureRequestor implements IStructureRequestor {
 	}
 
 	public void exitField(int sourceEnd) {
-		requestor.exitField(sourceEnd);
+		if (elementTypes.pop() == ElementType.FIELD) {
+			requestor.exitField(sourceEnd);
+		}
 	}
 
 	public void enterField(FieldInfo fieldInfo, Expression identifer,
-			JSType type) {
-		requestor.enterField(fieldInfo);
-	}
-
-	public void updateField(FieldInfo fieldInfo, int flags) {
-		requestor.updateField(fieldInfo, flags);
-	}
-
-	public boolean enterFieldCheckDuplicates(FieldInfo fieldInfo,
-			Expression identifier, JSType type) {
-		return requestor.enterFieldCheckDuplicates(fieldInfo);
+			JSType type, boolean local) {
+		elementTypes.push(local ? ElementType.FIELD_LOCAL : ElementType.FIELD);
+		if (!local) {
+			requestor.enterField(fieldInfo);
+		} else {
+			requestor.acceptFieldReference(fieldInfo.name,
+					identifer.sourceStart());
+		}
 	}
 
 }

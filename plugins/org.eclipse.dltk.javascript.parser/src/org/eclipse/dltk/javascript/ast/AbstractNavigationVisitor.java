@@ -80,9 +80,13 @@ public class AbstractNavigationVisitor<E> extends ASTVisitor<E> {
 
 	private void processVariables(List<VariableDeclaration> variables) {
 		for (VariableDeclaration declaration : variables) {
-			if (declaration.getInitializer() != null) {
-				visit(declaration.getInitializer());
-			}
+			processVariable(declaration);
+		}
+	}
+
+	protected void processVariable(VariableDeclaration declaration) {
+		if (declaration.getInitializer() != null) {
+			visit(declaration.getInitializer());
 		}
 	}
 

@@ -5,12 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.compiler.IElementRequestor.FieldInfo;
+import org.eclipse.dltk.compiler.IElementRequestor.ImportInfo;
 import org.eclipse.dltk.compiler.IElementRequestor.MethodInfo;
 import org.eclipse.dltk.compiler.IElementRequestor.TypeInfo;
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.core.search.matching2.MatchingCollector;
-import org.eclipse.dltk.internal.javascript.parser.structure.IStructureRequestor;
 import org.eclipse.dltk.internal.javascript.ti.JSDocSupport;
 import org.eclipse.dltk.internal.javascript.ti.JSDocSupport.ParameterNode;
 import org.eclipse.dltk.javascript.ast.Argument;
@@ -18,8 +19,12 @@ import org.eclipse.dltk.javascript.ast.Comment;
 import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.Identifier;
+import org.eclipse.dltk.javascript.ast.PropertyExpression;
+import org.eclipse.dltk.javascript.core.JSBindings;
 import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTag;
 import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTags;
+import org.eclipse.dltk.javascript.structure.IDeclaration;
+import org.eclipse.dltk.javascript.structure.IStructureRequestor;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
@@ -28,34 +33,34 @@ import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 public class MatchingCollectorSourceElementRequestor implements
 		IStructureRequestor {
 
-	private final MatchingCollector<MatchingNode> matchingCollector;
-
 	private final List<MatchingNode> nodes = new ArrayList<MatchingNode>();
 
-	public MatchingCollectorSourceElementRequestor(
-			MatchingCollector<MatchingNode> matchingCollector) {
-		this.matchingCollector = matchingCollector;
+	private ISourceModule module;
 
+	public void enterModule(ISourceModule module) {
+		this.module = module;
 	}
 
-	public void report() {
+	public void report(MatchingCollector<MatchingNode> matchingCollector) {
 		for (MatchingNode node : nodes) {
 			matchingCollector.report(node);
 		}
 		nodes.clear();
 	}
 
-	public void acceptLocalReference(Identifier node, IValueReference reference) {
-		nodes.add(new LocalVariableReferenceNode(node, reference.getLocation()));
+	public void acceptImport(ImportInfo importInfo) {
 	}
 
-	public void acceptFieldReference(Identifier node, IValueReference reference) {
-		nodes.add(new FieldReferenceNode(node, reference));
+	public void acceptLocalReference(Identifier node, IDeclaration target) {
+		nodes.add(new LocalVariableReferenceNode(node, target.getLocation()));
 	}
 
-	public void acceptMethodReference(Identifier node, int argCount,
-			IValueReference reference) {
-		nodes.add(new MethodReferenceNode(node, reference));
+	public void acceptFieldReference(Identifier node) {
+		nodes.add(new FieldReferenceNode(node));
+	}
+
+	public void acceptMethodReference(Identifier node, int argCount) {
+		nodes.add(new MethodReferenceNode(node));
 	}
 
 	public void enterNamespace(String[] namespace) {
@@ -109,21 +114,11 @@ public class MatchingCollectorSourceElementRequestor implements
 	}
 
 	public void enterField(FieldInfo fieldInfo, Expression identifier,
-			JSType type) {
+			JSType type, boolean local) {
 		nodes.add(new FieldDeclarationNode(identifier, type));
 	}
 
-	public void updateField(FieldInfo fieldInfo, int flags) {
-	}
-
-	public boolean enterFieldCheckDuplicates(FieldInfo fieldInfo,
-			Expression identifier, JSType type) {
-		enterField(fieldInfo, identifier, type);
-		return true;
-	}
-
-	public void enterLocal(Identifier identifier, ISourceModule module,
-			JSType type) {
+	public void enterLocal(Identifier identifier, JSType type) {
 		nodes.add(new LocalVariableDeclarationNode(identifier, module, type));
 	}
 
@@ -134,6 +129,38 @@ public class MatchingCollectorSourceElementRequestor implements
 	}
 
 	public void exitLocal(int sourceEnd) {
+	}
+
+	public boolean needsTypeInference() {
+		// TODO (alex) also check if there are corresponding predicates?
+		for (MatchingNode node : nodes) {
+			if (node instanceof MemberReferenceNode) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public void resolveReferences(JSBindings bindings) {
+		for (MatchingNode node : nodes) {
+			if (node instanceof MemberReferenceNode) {
+				final MemberReferenceNode refNode = (MemberReferenceNode) node;
+				final IValueReference reference = bindings.get(refNode.node);
+				if (reference != null) {
+					refNode.location = reference.getLocation();
+				} else {
+					final ASTNode parent = refNode.node.getParent();
+					if (parent instanceof PropertyExpression
+							&& ((PropertyExpression) parent).getProperty() == refNode.node) {
+						final IValueReference parentReference = bindings
+								.get(parent);
+						if (parentReference != null) {
+							refNode.location = parentReference.getLocation();
+						}
+					}
+				}
+			}
+		}
 	}
 
 }

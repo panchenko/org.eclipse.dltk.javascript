@@ -1,22 +1,22 @@
-package org.eclipse.dltk.internal.javascript.parser.structure;
+package org.eclipse.dltk.javascript.structure;
 
 import org.eclipse.dltk.compiler.IElementRequestor.FieldInfo;
+import org.eclipse.dltk.compiler.IElementRequestor.ImportInfo;
 import org.eclipse.dltk.compiler.IElementRequestor.MethodInfo;
 import org.eclipse.dltk.compiler.IElementRequestor.TypeInfo;
-import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.Identifier;
-import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
 public interface IStructureRequestor {
 
-	void acceptFieldReference(Identifier node, IValueReference reference);
+	public void acceptImport(ImportInfo importInfo);
 
-	void acceptMethodReference(Identifier node, int argCount,
-			IValueReference reference);
+	void acceptFieldReference(Identifier node);
+
+	void acceptMethodReference(Identifier node, int argCount);
 
 	void enterNamespace(String[] namespace);
 
@@ -33,17 +33,12 @@ public interface IStructureRequestor {
 
 	void exitField(int sourceEnd);
 
-	void enterField(FieldInfo fieldInfo, Expression identifier, JSType type);
+	void enterField(FieldInfo fieldInfo, Expression identifier, JSType type,
+			boolean local);
 
-	void updateField(FieldInfo fieldInfo, int flags);
+	void acceptLocalReference(Identifier node, IDeclaration target);
 
-	boolean enterFieldCheckDuplicates(FieldInfo fieldInfo,
-			Expression identifier, JSType type);
-
-	void acceptLocalReference(Identifier node, IValueReference reference);
-
-	public void enterLocal(Identifier identifier, ISourceModule module,
-			JSType type);
+	void enterLocal(Identifier identifier, JSType type);
 
 	void exitLocal(int sourceEnd);
 

@@ -47,8 +47,9 @@ public class Method extends Member {
 		}
 	}
 
-	public void setType(String type) {
+	public Method setType(String type) {
 		this.type = type;
+		return this;
 	}
 
 	public String getType() {

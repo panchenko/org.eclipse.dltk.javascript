@@ -60,6 +60,34 @@ public class LocalVariablePredicate extends
 					&& isSame(location.getSourceModule())) {
 				return matchName(varNode.node.getName());
 			}
+		} else if (node instanceof FieldReferenceNode) {
+			if (!references)
+				return null;
+			final FieldReferenceNode fieldNode = (FieldReferenceNode) node;
+			final ReferenceLocation location = fieldNode.location;
+			if (location != null && location.getNameStart() == nameStart
+					&& location.getNameEnd() == nameEnd
+					&& isSame(location.getSourceModule())) {
+				return matchName(fieldNode.node.getName());
+			}
+		} else if (node instanceof MethodDeclarationNode) {
+			if (!declarations)
+				return null;
+			final MethodDeclarationNode mNode = (MethodDeclarationNode) node;
+			final ReferenceLocation location = mNode.method.getLocation();
+			if (location.getNameStart() == nameStart
+					&& location.getNameEnd() == nameEnd
+					&& isSame(location.getSourceModule())) {
+				return matchName(mNode.method.getName());
+			}
+		} else if (node instanceof FieldDeclarationNode) {
+			if (!declarations)
+				return null;
+			final FieldDeclarationNode fNode = (FieldDeclarationNode) node;
+			if (fNode.sourceStart() == nameStart
+					&& fNode.sourceEnd() == nameEnd) {
+				return matchName(fNode.getName());
+			}
 		}
 		return null;
 	}

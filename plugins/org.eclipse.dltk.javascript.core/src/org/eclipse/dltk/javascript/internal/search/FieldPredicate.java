@@ -69,7 +69,7 @@ public class FieldPredicate extends AbstractMatchingPredicate<MatchingNode> {
 				return null;
 			final FieldReferenceNode fieldNode = (FieldReferenceNode) node;
 
-			final ReferenceLocation location = fieldNode.getReferenceLocation();
+			final ReferenceLocation location = fieldNode.location;
 			if (location != null && nameStart != -1 && nameEnd != -1) {
 				if (location.getNameStart() == nameStart
 						&& location.getNameEnd() == nameEnd
