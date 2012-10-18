@@ -15,6 +15,7 @@ import java.util.Stack;
 
 import org.eclipse.dltk.compiler.ISourceElementRequestorExtension;
 import org.eclipse.dltk.compiler.SourceElementRequestorAdaptor;
+import org.eclipse.dltk.compiler.SourceElementRequestorMode;
 
 public class Recorder extends SourceElementRequestorAdaptor implements
 		ISourceElementRequestorExtension {
@@ -86,8 +87,8 @@ public class Recorder extends SourceElementRequestorAdaptor implements
 		peek().add(new MethodRef(methodName));
 	}
 
-	public int getMode() {
-		return MODE_INDEX;
+	public SourceElementRequestorMode getMode() {
+		return SourceElementRequestorMode.INDEX;
 	}
 
 }

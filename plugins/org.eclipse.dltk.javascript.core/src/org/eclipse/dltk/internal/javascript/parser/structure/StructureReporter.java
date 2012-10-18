@@ -20,7 +20,7 @@ import java.util.Set;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.compiler.IElementRequestor.FieldInfo;
 import org.eclipse.dltk.compiler.ISourceElementRequestor;
-import org.eclipse.dltk.compiler.SourceElementRequestorKind;
+import org.eclipse.dltk.compiler.SourceElementRequestorMode;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencerVisitor;
 import org.eclipse.dltk.javascript.ast.CallExpression;
@@ -97,7 +97,7 @@ public class StructureReporter extends TypeInferencerVisitor {
 			ISourceElementRequestor requestor) {
 		super(context);
 		this.fRequestor = requestor;
-		isIndexing = SourceElementRequestorKind.INDEXER.matches(fRequestor);
+		isIndexing = SourceElementRequestorMode.INDEX.matches(fRequestor);
 	}
 
 	public void processScope(IValueParent collection, boolean allowFields) {
