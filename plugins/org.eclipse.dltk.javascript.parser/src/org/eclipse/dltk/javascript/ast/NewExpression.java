@@ -12,7 +12,6 @@
 
 package org.eclipse.dltk.javascript.ast;
 
-import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 import org.eclipse.dltk.javascript.internal.parser.JSLiterals;
@@ -64,17 +63,8 @@ public class NewExpression extends Expression {
 
 	@Override
 	public String toSourceString(String indentationString) {
-
-		Assert.isTrue(sourceStart() >= 0);
-		Assert.isTrue(sourceEnd() > 0);
-
-		StringBuffer buffer = new StringBuffer();
-
-		buffer.append(Keywords.NEW);
-		buffer.append(JSLiterals.SPACE);
-		buffer.append(objectClass.toSourceString(indentationString));
-
-		return buffer.toString();
+		return Keywords.NEW + JSLiterals.SPACE
+				+ toSourceString(objectClass, indentationString);
 	}
 
 }

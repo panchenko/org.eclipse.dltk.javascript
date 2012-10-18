@@ -12,7 +12,6 @@
 
 package org.eclipse.dltk.javascript.ast;
 
-import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
@@ -120,15 +119,7 @@ public class ForStatement extends LoopStatement {
 
 	@Override
 	public String toSourceString(String indentationString) {
-
-		Assert.isTrue(sourceStart() >= 0);
-		Assert.isTrue(sourceEnd() > 0);
-		Assert.isTrue(LP > 0);
-		Assert.isTrue(RP > 0);
-		Assert.isTrue(initialSemic > 0);
-		Assert.isTrue(conditionSemic > 0);
-
-		StringBuffer buffer = new StringBuffer();
+		final StringBuilder buffer = new StringBuilder();
 
 		buffer.append(indentationString);
 		buffer.append(Keywords.FOR);

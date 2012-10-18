@@ -12,7 +12,6 @@
 
 package org.eclipse.dltk.javascript.ast;
 
-import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
@@ -67,18 +66,8 @@ public class PropertyInitializer extends ObjectInitializerPart implements
 
 	@Override
 	public String toSourceString(String indentationString) {
-
-		Assert.isTrue(sourceStart() > 0);
-		Assert.isTrue(sourceEnd() > 0);
-		Assert.isTrue(colon > 0);
-
-		StringBuffer buffer = new StringBuffer();
-
-		buffer.append(name.toSourceString(indentationString));
-		buffer.append(": ");
-		buffer.append(value.toSourceString(indentationString));
-
-		return buffer.toString();
+		return toSourceString(name, indentationString) + ": "
+				+ toSourceString(value, indentationString);
 	}
 
 	public String getNameAsString() {

@@ -15,7 +15,6 @@ package org.eclipse.dltk.javascript.ast;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 import org.eclipse.dltk.utils.IntList;
@@ -119,21 +118,15 @@ public class ObjectInitializer extends Expression {
 
 	@Override
 	public String toSourceString(String indentationString) {
-
-		Assert.isTrue(sourceStart() >= 0);
-		Assert.isTrue(sourceEnd() > 0);
-		Assert.isTrue(LC >= 0);
-		Assert.isTrue(RC > 0);
-
-		StringBuffer buffer = new StringBuffer();
+		final StringBuilder buffer = new StringBuilder();
 
 		buffer.append("{");
 		for (int i = 0; i < initializers.size(); i++) {
 			if (i > 0)
 				buffer.append(", ");
 
-			buffer.append(((ISourceable) initializers.get(i))
-					.toSourceString(indentationString));
+			buffer.append(toSourceString((ISourceable) initializers.get(i),
+					indentationString));
 		}
 		buffer.append("}");
 

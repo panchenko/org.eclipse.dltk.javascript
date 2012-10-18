@@ -12,7 +12,6 @@
 
 package org.eclipse.dltk.javascript.ast;
 
-import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
@@ -64,19 +63,7 @@ public class ParenthesizedExpression extends Expression {
 
 	@Override
 	public String toSourceString(String indentationString) {
-
-		Assert.isTrue(sourceStart() >= 0);
-		Assert.isTrue(sourceEnd() > 0);
-		Assert.isTrue(LP >= 0);
-		Assert.isTrue(RP > 0);
-
-		StringBuffer buffer = new StringBuffer();
-
-		buffer.append("(");
-		buffer.append(expression.toSourceString(indentationString));
-		buffer.append(")");
-
-		return buffer.toString();
+		return "(" + toSourceString(expression, indentationString) + ")";
 	}
 
 }

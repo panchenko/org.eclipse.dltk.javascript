@@ -12,7 +12,6 @@
 
 package org.eclipse.dltk.javascript.ast;
 
-import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
@@ -67,16 +66,11 @@ public class GetLocalNameExpression extends Expression implements
 
 	@Override
 	public String toSourceString(String indentationString) {
+		final StringBuilder buffer = new StringBuilder();
 
-		Assert.isTrue(sourceStart() >= 0);
-		Assert.isTrue(sourceEnd() > 0);
-		Assert.isTrue(coloncolon > 0);
-
-		StringBuffer buffer = new StringBuffer();
-
-		buffer.append(namespace.toSourceString(indentationString));
+		buffer.append(toSourceString(namespace, indentationString));
 		buffer.append("::");
-		buffer.append(localName.toSourceString(indentationString));
+		buffer.append(toSourceString(localName, indentationString));
 
 		return buffer.toString();
 	}

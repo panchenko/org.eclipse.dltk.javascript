@@ -56,9 +56,7 @@ public class Argument extends JSNode implements ISourceable {
 
 	@Override
 	public String toSourceString(String indentationString) {
-		final StringBuilder sb = new StringBuilder();
-		sb.append(identifier.toSourceString(indentationString));
-		return sb.toString();
+		return identifier.toSourceString(indentationString);
 	}
 
 	@Override

@@ -15,7 +15,6 @@ package org.eclipse.dltk.javascript.ast;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
@@ -79,18 +78,8 @@ public class PropertyExpression extends Expression implements Documentable {
 
 	@Override
 	public String toSourceString(String indentationString) {
-
-		Assert.isTrue(sourceStart() >= 0);
-		Assert.isTrue(sourceEnd() > 0);
-		Assert.isTrue(dot > 0);
-
-		StringBuffer buffer = new StringBuffer();
-
-		buffer.append(object.toSourceString(indentationString));
-		buffer.append('.');
-		buffer.append(property.toSourceString(indentationString));
-
-		return buffer.toString();
+		return toSourceString(object, indentationString) + '.'
+				+ toSourceString(property, indentationString);
 	}
 
 	public List<Expression> getPath() {

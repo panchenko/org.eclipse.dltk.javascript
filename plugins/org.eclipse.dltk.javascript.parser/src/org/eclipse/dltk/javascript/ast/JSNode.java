@@ -30,6 +30,14 @@ public abstract class JSNode extends ASTNode {
 		}
 	}
 
+	/**
+	 * @since 5.0
+	 */
+	protected static String toSourceString(ISourceable node,
+			String indentationString) {
+		return node != null ? node.toSourceString(indentationString) : "?";
+	}
+
 	private final ASTNode parent;
 
 	public JSNode(ASTNode parent) {

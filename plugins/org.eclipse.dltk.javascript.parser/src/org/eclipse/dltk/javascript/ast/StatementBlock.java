@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
@@ -64,19 +63,14 @@ public class StatementBlock extends Statement implements ISourceableBlock {
 
 	@Override
 	public String toSourceString(String indentationString) {
-
-		Assert.isTrue(sourceStart() >= 0);
-		Assert.isTrue(sourceEnd() > 0);
-		Assert.isTrue((LC >= 0 && RC > 0) || (RC == -1 && LC == -1));
-
-		StringBuffer buffer = new StringBuffer();
+		final StringBuilder buffer = new StringBuilder();
 
 		buffer.append(indentationString);
 		buffer.append("{\n");
 
 		for (int i = 0; i < statements.size(); i++) {
-			buffer.append(((ISourceable) statements.get(i))
-					.toSourceString(indentationString + INDENT));
+			buffer.append(toSourceString((ISourceable) statements.get(i),
+					indentationString + INDENT));
 		}
 
 		buffer.append(indentationString);

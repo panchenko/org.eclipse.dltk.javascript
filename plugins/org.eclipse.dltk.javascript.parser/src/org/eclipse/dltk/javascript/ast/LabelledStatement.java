@@ -12,7 +12,6 @@
 
 package org.eclipse.dltk.javascript.ast;
 
-import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
@@ -67,20 +66,12 @@ public class LabelledStatement extends Statement implements ISourceableBlock {
 
 	@Override
 	public String toSourceString(String indentationString) {
-
-		Assert.isTrue(sourceStart() >= 0);
-		Assert.isTrue(sourceEnd() > 0);
-		Assert.isTrue(colon > 0);
-
-		StringBuffer buffer = new StringBuffer();
+		final StringBuilder buffer = new StringBuilder();
 
 		buffer.append(indentationString);
-		buffer.append(getLabel().toSourceString(indentationString));
+		buffer.append(toSourceString(label, indentationString));
 		buffer.append(":\n");
-
-		buffer
-				.append(getStatement().toSourceString(
-						indentationString + INDENT));
+		buffer.append(toSourceString(statement, indentationString + INDENT));
 
 		return buffer.toString();
 	}

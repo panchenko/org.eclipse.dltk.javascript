@@ -12,7 +12,6 @@
 
 package org.eclipse.dltk.javascript.ast;
 
-import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
@@ -59,9 +58,6 @@ public class StringLiteral extends Literal implements Documentable {
 
 	@Override
 	public String toSourceString(String indentationString) {
-		Assert.isTrue(sourceStart() >= 0);
-		Assert.isTrue(sourceEnd() > 0);
-
 		return text;
 	}
 

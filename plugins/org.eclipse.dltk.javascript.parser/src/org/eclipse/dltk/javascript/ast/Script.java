@@ -16,7 +16,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.parser.IModuleDeclaration;
 import org.eclipse.dltk.javascript.internal.parser.JSLiterals;
 
@@ -37,11 +36,7 @@ public class Script extends JSNode implements ISourceable, IModuleDeclaration,
 	}
 
 	public String toSourceString(String indentationString) {
-
-		Assert.isTrue(sourceStart() == 0);
-		Assert.isTrue(sourceEnd() > 0);
-
-		StringBuffer buffer = new StringBuffer();
+		final StringBuilder buffer = new StringBuilder();
 
 		for (Statement statement : statements) {
 			buffer.append(statement.toSourceString(indentationString));
