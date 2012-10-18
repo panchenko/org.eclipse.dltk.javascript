@@ -13,9 +13,11 @@ package org.eclipse.dltk.javascript.structure;
 
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.internal.javascript.parser.structure.StructureReporter3;
+import org.eclipse.dltk.javascript.typeinfo.ITypeInferenceExtensionFactory;
 
 /**
- * Handler which can be used as plugin for {@link StructureReporter3}.
+ * Handler which can be used as plugin for {@link StructureReporter3}, it is
+ * created by {@link ITypeInferenceExtensionFactory}.
  */
 public interface IStructureHandler {
 
