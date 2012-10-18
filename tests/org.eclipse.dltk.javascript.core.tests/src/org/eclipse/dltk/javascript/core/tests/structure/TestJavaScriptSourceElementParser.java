@@ -29,9 +29,13 @@ public final class TestJavaScriptSourceElementParser extends
 
 	@Override
 	protected void reportStructure(Script script, IStructureNode node) {
-		print(node, true, 0);
+		if (DEBUG) {
+			print(node, true, 0);
+		}
 		super.reportStructure(script, node);
 	}
+
+	static final boolean DEBUG = false;
 
 	private void print(IStructureNode node, boolean printable, int level) {
 		if (node.isManyChildren()) {

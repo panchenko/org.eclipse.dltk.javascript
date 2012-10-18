@@ -24,15 +24,19 @@ public class StructureParserTests extends TestCase {
 	}
 
 	protected Root parse(String code) {
-		System.out.println(code.trim());
-		System.out.println("---");
+		if (TestJavaScriptSourceElementParser.DEBUG) {
+			System.out.println(code.trim());
+			System.out.println("---");
+		}
 		Recorder rec = new Recorder();
 		ISourceElementParser parser = createParser();
 		parser.setRequestor(rec);
 		parser.parseSourceModule(new ModuleSource(code));
-		System.out.println("---");
-		System.out.println(rec.getRoot());
-		System.out.println("------");
+		if (TestJavaScriptSourceElementParser.DEBUG) {
+			System.out.println("---");
+			System.out.println(rec.getRoot());
+			System.out.println("------");
+		}
 		return rec.getRoot();
 	}
 
