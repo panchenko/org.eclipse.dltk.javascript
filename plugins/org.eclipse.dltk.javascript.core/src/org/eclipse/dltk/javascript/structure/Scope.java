@@ -25,7 +25,8 @@ public abstract class Scope extends ParentNode implements IScope {
 		return this;
 	}
 
-	public boolean isStructureKnown() {
+	@Override
+	protected boolean isStructureKnown() {
 		return false;
 	}
 

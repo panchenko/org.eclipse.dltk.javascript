@@ -34,6 +34,8 @@ import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.SetMethod;
 import org.eclipse.dltk.javascript.ast.StringLiteral;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
+import org.eclipse.dltk.javascript.ast.VariableStatement;
+import org.eclipse.dltk.javascript.ast.VoidExpression;
 import org.eclipse.dltk.javascript.parser.JSProblemReporter;
 import org.eclipse.dltk.javascript.structure.FunctionDeclaration;
 import org.eclipse.dltk.javascript.structure.FunctionExpression;
@@ -87,9 +89,7 @@ public class StructureReporter3 extends
 		if (value != null) {
 			if (!parents.isEmpty()) {
 				final IParentNode parent = parents.peek();
-				if (!parent.isStructureKnown()) {
-					parent.getScope().addChild(value);
-				}
+				parent.addToScope(value);
 			}
 		}
 		return value;
@@ -234,6 +234,21 @@ public class StructureReporter3 extends
 			} else {
 				peek().addFieldReference(node);
 			}
+		}
+		return null;
+	}
+
+	@Override
+	public IStructureNode visitVoidExpression(VoidExpression node) {
+		final Expression expression = node.getExpression();
+		if (expression instanceof FunctionStatement
+				|| expression instanceof VariableStatement) {
+			visit(expression);
+		} else {
+			final ExpressionNode expressionNode = new ExpressionNode(peek());
+			push(expressionNode);
+			visit(expression);
+			pop();
 		}
 		return null;
 	}

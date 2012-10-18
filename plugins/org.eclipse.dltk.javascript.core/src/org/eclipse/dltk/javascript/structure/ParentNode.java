@@ -117,8 +117,14 @@ public abstract class ParentNode extends StructureNode implements IParentNode {
 		addReference(new FieldReference(identifier));
 	}
 
-	public boolean isStructureKnown() {
+	protected boolean isStructureKnown() {
 		return true;
+	}
+
+	public void addToScope(IStructureNode child) {
+		if (!isStructureKnown()) {
+			getScope().addChild(child);
+		}
 	}
 
 	@Override
