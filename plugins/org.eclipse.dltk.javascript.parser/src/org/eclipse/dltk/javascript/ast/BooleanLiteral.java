@@ -11,17 +11,16 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.ast;
 
-import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
 public class BooleanLiteral extends Literal {
 
-	private final String text;
+	private final boolean value;
 
-	public BooleanLiteral(ASTNode parent, String text) {
+	public BooleanLiteral(ASTNode parent, boolean value) {
 		super(parent);
-		this.text = text;
+		this.value = value;
 	}
 
 	/**
@@ -36,20 +35,16 @@ public class BooleanLiteral extends Literal {
 
 	@Override
 	public String getText() {
-		return this.text;
+		return value ? Keywords.TRUE : Keywords.FALSE;
 	}
 
 	public boolean booleanValue() {
-		return "true".equals(text);
+		return value;
 	}
 
 	@Override
 	public String toSourceString(String indentionString) {
-
-		Assert.isTrue(sourceStart() >= 0);
-		Assert.isTrue(sourceEnd() > 0);
-
-		return text;
+		return getText();
 	}
 
 }

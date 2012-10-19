@@ -34,6 +34,7 @@ public class AllTests {
 		suite.addTestSuite(SimpleJSDocParserTests.class);
 		suite.addTestSuite(Bug20110503.class);
 		suite.addTestSuite(ForTests.class);
+		suite.addTestSuite(StringPoolTest.class);
 		// $JUnit-END$
 		return suite;
 	}

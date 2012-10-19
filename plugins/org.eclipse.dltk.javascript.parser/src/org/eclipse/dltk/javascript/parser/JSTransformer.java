@@ -30,6 +30,7 @@ import org.eclipse.core.runtime.AssertionFailedException;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.compiler.problem.ProblemSeverity;
 import org.eclipse.dltk.compiler.util.Util;
+import org.eclipse.dltk.internal.core.util.WeakHashSet;
 import org.eclipse.dltk.javascript.ast.Argument;
 import org.eclipse.dltk.javascript.ast.ArrayInitializer;
 import org.eclipse.dltk.javascript.ast.AsteriskExpression;
@@ -108,6 +109,7 @@ import org.eclipse.dltk.javascript.internal.parser.NodeTransformerManager;
 import org.eclipse.dltk.javascript.parser.JSParser.program_return;
 import org.eclipse.dltk.utils.IntList;
 
+@SuppressWarnings("restriction")
 public class JSTransformer {
 
 	private final NodeTransformer[] transformers;
@@ -142,6 +144,14 @@ public class JSTransformer {
 		this.tokens = tokens;
 		this.ignoreUnknown = ignoreUnknown;
 		tokenOffsets = prepareOffsetMap(tokens);
+	}
+
+	private static final WeakHashSet stringPool = new WeakHashSet();
+
+	private static final String intern(String value) {
+		synchronized (stringPool) {
+			return (String) stringPool.add(value);
+		}
 	}
 
 	protected final ASTNode visitNode(Tree node) {
@@ -703,7 +713,7 @@ public class JSTransformer {
 		if (node.getChildCount() > 0) {
 			Label label = new Label(statement);
 			final Tree labelNode = node.getChild(0);
-			label.setText(labelNode.getText());
+			label.setText(intern(labelNode.getText()));
 			setRangeByToken(label, labelNode.getTokenStartIndex());
 			statement.setLabel(label);
 			validateLabel(label);
@@ -796,7 +806,7 @@ public class JSTransformer {
 
 	protected ASTNode visitDecimalLiteral(Tree node) {
 		DecimalLiteral number = new DecimalLiteral(getParent());
-		number.setText(node.getText());
+		number.setText(intern(node.getText()));
 		number.setStart(getTokenOffset(node.getTokenStartIndex()));
 		number.setEnd(number.sourceStart() + number.getText().length());
 
@@ -1036,7 +1046,7 @@ public class JSTransformer {
 		Identifier id = new Identifier(getParent());
 		locateDocumentation(id, node);
 
-		id.setName(node.getText());
+		id.setName(intern(node.getText()));
 
 		setRangeByToken(id, node.getTokenStartIndex());
 
@@ -1078,7 +1088,7 @@ public class JSTransformer {
 
 		StringLiteral literal = new StringLiteral(getParent());
 		locateDocumentation(literal, node);
-		literal.setText(node.getText());
+		literal.setText(intern(node.getText()));
 
 		literal.setStart(getTokenOffset(node.getTokenStartIndex()));
 		literal.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
@@ -1212,7 +1222,7 @@ public class JSTransformer {
 		if (node.getChildCount() > 0) {
 			Label label = new Label(statement);
 			final Tree labelNode = node.getChild(0);
-			label.setText(labelNode.getText());
+			label.setText(intern(labelNode.getText()));
 			setRangeByToken(label, labelNode.getTokenStartIndex());
 			statement.setLabel(label);
 			validateLabel(label);
@@ -1855,7 +1865,7 @@ public class JSTransformer {
 
 	protected ASTNode visitRegExp(Tree node) {
 		RegExpLiteral regexp = new RegExpLiteral(getParent());
-		regexp.setText(node.getText());
+		regexp.setText(intern(node.getText()));
 
 		regexp.setStart(getTokenOffset(node.getTokenStartIndex()));
 		regexp.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
@@ -1902,7 +1912,7 @@ public class JSTransformer {
 		LabelledStatement statement = new LabelledStatement(getParent());
 
 		Label label = new Label(statement);
-		label.setText(node.getChild(0).getText());
+		label.setText(intern(node.getChild(0).getText()));
 		setRangeByToken(label, node.getChild(0).getTokenStartIndex());
 		statement.setLabel(label);
 
@@ -2028,7 +2038,8 @@ public class JSTransformer {
 
 	protected ASTNode visitBooleanLiteral(Tree node) {
 
-		BooleanLiteral bool = new BooleanLiteral(getParent(), node.getText());
+		BooleanLiteral bool = new BooleanLiteral(getParent(),
+				node.getType() == JSParser.TRUE);
 
 		bool.setStart(getTokenOffset(node.getTokenStartIndex()));
 		bool.setEnd(getTokenOffset(node.getTokenStartIndex() + 1));
@@ -2175,7 +2186,7 @@ public class JSTransformer {
 
 	protected ASTNode visitHexIntegerLiteral(Tree node) {
 		DecimalLiteral number = new DecimalLiteral(getParent());
-		number.setText(node.getText());
+		number.setText(intern(node.getText()));
 		number.setStart(getTokenOffset(node.getTokenStartIndex()));
 		number.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
 
@@ -2184,7 +2195,7 @@ public class JSTransformer {
 
 	protected ASTNode visitOctalIntegerLiteral(Tree node) {
 		DecimalLiteral number = new DecimalLiteral(getParent());
-		number.setText(node.getText());
+		number.setText(intern(node.getText()));
 		number.setStart(getTokenOffset(node.getTokenStartIndex()));
 		number.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
 
