@@ -30,6 +30,7 @@ package org.eclipse.dltk.javascript.parser;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.TokenSource;
 import org.antlr.runtime.TokenStream;
@@ -83,12 +84,12 @@ public class DynamicTokenStream implements TokenStream, JSTokenStream {
 	 * Fetches the next token, returns the result if fetch was successful
 	 */
 	private final boolean fetchToken() {
-		Token t = tokenSource.nextToken();
+		CommonToken t = (CommonToken) tokenSource.nextToken();
 		if (t != Token.EOF_TOKEN) {
 			int index = tokens.size();
 			t.setTokenIndex(index);
 			tokens.add(t);
-			int offset = t.getText().length();
+			int offset = t.getStopIndex() - t.getStartIndex() + 1;
 			if (offsets.size() != 0) {
 				offset += offsets.get(offsets.size() - 1);
 			}
