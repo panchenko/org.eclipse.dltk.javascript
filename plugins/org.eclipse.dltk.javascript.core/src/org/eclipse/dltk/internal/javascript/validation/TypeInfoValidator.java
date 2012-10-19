@@ -2336,8 +2336,8 @@ public class TypeInfoValidator implements IBuildParticipant,
 					name);
 		}
 
-		private boolean stronglyTyped(IValueReference reference) {
-			final IRType parentType = typeOf(reference.getParent());
+		private static boolean stronglyTyped(IValueReference reference) {
+			final IRType parentType = typeOf(reference);
 			if (parentType != null) {
 				if (parentType instanceof IRRecordType) {
 					return true;
@@ -2351,14 +2351,16 @@ public class TypeInfoValidator implements IBuildParticipant,
 		public IValueReference visitIfStatement(IfStatement node) {
 			final IValueReference condition = visit(node.getCondition());
 			if (condition != null && !condition.exists()
-					&& node.getCondition() instanceof PropertyExpression
-					&& !stronglyTyped(condition)) {
-				if (DEBUG) {
-					System.out.println("visitIfStatement("
-							+ node.getCondition() + ") doesn't exist "
-							+ condition + " - create it");
+					&& node.getCondition() instanceof PropertyExpression) {
+				final IValueReference parent = condition.getParent();
+				if (parent != null && parent.exists() && !stronglyTyped(parent)) {
+					if (DEBUG) {
+						System.out.println("visitIfStatement("
+								+ node.getCondition() + ") doesn't exist "
+								+ condition + " - create it");
+					}
+					condition.setValue(PhantomValueReference.REFERENCE);
 				}
-				condition.setValue(PhantomValueReference.REFERENCE);
 			}
 			visitIfStatements(node);
 			return null;

@@ -1244,6 +1244,17 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(problems.toString(), 0, problems.size());
 	}
 
+	public void testUnknowPropertyOfUnknownVariableIfTest() {
+		List<String> code = new StringList();
+		code.add("function test() {");
+		code.add("  if(unknown.xxx){}");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JavaScriptProblems.UNDECLARED_VARIABLE, problems.get(0)
+				.getID());
+	}
+
 	public void testDoubleUnknowPropertyIfTest() {
 		List<String> code = new StringList();
 		code.add("/**");
