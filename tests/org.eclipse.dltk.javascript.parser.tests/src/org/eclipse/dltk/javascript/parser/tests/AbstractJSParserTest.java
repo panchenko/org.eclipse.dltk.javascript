@@ -36,12 +36,6 @@ public abstract class AbstractJSParserTest extends TestCase {
 	protected final JavaScriptParser parser = new JavaScriptParser();
 
 	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		reporter.reset();
-	}
-
-	@Override
 	public void run(TestResult result) {
 		if (TestSupport.ignored(this))
 			return;
@@ -49,6 +43,7 @@ public abstract class AbstractJSParserTest extends TestCase {
 	}
 
 	protected Script parseRaw(final String source) {
+		reporter.reset();
 		return parser.parse(source, reporter);
 	}
 

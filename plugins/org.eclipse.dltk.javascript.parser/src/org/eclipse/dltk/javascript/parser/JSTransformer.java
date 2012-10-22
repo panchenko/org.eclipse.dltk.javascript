@@ -1607,8 +1607,9 @@ public class JSTransformer {
 				.getTokenStartIndex()));
 
 		operator.setColonPosition(getTokenOffset(JSParser.COLON,
-				node.getChild(1).getTokenStopIndex() + 1, node.getChild(2)
-						.getTokenStartIndex()));
+				node.getChild(1).getTokenStopIndex() + 1,
+				node.getChildCount() > 2 ? node.getChild(2)
+						.getTokenStartIndex() : node.getTokenStopIndex()));
 
 		operator.setStart(getTokenOffset(node.getTokenStartIndex()));
 		operator.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));

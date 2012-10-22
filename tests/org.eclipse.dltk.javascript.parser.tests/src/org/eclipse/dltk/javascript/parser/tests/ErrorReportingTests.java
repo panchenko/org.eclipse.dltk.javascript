@@ -94,4 +94,13 @@ public class ErrorReportingTests extends AbstractJSParserTest {
 		assertEquals(1, reporter.getProblems().size());
 	}
 
+	public void testNotFinishedConditionalOperator() {
+		parse("var x = x ? 0:");
+		assertEquals(1, reporter.getProblems().size());
+		assertEquals(JavaScriptParserProblems.SYNTAX_ERROR, getProblemId());
+		parse("var x = x ? 0:;");
+		assertEquals(1, reporter.getProblems().size());
+		assertEquals(JavaScriptParserProblems.SYNTAX_ERROR, getProblemId());
+	}
+
 }
