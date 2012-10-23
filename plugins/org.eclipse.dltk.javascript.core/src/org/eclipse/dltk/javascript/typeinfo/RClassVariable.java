@@ -35,6 +35,17 @@ public class RClassVariable extends RType {
 	}
 
 	@Override
+	public TypeCompatibility isAssignableFrom(IRType type) {
+		if (super.isAssignableFrom(type).ok()) {
+			return TypeCompatibility.TRUE;
+		} else if (type instanceof IRClassType) {
+			return TypeCompatibility.TRUE;
+		} else {
+			return TypeCompatibility.FALSE;
+		}
+	}
+
+	@Override
 	public int hashCode() {
 		return variable.hashCode();
 	}
