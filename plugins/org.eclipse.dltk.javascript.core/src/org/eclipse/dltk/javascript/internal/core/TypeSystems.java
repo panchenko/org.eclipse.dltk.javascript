@@ -17,8 +17,7 @@ public class TypeSystems {
 
 	public static final ITypeSystem DELEGATING_TYPE_SYSTEM = new DelegatingTypeSystem();
 
-	public static final ITypeSystem WEAK_TYPE_SYSTEM = new StaticTypeSystem(
-			"WEAK");
+	public static final ITypeSystem WEAK_TYPE_SYSTEM = new WeakTypeSystem();
 
 	public static final ITypeSystem GLOBAL = new StaticTypeSystem("GLOBAL");
 
