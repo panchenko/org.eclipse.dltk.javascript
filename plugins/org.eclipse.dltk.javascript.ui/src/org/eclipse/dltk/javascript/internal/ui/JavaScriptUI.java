@@ -9,6 +9,9 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.ui;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Plugin;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.dltk.javascript.internal.ui.text.JavascriptTextTools;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -66,8 +69,14 @@ public class JavaScriptUI extends AbstractUIPlugin {
 		return fJavascriptTextTools;
 	}
 
-	public static void log(Exception exception) {
-		exception.printStackTrace();
-	}	
-
+	public static void log(Throwable t) {
+		final Plugin p = plugin;
+		if (p != null) {
+			p.getLog().log(
+					new Status(IStatus.ERROR, PLUGIN_ID, IStatus.OK, t
+							.getLocalizedMessage(), t));
+		} else {
+			t.printStackTrace();
+		}
+	}
 }

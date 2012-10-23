@@ -9,14 +9,19 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.ui.text.completion;
 
+import java.util.concurrent.Callable;
+
 import org.eclipse.dltk.core.CompletionProposal;
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
+import org.eclipse.dltk.internal.javascript.ti.TypeSystemImpl;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
+import org.eclipse.dltk.javascript.internal.ui.JavaScriptUI;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinfo.IRMethod;
 import org.eclipse.dltk.javascript.typeinfo.IRParameter;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
+import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.RTypes;
 import org.eclipse.dltk.javascript.typeinfo.TypeMode;
 import org.eclipse.dltk.javascript.typeinfo.model.GenericType;
@@ -106,14 +111,25 @@ public class JavaScriptCompletionProposalCollector extends
 			if (parameters.size() > 0) {
 				sb = new StringBuilder();
 				int index = 0;
-				for (Parameter parameter : parameters) {
+				for (final Parameter parameter : parameters) {
 					if (sb.length() > 0)
 						sb.append(", ");
 					if (parameter.getKind() == ParameterKind.OPTIONAL)
 						sb.append('[');
 					if (parameter.getType() != null) {
-						IRType type = RTypes.create(parameter.getType());
-						sb.append(type.getName());
+						try {
+							final IRType type = ITypeSystem.CURRENT.runWith(
+									getTypeSystem(), new Callable<IRType>() {
+										public IRType call() {
+											return RTypes.create(parameter
+													.getType());
+										}
+									});
+							sb.append(type.getName());
+						} catch (Exception e) {
+							// shouldn't happen
+							JavaScriptUI.log(e);
+						}
 						if (parameter.getKind() == ParameterKind.VARARGS)
 							sb.append("...");
 						sb.append(' ');
@@ -168,6 +184,18 @@ public class JavaScriptCompletionProposalCollector extends
 		}
 
 		return methodReferenceProposal;
+	}
+
+	private ITypeSystem typeSystem;
+
+	private ITypeSystem getTypeSystem() {
+		if (typeSystem == null) {
+			typeSystem = ITypeSystem.CURRENT.get();
+			if (typeSystem == null) {
+				typeSystem = new TypeSystemImpl();
+			}
+		}
+		return typeSystem;
 	}
 
 	@Override
