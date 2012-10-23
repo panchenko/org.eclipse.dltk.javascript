@@ -73,7 +73,7 @@ public class TypeSystemImpl implements ITypeSystem {
 		}
 	}
 
-	public Type doResolveType(Type type) {
+	protected Type doResolveType(Type type) {
 		final String typeName = URI.decode(((InternalEObject) type).eProxyURI()
 				.fragment());
 		final Type resolved = TypeInfoModelLoader.getInstance().getType(

@@ -164,11 +164,21 @@ public class TypeInferencer2 extends TypeSystemImpl implements
 				false);
 	}
 
+	/**
+	 * Allows creation of unknown types in {@link #resolveType(Type)}. Most of
+	 * the time it doesn't matter, but in some special cases original proxy
+	 * should be kept, that's why this method is available for override.
+	 */
+	protected boolean resolveToUnknown() {
+		return true;
+	}
+
 	@Override
 	public Type doResolveType(Type type) {
 		final String typeName = URI.decode(((InternalEObject) type).eProxyURI()
 				.fragment());
-		final Type resolved = getType(typeName, null, true, true, false, true);
+		final Type resolved = getType(typeName, null, true, true, false,
+				resolveToUnknown());
 		if (resolved != null) {
 			return resolved;
 		}
