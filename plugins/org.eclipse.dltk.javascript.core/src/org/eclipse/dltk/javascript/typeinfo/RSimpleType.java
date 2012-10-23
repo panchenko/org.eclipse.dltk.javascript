@@ -19,14 +19,11 @@ import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 public class RSimpleType extends RType implements IRSimpleType {
 
 	@NonNull
-	private final Type target;
-	@NonNull
 	private final IRTypeDeclaration declaration;
 
 	protected RSimpleType(ITypeSystem typeSystem, Type target) {
 		super(typeSystem);
 		assert target != null;
-		this.target = target;
 		if (DEBUG)
 			checkType(target);
 		this.declaration = convert(target);
@@ -39,16 +36,10 @@ public class RSimpleType extends RType implements IRSimpleType {
 	protected RSimpleType(ITypeSystem typeSystem, IRTypeDeclaration declaration) {
 		super(typeSystem);
 		assert declaration != null;
-		this.target = declaration.getSource();
-		if (DEBUG)
-			checkType(target);
 		this.declaration = declaration;
 	}
 
 	protected RSimpleType(IRTypeDeclaration declaration) {
-		this.target = declaration.getSource();
-		if (DEBUG)
-			checkType(target);
 		this.declaration = declaration;
 	}
 
@@ -57,7 +48,7 @@ public class RSimpleType extends RType implements IRSimpleType {
 	}
 
 	public Type getTarget() {
-		return target;
+		return declaration.getSource();
 	}
 
 	public IRTypeDeclaration getDeclaration() {
@@ -66,7 +57,7 @@ public class RSimpleType extends RType implements IRSimpleType {
 
 	@Override
 	public int hashCode() {
-		return target.hashCode();
+		return declaration.hashCode();
 	}
 
 	@Override
@@ -78,14 +69,14 @@ public class RSimpleType extends RType implements IRSimpleType {
 		if (getClass() != obj.getClass())
 			return false;
 		final RSimpleType other = (RSimpleType) obj;
-		return target.equals(other.target);
+		return declaration.equals(other.declaration);
 	}
 
 	@Override
 	public TypeCompatibility isAssignableFrom(IRType type) {
 		if (super.isAssignableFrom(type).ok()) {
 			return TypeCompatibility.TRUE;
-		} else if (Types.OBJECT == this.target) {
+		} else if (Types.OBJECT == this.declaration.getSource()) {
 			return TypeCompatibility.valueOf(type.isJavaScriptObject());
 		} else if (type instanceof RSimpleType) {
 			final IRTypeDeclaration other = ((RSimpleType) type)
@@ -97,7 +88,7 @@ public class RSimpleType extends RType implements IRSimpleType {
 
 	@Override
 	public boolean isJavaScriptObject() {
-		final TypeKind kind = target.getKind();
+		final TypeKind kind = declaration.getSource().getKind();
 		return kind == TypeKind.PREDEFINED || kind == TypeKind.JAVASCRIPT;
 	}
 

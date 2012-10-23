@@ -91,6 +91,24 @@ public class TypeParameterizerTests extends TestCase {
 		assertFalse(arrayOfNumber.equals(arrayOfString));
 	}
 
+	public void testSimpleTypeEquals() {
+		final GenericType listType = eINSTANCE.createGenericType();
+		listType.setName("List");
+		final TypeVariable variable = eINSTANCE.createTypeVariable();
+		variable.setName("T");
+		listType.getTypeParameters().add(variable);
+
+		final IRTypeDeclaration numberList = typeSystem.parameterize(listType,
+				Collections.singletonList(RTypes.NUMBER));
+		final IRTypeDeclaration stringList = typeSystem.parameterize(listType,
+				Collections.singletonList(RTypes.STRING));
+
+		assertFalse((RTypes.simple(numberList)).equals(RTypes
+				.simple(stringList)));
+		assertFalse((RTypes.classType(numberList)).equals(RTypes
+				.classType(stringList)));
+	}
+
 	public void testParameterizeGenericSuperType() {
 		final GenericType collection = eINSTANCE.createGenericType();
 		collection.setName("Collection");

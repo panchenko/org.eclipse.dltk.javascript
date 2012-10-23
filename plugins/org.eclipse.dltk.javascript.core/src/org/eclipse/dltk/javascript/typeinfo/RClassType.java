@@ -70,7 +70,7 @@ public class RClassType extends RType implements IRClassType {
 	}
 
 	public Type getTarget() {
-		return type;
+		return declaration != null ? declaration.getSource() : null;
 	}
 
 	public IRTypeDeclaration getDeclaration() {
@@ -99,14 +99,15 @@ public class RClassType extends RType implements IRClassType {
 
 	@Override
 	public int hashCode() {
-		return type != null ? type.hashCode() : 31;
+		return declaration != null ? declaration.hashCode() : 31;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof RClassType) {
 			final RClassType other = (RClassType) obj;
-			return type != null ? type.equals(other.type) : other.type == null;
+			return declaration != null ? declaration.equals(other.declaration)
+					: other.declaration == null;
 		}
 		return false;
 	}
