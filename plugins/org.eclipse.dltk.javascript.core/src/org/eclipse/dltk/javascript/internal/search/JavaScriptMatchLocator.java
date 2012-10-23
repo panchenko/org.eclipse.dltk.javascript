@@ -105,7 +105,11 @@ public class JavaScriptMatchLocator implements IMatchLocator,
 				// TODO (alex) should be in resolvePotentialMatches()
 				final JSBindings bindings = TemporaryBindings.build(
 						inferencer2, module, script);
-				structureRequestor.resolveReferences(bindings);
+				bindings.run(new Runnable() {
+					public void run() {
+						structureRequestor.resolveReferences(bindings);
+					}
+				});
 			}
 			structureRequestor.report(matchingCollector);
 			if (!nodeSet.isEmpty()) {
