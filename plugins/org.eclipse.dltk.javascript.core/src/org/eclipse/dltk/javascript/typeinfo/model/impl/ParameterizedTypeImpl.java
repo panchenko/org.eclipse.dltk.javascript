@@ -200,4 +200,8 @@ public class ParameterizedTypeImpl extends SimpleTypeImpl implements Parameteriz
 		return RTypes.simple(typeSystem, parameterized);
 	}
 
-} //GenericTypeImpl
+	@Override
+	public String toString() {
+		return getName();
+	}
+} // ParameterizedTypeImpl
