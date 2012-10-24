@@ -26,7 +26,6 @@ import org.eclipse.dltk.javascript.typeinference.IAssignProtection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
-import org.eclipse.dltk.javascript.typeinfo.AttributeKey;
 import org.eclipse.dltk.javascript.typeinfo.IRArrayType;
 import org.eclipse.dltk.javascript.typeinfo.IRClassType;
 import org.eclipse.dltk.javascript.typeinfo.IRElement;
@@ -224,8 +223,7 @@ public abstract class ElementValue implements IValue {
 		}
 	}
 
-	private static class FunctionMethodKey extends
-			AttributeKey<FunctionTypeMethodValue> {
+	private static class FunctionMethodKey {
 		private final IRFunctionType type;
 		private final FunctionMethod method;
 
