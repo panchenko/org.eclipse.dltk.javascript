@@ -79,6 +79,7 @@ public class ValidationMessages extends NLS {
 
 	public static String NotGenericType;
 	public static String IncorrectNumberOfTypeArguments;
+	public static String ParameterizedBoundMismatch;
 
 	static {
 		// initialize resource bundle

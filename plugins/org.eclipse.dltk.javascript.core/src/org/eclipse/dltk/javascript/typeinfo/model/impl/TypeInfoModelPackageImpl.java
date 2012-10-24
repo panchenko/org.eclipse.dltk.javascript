@@ -787,6 +787,15 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
 
     /**
      * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EReference getTypeVariable_Bound() {
+        return (EReference)typeVariableEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
      * @generated
      */
@@ -1282,6 +1291,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         undefinedTypeEClass = createEClass(UNDEFINED_TYPE);
 
         typeVariableEClass = createEClass(TYPE_VARIABLE);
+        createEReference(typeVariableEClass, TYPE_VARIABLE__BOUND);
 
         genericTypeEClass = createEClass(GENERIC_TYPE);
         createEReference(genericTypeEClass, GENERIC_TYPE__TYPE_PARAMETERS);
@@ -1483,6 +1493,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         initEClass(undefinedTypeEClass, UndefinedType.class, "UndefinedType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
         initEClass(typeVariableEClass, TypeVariable.class, "TypeVariable", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+        initEReference(getTypeVariable_Bound(), this.getJSType(), null, "bound", null, 0, 1, TypeVariable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
         initEClass(genericTypeEClass, GenericType.class, "GenericType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
         initEReference(getGenericType_TypeParameters(), this.getTypeVariable(), null, "typeParameters", null, 0, -1, GenericType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$

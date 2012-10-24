@@ -10,6 +10,7 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.annotations.Nullable;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.compiler.problem.IValidationStatus;
+import org.eclipse.dltk.compiler.problem.ValidationMultiStatus;
 import org.eclipse.dltk.compiler.problem.ValidationStatus;
 import org.eclipse.dltk.core.ISourceNode;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
@@ -21,9 +22,12 @@ import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTag;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
+import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.ITypeCheck;
 import org.eclipse.dltk.javascript.typeinfo.ITypeChecker;
 import org.eclipse.dltk.javascript.typeinfo.ITypeCheckerExtension;
+import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
+import org.eclipse.dltk.javascript.typeinfo.RTypes;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.AnyType;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
@@ -39,10 +43,12 @@ import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
 import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeVariable;
 import org.eclipse.dltk.javascript.typeinfo.model.UndefinedType;
 import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
 import org.eclipse.dltk.javascript.validation.IValidatorExtension;
 import org.eclipse.dltk.javascript.validation.IValidatorExtension2;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.osgi.util.NLS;
 
 public class JSDocValidatorFactory {
@@ -121,10 +127,13 @@ public class JSDocValidatorFactory {
 			this.parameterizedType = parameterizedType;
 		}
 
-		public IValidationStatus checkType(Type type) {
+		public IValidationStatus checkType(ITypeInfoContext context, Type type) {
 			if (type instanceof GenericType) {
 				final GenericType genericType = (GenericType) type;
-				if (genericType.getTypeParameters().size() != parameterizedType
+				final EList<TypeVariable> typeVariables = genericType
+						.getTypeParameters();
+				final int typeVariableCount = typeVariables.size();
+				if (typeVariableCount != parameterizedType
 						.getActualTypeArguments().size()) {
 					return new ValidationStatus(
 							JavaScriptProblems.PARAMETERIZED_TYPE_INCORRECT_ARGUMENTS,
@@ -132,7 +141,29 @@ public class JSDocValidatorFactory {
 									ValidationMessages.IncorrectNumberOfTypeArguments,
 									type.getName()));
 				}
-				return null;
+				List<ValidationStatus> statuses = null;
+				for (int i = 0; i < typeVariableCount; ++i) {
+					final TypeVariable variable = typeVariables.get(i);
+					if (variable.getBound() != null) {
+						final IRType bound = RTypes.create(context,
+								variable.getBound());
+						final IRType actual = RTypes.create(parameterizedType
+								.getActualTypeArguments().get(i));
+						if (!bound.isAssignableFrom(actual).ok()) {
+							if (statuses == null) {
+								statuses = new ArrayList<ValidationStatus>();
+							}
+							statuses.add(new ValidationStatus(
+									JavaScriptProblems.PARAMETERIZED_TYPE_INCORRECT_ARGUMENTS,
+									NLS.bind(
+											ValidationMessages.ParameterizedBoundMismatch,
+											new Object[] { actual,
+													variable.getName(), bound,
+													genericType.getName() })));
+						}
+					}
+				}
+				return ValidationMultiStatus.of(statuses);
 			} else {
 				return new ValidationStatus(
 						JavaScriptProblems.NOT_GENERIC_TYPE, NLS.bind(
@@ -248,7 +279,7 @@ public class JSDocValidatorFactory {
 
 		private void doChecks(Type type, ISourceNode tag, ITypeCheck[] checks) {
 			for (ITypeCheck check : checks) {
-				final IValidationStatus status = check.checkType(type);
+				final IValidationStatus status = check.checkType(context, type);
 				if (status != null && status != ValidationStatus.OK) {
 					reportValidationStatus(reporter, status, tag,
 							JavaScriptProblems.INACCESSIBLE_TYPE,

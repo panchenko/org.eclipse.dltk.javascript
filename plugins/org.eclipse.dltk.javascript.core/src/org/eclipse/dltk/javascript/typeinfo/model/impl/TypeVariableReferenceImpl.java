@@ -15,6 +15,7 @@ import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.RTypeVariable;
 import org.eclipse.dltk.javascript.typeinfo.RTypes;
+import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeVariable;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeVariableReference;
@@ -127,7 +128,9 @@ public class TypeVariableReferenceImpl extends EObjectImpl implements TypeVariab
 					return value;
 				}
 			}
-			return new RTypeVariable(variable);
+			final JSType bound = variable.getBound();
+			return new RTypeVariable(variable, bound != null ? RTypes.create(
+					typeSystem, bound) : null);
 		}
 		return RTypes.none();
     }

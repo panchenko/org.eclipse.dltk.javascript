@@ -726,7 +726,7 @@ public class JSDocSupport implements IModelBuilder {
 		return typeName;
 	}
 
-	private static boolean isBraced(String typeName) {
+	public static boolean isBraced(String typeName) {
 		final int length = typeName.length();
 		return length > 2 && typeName.charAt(0) == '{'
 				&& typeName.charAt(length - 1) == '}';

@@ -1635,13 +1635,22 @@ public interface TypeInfoModelPackage extends EPackage {
     int TYPE_VARIABLE__NAME = NAMED_ELEMENT__NAME;
 
     /**
+     * The feature id for the '<em><b>Bound</b></em>' containment reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int TYPE_VARIABLE__BOUND = NAMED_ELEMENT_FEATURE_COUNT + 0;
+
+    /**
      * The number of structural features of the '<em>Type Variable</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int TYPE_VARIABLE_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 0;
+    int TYPE_VARIABLE_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 1;
 
     /**
      * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -2609,6 +2618,17 @@ public interface TypeInfoModelPackage extends EPackage {
     EClass getTypeVariable();
 
     /**
+     * Returns the meta object for the containment reference '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeVariable#getBound <em>Bound</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the containment reference '<em>Bound</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeVariable#getBound()
+     * @see #getTypeVariable()
+     * @generated
+     */
+    EReference getTypeVariable_Bound();
+
+    /**
      * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.Element <em>Element</em>}'.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3477,6 +3497,14 @@ public interface TypeInfoModelPackage extends EPackage {
          * @generated
          */
         EClass TYPE_VARIABLE = eINSTANCE.getTypeVariable();
+
+        /**
+         * The meta object literal for the '<em><b>Bound</b></em>' containment reference feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference TYPE_VARIABLE__BOUND = eINSTANCE.getTypeVariable_Bound();
 
         /**
          * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ElementImpl <em>Element</em>}' class.

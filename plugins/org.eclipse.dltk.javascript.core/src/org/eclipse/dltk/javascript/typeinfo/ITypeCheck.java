@@ -23,6 +23,6 @@ import org.eclipse.dltk.javascript.typeinfo.model.Type;
 public interface ITypeCheck {
 
 	@Nullable
-	IValidationStatus checkType(Type type);
+	IValidationStatus checkType(ITypeInfoContext context, Type type);
 
 }

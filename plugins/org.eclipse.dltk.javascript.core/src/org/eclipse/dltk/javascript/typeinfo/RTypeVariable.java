@@ -12,6 +12,7 @@
 package org.eclipse.dltk.javascript.typeinfo;
 
 import org.eclipse.dltk.annotations.NonNull;
+import org.eclipse.dltk.annotations.Nullable;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeVariable;
 
 /**
@@ -21,9 +22,12 @@ public class RTypeVariable extends RType {
 
 	@NonNull
 	private final TypeVariable variable;
+	@Nullable
+	private final IRType bound;
 
-	public RTypeVariable(TypeVariable variable) {
+	public RTypeVariable(TypeVariable variable, IRType bound) {
 		this.variable = variable;
+		this.bound = bound;
 	}
 
 	public String getName() {
@@ -39,8 +43,12 @@ public class RTypeVariable extends RType {
 		if (super.isAssignableFrom(type).ok()) {
 			return TypeCompatibility.TRUE;
 		} else {
-			// TODO (alex) review
-			return TypeCompatibility.TRUE;
+			if (bound != null) {
+				return bound.isAssignableFrom(type);
+			} else {
+				// TODO (alex) review
+				return TypeCompatibility.TRUE;
+			}
 		}
 	}
 
