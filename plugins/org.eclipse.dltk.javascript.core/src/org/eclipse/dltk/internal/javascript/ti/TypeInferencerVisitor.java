@@ -1187,6 +1187,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	@Override
 	public IValueReference visitObjectInitializer(ObjectInitializer node) {
+		// IRRecordType type
+
 		final IValueReference result = new AnonymousValue();
 		result.setDeclaredType(RTypes.OBJECT);
 		for (ObjectInitializerPart part : node.getInitializers()) {
