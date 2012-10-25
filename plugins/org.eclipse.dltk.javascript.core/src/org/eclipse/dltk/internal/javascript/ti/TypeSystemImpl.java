@@ -63,6 +63,13 @@ import org.eclipse.emf.ecore.InternalEObject;
 public class TypeSystemImpl implements ITypeSystem {
 
 	/*
+	 * @see ITypeSystem#getKnownType(java.lang.String)
+	 */
+	public Type getKnownType(String typeName) {
+		return TypeInfoModelLoader.getInstance().getType(typeName);
+	}
+
+	/*
 	 * @see ITypeSystem#resolveType(Type)
 	 */
 	public Type resolveType(Type type) {

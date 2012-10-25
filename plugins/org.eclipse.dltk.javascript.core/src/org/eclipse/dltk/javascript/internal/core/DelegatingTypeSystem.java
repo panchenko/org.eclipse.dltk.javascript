@@ -41,6 +41,15 @@ class DelegatingTypeSystem implements ITypeSystem {
 		}
 	}
 
+	public Type getKnownType(String typeName) {
+		final ITypeSystem current = current();
+		if (current != null) {
+			return current.getKnownType(typeName);
+		} else {
+			return TypeInfoModelLoader.getInstance().getType(typeName);
+		}
+	}
+
 	public Type resolveType(Type type) {
 		if (type != null && type.isProxy()) {
 			final ITypeSystem current = current();

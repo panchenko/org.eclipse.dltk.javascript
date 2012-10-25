@@ -63,6 +63,15 @@ public interface ITypeSystem {
 	}
 
 	/**
+	 * Returns the {@link Type} with the specified name or <code>null</code> if
+	 * no such type exists.
+	 * 
+	 * @param typeName
+	 *            the name of the type
+	 */
+	Type getKnownType(String typeName);
+
+	/**
 	 * Resolves the specified type if it's a proxy
 	 * 
 	 * @param type

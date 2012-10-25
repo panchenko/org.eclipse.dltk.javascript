@@ -155,6 +155,11 @@ public class TypeInferencer2 extends TypeSystemImpl implements
 		return TypeUtil.ref(getType(typeName));
 	}
 
+	@Override
+	public Type getKnownType(String typeName) {
+		return getKnownType(typeName, null);
+	}
+
 	public Type getKnownType(String typeName, TypeMode mode) {
 		if (typeName == null || typeName.length() == 0) {
 			return null;
