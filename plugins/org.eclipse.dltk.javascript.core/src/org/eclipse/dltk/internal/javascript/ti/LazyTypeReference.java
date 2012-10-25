@@ -1,7 +1,5 @@
 package org.eclipse.dltk.internal.javascript.ti;
 
-import static org.eclipse.dltk.javascript.typeinfo.ITypeNames.OBJECT;
-
 import java.util.StringTokenizer;
 
 import org.eclipse.dltk.internal.javascript.validation.JavaScriptValidations;
@@ -103,7 +101,7 @@ public class LazyTypeReference extends AbstractReference {
 						// LazyTypeReference is used to evaluate jsdoc type
 						// tags, which should be set as a declared type.
 						Type type = TypeInfoModelFactory.eINSTANCE.createType();
-						type.setSuperType(context.getKnownType(OBJECT, null));
+						type.setSuperType(Types.OBJECT);
 						type.setKind(TypeKind.JAVASCRIPT);
 						type.setName(className);
 						setDeclaredType(RTypes.simple(type));
