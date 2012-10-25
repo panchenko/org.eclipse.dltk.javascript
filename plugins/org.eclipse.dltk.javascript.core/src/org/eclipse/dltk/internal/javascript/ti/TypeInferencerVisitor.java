@@ -1349,7 +1349,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					peekContext());
 			IValueReference exception = collection.createChild(catchClause
 					.getException().getName());
-			exception.setDeclaredType(JSTypeSet.ref(ITypeNames.ERROR));
+			// TODO (alex) check @type declaration
+			// exception.setDeclaredType(JSTypeSet.ref(ITypeNames.ERROR));
 
 			enterContext(collection);
 			if (catchClause.getStatement() != null) {
