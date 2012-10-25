@@ -66,10 +66,6 @@ class RRecordMember implements IRRecordMember {
 		return false;
 	}
 
-	public Member getMember() {
-		return member;
-	}
-
 	public Visibility getVisibility() {
 		return Visibility.PUBLIC;
 	}
@@ -99,6 +95,6 @@ class RRecordMember implements IRRecordMember {
 	}
 
 	public Member getSource() {
-		return getMember();
+		return member;
 	}
 }

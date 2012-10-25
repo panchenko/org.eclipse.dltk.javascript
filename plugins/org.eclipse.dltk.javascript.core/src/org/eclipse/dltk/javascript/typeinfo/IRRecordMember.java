@@ -20,9 +20,6 @@ public interface IRRecordMember extends IRMember {
 
 	boolean isOptional();
 
-	@Deprecated
-	Member getMember();
-
 	// override return type
 	Member getSource();
 }
