@@ -81,10 +81,12 @@ import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinference.ValueReferenceUtil;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
+import org.eclipse.dltk.javascript.typeinfo.IRArrayType;
 import org.eclipse.dltk.javascript.typeinfo.IRClassType;
 import org.eclipse.dltk.javascript.typeinfo.IRConstructor;
 import org.eclipse.dltk.javascript.typeinfo.IRElement;
 import org.eclipse.dltk.javascript.typeinfo.IRFunctionType;
+import org.eclipse.dltk.javascript.typeinfo.IRMapType;
 import org.eclipse.dltk.javascript.typeinfo.IRMember;
 import org.eclipse.dltk.javascript.typeinfo.IRMethod;
 import org.eclipse.dltk.javascript.typeinfo.IRParameter;
@@ -988,9 +990,12 @@ public class TypeInfoValidator implements IBuildParticipant,
 							methodNode.sourceStart(), methodNode.sourceEnd());
 					return;
 				}
+				// we've got expressionType, reference exists, so return.
+				return;
 			}
-			if (!isArrayLookup(expression) && !isUntypedParameter(reference)) {
-				scope.add(path);
+			scope.add(path);
+			if (!isDynamicArrayAccess(reference)
+					&& !isUntypedParameter(reference)) {
 
 				final IRType type = JavaScriptValidations.typeOf(reference
 						.getParent());
@@ -1026,11 +1031,6 @@ public class TypeInfoValidator implements IBuildParticipant,
 										.sourceEnd());
 					}
 				} else {
-					IRType referenceType = JavaScriptValidations
-							.typeOf(reference);
-					if (RTypes.FUNCTION.isAssignableFrom(referenceType) == TypeCompatibility.TRUE) {
-						return;
-					}
 					if (expression instanceof NewExpression) {
 						if (reference.getKind() == ReferenceKind.TYPE) {
 							return;
@@ -1040,20 +1040,8 @@ public class TypeInfoValidator implements IBuildParticipant,
 						if (newType != null) {
 							return;
 						}
-
-					}
-					IValueReference parent = reference;
-					while (parent != null) {
-						if (parent.getName() == IValueReference.ARRAY_OP) {
-							// ignore array lookup function calls
-							// like: array[1](),
-							// those are dynamic.
-							return;
-						}
-						parent = parent.getParent();
 					}
 					if (expression instanceof NewExpression) {
-
 						reporter.reportProblem(
 								JavaScriptProblems.WRONG_TYPE_EXPRESSION,
 								NLS.bind(
@@ -1097,7 +1085,6 @@ public class TypeInfoValidator implements IBuildParticipant,
 					}
 				}
 			}
-			return;
 		}
 
 		private void validateCallExpressionRMethod(CallExpression node,
@@ -1222,10 +1209,6 @@ public class TypeInfoValidator implements IBuildParticipant,
 						&& reference.getDeclaredType() == null
 						&& reference.getDirectChildren().isEmpty()) {
 					return true;
-				} else if (EXPERIMENTAL && kind == ReferenceKind.PROPERTY
-						&& reference.getDeclaredType() == null
-						&& reference.getDirectChildren().isEmpty()) {
-					return true;
 				}
 				reference = reference.getParent();
 			}
@@ -1237,14 +1220,24 @@ public class TypeInfoValidator implements IBuildParticipant,
 					MemberPredicates.NON_STATIC) != null;
 		}
 
-		private static final boolean EXPERIMENTAL = false;
-
-		private boolean isArrayLookup(ASTNode expression) {
-			if (EXPERIMENTAL && expression instanceof GetArrayItemExpression)
-				return true;
-			if (EXPERIMENTAL && expression instanceof PropertyExpression) {
-				return isArrayLookup(((PropertyExpression) expression)
-						.getObject());
+		/**
+		 * Tests if reference has array access somewhere above which is not
+		 * applied to {@link IRArrayType} or {@link IRMapType} types.
+		 */
+		private boolean isDynamicArrayAccess(IValueReference reference) {
+			for (; reference != null; reference = reference.getParent()) {
+				if (reference.getName() == IValueReference.ARRAY_OP) {
+					final IRType containerType = JavaScriptValidations
+							.typeOf(reference.getParent());
+					if (containerType instanceof IRArrayType
+							|| containerType instanceof IRMapType) {
+						break;
+					}
+					// ignore array lookup function calls
+					// like: array[1](),
+					// those are dynamic.
+					return true;
+				}
 			}
 			return false;
 		}
@@ -1965,7 +1958,7 @@ public class TypeInfoValidator implements IBuildParticipant,
 					validateAccessibility(propName, member);
 				}
 			} else if ((!exists && !result.exists())
-					&& !isArrayLookup(propertyExpression)) {
+					&& !isDynamicArrayAccess(result)) {
 				scope.add(path);
 				final IRType parentType = typeOf(result.getParent());
 				if (parentType != null && parentType.isExtensible()) {
@@ -1979,7 +1972,7 @@ public class TypeInfoValidator implements IBuildParticipant,
 											result.getName(),
 											parentType.getName()), propName
 									.sourceStart(), propName.sourceEnd());
-				} else if (shouldBeDefined(propertyExpression)) {
+				} else if (!belongsToLogicalExpression(propertyExpression)) {
 					if (parentType != null
 							&& (parentKind == TypeKind.JAVASCRIPT || parentKind == TypeKind.PREDEFINED)) {
 						reporter.reportProblem(
@@ -2034,14 +2027,18 @@ public class TypeInfoValidator implements IBuildParticipant,
 			}
 		}
 
-		private boolean shouldBeDefined(PropertyExpression propertyExpression) {
-			if (propertyExpression.getParent() instanceof BinaryOperation) {
-				final BinaryOperation bo = (BinaryOperation) propertyExpression
+		/**
+		 * Tests if the specified expression is part of {@link BinaryOperation}
+		 * combining parts with logical AND or OR.
+		 */
+		private boolean belongsToLogicalExpression(Expression expression) {
+			if (expression.getParent() instanceof BinaryOperation) {
+				final BinaryOperation bo = (BinaryOperation) expression
 						.getParent();
-				return bo.getOperation() != JSParser.LAND
-						&& bo.getOperation() != JSParser.LOR;
+				return bo.getOperation() == JSParser.LAND
+						|| bo.getOperation() == JSParser.LOR;
 			}
-			return true;
+			return false;
 		}
 
 		private void reportDeprecatedProperty(IRProperty property,

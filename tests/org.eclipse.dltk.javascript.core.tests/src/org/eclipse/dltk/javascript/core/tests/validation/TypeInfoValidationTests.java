@@ -2459,6 +2459,16 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 				.getID());
 	}
 
+	public void testArrayAccess1property() {
+		final StringList code = new StringList();
+		code.add("var strings = ['A','B','C'];");
+		code.add("strings[0].aaa;");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JavaScriptProblems.UNDEFINED_PROPERTY, problems.get(0)
+				.getID());
+	}
+
 	public void testArrayAccess2() {
 		final StringList code = new StringList();
 		code.add("/** @type {Array<String>} */");
@@ -2467,6 +2477,17 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 1, problems.size());
 		assertEquals(JavaScriptProblems.UNDEFINED_METHOD, problems.get(0)
+				.getID());
+	}
+
+	public void testArrayAccess2property() {
+		final StringList code = new StringList();
+		code.add("/** @type {Array<String>} */");
+		code.add("var strings;");
+		code.add("strings[0].aaa;");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JavaScriptProblems.UNDEFINED_PROPERTY, problems.get(0)
 				.getID());
 	}
 
@@ -2569,8 +2590,6 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 	}
 
 	public void testJavaScriptDynamicArrayAcces() {
-		if (notYetImplemented())
-			return;
 		final StringList code = new StringList();
 		code.add("var x = new Array();");
 		code.add("x['test']();");
@@ -2580,11 +2599,26 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(problems.toString(), 0, problems.size());
 	}
 
+	public void testJavaScriptDynamicArrayAccesProperty() {
+		final StringList code = new StringList();
+		code.add("var x = new Array();");
+		code.add("x['test'].aaa;");
+		code.add("var y = {}");
+		code.add("y['test'].aaa;");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+
 	public void testJavaObjectDynamicArrayAcces() {
-		if (notYetImplemented())
-			return;
 		final StringList code = new StringList();
 		code.add("exampleForms['test']();");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+
+	public void testJavaObjectDynamicArrayAccesProperty() {
+		final StringList code = new StringList();
+		code.add("exampleForms['test'].aaa;");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
