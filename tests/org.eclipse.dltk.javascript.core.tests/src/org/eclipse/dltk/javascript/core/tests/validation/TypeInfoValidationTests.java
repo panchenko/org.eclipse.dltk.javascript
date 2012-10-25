@@ -12,6 +12,7 @@
 package org.eclipse.dltk.javascript.core.tests.validation;
 
 import static java.util.Collections.singleton;
+import static org.eclipse.dltk.core.tests.TestSupport.notYetImplemented;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,7 +21,6 @@ import java.util.List;
 
 import org.eclipse.dltk.compiler.problem.IProblem;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
-import org.eclipse.dltk.core.tests.TestSupport;
 import org.eclipse.dltk.core.tests.util.StringList;
 import org.eclipse.dltk.internal.javascript.validation.ValidationMessages;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
@@ -28,10 +28,6 @@ import org.eclipse.dltk.javascript.core.tests.AbstractValidationTest;
 
 @SuppressWarnings({ "nls", "restriction" })
 public class TypeInfoValidationTests extends AbstractValidationTest {
-
-	private boolean notYetImplemented() {
-		return TestSupport.notYetImplemented(this);
-	}
 
 	@Override
 	protected IBuildParticipant createValidator() {
@@ -427,7 +423,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 	}
 
 	public void testLazyVariableWithAssignment() {
-		if (notYetImplemented())
+		if (notYetImplemented(this))
 			return;
 		// TODO uncomment when correct scopes support is implemented
 		StringList code = new StringList();
@@ -976,7 +972,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 	}
 
 	public void testVariableAssignedFunctionCallingItself() {
-		if (notYetImplemented())
+		if (notYetImplemented(this))
 			return;
 		StringList code = new StringList();
 		code.add("var b = function a() {");
@@ -986,7 +982,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 	}
 
 	public void testVariableAssignedObjectInitializerFunctionCallingItSelf() {
-		if (notYetImplemented())
+		if (notYetImplemented(this))
 			return;
 		StringList code = new StringList();
 		code.add("var object = {");
@@ -1351,7 +1347,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 	}
 
 	public void testNestedTypeToReturnType() {
-		if (notYetImplemented())
+		if (notYetImplemented(this))
 			return;
 		List<String> code = new StringList();
 		code.add("function Test() {");
@@ -1419,23 +1415,23 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 	}
 
 	public void testNestedObjectInitializerWithThisTypeWithFunctionCall() {
-		if (notYetImplemented())
+		if (true || notYetImplemented(this))
 			return;
 		final StringList code = new StringList();
 		code.add("var init = {");
-		code.add("Node: function(){}, ");
-		code.add("fun: function() {return new this.Node();}");
+		code.add("  Node: function(){}, ");
+		code.add("  fun: function() {return new this.Node();}");
 		code.add("}");
-		code.add("/**");
-		code.add(" * @return {init.Node} */");
+		code.add("/** @return {init.Node} */");
 		code.add("function caller2() {");
-		code.add(" return init.fun();}");
+		code.add("  return init.fun();");
+		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
 
 	public void testOuterVariableInInnerFunction() {
-		if (notYetImplemented())
+		if (notYetImplemented(this))
 			return;
 		StringList code = new StringList();
 		code.add("function Outer() {");

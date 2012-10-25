@@ -223,12 +223,12 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 		if (DEBUG) {
 			System.out.println(value + "," + kind); //$NON-NLS-1$
 		}
+		final ReferenceLocation location = value.getLocation();
+		if (DEBUG) {
+			System.out.println(location);
+		}
 		ISourceModule m = (ISourceModule) module.getModelElement();
 		if (kind == ReferenceKind.ARGUMENT || kind == ReferenceKind.LOCAL) {
-			final ReferenceLocation location = value.getLocation();
-			if (DEBUG) {
-				System.out.println(location);
-			}
 			if (location == ReferenceLocation.UNKNOWN) {
 				return null;
 			}
@@ -246,10 +246,6 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 							: type.getName()) };
 		} else if (kind == ReferenceKind.FUNCTION
 				|| kind == ReferenceKind.GLOBAL || kind == ReferenceKind.FIELD) {
-			final ReferenceLocation location = value.getLocation();
-			if (DEBUG) {
-				System.out.println(location);
-			}
 			if (location == ReferenceLocation.UNKNOWN) {
 				return null;
 			}
@@ -262,6 +258,10 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 					.extractElements(value, Property.class);
 			if (properties != null) {
 				return convert(m, properties);
+			}
+			final IModelElement result = locateModelElement(location);
+			if (result != null) {
+				return new IModelElement[] { result };
 			}
 		} else if (kind == ReferenceKind.METHOD) {
 			final List<IRMethod> methods = ValueReferenceUtil.extractElements(
@@ -292,7 +292,6 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 				return convert(m, t);
 			}
 		}
-		final ReferenceLocation location = value.getLocation();
 		if (location != ReferenceLocation.UNKNOWN
 				&& location.getSourceModule() != null) {
 			return new IModelElement[] { new UnresolvedElement(

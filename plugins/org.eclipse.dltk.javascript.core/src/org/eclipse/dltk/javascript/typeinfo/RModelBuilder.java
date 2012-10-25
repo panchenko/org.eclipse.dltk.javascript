@@ -160,6 +160,24 @@ public class RModelBuilder {
 		public boolean isGeneric() {
 			return false;
 		}
+
+		@Override
+		public String toString() {
+			final StringBuilder sb = new StringBuilder();
+			sb.append(getName());
+			sb.append('(');
+			for (int i = 0; i < parameters.size(); ++i) {
+				if (i != 0) {
+					sb.append(',');
+				}
+				sb.append(parameters.get(i));
+			}
+			sb.append(')');
+			if (type != null) {
+				sb.append(':').append(type);
+			}
+			return sb.toString();
+		}
 	}
 
 	private static class RConstructor extends RMethod implements IRConstructor {

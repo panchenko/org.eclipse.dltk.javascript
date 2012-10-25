@@ -13,14 +13,21 @@ package org.eclipse.dltk.javascript.typeinfo;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.RegistryFactory;
+import org.eclipse.dltk.annotations.Nullable;
+import org.eclipse.dltk.internal.javascript.validation.JavaScriptValidations;
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 import org.eclipse.dltk.javascript.core.Types;
+import org.eclipse.dltk.javascript.internal.core.RRecordMember;
 import org.eclipse.dltk.javascript.internal.core.TypeSystems;
+import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
@@ -216,12 +223,108 @@ public class RTypes {
 		return new RMapType(typeSystem, keyType, valueType);
 	}
 
-	public static IRType recordType(ITypeSystem typeSystem,
+	/**
+	 * Returns empty record type instance.
+	 */
+	public static IRRecordType recordType() {
+		return EMPTY_RECORD_TYPE;
+	}
+
+	private static final IRRecordType EMPTY_RECORD_TYPE = new EmptyRecordType();
+
+	static class EmptyRecordType extends RType implements IRRecordType {
+
+		public String getName() {
+			return "{}";
+		}
+
+		public IRRecordMember getMember(String name) {
+			return null;
+		}
+
+		public Collection<IRRecordMember> getMembers() {
+			return Collections.emptyList();
+		}
+	}
+
+	public static IRRecordType recordType(ITypeSystem typeSystem,
 			Collection<Member> members) {
 		return new RRecordType(typeSystem, members);
 	}
 
-	public static IRType functionType(List<IRParameter> parameters,
+	public static IRRecordType recordType(Collection<IRRecordMember> members) {
+		return new RRecordType(members);
+	}
+
+	/**
+	 * Represents the specified {@link IValueReference} as {@link IRRecordType}.
+	 * Only {@link IRRecordType} value types and direct children are considered,
+	 * otherwise the {@link #recordType() empty record type} is returned.
+	 */
+	public static IRRecordType recordType(@Nullable IValueReference argument) {
+		if (argument != null) {
+			final Set<String> directChildren = argument.getDirectChildren();
+			final IRType type = JavaScriptValidations.typeOf(argument);
+			if (type instanceof IRRecordType) {
+				if (directChildren.isEmpty()) {
+					return (IRRecordType) type;
+				} else {
+					final List<IRRecordMember> members = new ArrayList<IRRecordMember>(
+							directChildren.size()
+									+ ((IRRecordType) type).getMembers().size());
+					for (String childName : directChildren) {
+						final IValueReference child = argument
+								.getChild(childName);
+						if (child.exists()) {
+							final IRType memberType = JavaScriptValidations
+									.typeOf(child);
+							members.add(new RRecordMember(childName,
+									memberType != null ? memberType : any(),
+									child));
+						}
+					}
+					for (IRRecordMember member : ((IRRecordType) type)
+							.getMembers()) {
+						if (!directChildren.contains(member.getName())) {
+							members.add(member);
+						}
+					}
+					return recordType(members);
+				}
+			} else if (!directChildren.isEmpty()) {
+				final List<IRRecordMember> members = new ArrayList<IRRecordMember>(
+						directChildren.size());
+				for (String childName : directChildren) {
+					final IValueReference child = argument.getChild(childName);
+					if (child.exists()) {
+						final IRType memberType = JavaScriptValidations
+								.typeOf(child);
+						members.add(new RRecordMember(childName,
+								memberType != null ? memberType : any(), child));
+					}
+				}
+				return recordType(members);
+			} else {
+				return recordType();
+			}
+		} else {
+			return recordType();
+		}
+	}
+
+	public static Set<String> memberNames(IRRecordType recordType) {
+		final Collection<IRRecordMember> members = recordType.getMembers();
+		if (members.isEmpty()) {
+			return Collections.emptySet();
+		}
+		final Set<String> names = new LinkedHashSet<String>(members.size());
+		for (IRRecordMember member : members) {
+			names.add(member.getName());
+		}
+		return names;
+	}
+
+	public static IRFunctionType functionType(List<IRParameter> parameters,
 			IRType returnType) {
 		return new RFunctionType(parameters, returnType);
 	}
@@ -278,7 +381,8 @@ public class RTypes {
 	public static final IRType BOOLEAN = simple(TypeSystems.GLOBAL,
 			Types.BOOLEAN);
 
-	public static final IRType OBJECT = simple(TypeSystems.GLOBAL, Types.OBJECT);
+	public static final IRSimpleType OBJECT = (IRSimpleType) simple(
+			TypeSystems.GLOBAL, Types.OBJECT);
 
 	public static List<IRType> convert(ITypeSystem typeSystem, List<JSType> args) {
 		final int size = args.size();

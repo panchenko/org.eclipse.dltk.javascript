@@ -16,7 +16,6 @@ import java.util.Set;
 
 import org.eclipse.dltk.compiler.problem.IProblemCategory;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
-import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.IRFunctionType;
 import org.eclipse.dltk.javascript.typeinfo.IRMethod;
 import org.eclipse.dltk.javascript.typeinfo.IRParameter;
@@ -48,10 +47,6 @@ public class RMethodFunctionWrapper implements IRMethod {
 
 	public IRType getType() {
 		return functionType.getReturnType();
-	}
-
-	public ReferenceLocation getLocation() {
-		return ReferenceLocation.UNKNOWN;
 	}
 
 	public Set<IProblemCategory> getSuppressedWarnings() {

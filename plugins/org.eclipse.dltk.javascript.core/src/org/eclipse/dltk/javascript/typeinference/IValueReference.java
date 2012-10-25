@@ -14,7 +14,7 @@ package org.eclipse.dltk.javascript.typeinference;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 
-public interface IValueReference extends IValueParent {
+public interface IValueReference extends IValueParent, ILocationProvider {
 
 	static final String FUNCTION_OP = "()"; //$NON-NLS-1$
 	static final String ARRAY_OP = "[]"; //$NON-NLS-1$

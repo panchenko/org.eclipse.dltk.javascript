@@ -66,6 +66,7 @@ import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.MemberPredicate;
 import org.eclipse.dltk.javascript.typeinfo.MemberPredicates;
 import org.eclipse.dltk.javascript.typeinfo.RTypeMemberQuery;
+import org.eclipse.dltk.javascript.typeinfo.RTypes;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.dltk.javascript.typeinfo.TypeMode;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
@@ -429,7 +430,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 									MemberPredicates.NON_STATIC);
 						}
 					} else {
-						typeQuery.add(context.convert(Types.FUNCTION),
+						typeQuery.add(RTypes.FUNCTION.getDeclaration(),
 								MemberPredicates.NON_STATIC);
 					}
 				} else if (type instanceof IRSimpleType) {
@@ -443,11 +444,13 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 					}
 				} else if (type instanceof IRRecordType) {
 					members.addAll(((IRRecordType) type).getMembers());
+					typeQuery.add(RTypes.OBJECT.getDeclaration(),
+							MemberPredicates.NON_STATIC);
 				} else if (type instanceof IRFunctionType) {
 					final IRFunctionType functionType = (IRFunctionType) type;
 					members.add(FunctionMethod.apply.create(functionType));
 					members.add(FunctionMethod.call.create(functionType));
-					typeQuery.add(context.convert(Types.FUNCTION),
+					typeQuery.add(RTypes.FUNCTION.getDeclaration(),
 							new MemberPredicate() {
 								public boolean isCompatibleWith(
 										MemberPredicate predicate) {
@@ -471,11 +474,12 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 							});
 				} else if (type instanceof IRArrayType) {
 					final IRArrayType arrayType = (IRArrayType) type;
-					typeQuery
-							.add(context.parameterize(Types.ARRAY, Collections
-									.singletonList(arrayType.getItemType())));
+					typeQuery.add(
+							context.parameterize(Types.ARRAY, Collections
+									.singletonList(arrayType.getItemType())),
+							MemberPredicates.NON_STATIC);
 				} else if (type.isJavaScriptObject()) {
-					typeQuery.add(context.convert(Types.OBJECT),
+					typeQuery.add(RTypes.OBJECT.getDeclaration(),
 							MemberPredicates.NON_STATIC);
 				}
 			}

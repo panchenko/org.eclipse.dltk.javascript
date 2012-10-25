@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011 NumberFour AG
+ * Copyright (c) 2012 NumberFour AG
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,13 +9,10 @@
  * Contributors:
  *     NumberFour AG - initial API and Implementation (Alex Panchenko)
  *******************************************************************************/
-package org.eclipse.dltk.javascript.typeinfo;
+package org.eclipse.dltk.javascript.typeinference;
 
-public interface IRRecordMember extends IRMember {
-	String getName();
+public interface ILocationProvider {
 
-	IRType getType();
-
-	boolean isOptional();
+	ReferenceLocation getLocation();
 
 }

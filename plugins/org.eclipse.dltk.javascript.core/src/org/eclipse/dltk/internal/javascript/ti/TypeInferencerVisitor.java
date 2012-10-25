@@ -91,10 +91,12 @@ import org.eclipse.dltk.javascript.ast.XmlTextFragment;
 import org.eclipse.dltk.javascript.ast.YieldOperator;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.core.Types;
+import org.eclipse.dltk.javascript.internal.core.RRecordMember;
 import org.eclipse.dltk.javascript.internal.core.TypeSystems;
 import org.eclipse.dltk.javascript.parser.ISuppressWarningsState;
 import org.eclipse.dltk.javascript.parser.JSParser;
 import org.eclipse.dltk.javascript.parser.PropertyExpressionUtils;
+import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTags;
 import org.eclipse.dltk.javascript.typeinference.IAssignProtection;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
@@ -104,6 +106,7 @@ import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinference.ValueReferenceUtil;
 import org.eclipse.dltk.javascript.typeinfo.IMemberEvaluator;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
+import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilderExtension;
@@ -113,6 +116,7 @@ import org.eclipse.dltk.javascript.typeinfo.IRConstructor;
 import org.eclipse.dltk.javascript.typeinfo.IRFunctionType;
 import org.eclipse.dltk.javascript.typeinfo.IRMapType;
 import org.eclipse.dltk.javascript.typeinfo.IRMethod;
+import org.eclipse.dltk.javascript.typeinfo.IRRecordMember;
 import org.eclipse.dltk.javascript.typeinfo.IRSimpleType;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.IRTypeDeclaration;
@@ -1187,27 +1191,82 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	@Override
 	public IValueReference visitObjectInitializer(ObjectInitializer node) {
-		final IValueReference result = new AnonymousValue();
-		result.setDeclaredType(RTypes.OBJECT);
+		final List<IRRecordMember> members = new ArrayList<IRRecordMember>(node
+				.getInitializers().size());
 		for (ObjectInitializerPart part : node.getInitializers()) {
 			if (part instanceof PropertyInitializer) {
 				final PropertyInitializer pi = (PropertyInitializer) part;
-				final IValueReference child = extractNamedChild(result,
-						pi.getName());
+				final String childName = PropertyExpressionUtils.nameOf(pi
+						.getName());
+				if (childName == null) { // just in case
+					visit(pi.getValue());
+					continue;
+				}
 				final IValueReference value = visit(pi.getValue());
-				if (child != null) {
-					child.setValue(value);
-					child.setLocation(ReferenceLocation.create(getSource(), pi
-							.getName().sourceStart(), pi.getName().sourceEnd()));
-					if (child.getKind() == ReferenceKind.UNKNOWN) {
-						child.setKind(ReferenceKind.FIELD);
+				if (value != null) {
+					final IRMethod method = (IRMethod) value
+							.getAttribute(IReferenceAttributes.R_METHOD);
+					if (method != null) {
+						if (method.getSource() instanceof IMethod) {
+							final IMethod m = (IMethod) method.getSource();
+							final ReferenceLocation loc = m.getLocation();
+							m.setLocation(ReferenceLocation.create(getSource(),
+									loc.getDeclarationStart(), loc
+											.getDeclarationEnd(), pi.getName()
+											.sourceStart(), pi.getName()
+											.sourceEnd()));
+						}
+						IRType returnType = method.getType();
+						if (returnType == null) {
+							returnType = JavaScriptValidations.typeOf(value
+									.getChild(IValueReference.FUNCTION_OP));
+						}
+						members.add(new RRecordMember(childName, RTypes
+								.functionType(method.getParameters(),
+										returnType), method.getSource()));
+						continue;
 					}
 				}
+				final JSVariable source;
+				if (!(pi.getValue() instanceof FunctionStatement)) {
+					source = new JSVariable();
+					source.setName(childName);
+					source.setLocation(ReferenceLocation.create(getSource(), pi
+							.getName().sourceStart(), pi.getName().sourceEnd()));
+					if (pi.getName().getDocumentation() != null) {
+						final JSDocTags tags = JSDocSupport.parse(pi.getName()
+								.getDocumentation());
+						if (!tags.isEmpty()) {
+							final IModelBuilder[] modelBuilders = this.context
+									.getModelBuilders();
+							if (modelBuilders.length > 0
+									&& modelBuilders[0] instanceof JSDocSupport) {
+								final JSDocSupport jsdocSupport = (JSDocSupport) modelBuilders[0];
+								jsdocSupport.parseType(source, tags,
+										JSDocSupport.TYPE_TAGS, reporter,
+										typeChecker);
+								jsdocSupport.parseDeprecation(source, tags,
+										reporter);
+							}
+						}
+					}
+				} else {
+					source = null;
+				}
+				final IRType type;
+				if (source != null && source.getType() != null) {
+					type = RTypes.create(context, source.getType());
+					// TODO (alex) validate evaluated type?
+				} else {
+					type = JavaScriptValidations.typeOf(value);
+				}
+				members.add(new RRecordMember(childName, type != null ? type
+						: RTypes.any(), source));
 			} else {
 				// TODO handle get/set methods
 			}
 		}
-		return result;
+		return ConstantValue.of(RTypes.recordType(members));
 	}
 
 	@Override
