@@ -17,12 +17,12 @@ import org.eclipse.dltk.javascript.core.JSKeywordCategory;
 import org.eclipse.dltk.javascript.core.JSKeywordManager;
 import org.eclipse.dltk.javascript.core.JavaScriptKeywords;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
-import org.eclipse.dltk.javascript.internal.ui.rules.FloatNumberRule;
 import org.eclipse.dltk.ui.coloring.ColoringPreferences;
 import org.eclipse.dltk.ui.coloring.IKeywordColorProvider;
 import org.eclipse.dltk.ui.coloring.ITextRuleProvider;
 import org.eclipse.dltk.ui.text.AbstractScriptScanner;
 import org.eclipse.dltk.ui.text.IColorManager;
+import org.eclipse.dltk.ui.text.rules.FloatNumberRule;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.rules.IRule;
@@ -32,8 +32,8 @@ import org.eclipse.jface.text.rules.WordRule;
 
 public class JavascriptCodeScanner extends AbstractScriptScanner {
 
-	private static String fgReturnKeyword = "return";
-	private static String fgTokenProperties[] = new String[] {
+	private static final String fgReturnKeyword = "return";
+	private static final String fgTokenProperties[] = new String[] {
 			JavascriptColorConstants.JS_DEFAULT,
 			JavascriptColorConstants.JS_KEYWORD,
 			JavascriptColorConstants.JS_KEYWORD_RETURN,
