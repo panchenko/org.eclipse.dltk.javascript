@@ -63,8 +63,9 @@ public interface ITypeSystem {
 	}
 
 	/**
-	 * Returns the {@link Type} with the specified name or <code>null</code> if
-	 * no such type exists.
+	 * Returns the {@link Type} with the specified name if it is known to this
+	 * type system or <code>null</code> if no such type exists. The returned
+	 * value is never a proxy.
 	 * 
 	 * @param typeName
 	 *            the name of the type
