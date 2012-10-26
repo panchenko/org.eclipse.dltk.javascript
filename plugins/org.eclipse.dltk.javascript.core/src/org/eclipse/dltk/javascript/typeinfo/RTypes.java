@@ -186,8 +186,25 @@ public class RTypes {
 		return new RClassType(typeSystem, type);
 	}
 
-	public static IRType classType(IRTypeDeclaration declaration) {
+	public static IRClassType classType(IRTypeDeclaration declaration) {
 		return new RClassType(declaration);
+	}
+
+	/**
+	 * Returns the {@link IRClassType} corresponding to the specified (simple)
+	 * type.
+	 * <p>
+	 * NOTICE: At the moment only {@link IRSimpleType} is supported at the
+	 * moment, for all other values empty class type is returned.
+	 * </p>
+	 */
+	public static IRClassType classOf(IRType type) {
+		if (type instanceof IRSimpleType) {
+			return classType(((IRSimpleType) type).getDeclaration());
+		} else {
+			// not supported case - create empty class type.
+			return classType((IRTypeDeclaration) null);
+		}
 	}
 
 	public static IRMapType mapOf(final IRType keyType, final IRType valueType) {

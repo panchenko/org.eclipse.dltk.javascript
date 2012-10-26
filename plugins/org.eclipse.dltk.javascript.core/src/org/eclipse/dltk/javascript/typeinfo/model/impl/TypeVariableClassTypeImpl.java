@@ -11,13 +11,13 @@
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
-import org.eclipse.dltk.javascript.typeinfo.IRSimpleType;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.IRTypeDeclaration;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.JSDocTypeParser;
 import org.eclipse.dltk.javascript.typeinfo.RClassVariable;
 import org.eclipse.dltk.javascript.typeinfo.RTypes;
+import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeVariable;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeVariableClassType;
@@ -128,13 +128,11 @@ public class TypeVariableClassTypeImpl extends EObjectImpl implements TypeVariab
 			if (typeSystem != null) {
 				final IRType value = typeSystem.getTypeVariable(variable);
 				if (value != null) {
-					if (value instanceof IRSimpleType) {
-						return RTypes.classType(((IRSimpleType) value)
-								.getDeclaration());
-					} else {
-						// not yet supported case - create empty class type.
-						return RTypes.classType((IRTypeDeclaration) null);
-					}
+					return RTypes.classOf(value);
+				}
+				final JSType bound = variable.getBound();
+				if (bound != null) {
+					return RTypes.classOf(RTypes.create(typeSystem, bound));
 				}
 			}
 			return new RClassVariable(variable);

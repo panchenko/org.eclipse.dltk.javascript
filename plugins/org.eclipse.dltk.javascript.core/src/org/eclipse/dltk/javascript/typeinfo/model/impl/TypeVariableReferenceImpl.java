@@ -129,8 +129,8 @@ public class TypeVariableReferenceImpl extends EObjectImpl implements TypeVariab
 				}
 			}
 			final JSType bound = variable.getBound();
-			return new RTypeVariable(variable, bound != null ? RTypes.create(
-					typeSystem, bound) : null);
+			return bound != null ? RTypes.create(typeSystem, bound)
+					: new RTypeVariable(variable);
 		}
 		return RTypes.none();
     }
