@@ -91,6 +91,7 @@ import org.eclipse.dltk.javascript.ast.XmlTextFragment;
 import org.eclipse.dltk.javascript.ast.YieldOperator;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.core.Types;
+import org.eclipse.dltk.javascript.internal.core.TypeSystems;
 import org.eclipse.dltk.javascript.parser.ISuppressWarningsState;
 import org.eclipse.dltk.javascript.parser.JSParser;
 import org.eclipse.dltk.javascript.parser.PropertyExpressionUtils;
@@ -774,8 +775,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				final IRType itemType = ((IRMapType) type).getValueType();
 				setIRType(itemReference, itemType, true);
 			} else if (ITypeNames.XMLLIST.equals(type.getName())) {
-				itemReference.setDeclaredType(RTypes.simple(context
-						.getType(ITypeNames.XML)));
+				itemReference.setDeclaredType(RTypes.simple(TypeSystems.GLOBAL,
+						context.getType(ITypeNames.XML)));
 			}
 		}
 		visit(node.getBody());
@@ -1123,7 +1124,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 						type.setSuperType(Types.OBJECT);
 						type.setKind(TypeKind.JAVASCRIPT);
 						type.setName(className);
-						result.value.setDeclaredType(RTypes.simple(type));
+						result.value.setDeclaredType(RTypes.simple(context,
+								type));
 					} else {
 						result.value.setDeclaredType(RTypes.OBJECT);
 					}
@@ -1158,7 +1160,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				if (knownType != null) {
 					result.value = new AnonymousNewValue();
 					result.value.setValue(context.getFactory().create(
-							contextValueCollection, RTypes.simple(knownType)));
+							contextValueCollection,
+							RTypes.simple(context, knownType)));
 					result.value.setKind(ReferenceKind.TYPE);
 				} else {
 					result.value = new LazyTypeReference(context, className,
@@ -1447,8 +1450,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				peekContext());
 
 		if (xmlValueReference instanceof IValueProvider) {
-			IRType xmlType = RTypes.simple(context.getKnownType(ITypeNames.XML,
-					null));
+			IRType xmlType = RTypes.simple(TypeSystems.GLOBAL,
+					context.getKnownType(ITypeNames.XML));
 			IValue xmlValue = ((IValueProvider) xmlValueReference).getValue();
 			List<XmlFragment> fragments = node.getFragments();
 			StringBuilder xml = new StringBuilder();
