@@ -444,7 +444,7 @@ public class TypeInferencer2 extends TypeSystemImpl implements
 						value.setDeclaredType(member.getType());
 					}
 					if (value.getKind() == ReferenceKind.UNKNOWN) {
-						if (member instanceof Property) {
+						if (source instanceof Property) {
 							value.setKind(ReferenceKind.PROPERTY);
 						} else {
 							value.setKind(ReferenceKind.METHOD);
