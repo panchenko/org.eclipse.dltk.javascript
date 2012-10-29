@@ -12,18 +12,27 @@
 package org.eclipse.dltk.javascript.internal.core;
 
 import org.eclipse.dltk.internal.javascript.ti.TypeSystemImpl;
+import org.eclipse.dltk.javascript.typeinfo.model.Type;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
+import org.eclipse.emf.ecore.resource.Resource;
 
-public class StaticTypeSystem extends TypeSystemImpl {
+public class GloablTypeSystem extends TypeSystemImpl {
 
-	private final String name;
-
-	public StaticTypeSystem(String name) {
-		this.name = name;
+	@Override
+	public Type resolveType(Type type) {
+		if (type != null) {
+			final Resource resource = type.eResource();
+			if (resource != null
+					&& !TypeInfoModelLoader.getInstance().hasResource(resource)) {
+				throw new IllegalArgumentException(type.getName());
+			}
+		}
+		return super.resolveType(type);
 	}
 
 	@Override
 	public String toString() {
-		return "TypeSystem(" + name + ")";
+		return getClass().getName();
 	}
 
 }
