@@ -188,8 +188,7 @@ public class RewriteAnalyzer extends DomSwitch<Boolean> {
 	public Boolean caseUnaryExpression(UnaryExpression node) {
 		if (cd.getObjectChanges().get(node) != null)
 			for (FeatureChange fc : cd.getObjectChanges().get(node))
-				if (fc.getFeature() == DomPackage.eINSTANCE
-						.getUnaryExpression_Operation()) {
+				if (fc.getFeature() == DomPackage.Literals.UNARY_EXPRESSION__OPERATION) {
 					UnaryOperator n = node.getOperation();
 					UnaryOperator o = (UnaryOperator) fc.getValue();
 					int len = o.toString().length();
@@ -225,8 +224,7 @@ public class RewriteAnalyzer extends DomSwitch<Boolean> {
 	public Boolean caseIdentifier(Identifier node) {
 		if (cd.getObjectChanges().get(node) != null)
 			for (FeatureChange fc : cd.getObjectChanges().get(node))
-				if (fc.getFeature() == DomPackage.eINSTANCE
-						.getIdentifier_Name())
+				if (fc.getFeature() == DomPackage.Literals.IDENTIFIER__NAME)
 					addEdit(new ReplaceEdit(node.getBegin(), node.getEnd()
 							- node.getBegin(), node.getName()), node);
 		return true;
@@ -236,7 +234,7 @@ public class RewriteAnalyzer extends DomSwitch<Boolean> {
 	public Boolean caseLabel(Label node) {
 		if (cd.getObjectChanges().get(node) != null)
 			for (FeatureChange fc : cd.getObjectChanges().get(node))
-				if (fc.getFeature() == DomPackage.eINSTANCE.getLabel_Name())
+				if (fc.getFeature() == DomPackage.Literals.LABEL__NAME)
 					addEdit(new ReplaceEdit(node.getBegin(), node.getEnd()
 							- node.getBegin(), node.getName()), node);
 		return true;
@@ -246,8 +244,7 @@ public class RewriteAnalyzer extends DomSwitch<Boolean> {
 	public Boolean caseBinaryExpression(BinaryExpression node) {
 		if (cd.getObjectChanges().get(node) != null)
 			for (FeatureChange fc : cd.getObjectChanges().get(node))
-				if (fc.getFeature() == DomPackage.eINSTANCE
-						.getBinaryExpression_Operation()) {
+				if (fc.getFeature() == DomPackage.Literals.BINARY_EXPRESSION__OPERATION) {
 					String r = node.getOperation().toString();
 					if (isTextBinary(fc.getValue()))
 						r = ' ' + r + ' ';
@@ -296,7 +293,7 @@ public class RewriteAnalyzer extends DomSwitch<Boolean> {
 			return node.getEnd();
 		case DomPackage.FUNCTION_EXPRESSION:
 			FunctionExpression expr = (FunctionExpression) node;
-			if (ref == DomPackage.eINSTANCE.getFunctionExpression_Identifier())
+			if (ref == DomPackage.Literals.FUNCTION_EXPRESSION__IDENTIFIER)
 				return expr.getParametersPosition() - 1;
 			else
 				return expr.getParametersPosition();
@@ -354,16 +351,13 @@ public class RewriteAnalyzer extends DomSwitch<Boolean> {
 	public String generate(Node node, Node parent, boolean wasNull, int pos) {
 		Generator gen = new Generator(cd, text, pos, lineDelimiter);
 		if (wasNull
-				&& parent.eClass() == DomPackage.eINSTANCE
-						.getVariableDeclaration())
+				&& parent.eClass() == DomPackage.Literals.VARIABLE_DECLARATION)
 			gen.append("=");
 		if (wasNull
-				&& parent.eClass() == DomPackage.eINSTANCE
-						.getFunctionExpression())
+				&& parent.eClass() == DomPackage.Literals.FUNCTION_EXPRESSION)
 			gen.append(" ");
 		if (wasNull
-				&& node.eContainmentFeature() == DomPackage.eINSTANCE
-						.getCatchClause_Filter())
+				&& node.eContainmentFeature() == DomPackage.Literals.CATCH_CLAUSE__FILTER)
 			gen.append(" if ");
 		gen.generate(node);
 		generated.add(node);
