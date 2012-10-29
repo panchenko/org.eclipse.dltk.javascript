@@ -95,27 +95,33 @@ public class Generator extends DomSwitch<StringBuilder> {
 	private final String text;
 	private final String lineDelimiter;
 	private String nlStr;
-	public Generator(ChangeDescription cd, String text, int pos, String lineDelimiter) {
+
+	public Generator(ChangeDescription cd, String text, int pos,
+			String lineDelimiter) {
 		this.cd = cd;
 		this.text = text;
 		this.lineDelimiter = lineDelimiter;
-		int st,end=pos;
-		for(st=pos-1;st>=0;st--) {
+		int st, end = pos;
+		for (st = pos - 1; st >= 0; st--) {
 			try {
 				char c = text.charAt(st);
-				if (c == '\n' || c == '\r') break;
-				if (c != ' ' && c != '\t') end = st;
+				if (c == '\n' || c == '\r')
+					break;
+				if (c != ' ' && c != '\t')
+					end = st;
 			} catch (RuntimeException e) {
 				System.err.println("OK");
 			}
 		}
-		nlStr = lineDelimiter + text.substring(st+1,end);
+		nlStr = lineDelimiter + text.substring(st + 1, end);
 	}
+
 	public StringBuilder generate(Node node) {
 		if (node.getBegin() != -1 && cd != null) {
 			RewriteAnalyzer ra = new RewriteAnalyzer(cd, text, lineDelimiter);
 			ra.rewrite(node);
-			Document doc = new Document(text.substring(node.getBegin(),node.getEnd()));
+			Document doc = new Document(text.substring(node.getBegin(),
+					node.getEnd()));
 			try {
 				TextEdit edit = ra.getEdit();
 				if (edit.hasChildren())
@@ -123,15 +129,17 @@ public class Generator extends DomSwitch<StringBuilder> {
 				edit.apply(doc);
 				String res = doc.get();
 				if (res.contains(lineDelimiter)) {
-					int st,end=node.getBegin();
-					for(st=node.getBegin()-1;st>=0;st--) {
+					int st, end = node.getBegin();
+					for (st = node.getBegin() - 1; st >= 0; st--) {
 						char c = text.charAt(st);
-						if (c == '\n' || c == '\r') break;
-						if (c != ' ' && c != '\t') end = st;
+						if (c == '\n' || c == '\r')
+							break;
+						if (c != ' ' && c != '\t')
+							end = st;
 					}
-					String nl = lineDelimiter + text.substring(st+1,end);
+					String nl = lineDelimiter + text.substring(st + 1, end);
 					sb.append(res.replace(nl, nlStr));
-			} else
+				} else
 					sb.append(res);
 			} catch (BadLocationException e) {
 				JavascriptManipulationPlugin.log(e);
@@ -141,103 +149,129 @@ public class Generator extends DomSwitch<StringBuilder> {
 		doSwitch(node);
 		return sb;
 	}
+
 	public Generator append(String s) {
 		sb.append(s);
 		return this;
 	}
+
 	public String toString() {
 		return sb.toString();
 	}
+
 	private void indent() {
 		nlStr = nlStr + '\t';
 	}
+
 	private void unindent() {
-		nlStr = nlStr.substring(0,nlStr.length()-1);
+		nlStr = nlStr.substring(0, nlStr.length() - 1);
 	}
+
 	public String getIndentation() {
 		return nlStr;
 	}
+
 	public void newLine() {
 		sb.append(nlStr);
 	}
+
 	@Override
 	public StringBuilder caseIdentifier(Identifier object) {
 		return sb.append(object.getName());
 	}
+
 	@Override
 	public StringBuilder caseVariableReference(VariableReference object) {
 		return sb.append(object.getVariable().getName());
 	}
+
 	@Override
 	public StringBuilder caseLabel(Label object) {
 		return sb.append(object.getName());
 	}
+
 	@Override
 	public StringBuilder caseNullLiteral(NullLiteral object) {
 		return sb.append("null");
 	}
+
 	@Override
 	public StringBuilder caseBooleanLiteral(BooleanLiteral object) {
 		return sb.append(object.getText());
 	}
+
 	@Override
 	public StringBuilder caseNumericLiteral(NumericLiteral object) {
 		return sb.append(object.getText());
 	}
+
 	@Override
 	public StringBuilder caseStringLiteral(StringLiteral object) {
 		return sb.append(object.getText());
 	}
+
 	@Override
-	public StringBuilder caseRegularExpressionLiteral(RegularExpressionLiteral object) {
+	public StringBuilder caseRegularExpressionLiteral(
+			RegularExpressionLiteral object) {
 		return sb.append(object.getText());
 	}
+
 	@Override
 	public StringBuilder caseThisExpression(ThisExpression object) {
 		return sb.append("this");
 	}
+
 	@Override
 	public StringBuilder caseArrayLiteral(ArrayLiteral object) {
 		sb.append('[');
-		boolean first=true;
-		for(IArrayElement elem : object.getElements()) {
-			if (!first) sb.append(',');
+		boolean first = true;
+		for (IArrayElement elem : object.getElements()) {
+			if (!first)
+				sb.append(',');
 			generate(elem);
 			first = false;
 		}
 		return sb.append(']');
 	}
+
 	@Override
 	public StringBuilder caseElision(Elision object) {
 		return sb;
 	}
+
 	@Override
 	public StringBuilder caseObjectLiteral(ObjectLiteral object) {
 		sb.append('{').append(nlStr);
-		boolean first=true;
+		boolean first = true;
 		indent();
-		for(PropertyAssignment pa : object.getProperties()) {
-			if (!first) sb.append(',').append(nlStr);
+		for (PropertyAssignment pa : object.getProperties()) {
+			if (!first)
+				sb.append(',').append(nlStr);
 			generate(pa);
 			first = false;
 		}
 		unindent();
 		return sb.append(nlStr).append('}');
 	}
+
 	@Override
-	public StringBuilder caseSimplePropertyAssignment(SimplePropertyAssignment object) {
+	public StringBuilder caseSimplePropertyAssignment(
+			SimplePropertyAssignment object) {
 		generate(object.getName());
 		sb.append(':');
 		return generate(object.getInitializer());
 	}
+
 	private void generateStatements(EList<Statement> list) {
 		indent();
-		for(int i=0; i<list.size(); i++) {
+		for (int i = 0; i < list.size(); i++) {
 			generate(list.get(i));
-			if (i == list.size()-1) unindent();
+			if (i == list.size() - 1)
+				unindent();
 			newLine();
 		}
 	}
+
 	@Override
 	public StringBuilder caseGetterAssignment(GetterAssignment object) {
 		sb.append("get ");
@@ -245,6 +279,7 @@ public class Generator extends DomSwitch<StringBuilder> {
 		generate(object.getBody());
 		return sb;
 	}
+
 	@Override
 	public StringBuilder caseSetterAssignment(SetterAssignment object) {
 		sb.append("set ");
@@ -253,12 +288,15 @@ public class Generator extends DomSwitch<StringBuilder> {
 		generate(object.getBody());
 		return sb;
 	}
+
 	@Override
-	public StringBuilder caseParenthesizedExpression(ParenthesizedExpression object) {
+	public StringBuilder caseParenthesizedExpression(
+			ParenthesizedExpression object) {
 		sb.append('(');
 		generate(object.getEnclosed());
 		return sb.append(')');
 	}
+
 	@Override
 	public StringBuilder caseArrayAccessExpression(ArrayAccessExpression object) {
 		generate(object.getArray());
@@ -266,20 +304,25 @@ public class Generator extends DomSwitch<StringBuilder> {
 		generate(object.getIndex());
 		return sb.append(']');
 	}
+
 	@Override
-	public StringBuilder casePropertyAccessExpression(PropertyAccessExpression object) {
+	public StringBuilder casePropertyAccessExpression(
+			PropertyAccessExpression object) {
 		generate(object.getObject());
 		sb.append('.');
 		return generate(object.getProperty());
 	}
+
 	private void generateExpressions(EList<Expression> list) {
 		boolean first = true;
-		for(Expression expr : list) {
-			if (!first) sb.append(',');
+		for (Expression expr : list) {
+			if (!first)
+				sb.append(',');
 			generate(expr);
 			first = false;
 		}
 	}
+
 	@Override
 	public StringBuilder caseNewExpression(NewExpression object) {
 		sb.append("new ");
@@ -288,6 +331,7 @@ public class Generator extends DomSwitch<StringBuilder> {
 		generateExpressions(object.getArguments());
 		return sb.append(')');
 	}
+
 	@Override
 	public StringBuilder caseCallExpression(CallExpression object) {
 		generate(object.getApplicant());
@@ -295,27 +339,38 @@ public class Generator extends DomSwitch<StringBuilder> {
 		generateExpressions(object.getArguments());
 		return sb.append(')');
 	}
+
 	@Override
 	public StringBuilder caseUnaryExpression(UnaryExpression object) {
 		UnaryOperator op = object.getOperation();
-		boolean postfix = op == UnaryOperator.POSTFIX_INC || op == UnaryOperator.POSTFIX_DEC;
-		boolean text = op == UnaryOperator.DELETE || op == UnaryOperator.VOID || op == UnaryOperator.TYPEOF; 
-		if (!postfix) sb.append(object.getOperation().toString());
-		if (text) sb.append(' ');
+		boolean postfix = op == UnaryOperator.POSTFIX_INC
+				|| op == UnaryOperator.POSTFIX_DEC;
+		boolean text = op == UnaryOperator.DELETE || op == UnaryOperator.VOID
+				|| op == UnaryOperator.TYPEOF;
+		if (!postfix)
+			sb.append(object.getOperation().toString());
+		if (text)
+			sb.append(' ');
 		generate(object.getArgument());
-		if (postfix) sb.append(object.getOperation().toString());
+		if (postfix)
+			sb.append(object.getOperation().toString());
 		return sb;
 	}
+
 	@Override
 	public StringBuilder caseBinaryExpression(BinaryExpression object) {
 		generate(object.getLeft());
-		boolean text = object.getOperation() == BinaryOperator.IN || object.getOperation() == BinaryOperator.INSTANCEOF;
-		if (text) sb.append(' ');
+		boolean text = object.getOperation() == BinaryOperator.IN
+				|| object.getOperation() == BinaryOperator.INSTANCEOF;
+		if (text)
+			sb.append(' ');
 		sb.append(object.getOperation().toString());
-		if (text) sb.append(' ');
+		if (text)
+			sb.append(' ');
 		generate(object.getRight());
 		return sb;
 	}
+
 	@Override
 	public StringBuilder caseConditionalExpression(ConditionalExpression object) {
 		generate(object.getPredicate());
@@ -324,6 +379,7 @@ public class Generator extends DomSwitch<StringBuilder> {
 		sb.append(':');
 		return generate(object.getAlternative());
 	}
+
 	@Override
 	public StringBuilder caseBlockStatement(BlockStatement object) {
 		indent();
@@ -333,29 +389,35 @@ public class Generator extends DomSwitch<StringBuilder> {
 		sb.append('}');
 		return sb;
 	}
+
 	@Override
 	public StringBuilder caseVariableStatement(VariableStatement object) {
 		sb.append("var ");
 		boolean first = true;
-		for(VariableDeclaration decl : object.getDeclarations()) {
-			if (!first) sb.append(',');
+		for (VariableDeclaration decl : object.getDeclarations()) {
+			if (!first)
+				sb.append(',');
 			generate(decl);
 			first = false;
 		}
-		sb.append(';'); // TODO (alex) conditionally add semicolons for other statements;
+		sb.append(';'); // TODO (alex) conditionally add semicolons for other
+						// statements;
 		return sb;
 	}
+
 	@Override
 	public StringBuilder caseConstStatement(ConstStatement object) {
 		sb.append("const ");
 		boolean first = true;
-		for(VariableDeclaration decl : object.getDeclarations()) {
-			if (!first) sb.append(',');
+		for (VariableDeclaration decl : object.getDeclarations()) {
+			if (!first)
+				sb.append(',');
 			generate(decl);
 			first = false;
 		}
 		return sb;
 	}
+
 	@Override
 	public StringBuilder caseVariableDeclaration(VariableDeclaration object) {
 		sb.append(object.getIdentifier().getName());
@@ -365,14 +427,17 @@ public class Generator extends DomSwitch<StringBuilder> {
 		}
 		return sb;
 	}
+
 	@Override
 	public StringBuilder caseEmptyStatement(EmptyStatement object) {
 		return sb.append(';');
 	}
+
 	@Override
 	public StringBuilder caseExpressionStatement(ExpressionStatement object) {
 		return generate(object.getExpression());
 	}
+
 	@Override
 	public StringBuilder caseIfStatement(IfStatement object) {
 		sb.append("if (");
@@ -385,6 +450,7 @@ public class Generator extends DomSwitch<StringBuilder> {
 		}
 		return sb;
 	}
+
 	@Override
 	public StringBuilder caseDoStatement(DoStatement object) {
 		sb.append("do ");
@@ -393,6 +459,7 @@ public class Generator extends DomSwitch<StringBuilder> {
 		generate(object.getCondition());
 		return sb.append(')');
 	}
+
 	@Override
 	public StringBuilder caseWhileStatement(WhileStatement object) {
 		sb.append("while (");
@@ -400,6 +467,7 @@ public class Generator extends DomSwitch<StringBuilder> {
 		sb.append(") ");
 		return generate(object.getBody());
 	}
+
 	@Override
 	public StringBuilder caseForStatement(ForStatement object) {
 		sb.append("for (");
@@ -414,6 +482,7 @@ public class Generator extends DomSwitch<StringBuilder> {
 		sb.append(") ");
 		return generate(object.getBody());
 	}
+
 	@Override
 	public StringBuilder caseForInStatement(ForInStatement object) {
 		sb.append("for (");
@@ -423,6 +492,7 @@ public class Generator extends DomSwitch<StringBuilder> {
 		sb.append(") ");
 		return generate(object.getBody());
 	}
+
 	@Override
 	public StringBuilder caseForEachInStatement(ForEachInStatement object) {
 		sb.append("for each(");
@@ -432,6 +502,7 @@ public class Generator extends DomSwitch<StringBuilder> {
 		sb.append(") ");
 		return generate(object.getBody());
 	}
+
 	@Override
 	public StringBuilder caseContinueStatement(ContinueStatement object) {
 		sb.append("continue");
@@ -439,6 +510,7 @@ public class Generator extends DomSwitch<StringBuilder> {
 			sb.append(' ').append(object.getLabel().getName());
 		return sb;
 	}
+
 	@Override
 	public StringBuilder caseBreakStatement(BreakStatement object) {
 		sb.append("break");
@@ -446,6 +518,7 @@ public class Generator extends DomSwitch<StringBuilder> {
 			sb.append(' ').append(object.getLabel().getName());
 		return sb;
 	}
+
 	@Override
 	public StringBuilder caseReturnStatement(ReturnStatement object) {
 		sb.append("return");
@@ -455,6 +528,7 @@ public class Generator extends DomSwitch<StringBuilder> {
 		}
 		return sb;
 	}
+
 	@Override
 	public StringBuilder caseWithStatement(WithStatement object) {
 		sb.append("with (");
@@ -462,15 +536,17 @@ public class Generator extends DomSwitch<StringBuilder> {
 		sb.append(") ");
 		return generate(object.getStatement());
 	}
+
 	@Override
 	public StringBuilder caseSwitchStatement(SwitchStatement object) {
 		sb.append("switch (");
 		generate(object.getSelector());
 		sb.append(") {");
-		for(SwitchElement se : object.getElements())
+		for (SwitchElement se : object.getElements())
 			generate(se);
 		return sb.append('}');
 	}
+
 	@Override
 	public StringBuilder caseCaseClause(CaseClause object) {
 		sb.append("case ");
@@ -479,27 +555,31 @@ public class Generator extends DomSwitch<StringBuilder> {
 		generateStatements(object.getStatements());
 		return sb;
 	}
+
 	@Override
 	public StringBuilder caseDefaultClause(DefaultClause object) {
 		sb.append("default:").append(nlStr);
 		generateStatements(object.getStatements());
 		return sb;
 	}
+
 	@Override
 	public StringBuilder caseLabeledStatement(LabeledStatement object) {
 		sb.append(object.getLabel().getName()).append(": ");
 		return generate(object.getStatement());
 	}
+
 	@Override
 	public StringBuilder caseThrowStatement(ThrowStatement object) {
 		sb.append("throw ");
 		return generate(object.getException());
 	}
+
 	@Override
 	public StringBuilder caseTryStatement(TryStatement object) {
 		sb.append("try ");
 		generate(object.getBody());
-		for(CatchClause cc : object.getCatches()) {
+		for (CatchClause cc : object.getCatches()) {
 			sb.append(' ');
 			generate(cc);
 		}
@@ -509,6 +589,7 @@ public class Generator extends DomSwitch<StringBuilder> {
 		}
 		return sb;
 	}
+
 	@Override
 	public StringBuilder caseCatchClause(CatchClause object) {
 		sb.append("catch (");
@@ -520,11 +601,13 @@ public class Generator extends DomSwitch<StringBuilder> {
 		sb.append(") ");
 		return generate(object.getBody());
 	}
+
 	@Override
 	public StringBuilder caseFinallyClause(FinallyClause object) {
 		sb.append("finally ");
 		return generate(object.getBody());
 	}
+
 	@Override
 	public StringBuilder caseFunctionExpression(FunctionExpression object) {
 		if (object.getDocumentation() != null)
@@ -534,8 +617,9 @@ public class Generator extends DomSwitch<StringBuilder> {
 			sb.append(object.getIdentifier().getName());
 		sb.append('(');
 		boolean first = true;
-		for(Parameter prm : object.getParameters()) {
-			if (!first) sb.append(',');
+		for (Parameter prm : object.getParameters()) {
+			if (!first)
+				sb.append(',');
 			generate(prm);
 			first = false;
 		}
@@ -544,54 +628,65 @@ public class Generator extends DomSwitch<StringBuilder> {
 		generate(object.getBody());
 		return sb;
 	}
+
 	@Override
 	public StringBuilder caseSource(Source object) {
 		generateStatements(object.getStatements());
 		return sb;
 	}
+
 	@Override
 	public StringBuilder caseXmlInitializer(XmlInitializer object) {
-		for(XmlFragment fragment : object.getFragments())
+		for (XmlFragment fragment : object.getFragments())
 			generate(fragment);
 		return sb;
 	}
+
 	@Override
 	public StringBuilder caseAttributeIdentifier(AttributeIdentifier object) {
 		sb.append('@');
 		return generate(object.getSelector());
 	}
+
 	@Override
 	public StringBuilder caseQualifiedIdentifier(QualifiedIdentifier object) {
 		generate(object.getNamespace());
 		sb.append("::");
 		return generate(object.getMember());
 	}
+
 	@Override
 	public StringBuilder caseWildcardIdentifier(WildcardIdentifier object) {
 		return sb.append('*');
 	}
+
 	@Override
 	public StringBuilder caseExpressionSelector(ExpressionSelector object) {
 		sb.append('[');
 		generate(object.getIndex());
 		return sb.append(']');
 	}
+
 	@Override
 	public StringBuilder caseXmlTextFragment(XmlTextFragment object) {
 		return sb.append(object.getText());
 	}
+
 	@Override
 	public StringBuilder caseXmlExpressionFragment(XmlExpressionFragment object) {
 		sb.append('{');
 		generate(object.getExpression());
 		return sb.append('}');
 	}
+
 	@Override
-	public StringBuilder caseDescendantAccessExpression(DescendantAccessExpression object) {
+	public StringBuilder caseDescendantAccessExpression(
+			DescendantAccessExpression object) {
 		generate(object.getObject());
 		sb.append("..");
 		return generate(object.getProperty());
 	}
+
 	@Override
 	public StringBuilder caseFilterExpression(FilterExpression object) {
 		generate(object.getObject());
@@ -599,16 +694,20 @@ public class Generator extends DomSwitch<StringBuilder> {
 		generate(object.getFilter());
 		return sb.append(')');
 	}
+
 	@Override
-	public StringBuilder caseDefaultXmlNamespaceStatement(DefaultXmlNamespaceStatement object) {
+	public StringBuilder caseDefaultXmlNamespaceStatement(
+			DefaultXmlNamespaceStatement object) {
 		sb.append("default xml namespace = ");
 		return generate(object.getExpression());
 	}
+
 	@Override
 	public StringBuilder caseParameter(Parameter object) {
 		sb.append(object.getName().getName());
 		return sb;
 	}
+
 	@Override
 	public StringBuilder caseComment(Comment object) {
 		return sb.append(object.getText());

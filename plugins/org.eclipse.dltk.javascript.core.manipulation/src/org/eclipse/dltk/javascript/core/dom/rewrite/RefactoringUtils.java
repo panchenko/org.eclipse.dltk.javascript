@@ -17,29 +17,36 @@ public class RefactoringUtils {
 	private RefactoringUtils() {
 	}
 
-	public static CallExpression getFunctionReference(Node node){
-		if (node.eContainingFeature() == DomPackage.eINSTANCE.getCallExpression_Applicant())
-			return (CallExpression)node.eContainer();
-		if (node.eContainingFeature() == DomPackage.eINSTANCE.getPropertyAccessExpression_Property())
-			return getFunctionReference((Node)node.eContainer());
+	public static CallExpression getFunctionReference(Node node) {
+		if (node.eContainingFeature() == DomPackage.eINSTANCE
+				.getCallExpression_Applicant())
+			return (CallExpression) node.eContainer();
+		if (node.eContainingFeature() == DomPackage.eINSTANCE
+				.getPropertyAccessExpression_Property())
+			return getFunctionReference((Node) node.eContainer());
 		return null;
 	}
 
 	public static FunctionExpression getFunctionDeclaration(Node node) {
-		if (node.eContainingFeature() == DomPackage.eINSTANCE.getFunctionExpression_Identifier())
-			return (FunctionExpression)node.eContainer();
-		if (node.eContainingFeature() == DomPackage.eINSTANCE.getPropertyAssignment_Name()) {
-			Node parent = (Node)node.eContainer();
+		if (node.eContainingFeature() == DomPackage.eINSTANCE
+				.getFunctionExpression_Identifier())
+			return (FunctionExpression) node.eContainer();
+		if (node.eContainingFeature() == DomPackage.eINSTANCE
+				.getPropertyAssignment_Name()) {
+			Node parent = (Node) node.eContainer();
 			if (parent instanceof SimplePropertyAssignment) {
-				Node func = ((SimplePropertyAssignment)parent).getInitializer();
+				Node func = ((SimplePropertyAssignment) parent)
+						.getInitializer();
 				if (func instanceof FunctionExpression)
-					return (FunctionExpression)func;
+					return (FunctionExpression) func;
 			}
 		}
-		if (node.eContainingFeature() == DomPackage.eINSTANCE.getVariableDeclaration_Identifier()) {
-			Expression initializer = ((VariableDeclaration)node.eContainer()).getInitializer();
+		if (node.eContainingFeature() == DomPackage.eINSTANCE
+				.getVariableDeclaration_Identifier()) {
+			Expression initializer = ((VariableDeclaration) node.eContainer())
+					.getInitializer();
 			if (initializer instanceof FunctionExpression)
-				return (FunctionExpression)initializer;
+				return (FunctionExpression) initializer;
 		}
 		if (node.eContainingFeature() == DomPackage.eINSTANCE
 				.getPropertyAccessExpression_Property()) {
@@ -87,11 +94,11 @@ public class RefactoringUtils {
 		}
 		return false;
 	}
-	
+
 	public static Expression getReceiver(CallExpression invocation) {
 		Expression func = invocation.getApplicant();
 		while (func instanceof ParenthesizedExpression)
-			func = ((ParenthesizedExpression)func).getEnclosed();
+			func = ((ParenthesizedExpression) func).getEnclosed();
 		if (!(func instanceof PropertyAccessExpression))
 			return null;
 		return ((PropertyAccessExpression) func).getObject();

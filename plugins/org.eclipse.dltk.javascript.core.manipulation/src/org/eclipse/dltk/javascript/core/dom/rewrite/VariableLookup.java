@@ -36,22 +36,23 @@ import org.eclipse.dltk.javascript.core.dom.util.DomSwitch;
 import org.eclipse.emf.ecore.EObject;
 
 public abstract class VariableLookup extends DomSwitch<Boolean> {
-	private Map<String,List<Identifier>> decls = new HashMap<String,List<Identifier>>();
+	private Map<String, List<Identifier>> decls = new HashMap<String, List<Identifier>>();
 	private Set<String> scope = new HashSet<String>();
-	
+
 	protected abstract void reportDeclaration(Identifier decl);
-	protected abstract void reportReference(Identifier ref,Identifier decl);
-	
+
+	protected abstract void reportReference(Identifier ref, Identifier decl);
+
 	public final void traverse(Node node) {
 		if (doSwitch(node) == null)
-			for(EObject obj : node.eContents())
-				traverse((Node)obj);
+			for (EObject obj : node.eContents())
+				traverse((Node) obj);
 	}
-	
+
 	private void addDeclaration(Identifier id) {
 		if (scope.contains(id.getName())) {
 			List<Identifier> list = decls.get(id.getName());
-			reportReference(id, list.get(list.size()-1));
+			reportReference(id, list.get(list.size() - 1));
 			return;
 		}
 		reportDeclaration(id);
@@ -63,21 +64,22 @@ public abstract class VariableLookup extends DomSwitch<Boolean> {
 		list.add(id);
 		scope.add(id.getName());
 	}
-	
+
 	private void popScope(Set<String> outerScope) {
-		for(String str : scope) {
+		for (String str : scope) {
 			List<Identifier> list = decls.get(str);
-			list.remove(list.size()-1);
+			list.remove(list.size() - 1);
 		}
 		scope = outerScope;
 	}
-	
+
 	protected final void findDeclarations(Node node) {
-		switch(node.eClass().getClassifierID()) {
+		switch (node.eClass().getClassifierID()) {
 		case DomPackage.EXPRESSION_STATEMENT:
-			ExpressionStatement stmt = (ExpressionStatement)node;
+			ExpressionStatement stmt = (ExpressionStatement) node;
 			if (stmt.getExpression() instanceof FunctionExpression) {
-				Identifier id = ((FunctionExpression)stmt.getExpression()).getIdentifier();
+				Identifier id = ((FunctionExpression) stmt.getExpression())
+						.getIdentifier();
 				if (id != null)
 					addDeclaration(id);
 				return;
@@ -86,13 +88,13 @@ public abstract class VariableLookup extends DomSwitch<Boolean> {
 		case DomPackage.FUNCTION_EXPRESSION:
 			return;
 		case DomPackage.VARIABLE_DECLARATION:
-			addDeclaration(((VariableDeclaration)node).getIdentifier());
+			addDeclaration(((VariableDeclaration) node).getIdentifier());
 			break;
 		}
-		for(EObject obj : node.eContents())
-			findDeclarations((Node)obj);
+		for (EObject obj : node.eContents())
+			findDeclarations((Node) obj);
 	}
-	
+
 	private Set<String> pushScope() {
 		Set<String> outerScope = scope;
 		scope = new HashSet<String>();
@@ -106,9 +108,10 @@ public abstract class VariableLookup extends DomSwitch<Boolean> {
 		if (list == null || list.size() == 0)
 			reportReference(id, null);
 		else
-			reportReference(id, list.get(list.size()-1));
+			reportReference(id, list.get(list.size() - 1));
 		return true;
 	}
+
 	@Override
 	public Boolean caseGetterAssignment(GetterAssignment node) {
 		Set<String> outerScope = pushScope();
@@ -117,6 +120,7 @@ public abstract class VariableLookup extends DomSwitch<Boolean> {
 		popScope(outerScope);
 		return true;
 	}
+
 	@Override
 	public Boolean caseSetterAssignment(SetterAssignment node) {
 		Set<String> outerScope = pushScope();
@@ -126,6 +130,7 @@ public abstract class VariableLookup extends DomSwitch<Boolean> {
 		popScope(outerScope);
 		return true;
 	}
+
 	@Override
 	public Boolean caseCatchClause(CatchClause node) {
 		Set<String> outerScope = pushScope();
@@ -134,36 +139,41 @@ public abstract class VariableLookup extends DomSwitch<Boolean> {
 		popScope(outerScope);
 		return true;
 	}
+
 	@Override
 	public Boolean caseFunctionExpression(FunctionExpression node) {
 		Set<String> outerScope = pushScope();
-		if (node.getIdentifier() != null && !(node.eContainer() instanceof ExpressionStatement))
+		if (node.getIdentifier() != null
+				&& !(node.eContainer() instanceof ExpressionStatement))
 			addDeclaration(node.getIdentifier());
-		for(Parameter param : node.getParameters())
+		for (Parameter param : node.getParameters())
 			addDeclaration(param.getName());
 		findDeclarations(node.getBody());
 		traverse(node.getBody());
 		popScope(outerScope);
 		return true;
 	}
+
 	@Override
 	public Boolean caseSource(Source node) {
 		Set<String> outerScope = pushScope();
 		findDeclarations(node);
 		for (EObject obj : node.getStatements())
-			traverse((Node)obj);
+			traverse((Node) obj);
 		popScope(outerScope);
 		return true;
 	}
+
 	public static Set<String> getVisibleNames(Node node) {
 		final Set<String> result = new HashSet<String>();
-		final boolean[] reportDecls = new boolean[]{true};
+		final boolean[] reportDecls = new boolean[] { true };
 		VariableLookup lookup = new VariableLookup() {
 			@Override
 			protected void reportDeclaration(Identifier decl) {
 				if (reportDecls[0])
 					result.add(decl.getName());
 			}
+
 			@Override
 			protected void reportReference(Identifier ref, Identifier decl) {
 				if (decl == null)
@@ -172,14 +182,14 @@ public abstract class VariableLookup extends DomSwitch<Boolean> {
 		};
 		Node body = null;
 		while (body == null) {
-			node = (Node)node.eContainer();
-			switch(node.eClass().getClassifierID()) {
+			node = (Node) node.eContainer();
+			switch (node.eClass().getClassifierID()) {
 			case DomPackage.FUNCTION_EXPRESSION:
-				body = ((FunctionExpression)node).getBody();
+				body = ((FunctionExpression) node).getBody();
 				break;
 			case DomPackage.GETTER_ASSIGNMENT:
 			case DomPackage.SETTER_ASSIGNMENT:
-				body = ((AccessorAssignment)node).getBody();
+				body = ((AccessorAssignment) node).getBody();
 			case DomPackage.SOURCE:
 				body = node;
 				break;
@@ -190,11 +200,11 @@ public abstract class VariableLookup extends DomSwitch<Boolean> {
 		lookup.traverse(node);
 		return result;
 	}
-	
+
 	public static List<Identifier> findReferences(Node root, Set<String> names) {
-		return findReferences(root,names,false);
+		return findReferences(root, names, false);
 	}
-	
+
 	public static List<Identifier> findReferences(Node root, Set<String> names,
 			final boolean firstOnly) {
 		final Set<String> wanted;
@@ -204,7 +214,7 @@ public abstract class VariableLookup extends DomSwitch<Boolean> {
 		} else
 			wanted = names;
 		final List<Identifier> refs = new ArrayList<Identifier>();
-		VariableLookup lookup =  new VariableLookup() {
+		VariableLookup lookup = new VariableLookup() {
 			@Override
 			protected void reportDeclaration(Identifier decl) {
 				// do nothing
@@ -225,24 +235,28 @@ public abstract class VariableLookup extends DomSwitch<Boolean> {
 		lookup.traverse(root);
 		return refs;
 	}
+
 	public static Map<Identifier, VariableBinding> findBindings(Node node) {
 		final Map<Identifier, VariableBinding> bindings = new HashMap<Identifier, VariableBinding>();
-		VariableLookup lookup = new VariableLookup(){
+		VariableLookup lookup = new VariableLookup() {
 			@Override
 			protected void reportDeclaration(Identifier decl) {
-				Node parent = (Node)decl.eContainer();
-//				Type type = null;
+				Node parent = (Node) decl.eContainer();
+				// Type type = null;
 				switch (parent.eClass().getClassifierID()) {
 				case DomPackage.VARIABLE_DECLARATION:
-//					type = ((VariableDeclaration)parent).getType();
+					// type = ((VariableDeclaration)parent).getType();
 					break;
 				case DomPackage.PARAMETER:
-//					type = ((Parameter)parent).getType();
+					// type = ((Parameter)parent).getType();
 					break;
 				}
-				String typeName = /*type == null ?*/ null /*: type.getName()*/;
-				bindings.put(decl, new VariableBinding(decl.getName(), bindings.size(), decl, typeName));
+				String typeName = /* type == null ? */null /* : type.getName() */;
+				bindings.put(decl,
+						new VariableBinding(decl.getName(), bindings.size(),
+								decl, typeName));
 			}
+
 			@Override
 			protected void reportReference(Identifier ref, Identifier decl) {
 				if (decl != null)
