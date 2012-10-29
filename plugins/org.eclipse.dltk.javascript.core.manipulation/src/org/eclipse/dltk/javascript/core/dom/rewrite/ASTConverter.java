@@ -573,6 +573,11 @@ public class ASTConverter extends ASTVisitor<Node> {
 		for (org.eclipse.dltk.javascript.ast.Statement stmt : node
 				.getStatements())
 			res.getStatements().add((Statement) visit(stmt));
+		final CommentContainer comments = CommentContainer.of(node
+				.getComments());
+		if (comments != null) {
+			res.eAdapters().add(comments);
+		}
 		return res;
 	}
 

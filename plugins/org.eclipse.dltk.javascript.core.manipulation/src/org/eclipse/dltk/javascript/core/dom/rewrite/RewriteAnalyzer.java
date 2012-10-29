@@ -11,12 +11,16 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.core.dom.rewrite;
 
+import static org.eclipse.jface.text.TextUtilities.determineLineDelimiter;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.dltk.compiler.util.Util;
+import org.eclipse.dltk.javascript.ast.MultiLineComment;
 import org.eclipse.dltk.javascript.core.dom.BinaryExpression;
 import org.eclipse.dltk.javascript.core.dom.BinaryOperator;
 import org.eclipse.dltk.javascript.core.dom.CatchClause;
@@ -25,6 +29,7 @@ import org.eclipse.dltk.javascript.core.dom.FunctionExpression;
 import org.eclipse.dltk.javascript.core.dom.Identifier;
 import org.eclipse.dltk.javascript.core.dom.Label;
 import org.eclipse.dltk.javascript.core.dom.Node;
+import org.eclipse.dltk.javascript.core.dom.Source;
 import org.eclipse.dltk.javascript.core.dom.Statement;
 import org.eclipse.dltk.javascript.core.dom.TryStatement;
 import org.eclipse.dltk.javascript.core.dom.UnaryExpression;
@@ -41,7 +46,7 @@ import org.eclipse.emf.ecore.change.ChangeDescription;
 import org.eclipse.emf.ecore.change.ChangeKind;
 import org.eclipse.emf.ecore.change.FeatureChange;
 import org.eclipse.emf.ecore.change.ListChange;
-import org.eclipse.jface.text.Document;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.text.edits.DeleteEdit;
 import org.eclipse.text.edits.InsertEdit;
 import org.eclipse.text.edits.MultiTextEdit;
@@ -54,12 +59,10 @@ public class RewriteAnalyzer extends DomSwitch<Boolean> {
 	private final String text;
 	protected final String lineDelimiter;
 	private final TextEdit edit;
+	private MultiLineComment[] comments;
 
 	public RewriteAnalyzer(ChangeDescription cd, String text) {
-		this.cd = cd;
-		this.text = text;
-		this.lineDelimiter = new Document(text).getDefaultLineDelimiter();
-		edit = new MultiTextEdit();
+		this(cd, text, determineLineDelimiter(text, Util.LINE_SEPARATOR));
 	}
 
 	public RewriteAnalyzer(ChangeDescription cd, String text,
@@ -67,10 +70,17 @@ public class RewriteAnalyzer extends DomSwitch<Boolean> {
 		this.cd = cd;
 		this.text = text;
 		this.lineDelimiter = lineDelimiter;
-		edit = new MultiTextEdit();
+		this.edit = new MultiTextEdit();
 	}
 
-	public void rewrite(Node node) {
+	public void rewrite(Source source) {
+		final CommentContainer container = (CommentContainer) EcoreUtil
+				.getExistingAdapter(source, CommentContainer.class);
+		this.comments = container != null ? container.comments : null;
+		rewrite((Node) source);
+	}
+
+	void rewrite(Node node) {
 		doSwitch(node);
 		for (EObject obj : node.eContents())
 			if (!generated.contains(obj))
@@ -138,9 +148,9 @@ public class RewriteAnalyzer extends DomSwitch<Boolean> {
 			Node item = original.get(i);
 			if (deleted.contains(item)) {
 				int off = isLast && i != 0 ? original.get(i - 1).getEnd()
-						: item.getBegin();
-				int end = isLast ? item.getEnd() : original.get(i + 1)
-						.getBegin();
+						: getBegin(item);
+				int end = isLast ? item.getEnd()
+						: getBegin(original.get(i + 1));
 				addEdit(new DeleteEdit(off, end - off), item);
 			} else
 				isLast = item == last;
@@ -174,6 +184,40 @@ public class RewriteAnalyzer extends DomSwitch<Boolean> {
 			} else
 				isLast = item == last;
 		}
+	}
+
+	private int getBegin(Node node) {
+		int value = node.getBegin();
+		if (comments != null) {
+			final MultiLineComment comment = findComment(value);
+			if (comment != null) {
+				for (int i = comment.end(); i < value; ++i) {
+					if (!Character.isWhitespace(text.charAt(i))) {
+						return value;
+					}
+				}
+				return comment.start();
+			}
+		}
+		return value;
+	}
+
+	private MultiLineComment findComment(int value) {
+		int low = 0;
+		int high = comments.length;
+		while (low < high) {
+			final int mid = (low + high) >>> 1;
+			final MultiLineComment comment = comments[mid];
+			final int end = comment.end();
+			if (end > value) {
+				high = mid;
+			} else if (end < value) {
+				low = mid + 1;
+			} else {
+				return comment;
+			}
+		}
+		return low > 0 ? comments[low - 1] : null;
 	}
 
 	@Override
@@ -210,12 +254,12 @@ public class RewriteAnalyzer extends DomSwitch<Boolean> {
 		return true;
 	}
 
-	private static boolean isPostfix(Object op) {
+	static boolean isPostfix(Object op) {
 		return op == UnaryOperator.POSTFIX_INC
 				|| op == UnaryOperator.POSTFIX_DEC;
 	}
 
-	private static boolean isTextUnary(Object op) {
+	static boolean isTextUnary(Object op) {
 		return op == UnaryOperator.DELETE || op == UnaryOperator.VOID
 				|| op == UnaryOperator.TYPEOF || op == UnaryOperator.YIELD;
 	}
@@ -255,7 +299,7 @@ public class RewriteAnalyzer extends DomSwitch<Boolean> {
 		return true;
 	}
 
-	private static boolean isTextBinary(Object op) {
+	static boolean isTextBinary(Object op) {
 		return op == BinaryOperator.IN || op == BinaryOperator.INSTANCEOF;
 	}
 

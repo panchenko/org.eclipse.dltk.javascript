@@ -9,6 +9,7 @@ import org.eclipse.dltk.javascript.core.tests.contentassist.CompletionStringPars
 import org.eclipse.dltk.javascript.core.tests.contentassist.SelectionTests;
 import org.eclipse.dltk.javascript.core.tests.contentassist.StandardTypeMemberTests;
 import org.eclipse.dltk.javascript.core.tests.contentassist.XMLCompletionTests;
+import org.eclipse.dltk.javascript.core.tests.rewrite.VariableRemoveTest;
 import org.eclipse.dltk.javascript.core.tests.search.SearchDeclarationTests;
 import org.eclipse.dltk.javascript.core.tests.search.SearchExternalLibraryTests;
 import org.eclipse.dltk.javascript.core.tests.search.SearchFieldTests;
@@ -72,6 +73,7 @@ public class AllTests {
 		suite.addTest(SearchLocalsTests.suite());
 		suite.addTest(SearchFunctionTests.suite());
 		suite.addTest(SearchExternalLibraryTests.suite());
+		suite.addTestSuite(VariableRemoveTest.class);
 		// $JUnit-END$
 		return suite;
 	}

@@ -16,7 +16,6 @@ import org.eclipse.dltk.javascript.core.dom.ArrayAccessExpression;
 import org.eclipse.dltk.javascript.core.dom.ArrayLiteral;
 import org.eclipse.dltk.javascript.core.dom.AttributeIdentifier;
 import org.eclipse.dltk.javascript.core.dom.BinaryExpression;
-import org.eclipse.dltk.javascript.core.dom.BinaryOperator;
 import org.eclipse.dltk.javascript.core.dom.BlockStatement;
 import org.eclipse.dltk.javascript.core.dom.BooleanLiteral;
 import org.eclipse.dltk.javascript.core.dom.BreakStatement;
@@ -343,10 +342,8 @@ public class Generator extends DomSwitch<StringBuilder> {
 	@Override
 	public StringBuilder caseUnaryExpression(UnaryExpression object) {
 		UnaryOperator op = object.getOperation();
-		boolean postfix = op == UnaryOperator.POSTFIX_INC
-				|| op == UnaryOperator.POSTFIX_DEC;
-		boolean text = op == UnaryOperator.DELETE || op == UnaryOperator.VOID
-				|| op == UnaryOperator.TYPEOF;
+		boolean postfix = RewriteAnalyzer.isPostfix(op);
+		boolean text = RewriteAnalyzer.isTextUnary(op);
 		if (!postfix)
 			sb.append(object.getOperation().toString());
 		if (text)
@@ -360,8 +357,7 @@ public class Generator extends DomSwitch<StringBuilder> {
 	@Override
 	public StringBuilder caseBinaryExpression(BinaryExpression object) {
 		generate(object.getLeft());
-		boolean text = object.getOperation() == BinaryOperator.IN
-				|| object.getOperation() == BinaryOperator.INSTANCEOF;
+		boolean text = RewriteAnalyzer.isTextBinary(object.getOperation());
 		if (text)
 			sb.append(' ');
 		sb.append(object.getOperation().toString());
