@@ -91,6 +91,8 @@ import org.eclipse.dltk.javascript.ast.XmlTextFragment;
 import org.eclipse.dltk.javascript.ast.YieldOperator;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.core.Types;
+import org.eclipse.dltk.javascript.internal.core.RRecordMemberFunction;
+import org.eclipse.dltk.javascript.internal.core.RRecordMemberObjectProperty;
 import org.eclipse.dltk.javascript.internal.core.TypeSystems;
 import org.eclipse.dltk.javascript.parser.ISuppressWarningsState;
 import org.eclipse.dltk.javascript.parser.JSParser;
@@ -113,6 +115,7 @@ import org.eclipse.dltk.javascript.typeinfo.IRConstructor;
 import org.eclipse.dltk.javascript.typeinfo.IRFunctionType;
 import org.eclipse.dltk.javascript.typeinfo.IRMapType;
 import org.eclipse.dltk.javascript.typeinfo.IRMethod;
+import org.eclipse.dltk.javascript.typeinfo.IRRecordMember;
 import org.eclipse.dltk.javascript.typeinfo.IRSimpleType;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.IRTypeDeclaration;
@@ -1188,28 +1191,46 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	@Override
 	public IValueReference visitObjectInitializer(ObjectInitializer node) {
 		// IRRecordType type
-
-		final IValueReference result = new AnonymousValue();
-		result.setDeclaredType(RTypes.OBJECT);
+		// final IValueReference result = new AnonymousValue();
+		final List<IRRecordMember> members = new ArrayList<IRRecordMember>(node
+				.getInitializers().size());
+		// result.setDeclaredType(RTypes.OBJECT);
 		for (ObjectInitializerPart part : node.getInitializers()) {
 			if (part instanceof PropertyInitializer) {
 				final PropertyInitializer pi = (PropertyInitializer) part;
-				final IValueReference child = extractNamedChild(result,
-						pi.getName());
+				final String childName = PropertyExpressionUtils.nameOf(pi
+						.getName());
+				if (childName == null) { // just in case
+					visit(pi.getValue());
+					continue;
+				}
+				// final IValueReference child = result.createChild(childName);
+				// child.setLocation(ReferenceLocation.create(getSource(), pi
+				// .getName().sourceStart(), pi.getName().sourceEnd()));
 				final IValueReference value = visit(pi.getValue());
-				if (child != null) {
-					child.setValue(value);
-					child.setLocation(ReferenceLocation.create(getSource(), pi
-							.getName().sourceStart(), pi.getName().sourceEnd()));
-					if (child.getKind() == ReferenceKind.UNKNOWN) {
-						child.setKind(ReferenceKind.FIELD);
+				if (value != null) {
+					final IRMethod method = (IRMethod) value
+							.getAttribute(IReferenceAttributes.R_METHOD);
+					if (method != null) {
+						members.add(new RRecordMemberFunction(childName, RTypes
+								.functionType(method.getParameters(),
+										method.getType()), method));
+						continue;
 					}
 				}
+				final IRType type = JavaScriptValidations.typeOf(value);
+				members.add(new RRecordMemberObjectProperty(childName,
+						type != null ? type : RTypes.any()));
+
+				// child.setValue(value);
+				// if (child.getKind() == ReferenceKind.UNKNOWN) {
+				// child.setKind(ReferenceKind.FIELD);
+				// }
 			} else {
 				// TODO handle get/set methods
 			}
 		}
-		return result;
+		return ConstantValue.of(RTypes.recordType(members));
 	}
 
 	@Override

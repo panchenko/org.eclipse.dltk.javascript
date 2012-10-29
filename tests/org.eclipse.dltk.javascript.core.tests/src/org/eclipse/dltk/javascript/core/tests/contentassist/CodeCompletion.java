@@ -569,7 +569,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 		final IModuleSource module = new TestModule(code.toString());
 		String[] names = new String[] { "x", "y" };
 		int position = lastPositionInFile(".", module);
-		basicTest(module, position, names);
+		basicTest(module, position, concat(getMethodsOfObject(), names));
 	}
 
 }

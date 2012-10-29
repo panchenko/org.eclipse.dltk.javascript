@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo;
 
-import org.eclipse.dltk.javascript.typeinfo.model.Member;
-
 public interface IRRecordMember extends IRMember {
 	String getName();
 
@@ -20,6 +18,4 @@ public interface IRRecordMember extends IRMember {
 
 	boolean isOptional();
 
-	// override return type
-	Member getSource();
 }

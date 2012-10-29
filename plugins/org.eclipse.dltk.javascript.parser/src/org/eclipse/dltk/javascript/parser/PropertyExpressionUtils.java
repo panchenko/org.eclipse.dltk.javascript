@@ -14,6 +14,7 @@ package org.eclipse.dltk.javascript.parser;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.dltk.javascript.ast.DecimalLiteral;
 import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.Identifier;
@@ -122,6 +123,8 @@ public class PropertyExpressionUtils {
 			return ((Identifier) name).getName();
 		} else if (name instanceof StringLiteral) {
 			return ((StringLiteral) name).getValue();
+		} else if (name instanceof DecimalLiteral) {
+			return ((DecimalLiteral) name).getText();
 		} else {
 			return null;
 		}

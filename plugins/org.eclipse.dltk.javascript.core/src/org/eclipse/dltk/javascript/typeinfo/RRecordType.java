@@ -17,6 +17,7 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.eclipse.dltk.javascript.internal.core.RRecordMember;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 
@@ -27,10 +28,16 @@ class RRecordType extends RType implements IRRecordType {
 	public RRecordType(ITypeSystem context, Collection<Member> members) {
 		for (Member member : members) {
 			final JSType type = member.getType();
-			this.members.put(member.getName(),
-					new RRecordMember(member.getName(),
-							type != null ? RTypes.create(context, type) : any(),
-							member));
+			this.members.put(
+					member.getName(),
+					new RRecordMember(member.getName(), type != null ? RTypes
+							.create(context, type) : any(), member));
+		}
+	}
+
+	public RRecordType(Collection<IRRecordMember> members) {
+		for (IRRecordMember member : members) {
+			this.members.put(member.getName(), member);
 		}
 	}
 

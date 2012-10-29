@@ -22,6 +22,7 @@ import junit.framework.TestCase;
 
 import org.eclipse.dltk.compiler.env.ModuleSource;
 import org.eclipse.dltk.compiler.problem.ProblemCollector;
+import org.eclipse.dltk.core.tests.TestSupport;
 import org.eclipse.dltk.core.tests.util.StringList;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
@@ -33,6 +34,7 @@ import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ValueReferenceUtil;
 import org.eclipse.dltk.javascript.typeinfo.IRClassType;
+import org.eclipse.dltk.javascript.typeinfo.IRFunctionType;
 import org.eclipse.dltk.javascript.typeinfo.IRMember;
 import org.eclipse.dltk.javascript.typeinfo.IRMethod;
 import org.eclipse.dltk.javascript.typeinfo.IRRecordType;
@@ -255,31 +257,33 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		assertEquals("Function", test.getTypes().iterator().next().getName());
 
 		test = test.getChild(IValueReference.FUNCTION_OP);
-		assertEquals(3, test.getDirectChildren().size());
+		final IRRecordType testType = (IRRecordType) JavaScriptValidations
+				.typeOf(test);
+		assertEquals(3, testType.getMembers().size());
 		assertNull(test.getDeclaredType());
 
 		IValueReference x = test.getChild("x");
 		assertEquals(true, x.exists());
-		assertEquals(0, x.getDeclaredTypes().size());
-		assertEquals(1, x.getTypes().size());
-		assertEquals("Number", x.getTypes().iterator().next().getName());
+		assertEquals(1, x.getDeclaredTypes().size());
+		assertEquals(0, x.getTypes().size());
+		assertEquals(RTypes.NUMBER, x.getDeclaredType());
 
 		IValueReference y = test.getChild("y");
 		assertEquals(true, y.exists());
-		assertEquals(0, y.getDeclaredTypes().size());
-		assertEquals(1, y.getTypes().size());
-		assertEquals("String", y.getTypes().iterator().next().getName());
+		assertEquals(1, y.getDeclaredTypes().size());
+		assertEquals(0, y.getTypes().size());
+		assertEquals(RTypes.STRING, y.getDeclaredType());
 
-		IValueReference toString = test.getChild("z");
-		assertEquals(true, toString.exists());
-		assertEquals(0, toString.getDeclaredTypes().size());
-		assertEquals(1, toString.getTypes().size());
-		assertEquals("Function", typename(toString.getTypes()));
+		IValueReference z = test.getChild("z");
+		assertEquals(true, z.exists());
+		assertEquals(1, z.getDeclaredTypes().size());
+		assertEquals(0, z.getTypes().size());
+		assertTrue(z.getDeclaredType() instanceof IRFunctionType);
 
-		toString = toString.getChild(IValueReference.FUNCTION_OP);
-		assertEquals(true, toString.exists());
-		assertEquals(1, toString.getTypes().size());
-		assertEquals("String", toString.getTypes().iterator().next().getName());
+		z = z.getChild(IValueReference.FUNCTION_OP);
+		assertEquals(true, z.exists());
+		assertEquals(1, z.getTypes().size());
+		assertEquals("String", z.getTypes().iterator().next().getName());
 
 	}
 
@@ -340,13 +344,13 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		lines.add("var z = s.execute()");
 		IValueCollection collection = inference(lines.toString());
 		IValueReference z = collection.getChild("z");
-		assertEquals(getTypes(OBJECT), z.getTypes());
+		assertTrue(z.getTypes().toRType() instanceof IRRecordType);
 		final IValueReference a = z.getChild("a");
 		assertTrue(a.exists());
-		assertEquals(getTypes(NUMBER), a.getTypes());
+		assertEquals(getTypes(NUMBER), a.getDeclaredTypes());
 		final IValueReference b = z.getChild("b");
 		assertTrue(b.exists());
-		assertEquals(getTypes(BOOLEAN), b.getTypes());
+		assertEquals(getTypes(BOOLEAN), b.getDeclaredTypes());
 	}
 
 	public void testInlineFunctionStatementCall() {
@@ -461,8 +465,8 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		lines.add("var y = x.b");
 		IValueCollection collection = inference(lines.toString());
 		IValueReference x = collection.getChild("x");
-		assertEquals(getTypes(OBJECT), x.getTypes());
-		assertEquals(Collections.singleton("a"), x.getDirectChildren());
+		final IRRecordType xType = (IRRecordType) x.getTypes().toRType();
+		assertEquals(Collections.singleton("a"), RTypes.memberNames(xType));
 		IValueReference y = collection.getChild("y");
 		assertEquals(getTypes(), y.getTypes());
 	}
@@ -489,6 +493,8 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 	}
 
 	public void testWith() {
+		if (TestSupport.notYetImplemented(this))
+			return;
 		List<String> lines = new StringList();
 		lines.add("var a = {name:1}");
 		lines.add("with (a) {");
@@ -496,7 +502,7 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		lines.add("}");
 		IValueCollection collection = inference(lines.toString());
 		IValueReference a = collection.getChild("a");
-		assertEquals(getTypes(OBJECT), a.getTypes());
+		assertTrue(a.getTypes().toRType() instanceof IRRecordType);
 		IValueReference name = a.getChild("name");
 		assertTrue(name.getTypes().containsAll(getTypes(STRING)));
 	}

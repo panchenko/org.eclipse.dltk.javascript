@@ -13,7 +13,10 @@ package org.eclipse.dltk.javascript.typeinfo;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
@@ -221,7 +224,23 @@ public class RTypes {
 		return new RRecordType(typeSystem, members);
 	}
 
-	public static IRType functionType(List<IRParameter> parameters,
+	public static IRType recordType(Collection<IRRecordMember> members) {
+		return new RRecordType(members);
+	}
+
+	public static Set<String> memberNames(IRRecordType recordType) {
+		final Collection<IRRecordMember> members = recordType.getMembers();
+		if (members.isEmpty()) {
+			return Collections.emptySet();
+		}
+		final Set<String> names = new LinkedHashSet<String>(members.size());
+		for (IRRecordMember member : members) {
+			names.add(member.getName());
+		}
+		return names;
+	}
+
+	public static IRFunctionType functionType(List<IRParameter> parameters,
 			IRType returnType) {
 		return new RFunctionType(parameters, returnType);
 	}
@@ -278,7 +297,8 @@ public class RTypes {
 	public static final IRType BOOLEAN = simple(TypeSystems.GLOBAL,
 			Types.BOOLEAN);
 
-	public static final IRType OBJECT = simple(TypeSystems.GLOBAL, Types.OBJECT);
+	public static final IRSimpleType OBJECT = (IRSimpleType) simple(
+			TypeSystems.GLOBAL, Types.OBJECT);
 
 	public static List<IRType> convert(ITypeSystem typeSystem, List<JSType> args) {
 		final int size = args.size();

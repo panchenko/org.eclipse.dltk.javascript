@@ -9,18 +9,21 @@
  * Contributors:
  *     NumberFour AG - initial API and Implementation (Alex Panchenko)
  *******************************************************************************/
-package org.eclipse.dltk.javascript.typeinfo;
+package org.eclipse.dltk.javascript.internal.core;
 
 import java.util.Collections;
 import java.util.Set;
 
 import org.eclipse.dltk.compiler.problem.IProblemCategory;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
+import org.eclipse.dltk.javascript.typeinfo.IRRecordMember;
+import org.eclipse.dltk.javascript.typeinfo.IRType;
+import org.eclipse.dltk.javascript.typeinfo.IRTypeDeclaration;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordMember;
 import org.eclipse.dltk.javascript.typeinfo.model.Visibility;
 
-class RRecordMember implements IRRecordMember {
+public class RRecordMember implements IRRecordMember {
 
 	private final String name;
 	private final IRType type;

@@ -1308,6 +1308,8 @@ public class TypeInfoValidator implements IBuildParticipant,
 			TypeCompatibility result = TypeCompatibility.TRUE;
 			for (int i = 0; i < testTypesSize; i++) {
 				final IValueReference argument = arguments[i];
+				final IRType argumentType = JavaScriptValidations
+						.typeOf(argument);
 				final IRParameter parameter = parameters.get(i);
 				if (parameter.getType() instanceof IRTypeExtension) {
 					final IValidationStatus status = ((IRTypeExtension) parameter
@@ -1335,7 +1337,7 @@ public class TypeInfoValidator implements IBuildParticipant,
 					}
 				} else if (parameter.getType() instanceof IRRecordType
 						&& argument != null
-						&& !(argument.getDeclaredType() instanceof IRRecordType)) {
+						&& !(argumentType instanceof IRRecordType)) {
 					boolean oneHit = false;
 					Set<String> argumentsChildren = argument
 							.getDirectChildren();
