@@ -36,8 +36,6 @@ public class Reporter extends LineTracker implements IProblemReporter,
 	private int end;
 	private ProblemSeverity severity;
 
-	private int problemCount;
-
 	public Reporter(ISourceLineTracker lineTracker,
 			IProblemReporter problemReporter) {
 		super(lineTracker);
@@ -142,7 +140,6 @@ public class Reporter extends LineTracker implements IProblemReporter,
 
 	public void reportProblem(IProblem problem) {
 		if (problemReporter != null && problem != null) {
-			problemCount++;
 			problemReporter.reportProblem(problem);
 		}
 	}

@@ -289,7 +289,7 @@ public class JavaScriptParser extends AbstractSourceParser {
 			int top = _fsp;
 			BitSet followSet = new BitSet();
 			for (int i = top; i >= 0; i--) {
-				BitSet localFollowSet = (BitSet) following[i];
+				BitSet localFollowSet = following[i];
 				followSet.orInPlace(localFollowSet);
 				if (exact && localFollowSet != null
 						&& !localFollowSet.member(Token.EOR_TOKEN_TYPE)) {
