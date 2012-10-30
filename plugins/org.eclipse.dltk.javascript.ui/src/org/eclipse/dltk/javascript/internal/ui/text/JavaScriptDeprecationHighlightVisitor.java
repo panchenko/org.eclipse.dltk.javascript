@@ -56,10 +56,6 @@ public class JavaScriptDeprecationHighlightVisitor extends ValidationVisitor
 		}
 	}
 
-	public int getProblemCount() {
-		return 0;
-	}
-
 	public void pushSuppressWarnings(Collection<IProblemIdentifier> suppressed) {
 	}
 

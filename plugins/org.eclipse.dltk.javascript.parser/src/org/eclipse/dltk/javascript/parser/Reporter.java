@@ -168,10 +168,6 @@ public class Reporter extends LineTracker implements IProblemReporter,
 				end, getLineNumberOfOffset(start)));
 	}
 
-	public int getProblemCount() {
-		return problemCount;
-	}
-
 	private boolean isSuppressed(IProblemIdentifier identifier) {
 		return suppressed != null && suppressed.contains(identifier);
 	}

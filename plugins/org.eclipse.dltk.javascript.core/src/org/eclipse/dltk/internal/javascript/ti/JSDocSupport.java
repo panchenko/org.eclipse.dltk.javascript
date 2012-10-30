@@ -22,8 +22,11 @@ import java.util.Set;
 
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CharStream;
+import org.eclipse.dltk.annotations.NonNull;
+import org.eclipse.dltk.annotations.Nullable;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.compiler.problem.IProblemCategory;
+import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.compiler.problem.ProblemCategoryManager;
 import org.eclipse.dltk.javascript.ast.BinaryOperation;
 import org.eclipse.dltk.javascript.ast.CallExpression;
@@ -40,6 +43,7 @@ import org.eclipse.dltk.javascript.core.JavaScriptNature;
 import org.eclipse.dltk.javascript.parser.JSParser;
 import org.eclipse.dltk.javascript.parser.JSProblemIdentifier;
 import org.eclipse.dltk.javascript.parser.JSProblemReporter;
+import org.eclipse.dltk.javascript.parser.ProblemReporter;
 import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTag;
 import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTags;
 import org.eclipse.dltk.javascript.parser.jsdoc.SimpleJSDocParser;
@@ -114,7 +118,8 @@ public class JSDocSupport implements IModelBuilder {
 				.list(JSDocTag.SUPPRESS_WARNINGS);
 		if (!suppressWarnings.isEmpty()) {
 			for (JSDocTag tag : suppressWarnings) {
-				processSuppressWarnings(tag, reporter, element);
+				processSuppressWarnings(tag, new CountingReporter(reporter),
+						element);
 			}
 		}
 	}
@@ -732,15 +737,31 @@ public class JSDocSupport implements IModelBuilder {
 				&& typeName.charAt(length - 1) == '}';
 	}
 
+	private static class CountingReporter implements ProblemReporter {
+		@Nullable
+		final JSProblemReporter reporter;
+		int problemCount;
+
+		public CountingReporter(@Nullable JSProblemReporter reporter) {
+			this.reporter = reporter;
+		}
+
+		public void reportProblem(IProblemIdentifier identifier,
+				String message, int start, int end) {
+			++problemCount;
+			if (reporter != null) {
+				reporter.reportProblem(identifier, message, start, end);
+			}
+		}
+	}
+
 	private void processSuppressWarnings(JSDocTag tag,
-			JSProblemReporter reporter, IElement element) {
+			@NonNull CountingReporter reporter, IElement element) {
 		final CharStream input = new ANTLRStringStream(tag.value());
 		final boolean hasParenthesis = input.LT(1) == '(';
 		if (hasParenthesis) {
 			input.consume();
 		}
-		final int problemCount = reporter != null ? reporter.getProblemCount()
-				: 0;
 		for (;;) {
 			int ch = input.LT(1);
 			while (Character.isWhitespace(ch)) {
@@ -758,12 +779,10 @@ public class JSDocSupport implements IModelBuilder {
 						input.consume();
 						break;
 					} else if (ch == CharStream.EOF) {
-						if (reporter != null) {
-							reporter.reportProblem(
-									JSDocProblem.WRONG_SUPPRESS_WARNING,
-									"Closing " + quote + " expected",
-									tag.start(), tag.end());
-						}
+						reporter.reportProblem(
+								JSDocProblem.WRONG_SUPPRESS_WARNING, "Closing "
+										+ quote + " expected", tag.start(),
+								tag.end());
 						break;
 					}
 					input.consume();
@@ -793,32 +812,32 @@ public class JSDocSupport implements IModelBuilder {
 		if (hasParenthesis) {
 			if (input.LT(1) == ')') {
 				input.consume();
-			} else if (reporter != null) {
+			} else {
 				reporter.reportProblem(JSDocProblem.WRONG_SUPPRESS_WARNING,
 						"Closing ) expected", tag.start(), tag.end());
 			}
 		}
-		if (reporter != null && reporter.getProblemCount() == problemCount
-				&& input.LT(1) != CharStream.EOF) {
+		if (reporter.problemCount != 0 && input.LT(1) != CharStream.EOF) {
 			reporter.reportProblem(JSDocProblem.WRONG_SUPPRESS_WARNING,
 					"Unexpected content", tag.start(), tag.end());
 		}
 	}
 
-	private void suppressWarning(JSDocTag tag, JSProblemReporter reporter,
-			IElement element, final CharStream input, final int start) {
+	private void suppressWarning(JSDocTag tag,
+			@NonNull CountingReporter reporter, IElement element,
+			final CharStream input, final int start) {
 		final String categoryId = input.substring(start, input.index() - 1);
 		if (categoryId.length() != 0) {
 			final IProblemCategory category = getCategory(categoryId);
 			if (category != null) {
 				element.addSuppressedWarning(category);
-			} else if (reporter != null) {
+			} else {
 				reporter.reportProblem(JSDocProblem.WRONG_SUPPRESS_WARNING, NLS
 						.bind("Unsupported {0}({1})",
 								JSDocTag.SUPPRESS_WARNINGS, categoryId), tag
 						.start(), tag.end());
 			}
-		} else if (reporter != null) {
+		} else {
 			reporter.reportProblem(JSDocProblem.WRONG_SUPPRESS_WARNING,
 					"warning identifier expected", tag.start(), tag.end());
 		}

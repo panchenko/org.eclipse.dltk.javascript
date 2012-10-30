@@ -16,11 +16,7 @@ import java.util.Collection;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.compiler.problem.IProblemReporter;
 
-public interface JSProblemReporter extends IProblemReporter {
-	void reportProblem(IProblemIdentifier identifier, String message,
-			int start, int end);
-
-	int getProblemCount();
+public interface JSProblemReporter extends ProblemReporter, IProblemReporter {
 
 	void pushSuppressWarnings(Collection<IProblemIdentifier> suppressed);
 
