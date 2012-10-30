@@ -53,6 +53,9 @@ class RRecordType extends RType implements IRRecordType {
 				sb.append(':');
 				sb.append(member.getType().getName());
 			}
+			if (member.isOptional()) {
+				sb.append('=');
+			}
 		}
 		sb.append('}');
 		return sb.toString();

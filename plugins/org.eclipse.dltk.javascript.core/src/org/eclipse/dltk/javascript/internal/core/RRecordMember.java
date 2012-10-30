@@ -52,7 +52,7 @@ public class RRecordMember implements IRRecordMember {
 
 	@Override
 	public String toString() {
-		return name + ":" + type;
+		return name + ":" + type + (optional ? "=" : "");
 	}
 
 	@Override
