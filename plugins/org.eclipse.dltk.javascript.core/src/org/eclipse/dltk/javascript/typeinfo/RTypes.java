@@ -21,9 +21,12 @@ import java.util.Set;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.RegistryFactory;
+import org.eclipse.dltk.annotations.Nullable;
+import org.eclipse.dltk.internal.javascript.validation.JavaScriptValidations;
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 import org.eclipse.dltk.javascript.core.Types;
 import org.eclipse.dltk.javascript.internal.core.TypeSystems;
+import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
@@ -219,13 +222,30 @@ public class RTypes {
 		return new RMapType(typeSystem, keyType, valueType);
 	}
 
-	public static IRType recordType(ITypeSystem typeSystem,
+	public static IRRecordType recordType(ITypeSystem typeSystem,
 			Collection<Member> members) {
 		return new RRecordType(typeSystem, members);
 	}
 
-	public static IRType recordType(Collection<IRRecordMember> members) {
+	public static IRRecordType recordType(Collection<IRRecordMember> members) {
 		return new RRecordType(members);
+	}
+
+	public static IRRecordType recordType(@Nullable IValueReference argument) {
+		if (argument != null) {
+			final Set<String> directChildren = argument.getDirectChildren();
+			final IRType type = JavaScriptValidations.typeOf(argument);
+			if (type instanceof IRRecordType) {
+				// TODO (alex) add directChildren if available
+				return (IRRecordType) type;
+			}
+			if (!directChildren.isEmpty()) {
+				// TODO (alex) create fake type instance
+
+			}
+		}
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	public static Set<String> memberNames(IRRecordType recordType) {

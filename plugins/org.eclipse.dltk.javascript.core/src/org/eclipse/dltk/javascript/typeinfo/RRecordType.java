@@ -17,11 +17,13 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.eclipse.dltk.compiler.problem.IValidationStatus;
 import org.eclipse.dltk.javascript.internal.core.RRecordMember;
+import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 
-class RRecordType extends RType implements IRRecordType {
+class RRecordType extends RType implements IRRecordType, IRTypeExtension {
 
 	private final Map<String, IRRecordMember> members = new LinkedHashMap<String, IRRecordMember>();
 
@@ -69,31 +71,42 @@ class RRecordType extends RType implements IRRecordType {
 		return members.values();
 	}
 
+	@Override
 	public TypeCompatibility isAssignableFrom(IRType type) {
 		if (super.isAssignableFrom(type).ok()) {
 			return TypeCompatibility.TRUE;
+		} else if (type instanceof RRecordType) {
+			return isAssignableFrom((RRecordType) type);
+		} else {
+			return TypeCompatibility.FALSE;
 		}
-		if (type instanceof RRecordType) {
-			final Map<String, IRRecordMember> others = ((RRecordType) type).members;
-			for (Map.Entry<String, IRRecordMember> entry : others.entrySet()) {
-				final IRRecordMember member = members.get(entry.getKey());
-				if (member == null) {
-					return TypeCompatibility.FALSE;
-				}
-				if (!member.getType()
-						.isAssignableFrom(entry.getValue().getType()).ok()) {
-					return TypeCompatibility.FALSE;
-				}
+	}
+
+	private TypeCompatibility isAssignableFrom(RRecordType other) {
+		final Map<String, IRRecordMember> others = other.members;
+		for (Map.Entry<String, IRRecordMember> entry : others.entrySet()) {
+			final IRRecordMember member = members.get(entry.getKey());
+			if (member == null) {
+				return TypeCompatibility.FALSE;
 			}
-			for (Map.Entry<String, IRRecordMember> entry : members.entrySet()) {
-				if (!entry.getValue().isOptional()
-						&& !others.containsKey(entry.getKey())) {
-					return TypeCompatibility.FALSE;
-				}
+			if (!member.getType().isAssignableFrom(entry.getValue().getType())
+					.ok()) {
+				return TypeCompatibility.FALSE;
 			}
-			return TypeCompatibility.TRUE;
 		}
-		return TypeCompatibility.FALSE;
+		for (Map.Entry<String, IRRecordMember> entry : members.entrySet()) {
+			if (!entry.getValue().isOptional()
+					&& !others.containsKey(entry.getKey())) {
+				return TypeCompatibility.FALSE;
+			}
+		}
+		return TypeCompatibility.TRUE;
+	}
+
+	public IValidationStatus isAssignableFrom(IValueReference argument) {
+		final RRecordType other = (RRecordType) RTypes.recordType(argument);
+		return other != null ? isAssignableFrom(other)
+				: TypeCompatibility.FALSE;
 	}
 
 	@Override

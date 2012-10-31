@@ -295,53 +295,49 @@ public class TypeInfoValidator implements IBuildParticipant,
 		}
 
 		public void call(ValidationVisitor visitor) {
+			final IRType methodType = jsMethod.getType();
 			IRType firstType = null;
 			for (ReturnNode element : lst) {
 				if (element.returnValueReference == null)
 					continue;
-				IRType methodType = jsMethod.getType();
-				if (methodType != null && methodType instanceof IRRecordType) {
-					String failedPropertyTypeString = visitor
-							.testObjectPropertyType(
-									element.returnValueReference,
-									(IRRecordType) methodType);
-					if (failedPropertyTypeString != null) {
-						visitor.getProblemReporter()
-								.reportProblem(
-										JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE,
-										NLS.bind(
-												ValidationMessages.DeclarationMismatchWithActualReturnType,
-												new String[] {
-														jsMethod.getName(),
-														TypeUtil.getName(methodType),
-														failedPropertyTypeString }),
-										element.node.sourceStart(),
-										element.node.sourceEnd());
-					}
-					return;
-				}
-				IRType type = JavaScriptValidations
+				final IRType type = JavaScriptValidations
 						.typeOf(element.returnValueReference);
-
-				if (type != null && methodType != null) {
-					final TypeCompatibility compatibility = methodType
-							.isAssignableFrom(type);
-					if (compatibility != TypeCompatibility.TRUE) {
-						final ReturnStatement node = element.node;
-						visitor.getProblemReporter()
-								.reportProblem(
-										compatibility == TypeCompatibility.FALSE ? JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE
-												: JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE_PARAMETERIZATION,
-										NLS.bind(
-												ValidationMessages.DeclarationMismatchWithActualReturnType,
-												new String[] {
-														jsMethod.getName(),
-														TypeUtil.getName(methodType),
-														TypeUtil.getName(type) }),
-										node.sourceStart(), node.sourceEnd());
+				TypeCompatibility compatibility = null;
+				if (methodType instanceof IRTypeExtension) {
+					final IValidationStatus status = ((IRTypeExtension) methodType)
+							.isAssignableFrom(element.returnValueReference);
+					if (status != null) {
+						if (status instanceof TypeCompatibility) {
+							compatibility = (TypeCompatibility) status;
+						} else if (status != ValidationStatus.OK) {
+							JavaScriptValidations
+									.reportValidationStatus(
+											visitor.getProblemReporter(),
+											status,
+											element.node,
+											JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE,
+											ValidationMessages.DeclarationMismatchWithActualReturnType,
+											jsMethod.getName());
+						}
 					}
+				} else if (type != null && methodType != null) {
+					compatibility = methodType.isAssignableFrom(type);
 				}
-
+				if (compatibility != null
+						&& compatibility != TypeCompatibility.TRUE) {
+					final ReturnStatement node = element.node;
+					visitor.getProblemReporter()
+							.reportProblem(
+									compatibility == TypeCompatibility.FALSE ? JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE
+											: JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE_PARAMETERIZATION,
+									NLS.bind(
+											ValidationMessages.DeclarationMismatchWithActualReturnType,
+											new String[] {
+													jsMethod.getName(),
+													TypeUtil.getName(methodType),
+													TypeUtil.getName(type) }),
+									node.sourceStart(), node.sourceEnd());
+				}
 				if (firstType == null && type != null) {
 					firstType = type;
 				}
@@ -365,12 +361,10 @@ public class TypeInfoValidator implements IBuildParticipant,
 														TypeUtil.getName(firstType) }),
 										next.node.sourceStart(),
 										next.node.sourceEnd());
-
 					}
 				}
 			}
 		}
-
 	}
 
 	private static class NotExistingIdentiferValidator extends
@@ -934,9 +928,10 @@ public class TypeInfoValidator implements IBuildParticipant,
 									JavaScriptProblems.WRONG_JAVA_PARAMETERS,
 									NLS.bind(
 											ValidationMessages.MethodNotSelected,
-											new String[] { reference.getName(),
+											new String[] {
+													reference.getName(),
 													type.getName(),
-													describeArgTypes(arguments) }),
+													describeArguments(arguments) }),
 									methodNode.sourceStart(), methodNode
 											.sourceEnd());
 
@@ -1097,7 +1092,7 @@ public class TypeInfoValidator implements IBuildParticipant,
 						methodNode.sourceEnd());
 			}
 			validateAccessibility(methodNode, reference, method);
-			List<IRParameter> parameters = method.getParameters();
+			final List<IRParameter> parameters = method.getParameters();
 			final TypeCompatibility compatibility = validateParameters(
 					parameters, arguments, methodNode);
 			if (compatibility != TypeCompatibility.TRUE) {
@@ -1121,7 +1116,7 @@ public class TypeInfoValidator implements IBuildParticipant,
 				reporter.reportProblem(problemId, NLS.bind(
 						ValidationMessages.MethodNotApplicableInScript,
 						new String[] { name, describeParamTypes(parameters),
-								describeArgTypes(arguments, parameters) }),
+								describeArguments(arguments, parameters) }),
 						methodNode.sourceStart(), methodNode.sourceEnd());
 			}
 		}
@@ -1178,9 +1173,10 @@ public class TypeInfoValidator implements IBuildParticipant,
 								: JavaScriptProblems.WRONG_PARAMETERS_PARAMETERIZATION,
 						NLS.bind(
 								ValidationMessages.MethodNotApplicableInScript,
-								new String[] { name,
+								new String[] {
+										name,
 										describeParamTypes(parameters),
-										describeArgTypes(arguments, parameters) }),
+										describeArguments(arguments, parameters) }),
 						methodNode.sourceStart(), methodNode.sourceEnd());
 			}
 		}
@@ -1270,7 +1266,7 @@ public class TypeInfoValidator implements IBuildParticipant,
 						new String[] { method.getName(),
 								describeParamTypes(method.getParameters()),
 								method.getDeclaringType().getName(),
-								describeArgTypes(arguments) }), methodNode
+								describeArguments(arguments) }), methodNode
 						.sourceStart(), methodNode.sourceEnd());
 			} else {
 				reporter.reportProblem(JavaScriptProblems.WRONG_PARAMETERS, NLS
@@ -1279,10 +1275,12 @@ public class TypeInfoValidator implements IBuildParticipant,
 										method.getName(),
 										describeParamTypes(method
 												.getParameters()),
-										describeArgTypes(arguments) }),
+										describeArguments(arguments) }),
 						methodNode.sourceStart(), methodNode.sourceEnd());
 			}
 		}
+
+		private final List<ValidationStatus> statuses = new ArrayList<ValidationStatus>();
 
 		private TypeCompatibility validateParameters(
 				List<IRParameter> parameters, IValueReference[] arguments,
@@ -1304,7 +1302,7 @@ public class TypeInfoValidator implements IBuildParticipant,
 				testTypesSize = parameters.size() - 1;
 			}
 
-			List<ValidationStatus> statuses = null;
+			statuses.clear();
 			TypeCompatibility result = TypeCompatibility.TRUE;
 			for (int i = 0; i < testTypesSize; i++) {
 				final IValueReference argument = arguments[i];
@@ -1318,20 +1316,14 @@ public class TypeInfoValidator implements IBuildParticipant,
 						final TypeCompatibility pResult = (TypeCompatibility) status;
 						if (pResult.after(result)) {
 							if (pResult == TypeCompatibility.FALSE
-									&& statuses == null) {
+									&& statuses.isEmpty()) {
 								return pResult;
 							}
 							result = pResult;
 						}
 					} else if (status instanceof ValidationStatus) {
-						if (statuses == null) {
-							statuses = new ArrayList<ValidationStatus>();
-						}
 						statuses.add((ValidationStatus) status);
 					} else if (status instanceof ValidationMultiStatus) {
-						if (statuses == null) {
-							statuses = new ArrayList<ValidationStatus>();
-						}
 						Collections.addAll(statuses,
 								((ValidationMultiStatus) status).getChildren());
 					}
@@ -1368,7 +1360,7 @@ public class TypeInfoValidator implements IBuildParticipant,
 							parameter.getType(), argument);
 					if (pResult.after(result)) {
 						if (pResult == TypeCompatibility.FALSE
-								&& statuses == null) {
+								&& statuses.isEmpty()) {
 							return pResult;
 						}
 						result = pResult;
@@ -1386,7 +1378,7 @@ public class TypeInfoValidator implements IBuildParticipant,
 							paramType, argument);
 					if (pResult.after(result)) {
 						if (pResult == TypeCompatibility.FALSE
-								&& statuses == null) {
+								&& statuses.isEmpty()) {
 							return pResult;
 						}
 						result = pResult;
@@ -1394,7 +1386,7 @@ public class TypeInfoValidator implements IBuildParticipant,
 				}
 
 			}
-			if (statuses != null) {
+			if (!statuses.isEmpty()) {
 				for (ValidationStatus status : statuses) {
 					final int start;
 					final int end;
@@ -1421,56 +1413,13 @@ public class TypeInfoValidator implements IBuildParticipant,
 		private TypeCompatibility testArgumentType(IRType paramType,
 				IValueReference argument) {
 			if (argument != null && paramType != null) {
-				if (paramType instanceof IRRecordType) {
-					return TypeCompatibility.valueOf(testObjectPropertyType(
-							argument, (IRRecordType) paramType) == null);
-				}
-
-				IRType argumentType = argument.getDeclaredType();
-				if (argumentType == null && !argument.getTypes().isEmpty()) {
-					argumentType = argument.getTypes().getFirst();
-				}
+				final IRType argumentType = JavaScriptValidations
+						.typeOf(argument);
 				if (argumentType != null) {
 					return paramType.isAssignableFrom(argumentType);
 				}
 			}
 			return TypeCompatibility.TRUE;
-		}
-
-		/**
-		 * @param element
-		 * @param type
-		 */
-		protected String testObjectPropertyType(IValueReference reference,
-				IRRecordType type) {
-			for (IRRecordMember member : type.getMembers()) {
-				IValueReference child = reference.getChild(member.getName());
-				IRType referenceType = JavaScriptValidations.typeOf(child);
-				if (!child.exists()
-						|| (referenceType != null && member.getType() != null && !member
-								.getType().isAssignableFrom(referenceType).ok())) {
-					Set<String> children = reference.getDirectChildren();
-					if (children.size() == 0)
-						return "{}";
-					StringBuilder typeString = new StringBuilder();
-					typeString.append('{');
-					for (String childName : children) {
-						typeString.append(childName);
-						typeString.append(':');
-						IRType childType = JavaScriptValidations
-								.typeOf(reference.getChild(childName));
-						String typeName = TypeUtil.getName(childType);
-						typeString.append(typeName == null ? "Object"
-								: typeName);
-						typeString.append(',');
-					}
-					typeString.setLength(typeString.length() - 1);
-					typeString.append('}');
-
-					return typeString.toString();
-				}
-			}
-			return null;
 		}
 
 		private String describeParamTypes(List<IRParameter> parameters) {
@@ -1513,25 +1462,23 @@ public class TypeInfoValidator implements IBuildParticipant,
 		}
 
 		/**
-		 * @param arguments
-		 * @return
+		 * Describes the specified arguments.
 		 */
-		private String describeArgTypes(IValueReference[] arguments) {
-			return describeArgTypes(arguments,
+		private String describeArguments(IValueReference[] arguments) {
+			return describeArguments(arguments,
 					Collections.<IRParameter> emptyList());
 		}
 
 		/**
-		 * @param arguments
-		 * @param parameters
-		 * @return
+		 * Describes the specified arguments, expanding properties for those
+		 * where record type parameter is expected.
 		 */
-		private String describeArgTypes(IValueReference[] arguments,
+		private String describeArguments(IValueReference[] arguments,
 				List<IRParameter> parameters) {
-			StringBuilder sb = new StringBuilder();
+			final StringBuilder sb = new StringBuilder();
 			for (int i = 0; i < arguments.length; i++) {
-				IValueReference argument = arguments[i];
-				IRParameter parameter = parameters.size() > i ? parameters
+				final IValueReference argument = arguments[i];
+				final IRParameter parameter = i < parameters.size() ? parameters
 						.get(i) : null;
 				if (sb.length() != 0) {
 					sb.append(',');
@@ -1540,14 +1487,14 @@ public class TypeInfoValidator implements IBuildParticipant,
 					sb.append("null");
 				} else if (parameter != null
 						&& parameter.getType() instanceof IRRecordType) {
-					describeRecordType(sb, argument,
+					describeRecordTypeArgument(sb, argument,
 							(IRRecordType) parameter.getType());
 				} else if (argument.getDeclaredType() != null) {
 					sb.append(argument.getDeclaredType().getName());
 				} else {
 					final JSTypeSet types = argument.getTypes();
 					if (types.size() == 1) {
-						sb.append(types.getFirst().getName());
+						sb.append(types.toRType().getName());
 					} else {
 						sb.append('?');
 					}
@@ -1556,39 +1503,44 @@ public class TypeInfoValidator implements IBuildParticipant,
 			return sb.toString();
 		}
 
-		private void describeRecordType(StringBuilder sb,
-				IValueReference argument, IRRecordType paramType) {
-			Set<String> directChildren = argument.getDirectChildren();
+		/**
+		 * Describes the specified argument which is expected to be of the
+		 * record type.
+		 */
+		private void describeRecordTypeArgument(StringBuilder sb,
+				IValueReference argument, @Nullable IRRecordType expectedType) {
 			sb.append('{');
 			boolean appendComma = false;
-			for (String childName : directChildren) {
+			// TODO (alex) direct children and typed children.
+			for (String childName : argument.getDirectChildren()) {
 				if (appendComma)
 					sb.append(", ");
 				appendComma = true;
 				sb.append(childName);
 
-				IRType memberType = null;
-				if (paramType != null) {
-					for (IRRecordMember member : paramType.getMembers()) {
-						if (member.getName().equals(childName)) {
-							memberType = member.getType();
-							break;
-						}
-					}
-				}
-				if (memberType instanceof IRRecordType) {
-					sb.append(": ");
-					describeRecordType(sb, argument.getChild(childName),
-							(IRRecordType) memberType);
+				final IRType expectedMemberType;
+				if (expectedType != null) {
+					final IRRecordMember member = expectedType
+							.getMember(childName);
+					expectedMemberType = member != null ? member.getType()
+							: null;
 				} else {
-					IValueReference child = argument.getChild(childName);
-					IRType type = JavaScriptValidations.typeOf(child);
+					expectedMemberType = null;
+				}
+				if (expectedMemberType instanceof IRRecordType) {
+					sb.append(": ");
+					describeRecordTypeArgument(sb,
+							argument.getChild(childName),
+							(IRRecordType) expectedMemberType);
+				} else {
+					final IValueReference child = argument.getChild(childName);
+					final IRType type = JavaScriptValidations.typeOf(child);
 					if (type != null) {
-						if (paramType != null
+						if (expectedType != null
 								&& type.getName().equals(ITypeNames.OBJECT)
 								&& !child.getDirectChildren().isEmpty()) {
 							sb.append(": ");
-							describeRecordType(sb, child, null);
+							describeRecordTypeArgument(sb, child, null);
 						} else {
 							sb.append(':');
 							sb.append(type.getName());
@@ -2145,7 +2097,7 @@ public class TypeInfoValidator implements IBuildParticipant,
 											"The constructor {0}({1}) is undefined",
 											new String[] {
 													typeReference.getName(),
-													describeArgTypes(arguments) }),
+													describeArguments(arguments) }),
 									problemNode.sourceStart(), problemNode
 											.sourceEnd());
 							return;
@@ -2168,7 +2120,8 @@ public class TypeInfoValidator implements IBuildParticipant,
 											new String[] {
 													typeReference.getName(),
 													describeParamTypes(parameters),
-													describeArgTypes(arguments,
+													describeArguments(
+															arguments,
 															parameters) }),
 									problemNode.sourceStart(), problemNode
 											.sourceEnd());

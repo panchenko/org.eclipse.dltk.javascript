@@ -1218,6 +1218,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 						continue;
 					}
 				}
+				// TODO (alex) parse annotations @type/@deprecated if !function
 				final IRType type = JavaScriptValidations.typeOf(value);
 				members.add(new RRecordMemberObjectProperty(childName,
 						type != null ? type : RTypes.any()));
