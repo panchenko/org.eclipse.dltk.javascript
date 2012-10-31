@@ -124,8 +124,8 @@ public class SwitchStatement extends Statement {
 		buffer.append("{\n");
 
 		for (int i = 0; i < caseClauses.size(); i++) {
-			buffer.append(toSourceString((ISourceable) caseClauses.get(i),
-					indentationString + INDENT));
+			buffer.append(toSourceString(caseClauses.get(i), indentationString
+					+ INDENT));
 		}
 
 		buffer.append(indentationString);

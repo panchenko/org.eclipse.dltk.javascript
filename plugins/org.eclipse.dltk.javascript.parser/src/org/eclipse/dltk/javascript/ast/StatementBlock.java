@@ -69,7 +69,7 @@ public class StatementBlock extends Statement implements ISourceableBlock {
 		buffer.append("{\n");
 
 		for (int i = 0; i < statements.size(); i++) {
-			buffer.append(toSourceString((ISourceable) statements.get(i),
+			buffer.append(toSourceString(statements.get(i),
 					indentationString + INDENT));
 		}
 

@@ -80,7 +80,7 @@ public class ArrayInitializer extends Expression {
 		Assert.isTrue(RB > 0);
 		Assert.isTrue(items.size() == 0 || commas.size() == items.size() - 1);
 
-		StringBuffer buffer = new StringBuffer();
+		StringBuilder buffer = new StringBuilder();
 
 		buffer.append(Keywords.LB);
 
@@ -88,8 +88,7 @@ public class ArrayInitializer extends Expression {
 			if (i > 0)
 				buffer.append(", ");
 
-			ISourceable item = (ISourceable) items.get(i);
-			buffer.append(item.toSourceString(indentionString));
+			buffer.append(toSourceString(items.get(i), indentionString));
 		}
 
 		buffer.append(Keywords.RB);
