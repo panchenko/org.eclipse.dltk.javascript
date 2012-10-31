@@ -231,6 +231,9 @@ public class RTypes {
 		return new RRecordType(members);
 	}
 
+	/**
+	 * Represents the specified {@link IValueReference} as {@link IRRecordType}.
+	 */
 	public static IRRecordType recordType(@Nullable IValueReference argument) {
 		if (argument != null) {
 			final Set<String> directChildren = argument.getDirectChildren();
