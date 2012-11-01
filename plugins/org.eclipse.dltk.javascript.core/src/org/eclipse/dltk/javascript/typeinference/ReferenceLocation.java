@@ -13,6 +13,7 @@ package org.eclipse.dltk.javascript.typeinference;
 
 import java.text.MessageFormat;
 
+import org.eclipse.dltk.annotations.Internal;
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.core.ISourceNode;
 import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
@@ -45,8 +46,10 @@ public abstract class ReferenceLocation {
 
 	public abstract int getNameEnd();
 
-	public static final ReferenceLocation UNKNOWN = new ReferenceLocation() {
+	public static final ReferenceLocation UNKNOWN = new Unknown();
 
+	@Internal
+	static class Unknown extends ReferenceLocation {
 		@Override
 		public ReferenceSource getSource() {
 			return ReferenceSource.UNKNOWN;
@@ -76,7 +79,7 @@ public abstract class ReferenceLocation {
 		public String toString() {
 			return "UNKNOWN"; //$NON-NLS-1$
 		}
-	};
+	}
 
 	private static class SimpleLocation extends ReferenceLocation {
 
