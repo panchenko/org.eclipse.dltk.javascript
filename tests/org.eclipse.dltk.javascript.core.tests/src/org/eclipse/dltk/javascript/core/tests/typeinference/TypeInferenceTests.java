@@ -1174,4 +1174,22 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		assertNotNull(gcall);
 		assertSame(fcall, fcall);
 	}
+
+	public void testStaticConstructors() {
+		{
+			final IValueCollection collection = inference("var s = String('text')");
+			assertEquals(RTypes.STRING,
+					JavaScriptValidations.typeOf(collection.getChild("s")));
+		}
+		{
+			final IValueCollection collection = inference("var n = Number('1')");
+			assertEquals(RTypes.NUMBER,
+					JavaScriptValidations.typeOf(collection.getChild("n")));
+		}
+		{
+			final IValueCollection collection = inference("var b = Boolean('true')");
+			assertEquals(RTypes.BOOLEAN,
+					JavaScriptValidations.typeOf(collection.getChild("b")));
+		}
+	}
 }

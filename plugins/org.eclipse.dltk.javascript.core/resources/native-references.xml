@@ -265,7 +265,7 @@
     </members>
   </ref:GenericType>
   <ref:Type name="Boolean" kind="PREDEFINED" superType="Object">
-    <staticConstructor name="Boolean">
+    <staticConstructor name="Boolean" directType="Boolean">
       <parameters name="value" kind="OPTIONAL" directType="Object"/>
     </staticConstructor>
   </ref:Type>
@@ -399,7 +399,7 @@
     <members xsi:type="ref:Method" name="toUTCString" directType="String" description="Converts a Date object, according to universal time, to a string."/>
   </ref:Type>
   <ref:Type name="Number" kind="PREDEFINED" superType="Object">
-    <staticConstructor name="Number">
+    <staticConstructor name="Number" directType="Number">
       <parameters name="value" kind="OPTIONAL" directType="Object"/>
     </staticConstructor>
   	<members xsi:type="ref:Property" name="MAX_VALUE" directType="Number" static="true" description="The largest representable number."/>
@@ -427,7 +427,7 @@
     <constructors name="String">
       <parameters name="thing" kind="OPTIONAL" directType="Object"/>
     </constructors>
-    <staticConstructor name="String">
+    <staticConstructor name="String" directType="String">
       <parameters name="value" kind="OPTIONAL" directType="Object"/>
     </staticConstructor>
   	<members xsi:type="ref:Method" name="fromCharCode" directType="String" static="true" description="Returns a string created by using the specified sequence of Unicode values.">
