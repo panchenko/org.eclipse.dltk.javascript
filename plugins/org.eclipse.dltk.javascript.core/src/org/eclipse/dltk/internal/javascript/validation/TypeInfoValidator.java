@@ -1327,34 +1327,6 @@ public class TypeInfoValidator implements IBuildParticipant,
 						Collections.addAll(statuses,
 								((ValidationMultiStatus) status).getChildren());
 					}
-				} else if (parameter.getType() instanceof IRRecordType
-						&& argument != null
-						&& !(argumentType instanceof IRRecordType)) {
-					boolean oneHit = false;
-					Set<String> argumentsChildren = argument
-							.getDirectChildren();
-					for (IRRecordMember member : ((IRRecordType) parameter
-							.getType()).getMembers()) {
-						if (argumentsChildren.contains(member.getName())) {
-							oneHit = true;
-							if (member.getType() != null) {
-								IValueReference child = argument
-										.getChild(member.getName());
-								final TypeCompatibility pResult = testArgumentType(
-										member.getType(), child);
-								if (pResult.after(result)) {
-									if (pResult == TypeCompatibility.FALSE) {
-										return pResult;
-									}
-									result = pResult;
-								}
-							}
-						} else if (!member.isOptional()) {
-							return TypeCompatibility.FALSE;
-						}
-					}
-					if (!oneHit)
-						return TypeCompatibility.FALSE;
 				} else {
 					final TypeCompatibility pResult = testArgumentType(
 							parameter.getType(), argument);
