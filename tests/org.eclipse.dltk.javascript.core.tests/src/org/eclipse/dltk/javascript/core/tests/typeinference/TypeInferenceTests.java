@@ -280,10 +280,10 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		assertEquals(0, z.getTypes().size());
 		assertTrue(z.getDeclaredType() instanceof IRFunctionType);
 
-		z = z.getChild(IValueReference.FUNCTION_OP);
-		assertEquals(true, z.exists());
-		assertEquals(1, z.getTypes().size());
-		assertEquals("String", z.getTypes().iterator().next().getName());
+		IValueReference zResult = z.getChild(IValueReference.FUNCTION_OP);
+		assertEquals(true, zResult.exists());
+		assertEquals(1, zResult.getTypes().size());
+		assertEquals("String", zResult.getTypes().iterator().next().getName());
 
 	}
 
