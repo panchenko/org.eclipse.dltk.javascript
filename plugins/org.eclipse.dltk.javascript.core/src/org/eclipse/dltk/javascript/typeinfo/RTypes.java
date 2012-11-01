@@ -25,6 +25,7 @@ import org.eclipse.dltk.annotations.Nullable;
 import org.eclipse.dltk.internal.javascript.validation.JavaScriptValidations;
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 import org.eclipse.dltk.javascript.core.Types;
+import org.eclipse.dltk.javascript.internal.core.RRecordMemberObjectProperty;
 import org.eclipse.dltk.javascript.internal.core.TypeSystems;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
@@ -239,16 +240,50 @@ public class RTypes {
 			final Set<String> directChildren = argument.getDirectChildren();
 			final IRType type = JavaScriptValidations.typeOf(argument);
 			if (type instanceof IRRecordType) {
-				// TODO (alex) add directChildren if available
-				return (IRRecordType) type;
+				if (directChildren.isEmpty()) {
+					return (IRRecordType) type;
+				} else {
+					final List<IRRecordMember> members = new ArrayList<IRRecordMember>(
+							directChildren.size()
+									+ ((IRRecordType) type).getMembers().size());
+					for (String childName : directChildren) {
+						final IValueReference child = argument
+								.getChild(childName);
+						if (child.exists()) {
+							final IRType memberType = JavaScriptValidations
+									.typeOf(child);
+							members.add(new RRecordMemberObjectProperty(
+									childName, memberType != null ? memberType
+											: any()));
+						}
+					}
+					for (IRRecordMember member : ((IRRecordType) type)
+							.getMembers()) {
+						if (!directChildren.contains(member.getName())) {
+							members.add(member);
+						}
+					}
+					return recordType(members);
+				}
+			} else if (!directChildren.isEmpty()) {
+				final List<IRRecordMember> members = new ArrayList<IRRecordMember>(
+						directChildren.size());
+				for (String childName : directChildren) {
+					final IValueReference child = argument.getChild(childName);
+					if (child.exists()) {
+						final IRType memberType = JavaScriptValidations
+								.typeOf(child);
+						members.add(new RRecordMemberObjectProperty(childName,
+								memberType != null ? memberType : any()));
+					}
+				}
+				return recordType(members);
+			} else {
+				return null;
 			}
-			if (!directChildren.isEmpty()) {
-				// TODO (alex) create fake type instance
-
-			}
+		} else {
+			return null;
 		}
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	public static Set<String> memberNames(IRRecordType recordType) {
