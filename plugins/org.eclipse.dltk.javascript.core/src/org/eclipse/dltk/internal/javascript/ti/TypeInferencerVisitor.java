@@ -1214,7 +1214,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					if (method != null) {
 						members.add(new RRecordMemberFunction(childName, RTypes
 								.functionType(method.getParameters(),
-										method.getType()), method));
+										method.getType()), method.getSource()));
 						continue;
 					}
 				}
