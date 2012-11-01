@@ -2309,11 +2309,13 @@ public class TypeInfoValidator implements IBuildParticipant,
 						if (result == ValidationStatus.OK) {
 							return;
 						} else {
+							IRMember rMember = memberValidationEvent.getRMember();
 							JavaScriptValidations.reportValidationStatus(
 									reporter, result, expression,
 									JavaScriptProblems.INACCESSIBLE_MEMBER,
-									ValidationMessages.InaccessibleMember,
-									member.getName());
+									ValidationMessages.InaccessibleMember,rMember == null?reference.getName():
+									rMember
+											.getName());
 							return;
 						}
 					}
