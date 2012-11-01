@@ -223,6 +223,30 @@ public class RTypes {
 		return new RMapType(typeSystem, keyType, valueType);
 	}
 
+	/**
+	 * Returns empty record type instance.
+	 */
+	public static IRRecordType recordType() {
+		return EMPTY_RECORD_TYPE;
+	}
+
+	private static final IRRecordType EMPTY_RECORD_TYPE = new EmptyRecordType();
+
+	static class EmptyRecordType extends RType implements IRRecordType {
+
+		public String getName() {
+			return "{}";
+		}
+
+		public IRRecordMember getMember(String name) {
+			return null;
+		}
+
+		public Collection<IRRecordMember> getMembers() {
+			return Collections.emptyList();
+		}
+	}
+
 	public static IRRecordType recordType(ITypeSystem typeSystem,
 			Collection<Member> members) {
 		return new RRecordType(typeSystem, members);
@@ -234,6 +258,8 @@ public class RTypes {
 
 	/**
 	 * Represents the specified {@link IValueReference} as {@link IRRecordType}.
+	 * Only {@link IRRecordType} value types and direct children are considered,
+	 * otherwise the {@link #recordType() empty record type} is returned.
 	 */
 	public static IRRecordType recordType(@Nullable IValueReference argument) {
 		if (argument != null) {
@@ -279,10 +305,10 @@ public class RTypes {
 				}
 				return recordType(members);
 			} else {
-				return null;
+				return recordType();
 			}
 		} else {
-			return null;
+			return recordType();
 		}
 	}
 

@@ -76,13 +76,13 @@ class RRecordType extends RType implements IRRecordType, IRTypeExtension {
 		if (super.isAssignableFrom(type).ok()) {
 			return TypeCompatibility.TRUE;
 		} else if (type instanceof RRecordType) {
-			return isAssignableFrom((RRecordType) type);
+			return assignableFromRecordType((RRecordType) type);
 		} else {
 			return TypeCompatibility.FALSE;
 		}
 	}
 
-	private TypeCompatibility isAssignableFrom(RRecordType other) {
+	private TypeCompatibility assignableFromRecordType(RRecordType other) {
 		final Map<String, IRRecordMember> others = other.members;
 		int hits = 0;
 		for (Map.Entry<String, IRRecordMember> entry : others.entrySet()) {
@@ -106,8 +106,8 @@ class RRecordType extends RType implements IRRecordType, IRTypeExtension {
 	}
 
 	public IValidationStatus isAssignableFrom(IValueReference argument) {
-		final RRecordType other = (RRecordType) RTypes.recordType(argument);
-		return other != null ? isAssignableFrom(other)
+		final IRRecordType other = RTypes.recordType(argument);
+		return other != RTypes.recordType() ? assignableFromRecordType((RRecordType) other)
 				: TypeCompatibility.FALSE;
 	}
 
