@@ -1249,7 +1249,13 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				} else {
 					source = null;
 				}
-				final IRType type = JavaScriptValidations.typeOf(value);
+				final IRType type;
+				if (source != null && source.getType() != null) {
+					type = RTypes.create(context, source.getType());
+					// TODO (alex) validate evaluated type?
+				} else {
+					type = JavaScriptValidations.typeOf(value);
+				}
 				members.add(new RRecordMemberObjectProperty(childName,
 						type != null ? type : RTypes.any(), source));
 			} else {
