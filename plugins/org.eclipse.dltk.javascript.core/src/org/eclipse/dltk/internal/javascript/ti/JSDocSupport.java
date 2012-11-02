@@ -319,7 +319,7 @@ public class JSDocSupport implements IModelBuilder {
 		}
 	}
 
-	private void parseDeprecation(IMember member, JSDocTags tags,
+	public void parseDeprecation(IMember member, JSDocTags tags,
 			JSProblemReporter reporter) {
 		if (tags.get(JSDocTag.DEPRECATED) != null) {
 			member.setDeprecated(true);

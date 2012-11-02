@@ -20,6 +20,7 @@ import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.parser.JSProblemReporter;
+import org.eclipse.dltk.javascript.typeinference.ILocationProvider;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
@@ -28,7 +29,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Visibility;
 @ConfigurationElement("builder")
 public interface IModelBuilder {
 
-	public interface IElement {
+	public interface IElement extends ILocationProvider {
 		String getName();
 
 		void setName(String name);

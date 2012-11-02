@@ -97,6 +97,7 @@ import org.eclipse.dltk.javascript.internal.core.TypeSystems;
 import org.eclipse.dltk.javascript.parser.ISuppressWarningsState;
 import org.eclipse.dltk.javascript.parser.JSParser;
 import org.eclipse.dltk.javascript.parser.PropertyExpressionUtils;
+import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTags;
 import org.eclipse.dltk.javascript.typeinference.IAssignProtection;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
@@ -1190,11 +1191,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	@Override
 	public IValueReference visitObjectInitializer(ObjectInitializer node) {
-		// IRRecordType type
-		// final IValueReference result = new AnonymousValue();
 		final List<IRRecordMember> members = new ArrayList<IRRecordMember>(node
 				.getInitializers().size());
-		// result.setDeclaredType(RTypes.OBJECT);
 		for (ObjectInitializerPart part : node.getInitializers()) {
 			if (part instanceof PropertyInitializer) {
 				final PropertyInitializer pi = (PropertyInitializer) part;
@@ -1204,9 +1202,6 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					visit(pi.getValue());
 					continue;
 				}
-				// final IValueReference child = result.createChild(childName);
-				// child.setLocation(ReferenceLocation.create(getSource(), pi
-				// .getName().sourceStart(), pi.getName().sourceEnd()));
 				final IValueReference value = visit(pi.getValue());
 				if (value != null) {
 					final IRMethod method = (IRMethod) value
@@ -1218,15 +1213,35 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 						continue;
 					}
 				}
-				// TODO (alex) parse annotations @type/@deprecated if !function
+				final JSVariable source;
+				if (!(pi.getValue() instanceof FunctionStatement)) {
+					source = new JSVariable();
+					source.setName(childName);
+					source.setLocation(ReferenceLocation.create(getSource(), pi
+							.getName().sourceStart(), pi.getName().sourceEnd()));
+					if (pi.getName().getDocumentation() != null) {
+						final JSDocTags tags = JSDocSupport.parse(pi.getName()
+								.getDocumentation());
+						if (!tags.isEmpty()) {
+							final IModelBuilder[] modelBuilders = this.context
+									.getModelBuilders();
+							if (modelBuilders.length > 0
+									&& modelBuilders[0] instanceof JSDocSupport) {
+								final JSDocSupport jsdocSupport = (JSDocSupport) modelBuilders[0];
+								jsdocSupport.parseType(source, tags,
+										JSDocSupport.TYPE_TAGS, reporter,
+										typeChecker);
+								jsdocSupport.parseDeprecation(source, tags,
+										reporter);
+							}
+						}
+					}
+				} else {
+					source = null;
+				}
 				final IRType type = JavaScriptValidations.typeOf(value);
 				members.add(new RRecordMemberObjectProperty(childName,
-						type != null ? type : RTypes.any()));
-
-				// child.setValue(value);
-				// if (child.getKind() == ReferenceKind.UNKNOWN) {
-				// child.setKind(ReferenceKind.FIELD);
-				// }
+						type != null ? type : RTypes.any(), source));
 			} else {
 				// TODO handle get/set methods
 			}

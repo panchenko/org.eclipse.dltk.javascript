@@ -280,7 +280,7 @@ public class RTypes {
 									.typeOf(child);
 							members.add(new RRecordMemberObjectProperty(
 									childName, memberType != null ? memberType
-											: any()));
+											: any(), child));
 						}
 					}
 					for (IRRecordMember member : ((IRRecordType) type)
@@ -300,7 +300,7 @@ public class RTypes {
 						final IRType memberType = JavaScriptValidations
 								.typeOf(child);
 						members.add(new RRecordMemberObjectProperty(childName,
-								memberType != null ? memberType : any()));
+								memberType != null ? memberType : any(), child));
 					}
 				}
 				return recordType(members);

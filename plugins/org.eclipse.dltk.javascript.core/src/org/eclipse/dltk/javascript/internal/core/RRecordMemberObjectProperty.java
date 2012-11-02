@@ -16,6 +16,7 @@ import java.util.Set;
 
 import org.eclipse.dltk.compiler.problem.IProblemCategory;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
+import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMember;
 import org.eclipse.dltk.javascript.typeinfo.IRRecordMember;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.IRTypeDeclaration;
@@ -25,10 +26,12 @@ public class RRecordMemberObjectProperty implements IRRecordMember {
 
 	private final String name;
 	private final IRType type;
+	private final Object source;
 
-	public RRecordMemberObjectProperty(String name, IRType type) {
+	public RRecordMemberObjectProperty(String name, IRType type, Object source) {
 		this.name = name;
 		this.type = type;
+		this.source = source;
 	}
 
 	public String getName() {
@@ -87,11 +90,10 @@ public class RRecordMemberObjectProperty implements IRRecordMember {
 	}
 
 	public boolean isDeprecated() {
-		// TODO (alex) if specified
-		return false;
+		return source instanceof IMember && ((IMember) source).isDeprecated();
 	}
 
 	public Object getSource() {
-		return null;
+		return source;
 	}
 }
