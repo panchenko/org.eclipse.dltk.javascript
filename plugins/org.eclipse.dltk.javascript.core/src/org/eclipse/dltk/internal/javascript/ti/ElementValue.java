@@ -23,6 +23,7 @@ import org.eclipse.dltk.internal.javascript.validation.ValidationMessages;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.core.Types;
 import org.eclipse.dltk.javascript.typeinference.IAssignProtection;
+import org.eclipse.dltk.javascript.typeinference.ILocationProvider;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
@@ -717,6 +718,14 @@ public abstract class ElementValue implements IValue {
 		}
 
 		@Override
+		public ReferenceLocation getLocation() {
+			if (element.getSource() instanceof ILocationProvider) {
+				return ((ILocationProvider) element.getSource()).getLocation();
+			}
+			return super.getLocation();
+		}
+
+		@Override
 		public String toString() {
 			return getClass().getSimpleName() + '<' + type + '>';
 		}
@@ -933,7 +942,7 @@ public abstract class ElementValue implements IValue {
 		return ReferenceKind.UNKNOWN;
 	}
 
-	public final ReferenceLocation getLocation() {
+	public ReferenceLocation getLocation() {
 		return ReferenceLocation.UNKNOWN;
 	}
 
