@@ -107,6 +107,7 @@ import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinference.ValueReferenceUtil;
 import org.eclipse.dltk.javascript.typeinfo.IMemberEvaluator;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
+import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilderExtension;
@@ -1207,6 +1208,15 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					final IRMethod method = (IRMethod) value
 							.getAttribute(IReferenceAttributes.R_METHOD);
 					if (method != null) {
+						if (method.getSource() instanceof IMethod) {
+							final IMethod m = (IMethod) method.getSource();
+							final ReferenceLocation loc = m.getLocation();
+							m.setLocation(ReferenceLocation.create(getSource(),
+									loc.getDeclarationStart(), loc
+											.getDeclarationEnd(), pi.getName()
+											.sourceStart(), pi.getName()
+											.sourceEnd()));
+						}
 						members.add(new RRecordMemberFunction(childName, RTypes
 								.functionType(method.getParameters(),
 										method.getType()), method.getSource()));
