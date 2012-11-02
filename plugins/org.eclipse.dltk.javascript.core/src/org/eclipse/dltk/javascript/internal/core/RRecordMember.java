@@ -16,6 +16,7 @@ import java.util.Set;
 
 import org.eclipse.dltk.compiler.problem.IProblemCategory;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
+import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMember;
 import org.eclipse.dltk.javascript.typeinfo.IRRecordMember;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.IRTypeDeclaration;
@@ -27,15 +28,12 @@ public class RRecordMember implements IRRecordMember {
 
 	private final String name;
 	private final IRType type;
-	private final boolean optional;
-	private final Member member;
+	private final Object source;
 
-	public RRecordMember(String name, IRType type, Member member) {
+	public RRecordMember(String name, IRType type, Object member) {
 		this.name = name;
 		this.type = type;
-		this.optional = member instanceof RecordMember
-				&& ((RecordMember) member).isOptional();
-		this.member = member;
+		this.source = member;
 	}
 
 	public String getName() {
@@ -47,12 +45,13 @@ public class RRecordMember implements IRRecordMember {
 	}
 
 	public boolean isOptional() {
-		return optional;
+		return source instanceof RecordMember
+				&& ((RecordMember) source).isOptional();
 	}
 
 	@Override
 	public String toString() {
-		return name + ":" + type + (optional ? "=" : "");
+		return name + ":" + type + (isOptional() ? "=" : "");
 	}
 
 	@Override
@@ -94,10 +93,11 @@ public class RRecordMember implements IRRecordMember {
 	}
 
 	public boolean isDeprecated() {
-		return false;
+		return source instanceof IMember && ((IMember) source).isDeprecated()
+				|| source instanceof Member && ((Member) source).isDeprecated();
 	}
 
-	public Member getSource() {
-		return member;
+	public Object getSource() {
+		return source;
 	}
 }

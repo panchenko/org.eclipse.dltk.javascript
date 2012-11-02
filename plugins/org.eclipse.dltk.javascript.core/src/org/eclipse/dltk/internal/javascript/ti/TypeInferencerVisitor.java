@@ -91,8 +91,7 @@ import org.eclipse.dltk.javascript.ast.XmlTextFragment;
 import org.eclipse.dltk.javascript.ast.YieldOperator;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.core.Types;
-import org.eclipse.dltk.javascript.internal.core.RRecordMemberFunction;
-import org.eclipse.dltk.javascript.internal.core.RRecordMemberObjectProperty;
+import org.eclipse.dltk.javascript.internal.core.RRecordMember;
 import org.eclipse.dltk.javascript.internal.core.TypeSystems;
 import org.eclipse.dltk.javascript.parser.ISuppressWarningsState;
 import org.eclipse.dltk.javascript.parser.JSParser;
@@ -1222,7 +1221,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 							returnType = JavaScriptValidations.typeOf(value
 									.getChild(IValueReference.FUNCTION_OP));
 						}
-						members.add(new RRecordMemberFunction(childName, RTypes
+						members.add(new RRecordMember(childName, RTypes
 								.functionType(method.getParameters(),
 										returnType), method.getSource()));
 						continue;
@@ -1261,8 +1260,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				} else {
 					type = JavaScriptValidations.typeOf(value);
 				}
-				members.add(new RRecordMemberObjectProperty(childName,
-						type != null ? type : RTypes.any(), source));
+				members.add(new RRecordMember(childName, type != null ? type
+						: RTypes.any(), source));
 			} else {
 				// TODO handle get/set methods
 			}

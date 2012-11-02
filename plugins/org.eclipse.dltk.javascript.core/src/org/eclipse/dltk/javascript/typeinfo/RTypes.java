@@ -25,7 +25,7 @@ import org.eclipse.dltk.annotations.Nullable;
 import org.eclipse.dltk.internal.javascript.validation.JavaScriptValidations;
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 import org.eclipse.dltk.javascript.core.Types;
-import org.eclipse.dltk.javascript.internal.core.RRecordMemberObjectProperty;
+import org.eclipse.dltk.javascript.internal.core.RRecordMember;
 import org.eclipse.dltk.javascript.internal.core.TypeSystems;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
@@ -278,9 +278,9 @@ public class RTypes {
 						if (child.exists()) {
 							final IRType memberType = JavaScriptValidations
 									.typeOf(child);
-							members.add(new RRecordMemberObjectProperty(
-									childName, memberType != null ? memberType
-											: any(), child));
+							members.add(new RRecordMember(childName,
+									memberType != null ? memberType : any(),
+									child));
 						}
 					}
 					for (IRRecordMember member : ((IRRecordType) type)
@@ -299,7 +299,7 @@ public class RTypes {
 					if (child.exists()) {
 						final IRType memberType = JavaScriptValidations
 								.typeOf(child);
-						members.add(new RRecordMemberObjectProperty(childName,
+						members.add(new RRecordMember(childName,
 								memberType != null ? memberType : any(), child));
 					}
 				}
