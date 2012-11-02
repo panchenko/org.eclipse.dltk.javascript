@@ -1217,9 +1217,14 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 											.sourceStart(), pi.getName()
 											.sourceEnd()));
 						}
+						IRType returnType = method.getType();
+						if (returnType == null) {
+							returnType = JavaScriptValidations.typeOf(value
+									.getChild(IValueReference.FUNCTION_OP));
+						}
 						members.add(new RRecordMemberFunction(childName, RTypes
 								.functionType(method.getParameters(),
-										method.getType()), method.getSource()));
+										returnType), method.getSource()));
 						continue;
 					}
 				}
