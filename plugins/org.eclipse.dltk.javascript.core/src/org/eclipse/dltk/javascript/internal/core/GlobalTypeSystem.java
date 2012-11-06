@@ -16,7 +16,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 import org.eclipse.emf.ecore.resource.Resource;
 
-public class GloablTypeSystem extends TypeSystemImpl {
+public class GlobalTypeSystem extends TypeSystemImpl {
 
 	@Override
 	public Type resolveType(Type type) {
