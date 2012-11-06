@@ -12,7 +12,10 @@
 package org.eclipse.dltk.internal.javascript.validation;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.dltk.ast.parser.IModuleDeclaration;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
@@ -82,19 +85,21 @@ public class JavaScriptValidations {
 		return null;
 	}
 
-	public static JSTypeSet getTypes(IValueReference reference) {
+	public static Set<IRType> getTypes(IValueReference reference) {
 		if (reference != null) {
-			JSTypeSet set = JSTypeSet.create();
+			Set<IRType> set = new HashSet<IRType>(4);
 			if (reference.getDeclaredType() != null) {
 				set.add(reference.getDeclaredType());
 			}
-			JSTypeSet declaredTypes = reference.getDeclaredTypes();
-			set.addAll(declaredTypes);
-			JSTypeSet types = reference.getTypes();
-			set.addAll(types);
+			for (IRType type : reference.getDeclaredTypes()) {
+				set.add(type);
+			}
+			for (IRType type : reference.getTypes()) {
+				set.add(type);
+			}
 			return set;
 		}
-		return JSTypeSet.emptySet();
+		return Collections.emptySet();
 	}
 
 	protected static Reporter createReporter(IBuildContext context) {

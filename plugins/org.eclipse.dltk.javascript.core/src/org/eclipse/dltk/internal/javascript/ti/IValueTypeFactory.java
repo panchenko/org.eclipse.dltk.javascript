@@ -26,7 +26,4 @@ public interface IValueTypeFactory {
 
 	IValueReference createXMLList(IValueParent parent);
 
-	@Deprecated
-	IValueReference createArray(IValueParent parent);
-
 }

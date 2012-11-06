@@ -79,6 +79,10 @@ public abstract class RType implements IRType {
 		return this;
 	}
 
+	public IRType normalize() {
+		return this;
+	}
+
 	protected final IRTypeDeclaration convert(Type type) {
 		return (typeSystem != null ? typeSystem : DELEGATING_TYPE_SYSTEM)
 				.convert(type);

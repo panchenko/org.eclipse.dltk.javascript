@@ -104,6 +104,7 @@ import org.eclipse.dltk.javascript.typeinference.PhantomValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinference.ValueReferenceUtil;
+import org.eclipse.dltk.javascript.typeinfo.CommonSuperTypeFinder;
 import org.eclipse.dltk.javascript.typeinfo.IMemberEvaluator;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
@@ -203,7 +204,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		if (node.getItems().isEmpty()) {
 			return new ConstantValue(RTypes.arrayOf());
 		}
-		final JSTypeSet types = JSTypeSet.create();
+		final Set<IRType> types = new HashSet<IRType>();
 		for (ASTNode astNode : node.getItems()) {
 			if (astNode instanceof StringLiteral) {
 				types.add(RTypes.STRING);
@@ -217,19 +218,18 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			} else {
 				final IValueReference child = visit(astNode);
 				if (child != null && child.exists()) {
-					types.addAll(JavaScriptValidations.getTypes(child));
+					for (IRType type : JavaScriptValidations.getTypes(child)) {
+						types.add(type.normalize());
+					}
 				}
-				// TODO (alex) else add(Obect) ?
+				// TODO (alex) else add(Object) ?
 			}
 		}
 		if (types.isEmpty()) {
 			return new ConstantValue(RTypes.arrayOf());
-		} else if (types.size() == 1) {
-			return context.getFactory().create(peekContext(),
-					RTypes.arrayOf(types.getFirst()));
 		} else {
-			// TODO (alex) if not empty then evaluate common base type.
-			return context.getFactory().createArray(peekContext());
+			return new ConstantValue(RTypes.arrayOf(CommonSuperTypeFinder
+					.evaluate(types)));
 		}
 	}
 
@@ -749,7 +749,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	public IValueReference visitForEachInStatement(ForEachInStatement node) {
 		IValueReference itemReference = visit(node.getItem());
 		IValueReference iteratorReference = visit(node.getIterator());
-		JSTypeSet typeSet = JavaScriptValidations.getTypes(iteratorReference);
+		Set<IRType> typeSet = JavaScriptValidations.getTypes(iteratorReference);
 		if (!typeSet.isEmpty()) {
 			IRType type = null;
 			// try to get the best type, just take the first one, and if the the

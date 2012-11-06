@@ -34,10 +34,6 @@ public class ValueTypeFactoryImpl implements IValueTypeFactory, ITypeNames {
 		return new ConstantValue(type);
 	}
 
-	public IValueReference createArray(IValueParent parent) {
-		return create(parent, ARRAY);
-	}
-
 	public IValueReference createRegExp(IValueParent parent) {
 		return create(parent, REGEXP);
 	}

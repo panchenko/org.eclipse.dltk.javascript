@@ -43,7 +43,6 @@ import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.RTypes;
-import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
@@ -1089,7 +1088,7 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IValueCollection collection = inference(code.toString());
 		IValueReference child = collection.getChild("x");
 		IRType type = JavaScriptValidations.typeOf(child);
-		assertEquals(RTypes.create(TypeUtil.ref(ITypeNames.ARRAY)), type);
+		assertEquals(RTypes.arrayOf(RTypes.OBJECT), type);
 	}
 
 	public void testArrayInitializerWithVariableNumbers() {

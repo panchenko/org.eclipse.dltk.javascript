@@ -63,4 +63,10 @@ public interface IRType {
 	 */
 	IRType transform(IRTypeTransformer function);
 
+	/**
+	 * Normalizes this type, i.e. removes unnecessary options from the type
+	 * expression. Most of the time this function returns <code>this</code>.
+	 */
+	IRType normalize();
+
 }
