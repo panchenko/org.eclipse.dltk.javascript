@@ -17,7 +17,7 @@ import org.eclipse.dltk.javascript.typeinfo.RTypes;
 import org.eclipse.dltk.javascript.typeinfo.model.AnyType;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.impl.EObjectImpl;
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -28,7 +28,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *
  * @generated
  */
-public class AnyTypeImpl extends EObjectImpl implements AnyType {
+public class AnyTypeImpl extends MinimalEObjectImpl implements AnyType {
     /**
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->

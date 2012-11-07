@@ -23,7 +23,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.EObjectImpl;
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -38,7 +38,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *
  * @generated
  */
-public class SimpleTypeImpl extends EObjectImpl implements SimpleType {
+public class SimpleTypeImpl extends MinimalEObjectImpl implements SimpleType {
     /**
      * The cached value of the '{@link #getTarget() <em>Target</em>}' reference.
      * <!-- begin-user-doc -->

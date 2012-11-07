@@ -24,7 +24,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.EObjectImpl;
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -39,7 +39,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *
  * @generated
  */
-public class ClassTypeImpl extends EObjectImpl implements ClassType {
+public class ClassTypeImpl extends MinimalEObjectImpl implements ClassType {
     /**
      * The cached value of the '{@link #getTarget() <em>Target</em>}' reference.
      * <!-- begin-user-doc -->

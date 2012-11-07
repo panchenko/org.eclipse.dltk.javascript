@@ -23,7 +23,7 @@ import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.EObjectImpl;
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -38,7 +38,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *
  * @generated
  */
-public class ArrayTypeImpl extends EObjectImpl implements ArrayType {
+public class ArrayTypeImpl extends MinimalEObjectImpl implements ArrayType {
     /**
      * The cached value of the '{@link #getItemType() <em>Item Type</em>}' containment reference.
      * <!-- begin-user-doc -->

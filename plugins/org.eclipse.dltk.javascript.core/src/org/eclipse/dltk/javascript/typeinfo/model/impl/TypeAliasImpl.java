@@ -17,7 +17,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.EObjectImpl;
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -33,7 +33,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *
  * @generated
  */
-public class TypeAliasImpl extends EObjectImpl implements TypeAlias {
+public class TypeAliasImpl extends MinimalEObjectImpl implements TypeAlias {
     /**
      * The default value of the '{@link #getSource() <em>Source</em>}' attribute.
      * <!-- begin-user-doc -->

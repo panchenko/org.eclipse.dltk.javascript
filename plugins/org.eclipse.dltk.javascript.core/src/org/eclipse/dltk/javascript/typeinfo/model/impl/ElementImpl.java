@@ -22,7 +22,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.EObjectImpl;
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.emf.ecore.util.EcoreEMap;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -44,7 +44,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-public abstract class ElementImpl extends EObjectImpl implements Element {
+public abstract class ElementImpl extends MinimalEObjectImpl implements Element {
 	/**
      * The default value of the '{@link #getName() <em>Name</em>}' attribute.
      * <!-- begin-user-doc -->

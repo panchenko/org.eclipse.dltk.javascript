@@ -25,7 +25,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.EObjectImpl;
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -40,7 +40,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *
  * @generated
  */
-public class TypeVariableClassTypeImpl extends EObjectImpl implements TypeVariableClassType {
+public class TypeVariableClassTypeImpl extends MinimalEObjectImpl implements TypeVariableClassType {
     /**
      * The cached value of the '{@link #getVariable() <em>Variable</em>}' reference.
      * <!-- begin-user-doc -->

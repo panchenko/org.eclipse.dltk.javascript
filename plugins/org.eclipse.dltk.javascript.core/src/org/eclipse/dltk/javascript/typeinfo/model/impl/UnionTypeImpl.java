@@ -25,7 +25,7 @@ import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.impl.EObjectImpl;
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -42,7 +42,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-public class UnionTypeImpl extends EObjectImpl implements UnionType {
+public class UnionTypeImpl extends MinimalEObjectImpl implements UnionType {
     /**
      * The cached value of the '{@link #getTargets() <em>Targets</em>}' containment reference list.
      * <!-- begin-user-doc -->

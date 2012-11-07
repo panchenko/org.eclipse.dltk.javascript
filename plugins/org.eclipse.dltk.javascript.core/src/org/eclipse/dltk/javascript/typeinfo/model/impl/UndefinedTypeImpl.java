@@ -18,7 +18,7 @@ import org.eclipse.dltk.javascript.typeinfo.RTypes;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
 import org.eclipse.dltk.javascript.typeinfo.model.UndefinedType;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.impl.EObjectImpl;
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -29,7 +29,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *
  * @generated
  */
-public class UndefinedTypeImpl extends EObjectImpl implements UndefinedType {
+public class UndefinedTypeImpl extends MinimalEObjectImpl implements UndefinedType {
     /**
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->

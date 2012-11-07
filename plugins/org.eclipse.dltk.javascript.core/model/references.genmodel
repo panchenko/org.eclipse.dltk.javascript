@@ -3,9 +3,10 @@
     xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
     xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" copyrightText="Copyright (c) 2011 NumberFour AG&#xD;&#xA;&#xD;&#xA;All rights reserved. This program and the accompanying materials&#xD;&#xA;are made available under the terms of the Eclipse Public License v1.0&#xD;&#xA;which accompanies this distribution, and is available at&#xD;&#xA;http://www.eclipse.org/legal/epl-v10.html&#xD;&#xA;&#xD;&#xA;Contributors:&#xD;&#xA;    NumberFour AG - initial API and Implementation (Alex Panchenko)"
     modelDirectory="/org.eclipse.dltk.javascript.core/src" modelPluginID="org.eclipse.dltk.javascript.core"
-    modelName="References" modelPluginClass="" nonNLSMarkers="true" rootImplementsInterface=""
-    importerID="org.eclipse.emf.importer.ecore" complianceLevel="5.0" copyrightFields="false"
-    runtimeVersion="2.6" language="" interfaceNamePattern="">
+    modelName="References" modelPluginClass="" nonNLSMarkers="true" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl"
+    rootImplementsInterface="" featureMapWrapperClass="" booleanFlagsField="" importerID="org.eclipse.emf.importer.ecore"
+    complianceLevel="5.0" copyrightFields="false" runtimeVersion="2.6" language=""
+    interfaceNamePattern="">
   <foreignModel>references.ecore</foreignModel>
   <genPackages prefix="TypeInfoModel" basePackage="org.eclipse.dltk.javascript.typeinfo"
       disposableProviderFactory="true" multipleEditorPages="false" ecorePackage="references.ecore#/">
@@ -25,9 +26,12 @@
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="references.ecore#//Visibility">
       <genEnumLiterals ecoreEnumLiteral="references.ecore#//Visibility/PUBLIC"/>
       <genEnumLiterals ecoreEnumLiteral="references.ecore#//Visibility/PROTECTED"/>
+      <genEnumLiterals ecoreEnumLiteral="references.ecore#//Visibility/INTERNAL"/>
       <genEnumLiterals ecoreEnumLiteral="references.ecore#//Visibility/PRIVATE"/>
     </genEnums>
     <genDataTypes ecoreDataType="references.ecore#//IRType"/>
+    <genDataTypes ecoreDataType="references.ecore#//MetaType"/>
+    <genDataTypes ecoreDataType="references.ecore#//ITypeSystem"/>
     <genClasses image="false" ecoreClass="references.ecore#//NamedElement">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute references.ecore#//NamedElement/name"/>
     </genClasses>
@@ -53,9 +57,14 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference references.ecore#//Type/members"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute references.ecore#//Type/kind"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference references.ecore#//Type/superType"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference references.ecore#//Type/constructor"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference references.ecore#//Type/superTypeExpr"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference references.ecore#//Type/staticConstructor"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference references.ecore#//Type/traits"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute references.ecore#//Type/extensible"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference references.ecore#//Type/constructors"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute references.ecore#//Type/instantiable"/>
+      <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute references.ecore#//Type/inheritConstructors"/>
+      <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute references.ecore#//Type/inheritStaticMembers"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute references.ecore#//Type/metaType"/>
       <genOperations ecoreOperation="references.ecore#//Type/isProxy"/>
     </genClasses>
     <genClasses ecoreClass="references.ecore#//TypeAlias">
@@ -69,6 +78,7 @@
     </genClasses>
     <genClasses ecoreClass="references.ecore#//Method">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference references.ecore#//Method/parameters"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute references.ecore#//Method/abstract"/>
       <genOperations ecoreOperation="references.ecore#//Method/getParameter">
         <genParameters ecoreParameter="references.ecore#//Method/getParameter/name"/>
       </genOperations>
@@ -86,6 +96,9 @@
     </genClasses>
     <genClasses image="false" ecoreClass="references.ecore#//JSType">
       <genOperations ecoreOperation="references.ecore#//JSType/getName"/>
+      <genOperations ecoreOperation="references.ecore#//JSType/toRType">
+        <genParameters ecoreParameter="references.ecore#//JSType/toRType/typeSystem"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="references.ecore#//FunctionType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference references.ecore#//FunctionType/returnType"/>
@@ -122,7 +135,9 @@
       <genOperations ecoreOperation="references.ecore#//ClassType/getRawName"/>
     </genClasses>
     <genClasses ecoreClass="references.ecore#//UndefinedType"/>
-    <genClasses ecoreClass="references.ecore#//TypeVariable"/>
+    <genClasses ecoreClass="references.ecore#//TypeVariable">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference references.ecore#//TypeVariable/bound"/>
+    </genClasses>
     <genClasses ecoreClass="references.ecore#//GenericType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference references.ecore#//GenericType/typeParameters"/>
     </genClasses>
@@ -131,6 +146,16 @@
     </genClasses>
     <genClasses ecoreClass="references.ecore#//RType">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute references.ecore#//RType/runtimeType"/>
+    </genClasses>
+    <genClasses ecoreClass="references.ecore#//GenericMethod">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference references.ecore#//GenericMethod/typeParameters"/>
+    </genClasses>
+    <genClasses ecoreClass="references.ecore#//TypeLiteral">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute references.ecore#//TypeLiteral/name"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference references.ecore#//TypeLiteral/target"/>
+    </genClasses>
+    <genClasses ecoreClass="references.ecore#//TypeVariableClassType">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference references.ecore#//TypeVariableClassType/variable"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>
