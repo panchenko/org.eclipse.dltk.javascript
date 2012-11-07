@@ -449,9 +449,14 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		final GenericMethod method = (GenericMethod) rMethod.getSource();
 		final JSTypeSet[] argTypes = new JSTypeSet[arguments.length];
 		for (int i = 0; i < arguments.length; ++i) {
-			argTypes[i] = arguments[i].getDeclaredTypes();
-			if (argTypes[i].isEmpty()) {
-				argTypes[i] = arguments[i].getTypes();
+			final IValueReference argument = arguments[i];
+			if (argument != null) {
+				argTypes[i] = argument.getDeclaredTypes();
+				if (argTypes[i].isEmpty()) {
+					argTypes[i] = argument.getTypes();
+				}
+			} else {
+				argTypes[i] = JSTypeSet.emptySet();
 			}
 		}
 		// TODO (alex) can be pre-evaluated in GenericParameter objects.
