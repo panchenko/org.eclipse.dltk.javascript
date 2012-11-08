@@ -29,6 +29,7 @@ public class RSimpleType extends RType implements IRSimpleType {
 		this.declaration = convert(target);
 	}
 
+	@Deprecated
 	protected RSimpleType(Type type) {
 		this(null, type);
 	}

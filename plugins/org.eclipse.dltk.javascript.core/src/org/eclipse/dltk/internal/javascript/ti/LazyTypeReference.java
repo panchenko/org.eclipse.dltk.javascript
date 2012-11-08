@@ -39,7 +39,7 @@ public class LazyTypeReference extends AbstractReference {
 				if (childType != null && childType instanceof IRClassType) {
 					final Type target = ((IRClassType) childType).getTarget();
 					if (target != null) {
-						setDeclaredType(RTypes.simple(target));
+						setDeclaredType(RTypes.simple(context, target));
 						resolved = true;
 						return;
 					}
@@ -66,7 +66,7 @@ public class LazyTypeReference extends AbstractReference {
 				type.setSuperType(Types.OBJECT);
 				type.setKind(TypeKind.JAVASCRIPT);
 				type.setName(className);
-				setDeclaredType(RTypes.simple(type));
+				setDeclaredType(RTypes.simple(context, type));
 				resolved = true;
 			} else if (className.indexOf('.') != -1) {
 				StringTokenizer st = new StringTokenizer(className, ".");
@@ -104,7 +104,7 @@ public class LazyTypeReference extends AbstractReference {
 						type.setSuperType(Types.OBJECT);
 						type.setKind(TypeKind.JAVASCRIPT);
 						type.setName(className);
-						setDeclaredType(RTypes.simple(type));
+						setDeclaredType(RTypes.simple(context, type));
 					}
 					setKind(ReferenceKind.TYPE);
 					resolved = true;

@@ -18,6 +18,10 @@ import org.eclipse.dltk.javascript.typeinfo.model.Property;
 
 public class RProperty extends RMember<Property> implements IRProperty {
 
+	public RProperty(Property member, IRTypeDeclaration typeDeclaration) {
+		super(member, typeDeclaration);
+	}
+
 	public RProperty(Property member, IRType type,
 			IRTypeDeclaration typeDeclaration) {
 		super(member, type, typeDeclaration);

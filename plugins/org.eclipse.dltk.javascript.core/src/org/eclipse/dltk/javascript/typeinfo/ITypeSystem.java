@@ -143,4 +143,9 @@ public interface ITypeSystem {
 	 */
 	void setValue(Object key, Object value);
 
+	/**
+	 * Returns the primary type system or this type system if it is primary.
+	 */
+	ITypeSystem getPrimary();
+
 }

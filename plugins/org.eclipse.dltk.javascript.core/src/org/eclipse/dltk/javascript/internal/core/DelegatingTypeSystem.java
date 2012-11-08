@@ -115,4 +115,9 @@ class DelegatingTypeSystem implements ITypeSystem {
 		return current != null ? current.getTypeVariable(variable) : null;
 	}
 
+	public ITypeSystem getPrimary() {
+		final ITypeSystem current = current();
+		return current != null ? current : WEAK_TYPE_SYSTEM;
+	}
+
 }

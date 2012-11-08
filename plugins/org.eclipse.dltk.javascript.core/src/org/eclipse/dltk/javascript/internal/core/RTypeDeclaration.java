@@ -25,6 +25,7 @@ import org.eclipse.dltk.javascript.typeinfo.IRMethod;
 import org.eclipse.dltk.javascript.typeinfo.IRProperty;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.IRTypeDeclaration;
+import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.TypeCompatibility;
 import org.eclipse.dltk.javascript.typeinfo.model.GenericType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
@@ -33,6 +34,8 @@ import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 public class RTypeDeclaration implements IRTypeDeclaration {
 
 	@NonNull
+	protected final ITypeSystem typeSystem;
+	@NonNull
 	protected final Type type;
 	private RTypeDeclaration superType;
 	private List<RTypeDeclaration> traits;
@@ -40,7 +43,8 @@ public class RTypeDeclaration implements IRTypeDeclaration {
 	private List<IRConstructor> constructors;
 	private IRConstructor staticConstructor;
 
-	public RTypeDeclaration(Type type) {
+	public RTypeDeclaration(ITypeSystem typeSystem, Type type) {
+		this.typeSystem = typeSystem;
 		this.type = type;
 	}
 
@@ -58,6 +62,10 @@ public class RTypeDeclaration implements IRTypeDeclaration {
 
 	public boolean isDeprecated() {
 		return type.isDeprecated();
+	}
+
+	public ITypeSystem getTypeSystem() {
+		return typeSystem;
 	}
 
 	public Type getSource() {

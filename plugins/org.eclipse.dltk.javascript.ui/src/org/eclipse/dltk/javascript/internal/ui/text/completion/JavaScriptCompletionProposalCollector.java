@@ -118,11 +118,12 @@ public class JavaScriptCompletionProposalCollector extends
 						sb.append('[');
 					if (parameter.getType() != null) {
 						try {
-							final IRType type = ITypeSystem.CURRENT.runWith(
-									getTypeSystem(), new Callable<IRType>() {
+							final ITypeSystem ts = getTypeSystem();
+							final IRType type = ITypeSystem.CURRENT.runWith(ts,
+									new Callable<IRType>() {
 										public IRType call() {
-											return RTypes.create(parameter
-													.getType());
+											return RTypes.create(ts,
+													parameter.getType());
 										}
 									});
 							sb.append(type.getName());

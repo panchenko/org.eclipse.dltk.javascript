@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.eclipse.dltk.javascript.core.Types;
+import org.eclipse.dltk.javascript.internal.core.TypeSystems;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
@@ -238,26 +239,6 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 	 */
 	public static IRType normalize(ITypeSystem context, JSType type) {
 		return RTypes.create(context, type);
-	}
-
-	/**
-	 * @deprecated Use {@link RTypes#simple(Type)} instead
-	 */
-	public static IRType ref(Type type) {
-		return RTypes.simple(type);
-	}
-
-	@Deprecated
-	public static IRType ref(String name) {
-		final Type type = TypeInfoModelLoader.getInstance().getType(name);
-		return RTypes.simple(type);
-	}
-
-	/**
-	 * @deprecated Use {@link RTypes#classType(Type)} instead
-	 */
-	public static IRClassType classType(Type type) {
-		return RTypes.classType(type);
 	}
 
 	/**

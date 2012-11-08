@@ -18,6 +18,7 @@ import java.util.Collections;
 
 import junit.framework.TestCase;
 
+import org.eclipse.dltk.internal.javascript.ti.TypeSystemImpl;
 import org.eclipse.dltk.javascript.core.Types;
 import org.eclipse.dltk.javascript.typeinfo.IRClassType;
 import org.eclipse.dltk.javascript.typeinfo.IRFunctionType;
@@ -27,7 +28,7 @@ import org.eclipse.dltk.javascript.typeinfo.IRSimpleType;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.IRTypeDeclaration;
 import org.eclipse.dltk.javascript.typeinfo.IRUnionType;
-import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
+import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.RTypes;
 import org.eclipse.dltk.javascript.typeinfo.TypeCompatibility;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
@@ -39,17 +40,28 @@ import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
-public class RTypeTests extends TestCase implements ITypeNames {
+@SuppressWarnings("restriction")
+public class RTypeTests extends TestCase {
 
 	private static final TypeInfoModelFactory TIMF = TypeInfoModelFactory.eINSTANCE;
 
+	private ITypeSystem ts;
+
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		ts = new TypeSystemImpl();
+	}
+
 	public void testAssignableJavaScriptObject() {
-		final IRType object = simple(Types.OBJECT);
+		final IRType object = simple(ts, Types.OBJECT);
 		assertEquals(TypeCompatibility.TRUE,
-				object.isAssignableFrom(arrayOf(simple(Types.STRING))));
-		assertEquals(TypeCompatibility.TRUE, object.isAssignableFrom(RTypes
-				.functionType(Collections.<IRParameter> emptyList(),
-						simple(Types.STRING))));
+				object.isAssignableFrom(arrayOf(simple(ts, Types.STRING))));
+		assertEquals(
+				TypeCompatibility.TRUE,
+				object.isAssignableFrom(RTypes.functionType(
+						Collections.<IRParameter> emptyList(),
+						simple(ts, Types.STRING))));
 	}
 
 	public void testAssignableSuperType() {
@@ -57,8 +69,8 @@ public class RTypeTests extends TestCase implements ITypeNames {
 		final Type type = TIMF.createType();
 		type.setName(EcoreUtil.generateUUID());
 		type.setSuperType(superType);
-		assertEquals(TypeCompatibility.TRUE, RTypes.simple(superType)
-				.isAssignableFrom(RTypes.simple(type)));
+		assertEquals(TypeCompatibility.TRUE, RTypes.simple(ts, superType)
+				.isAssignableFrom(RTypes.simple(ts, type)));
 	}
 
 	public void testAssignableTrait() {
@@ -66,17 +78,17 @@ public class RTypeTests extends TestCase implements ITypeNames {
 		final Type type = TIMF.createType();
 		type.setName(EcoreUtil.generateUUID());
 		type.getTraits().add(trait);
-		assertEquals(TypeCompatibility.TRUE, RTypes.simple(trait)
-				.isAssignableFrom(RTypes.simple(type)));
+		assertEquals(TypeCompatibility.TRUE, RTypes.simple(ts, trait)
+				.isAssignableFrom(RTypes.simple(ts, type)));
 	}
 
 	public void testSimpleType() {
-		final IRType type = RTypes.create(TypeUtil.ref(Types.STRING));
+		final IRType type = RTypes.create(ts, TypeUtil.ref(Types.STRING));
 		assertSame(Types.STRING, ((IRSimpleType) type).getTarget());
 	}
 
 	public void testClassType() {
-		final IRType type = RTypes.create(TypeUtil.classType(Types.STRING));
+		final IRType type = RTypes.create(ts, TypeUtil.classType(Types.STRING));
 		assertSame(Types.STRING, ((IRClassType) type).getTarget());
 	}
 
@@ -84,19 +96,19 @@ public class RTypeTests extends TestCase implements ITypeNames {
 		final MapType mapType = TIMF.createMapType();
 		mapType.setKeyType(TypeUtil.ref(Types.STRING));
 		mapType.setValueType(TypeUtil.ref(Types.NUMBER));
-		final IRMapType type = (IRMapType) RTypes.create(mapType);
-		assertEquals(RTypes.simple(Types.STRING), type.getKeyType());
-		assertEquals(RTypes.simple(Types.NUMBER), type.getValueType());
+		final IRMapType type = (IRMapType) RTypes.create(ts, mapType);
+		assertEquals(RTypes.simple(ts, Types.STRING), type.getKeyType());
+		assertEquals(RTypes.simple(ts, Types.NUMBER), type.getValueType());
 	}
 
 	public void testUnionType() {
 		final UnionType unionType = TIMF.createUnionType();
 		unionType.getTargets().add(TypeUtil.ref(Types.STRING));
 		unionType.getTargets().add(TypeUtil.ref(Types.NUMBER));
-		final IRUnionType type = (IRUnionType) RTypes.create(unionType);
+		final IRUnionType type = (IRUnionType) RTypes.create(ts, unionType);
 		assertEquals(2, type.getTargets().size());
-		assertTrue(type.getTargets().contains(RTypes.simple(Types.STRING)));
-		assertTrue(type.getTargets().contains(RTypes.simple(Types.NUMBER)));
+		assertTrue(type.getTargets().contains(RTypes.simple(ts, Types.STRING)));
+		assertTrue(type.getTargets().contains(RTypes.simple(ts, Types.NUMBER)));
 	}
 
 	public void testFunctionType() {
@@ -106,19 +118,19 @@ public class RTypeTests extends TestCase implements ITypeNames {
 		parameter.setName("num");
 		parameter.setType(TypeUtil.ref(Types.NUMBER));
 		functionType.getParameters().add(parameter);
-		final IRFunctionType type = (IRFunctionType) RTypes
-				.create(functionType);
-		assertEquals(RTypes.simple(Types.STRING), type.getReturnType());
+		final IRFunctionType type = (IRFunctionType) RTypes.create(ts,
+				functionType);
+		assertEquals(RTypes.simple(ts, Types.STRING), type.getReturnType());
 		assertEquals(1, type.getParameters().size());
-		assertEquals(RTypes.simple(Types.NUMBER), type.getParameters().get(0)
-				.getType());
+		assertEquals(RTypes.simple(ts, Types.NUMBER),
+				type.getParameters().get(0).getType());
 		assertEquals(TypeCompatibility.TRUE,
-				type.isAssignableFrom(RTypes.simple(Types.FUNCTION)));
+				type.isAssignableFrom(RTypes.simple(ts, Types.FUNCTION)));
 	}
 
 	public void testTypeDeclaration() {
-		final IRTypeDeclaration stringType = ((IRSimpleType) RTypes
-				.simple(Types.STRING)).getDeclaration();
+		final IRTypeDeclaration stringType = ((IRSimpleType) RTypes.simple(ts,
+				Types.STRING)).getDeclaration();
 		assertEquals(Types.STRING.getMembers().size(), stringType.getMembers()
 				.size());
 		final IRTypeDeclaration objectType = stringType.getSuperType();

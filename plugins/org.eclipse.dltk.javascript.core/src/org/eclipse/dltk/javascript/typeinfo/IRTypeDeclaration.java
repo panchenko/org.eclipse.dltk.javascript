@@ -18,6 +18,11 @@ import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 
 public interface IRTypeDeclaration extends IRElement {
 
+	/**
+	 * Returns the type system this type was created by.
+	 */
+	ITypeSystem getTypeSystem();
+
 	IRTypeDeclaration getSuperType();
 
 	List<? extends IRTypeDeclaration> getTraits();

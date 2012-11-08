@@ -177,6 +177,7 @@ public class RTypes {
 				.toRType(typeSystem, declaration);
 	}
 
+	@Deprecated
 	public static IRType simple(Type type) {
 		if (Types.ARRAY == type) {
 			return arrayOf(none());
@@ -185,6 +186,7 @@ public class RTypes {
 		}
 	}
 
+	@Deprecated
 	public static IRClassType classType(Type type) {
 		return new RClassType(type);
 	}
@@ -345,6 +347,7 @@ public class RTypes {
 		return new RArrayType(typeSystem, itemType);
 	}
 
+	@Deprecated
 	public static IRType create(JSType type) {
 		ITypeSystem current = ITypeSystem.CURRENT.get();
 		if (current == null) {

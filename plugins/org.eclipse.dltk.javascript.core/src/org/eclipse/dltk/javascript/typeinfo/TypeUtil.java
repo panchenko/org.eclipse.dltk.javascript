@@ -130,22 +130,6 @@ public class TypeUtil {
 		}
 	}
 
-	public static JSType extractArrayItemType(JSType type,
-			ITypeInfoContext context) {
-		if (type instanceof ArrayType) {
-			return ((ArrayType) type).getItemType();
-		} else if (type instanceof MapType) {
-			return ((MapType) type).getValueType();
-		} else if (type != null && type.getName().equals(ITypeNames.XML)) {
-			return type;
-		} else if (type != null && type.getName().equals(ITypeNames.XMLLIST)) {
-			return ref(TypeInfoModelLoader.getInstance()
-					.getType(ITypeNames.XML));
-		} else {
-			return null;
-		}
-	}
-
 	public static IRType extractArrayItemType(IRType type) {
 		if (type instanceof IRArrayType) {
 			return ((IRArrayType) type).getItemType();

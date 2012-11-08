@@ -13,6 +13,7 @@ package org.eclipse.dltk.javascript.internal.core;
 
 import java.util.List;
 
+import org.eclipse.dltk.internal.javascript.ti.TypeSystemImpl;
 import org.eclipse.dltk.javascript.typeinfo.IRMethod;
 import org.eclipse.dltk.javascript.typeinfo.IRParameter;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
@@ -24,7 +25,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 
 public class RMethod extends RMember<Method> implements IRMethod {
 
-	private final List<IRParameter> parameters;
+	private List<IRParameter> parameters;
 
 	public RMethod(Method method, IRType type, List<IRParameter> parameters,
 			IRTypeDeclaration typeDeclaration) {
@@ -32,16 +33,29 @@ public class RMethod extends RMember<Method> implements IRMethod {
 		this.parameters = parameters;
 	}
 
+	public RMethod(Method method, IRTypeDeclaration typeDeclaration) {
+		super(method, typeDeclaration);
+	}
+
+	@Override
+	protected void initialize() {
+		super.initialize();
+		parameters = TypeSystemImpl.convertParameters(getDeclaringType()
+				.getTypeSystem(), member.getParameters());
+	}
+
 	public int getParameterCount() {
+		checkInitialized();
 		return parameters.size();
 	}
 
 	public List<IRParameter> getParameters() {
+		checkInitialized();
 		return parameters;
 	}
 
 	public boolean isTyped() {
-		if (type != null) {
+		if (getType() != null) { // checkInitialized() is called there
 			return true;
 		}
 		for (int i = 0; i < parameters.size(); ++i) {
@@ -56,6 +70,7 @@ public class RMethod extends RMember<Method> implements IRMethod {
 
 	@Override
 	public String toString() {
+		checkInitialized();
 		final StringBuilder sb = new StringBuilder();
 		sb.append(getName()).append('(');
 		for (int i = 0; i < getParameterCount(); ++i) {

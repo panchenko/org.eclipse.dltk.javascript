@@ -20,7 +20,6 @@ import org.eclipse.dltk.compiler.problem.IProblemCategory;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.internal.javascript.ti.TypeSystemImpl;
 import org.eclipse.dltk.javascript.internal.core.RParameter;
-import org.eclipse.dltk.javascript.internal.core.TypeSystems;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMember;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
@@ -256,13 +255,9 @@ public class RModelBuilder {
 		}
 	}
 
-	public static IRMethod contextualize(IRMethod method,
-			IRTypeDeclaration contextType) {
+	public static IRMethod contextualize(ITypeSystem typeSystem,
+			IRMethod method, IRTypeDeclaration contextType) {
 		if (TypeSystemImpl.isContextualizable(method)) {
-			ITypeSystem typeSystem = ITypeSystem.CURRENT.get();
-			if (typeSystem == null) {
-				typeSystem = TypeSystems.WEAK_TYPE_SYSTEM;
-			}
 			final IRTypeTransformer transformer = ((TypeSystemImpl) typeSystem)
 					.newTypeContextualizer(contextType);
 			final List<IRParameter> parameters = TypeSystemImpl

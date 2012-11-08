@@ -21,6 +21,10 @@ import org.eclipse.dltk.javascript.typeinfo.model.Method;
 
 public class RConstructor extends RMethod implements IRConstructor {
 
+	public RConstructor(Method method, IRTypeDeclaration typeDeclaration) {
+		super(method, typeDeclaration);
+	}
+
 	public RConstructor(Method method, IRType type,
 			List<IRParameter> parameters, IRTypeDeclaration typeDeclaration) {
 		super(method, type, parameters, typeDeclaration);

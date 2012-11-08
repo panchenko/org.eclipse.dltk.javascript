@@ -152,7 +152,7 @@ public class TypeSystemImpl implements ITypeSystem {
 		if (!processedTypes.add(type)) {
 			return null;
 		}
-		final RTypeDeclaration declaration = new RTypeDeclaration(type);
+		final RTypeDeclaration declaration = new RTypeDeclaration(this, type);
 		declarations.put(type, declaration);
 		if (TRACE) {
 			log("Creating", declaration, "declarations.size=",
@@ -192,7 +192,7 @@ public class TypeSystemImpl implements ITypeSystem {
 				traits.add(t);
 			}
 		}
-		declaration.setTraits(traits);
+		declaration.setTraits(toImmutableList(traits));
 		final Member[] additionalMembers = type.getAdditionalMembers();
 		final List<IRMember> members = new ArrayList<IRMember>(type
 				.getMembers().size()
@@ -205,18 +205,23 @@ public class TypeSystemImpl implements ITypeSystem {
 				members.add(convertMember(member, declaration));
 			}
 		}
-		declaration.setMembers(members);
+		declaration.setMembers(toImmutableList(members));
 		final List<IRConstructor> constructors = new ArrayList<IRConstructor>(
 				type.getConstructors().size());
 		for (Constructor constructor : type.getConstructors()) {
 			constructors.add(convertConstructor(constructor, declaration));
 		}
-		declaration.setConstructors(constructors);
+		declaration.setConstructors(toImmutableList(constructors));
 		final Constructor staticConstructor = type.getStaticConstructor();
 		if (staticConstructor != null) {
 			declaration.setStaticConstructor(convertConstructor(
 					staticConstructor, declaration));
 		}
+	}
+
+	private static <E> List<E> toImmutableList(List<E> list) {
+		// TODO (alex) introduce real immutable lists
+		return list.isEmpty() ? Collections.<E> emptyList() : list;
 	}
 
 	private void log(Object... args) {
@@ -243,7 +248,13 @@ public class TypeSystemImpl implements ITypeSystem {
 	}
 
 	public IRType getTypeVariable(TypeVariable variable) {
-		return typeVariables.get(variable);
+		for (int i = typeVariables.size(); --i >= 0;) {
+			final IRType type = typeVariables.get(i).getTypeVariable(variable);
+			if (type != null) {
+				return type;
+			}
+		}
+		return null;
 	}
 
 	protected IRMember convertMember(Member member,
@@ -258,32 +269,42 @@ public class TypeSystemImpl implements ITypeSystem {
 
 	private IRMember convertProperty(Property property,
 			IRTypeDeclaration declaration) {
-		return new RProperty(property, convert(property.getType()), declaration);
+		if (declaration != null && isLazy()) {
+			return new RProperty(property, declaration);
+		} else {
+			return new RProperty(property, convert(property.getType()),
+					declaration);
+		}
 	}
 
 	private IRMember convertMethod(Method method, IRTypeDeclaration declaration) {
-		return new RMethod(method, convert(method.getType()),
-				convertParameters(method.getParameters()), declaration);
+		if (declaration != null && isLazy()) {
+			return new RMethod(method, declaration);
+		} else {
+			return new RMethod(method, convert(method.getType()),
+					convertParameters(this, method.getParameters()),
+					declaration);
+		}
 	}
 
 	private IRConstructor convertConstructor(Constructor constructor,
 			RTypeDeclaration declaration) {
-		return new RConstructor(constructor, convert(constructor.getType()),
-				convertParameters(constructor.getParameters()), declaration);
+		return new RConstructor(constructor, declaration); // always lazy
 	}
 
-	private List<IRParameter> convertParameters(List<Parameter> parameters) {
+	public static List<IRParameter> convertParameters(ITypeSystem typeSystem,
+			List<Parameter> parameters) {
 		if (parameters.isEmpty()) {
 			return Collections.emptyList();
 		}
 		final List<IRParameter> result = new ArrayList<IRParameter>(
 				parameters.size());
 		for (Parameter param : parameters) {
-			final IRType type = param.getType() != null ? convert(param
-					.getType()) : RTypes.any();
+			final IRType type = param.getType() != null ? RTypes.create(
+					typeSystem, param.getType()) : RTypes.any();
 			result.add(new RParameter(param.getName(), type, param.getKind()));
 		}
-		return result;
+		return toImmutableList(result);
 	}
 
 	private static class ParameterizedTypeKey {
@@ -356,7 +377,7 @@ public class TypeSystemImpl implements ITypeSystem {
 		}
 	}
 
-	private final Map<TypeVariable, IRType> typeVariables = new HashMap<TypeVariable, IRType>();
+	private final List<RParameterizedTypeDeclaration> typeVariables = new ArrayList<RParameterizedTypeDeclaration>();
 
 	private RTypeDeclaration parameterizeType(GenericType genericType,
 			List<IRType> parameters) {
@@ -372,25 +393,13 @@ public class TypeSystemImpl implements ITypeSystem {
 			log("Creating", key, "parameterized.size=", parameterized.size());
 		}
 		final RParameterizedTypeDeclaration declaration = new RParameterizedTypeDeclaration(
-				genericType, Arrays.asList(key.parameters));
+				this, genericType, Arrays.asList(key.parameters));
 		parameterized.put(key, declaration);
-		final IRType[] oldTypes = new IRType[key.parameters.length];
-		final TypeVariable[] variables = genericType.getTypeParameters()
-				.toArray(new TypeVariable[key.parameters.length]);
-		for (int i = 0; i < key.parameters.length; ++i) {
-			oldTypes[i] = typeVariables.put(variables[i], key.parameters[i]);
-		}
+		typeVariables.add(declaration);
 		try {
 			buildType(declaration, genericType, new HashSet<Type>());
 		} finally {
-			for (int i = 0; i < key.parameters.length; ++i) {
-				final TypeVariable variable = variables[i];
-				if (oldTypes[i] != null) {
-					typeVariables.put(variable, oldTypes[i]);
-				} else {
-					typeVariables.remove(variable);
-				}
-			}
+			typeVariables.remove(typeVariables.size() - 1);
 		}
 		return declaration;
 	}
@@ -494,7 +503,7 @@ public class TypeSystemImpl implements ITypeSystem {
 					parameters.add(parameter);
 				}
 			}
-			return parameters;
+			return toImmutableList(parameters);
 		}
 	}
 
@@ -613,6 +622,14 @@ public class TypeSystemImpl implements ITypeSystem {
 		} else {
 			return type;
 		}
+	}
+
+	public ITypeSystem getPrimary() {
+		return this;
+	}
+
+	protected final boolean isLazy() {
+		return true;
 	}
 
 	private static final boolean TRACE = Boolean.valueOf(

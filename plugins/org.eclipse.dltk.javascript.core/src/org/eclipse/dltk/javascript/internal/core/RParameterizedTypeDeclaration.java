@@ -13,19 +13,32 @@ package org.eclipse.dltk.javascript.internal.core;
 
 import java.util.List;
 
+import org.eclipse.dltk.internal.javascript.ti.IValue;
+import org.eclipse.dltk.javascript.typeinfo.AttributeKey;
+import org.eclipse.dltk.javascript.typeinfo.IRMember;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.IRTypeDeclaration;
+import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.TypeCompatibility;
 import org.eclipse.dltk.javascript.typeinfo.model.GenericType;
+import org.eclipse.dltk.javascript.typeinfo.model.Type;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeVariable;
+import org.eclipse.emf.common.util.EList;
 
-public class RParameterizedTypeDeclaration extends RTypeDeclaration {
+public class RParameterizedTypeDeclaration extends RTypeDeclaration implements
+		ITypeSystem {
 
 	private final List<IRType> typeArguments;
 
-	public RParameterizedTypeDeclaration(GenericType type,
-			List<IRType> typeArguments) {
-		super(type);
+	public RParameterizedTypeDeclaration(ITypeSystem typeSystem,
+			GenericType type, List<IRType> typeArguments) {
+		super(typeSystem, type);
 		this.typeArguments = typeArguments;
+	}
+
+	@Override
+	public ITypeSystem getTypeSystem() {
+		return this;
 	}
 
 	@Override
@@ -108,6 +121,63 @@ public class RParameterizedTypeDeclaration extends RTypeDeclaration {
 			return true;
 		}
 		return false;
+	}
+
+	// ITypeSystem methods
+
+	public Type getKnownType(String typeName) {
+		return typeSystem.getKnownType(typeName);
+	}
+
+	public Type resolveType(Type type) {
+		return typeSystem.resolveType(type);
+	}
+
+	public IValue valueOf(IRMember member) {
+		return typeSystem.valueOf(member);
+	}
+
+	public IRTypeDeclaration convert(Type type) {
+		return typeSystem.convert(type);
+	}
+
+	public <E extends IRMember> E contextualize(E member, IRTypeDeclaration type) {
+		return typeSystem.contextualize(member, type);
+	}
+
+	public IRType contextualize(IRType type, IRTypeDeclaration contextType) {
+		return typeSystem.contextualize(type, contextType);
+	}
+
+	public IRTypeDeclaration parameterize(Type target, List<IRType> parameters) {
+		return typeSystem.parameterize(target, parameters);
+	}
+
+	public IRType getTypeVariable(TypeVariable variable) {
+		final EList<TypeVariable> vars = ((GenericType) getSource())
+				.getTypeParameters();
+		for (int i = 0, size = vars.size(); i < size; ++i) {
+			if (vars.get(i) == variable) {
+				return typeArguments.get(i);
+			}
+		}
+		return null;
+	}
+
+	public <T> T getAttribute(AttributeKey<T> key) {
+		return typeSystem.getAttribute(key);
+	}
+
+	public Object getValue(Object key) {
+		return typeSystem.getValue(key);
+	}
+
+	public void setValue(Object key, Object value) {
+		typeSystem.setValue(key, value);
+	}
+
+	public ITypeSystem getPrimary() {
+		return typeSystem;
 	}
 
 }
