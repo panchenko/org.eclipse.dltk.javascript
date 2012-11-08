@@ -34,6 +34,10 @@ public class Types {
 
 	public static final Type ARRAY = initType(ITypeNames.ARRAY);
 
+	public static final Type XML = initType(ITypeNames.XML);
+
+	public static final Type REGEXP = initType(ITypeNames.REGEXP);
+
 	private static Type initType(String name) {
 		Type type = TypeInfoModelLoader.getInstance().getType(name);
 		if (type == null) {

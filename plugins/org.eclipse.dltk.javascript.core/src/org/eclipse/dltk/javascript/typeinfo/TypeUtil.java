@@ -172,8 +172,7 @@ public class TypeUtil {
 		} else if (type != null && type.getName().equals(ITypeNames.XML)) {
 			return type;
 		} else if (type != null && type.getName().equals(ITypeNames.XMLLIST)) {
-			return RTypes.simple(TypeInfoModelLoader.getInstance().getType(
-					ITypeNames.XML));
+			return E4XTypes.XML;
 		} else {
 			return null;
 		}

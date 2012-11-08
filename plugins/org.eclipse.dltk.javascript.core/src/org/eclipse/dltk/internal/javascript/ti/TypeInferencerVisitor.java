@@ -92,7 +92,6 @@ import org.eclipse.dltk.javascript.ast.YieldOperator;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.core.Types;
 import org.eclipse.dltk.javascript.internal.core.RRecordMember;
-import org.eclipse.dltk.javascript.internal.core.TypeSystems;
 import org.eclipse.dltk.javascript.parser.ISuppressWarningsState;
 import org.eclipse.dltk.javascript.parser.JSParser;
 import org.eclipse.dltk.javascript.parser.PropertyExpressionUtils;
@@ -105,6 +104,7 @@ import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinference.ValueReferenceUtil;
 import org.eclipse.dltk.javascript.typeinfo.CommonSuperTypeFinder;
+import org.eclipse.dltk.javascript.typeinfo.E4XTypes;
 import org.eclipse.dltk.javascript.typeinfo.IMemberEvaluator;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
@@ -235,7 +235,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	@Override
 	public IValueReference visitAsteriskExpression(AsteriskExpression node) {
-		return context.getFactory().createXMLList(peekContext());
+		return new XMLListValue(peekContext());
 	}
 
 	@Override
@@ -784,8 +784,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				final IRType itemType = ((IRMapType) type).getValueType();
 				setIRType(itemReference, itemType, true);
 			} else if (ITypeNames.XMLLIST.equals(type.getName())) {
-				itemReference.setDeclaredType(RTypes.simple(TypeSystems.GLOBAL,
-						context.getType(ITypeNames.XML)));
+				itemReference.setDeclaredType(E4XTypes.XML);
 			}
 		}
 		visit(node.getBody());
@@ -957,7 +956,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	@Override
 	public IValueReference visitGetAllChildrenExpression(
 			GetAllChildrenExpression node) {
-		return context.getFactory().createXMLList(peekContext());
+		return new XMLListValue(peekContext());
 	}
 
 	@Override
@@ -1168,9 +1167,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				Type knownType = context.getKnownType(className, TypeMode.CODE);
 				if (knownType != null) {
 					result.value = new AnonymousNewValue();
-					result.value.setValue(context.getFactory().create(
-							contextValueCollection,
-							RTypes.simple(context, knownType)));
+					result.value.setValue(new ConstantValue(RTypes.simple(
+							context, knownType)));
 					result.value.setKind(ReferenceKind.TYPE);
 				} else {
 					result.value = new LazyTypeReference(context, className,
@@ -1296,7 +1294,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				if (parentType != null && isXML(parentType)) {
 					IValueReference child = parent.getChild(nameStr);
 					if (child != null && child.getDeclaredType() == null) {
-						child.setDeclaredType(JSTypeSet.ref(ITypeNames.XML));
+						child.setDeclaredType(E4XTypes.XML);
 						return child;
 					}
 				}
@@ -1315,7 +1313,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					}
 					IValueReference child = parent.getChild(nameStr);
 					if (child != null && child.getDeclaredType() == null) {
-						child.setDeclaredType(JSTypeSet.ref(ITypeNames.XML));
+						child.setDeclaredType(E4XTypes.XML);
 						return child;
 					}
 				}
@@ -1334,7 +1332,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	@Override
 	public IValueReference visitRegExpLiteral(RegExpLiteral node) {
-		return context.getFactory().createRegExp(peekContext());
+		return new ConstantValue(RTypes.REGEXP);
 	}
 
 	@Override
@@ -1510,12 +1508,9 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	@Override
 	public IValueReference visitXmlLiteral(XmlLiteral node) {
-		IValueReference xmlValueReference = context.getFactory().createXML(
-				peekContext());
+		IValueReference xmlValueReference = new ConstantValue(E4XTypes.XML);
 
 		if (xmlValueReference instanceof IValueProvider) {
-			IRType xmlType = RTypes.simple(TypeSystems.GLOBAL,
-					context.getKnownType(ITypeNames.XML));
 			IValue xmlValue = ((IValueProvider) xmlValueReference).getValue();
 			List<XmlFragment> fragments = node.getFragments();
 			StringBuilder xml = new StringBuilder();
@@ -1562,7 +1557,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 							xmlValue.createChild("@" + attribute.getNodeName(),
 									0);
 						}
-						createXmlChilds(xmlType, xmlValue, item.getChildNodes());
+						createXmlChilds(xmlValue, item.getChildNodes());
 					} else {
 						System.err.println("root should be 1 child?? " + xml);
 					}
@@ -1578,7 +1573,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	 * @param xmlValue
 	 * @param nl
 	 */
-	private void createXmlChilds(IRType xmlType, IValue xmlValue, NodeList nl) {
+	private void createXmlChilds(IValue xmlValue, NodeList nl) {
 		for (int i = 0; i < nl.getLength(); i++) {
 			Node item = nl.item(i);
 			if (item.getNodeType() == Node.TEXT_NODE) {
@@ -1588,7 +1583,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				}
 			}
 			IValue nodeValue = xmlValue.createChild(item.getNodeName(), 0);
-			nodeValue.setDeclaredType(xmlType);
+			nodeValue.setDeclaredType(E4XTypes.XML);
 			NamedNodeMap attributes = item.getAttributes();
 			if (attributes != null) {
 				for (int a = 0; a < attributes.getLength(); a++) {
@@ -1596,14 +1591,14 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					nodeValue.createChild("@" + attribute.getNodeName(), 0);
 				}
 			}
-			createXmlChilds(xmlType, nodeValue, item.getChildNodes());
+			createXmlChilds(nodeValue, item.getChildNodes());
 		}
 	}
 
 	@Override
 	public IValueReference visitXmlPropertyIdentifier(
 			XmlAttributeIdentifier node) {
-		return context.getFactory().createXML(peekContext());
+		return new ConstantValue(E4XTypes.XML);
 	}
 
 	@Override

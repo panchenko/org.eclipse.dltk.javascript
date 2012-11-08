@@ -390,12 +390,6 @@ public class TypeInferencer2 extends TypeSystemImpl implements
 
 	private final TypeResourceSet typeRS = new TypeResourceSet();
 
-	private IValueTypeFactory factory = new ValueTypeFactoryImpl(this);
-
-	public IValueTypeFactory getFactory() {
-		return factory;
-	}
-
 	private boolean resolve = true;
 
 	private Map<String, IRMember> elements = new HashMap<String, IRMember>();

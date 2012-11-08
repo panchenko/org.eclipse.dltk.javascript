@@ -23,9 +23,6 @@ import org.eclipse.dltk.javascript.typeinfo.TypeMode;
 
 public interface ITypeInferenceContext extends ITypeInfoContext, IAdaptable {
 
-	@Deprecated
-	IValueTypeFactory getFactory();
-
 	IRMember resolve(String name);
 
 	Set<String> listGlobals(String prefix);
