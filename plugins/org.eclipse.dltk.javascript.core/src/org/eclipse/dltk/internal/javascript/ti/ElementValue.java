@@ -147,10 +147,10 @@ public abstract class ElementValue implements IValue {
 										(IRProperty) selected,
 										new PrototypeType(context, t));
 							} else {
-								return new PrototypePropertyValue(
-										context,
+								return new PrototypePropertyValue(context,
 										(IRProperty) selected,
-										new PrototypeType(context, Types.OBJECT));
+										new PrototypeType(context,
+												RTypes.OBJECT.getDeclaration()));
 							}
 						}
 						return createElement(context,

@@ -21,7 +21,6 @@ import java.util.Set;
 import org.eclipse.dltk.annotations.NonNull;
 import org.eclipse.dltk.annotations.Nullable;
 import org.eclipse.dltk.javascript.core.Types;
-import org.eclipse.dltk.javascript.typeinfo.model.AnyType;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
 import org.eclipse.dltk.javascript.typeinfo.model.Constructor;
@@ -111,23 +110,6 @@ public class TypeUtil {
 	}
 
 	@Deprecated
-	public static Type extractType(JSType type) {
-		if (type instanceof SimpleType) {
-			return ((SimpleType) type).getTarget();
-		} else if (type instanceof ClassType) {
-			return ((ClassType) type).getTarget();
-		} else if (type instanceof ArrayType) {
-			return Types.ARRAY;
-		} else if (type instanceof MapType) {
-			return Types.OBJECT;
-		} else if (type instanceof AnyType) {
-			return Types.OBJECT;
-		} else {
-			return null;
-		}
-	}
-
-	@Deprecated
 	public static IRTypeDeclaration extractType(ITypeSystem context, IRType type) {
 		if (type instanceof IRSimpleType) {
 			return ((IRSimpleType) type).getDeclaration();
@@ -140,9 +122,9 @@ public class TypeUtil {
 			return context.parameterize(Types.ARRAY,
 					Collections.singletonList(arrayType.getItemType()));
 		} else if (type instanceof IRMapType) {
-			return context.convert(Types.OBJECT);
+			return RTypes.OBJECT.getDeclaration();
 		} else if (type == RTypes.any()) {
-			return context.convert(Types.OBJECT);
+			return RTypes.OBJECT.getDeclaration();
 		} else {
 			return null;
 		}
