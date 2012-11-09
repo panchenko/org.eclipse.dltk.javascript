@@ -19,38 +19,39 @@ import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.javascript.typeinfo.IRMember;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.IRTypeDeclaration;
+import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.RTypes;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Visibility;
 
 public class RMember<E extends Member> implements IRMember {
 	protected final E member;
-	private final IRTypeDeclaration typeDeclaration;
+	private final RTypeDeclaration typeDeclaration;
 	private IRType type;
 	private boolean initialized;
 
 	public RMember(E member, IRTypeDeclaration typeDeclaration) {
 		assert typeDeclaration != null;
 		this.member = member;
-		this.typeDeclaration = typeDeclaration;
+		this.typeDeclaration = (RTypeDeclaration) typeDeclaration;
 	}
 
 	public RMember(E member, IRType type, IRTypeDeclaration typeDeclaration) {
 		this.member = member;
-		this.typeDeclaration = typeDeclaration;
+		this.typeDeclaration = (RTypeDeclaration) typeDeclaration;
 		this.type = type;
 		this.initialized = true;
 	}
 
 	protected synchronized final void checkInitialized() {
 		if (!initialized) {
-			initialize();
+			initialize(typeDeclaration.getEffectiveTypeSystem());
 			initialized = true;
 		}
 	}
 
-	protected void initialize() {
-		type = RTypes.create(typeDeclaration.getTypeSystem(), member.getType());
+	protected void initialize(ITypeSystem typeSystem) {
+		type = RTypes.create(typeSystem, member.getType());
 	}
 
 	public String getName() {

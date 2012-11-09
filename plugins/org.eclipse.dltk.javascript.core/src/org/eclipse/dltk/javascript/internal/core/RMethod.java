@@ -18,6 +18,7 @@ import org.eclipse.dltk.javascript.typeinfo.IRMethod;
 import org.eclipse.dltk.javascript.typeinfo.IRParameter;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.IRTypeDeclaration;
+import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.RTypes;
 import org.eclipse.dltk.javascript.typeinfo.model.GenericMethod;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
@@ -38,10 +39,10 @@ public class RMethod extends RMember<Method> implements IRMethod {
 	}
 
 	@Override
-	protected void initialize() {
-		super.initialize();
-		parameters = TypeSystemImpl.convertParameters(getDeclaringType()
-				.getTypeSystem(), member.getParameters());
+	protected void initialize(ITypeSystem typeSystem) {
+		super.initialize(typeSystem);
+		parameters = TypeSystemImpl.convertParameters(typeSystem,
+				member.getParameters());
 	}
 
 	public int getParameterCount() {

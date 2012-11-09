@@ -48,6 +48,10 @@ public class RTypeDeclaration implements IRTypeDeclaration {
 		this.type = type;
 	}
 
+	protected ITypeSystem getEffectiveTypeSystem() {
+		return typeSystem;
+	}
+
 	public String getName() {
 		return type.getName();
 	}

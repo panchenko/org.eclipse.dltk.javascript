@@ -37,7 +37,7 @@ public class RParameterizedTypeDeclaration extends RTypeDeclaration implements
 	}
 
 	@Override
-	public ITypeSystem getTypeSystem() {
+	protected ITypeSystem getEffectiveTypeSystem() {
 		return this;
 	}
 
