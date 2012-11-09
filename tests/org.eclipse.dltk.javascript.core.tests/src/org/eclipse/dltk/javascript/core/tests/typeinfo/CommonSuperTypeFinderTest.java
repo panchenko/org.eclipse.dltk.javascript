@@ -12,9 +12,6 @@
 package org.eclipse.dltk.javascript.core.tests.typeinfo;
 
 import static java.util.Arrays.asList;
-
-import java.util.Arrays;
-
 import junit.framework.TestCase;
 
 import org.eclipse.dltk.internal.javascript.ti.TypeSystemImpl;

@@ -23,7 +23,6 @@ import org.eclipse.dltk.javascript.typeinference.ValueCollectionFactory;
 import org.eclipse.dltk.javascript.typeinfo.IMemberEvaluator;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
-import org.eclipse.dltk.javascript.typeinfo.model.Member;
 
 public class ExampleMemberEvaluator implements IMemberEvaluator {
 
