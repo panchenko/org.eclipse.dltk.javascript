@@ -18,6 +18,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.dltk.internal.javascript.ti.TypeSystemImpl;
+import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.IRTypeDeclaration;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
@@ -51,7 +52,10 @@ public class WeakTypeSystem extends TypeSystemImpl {
 					purgeJob = new Job(getClass().getSimpleName() + " purge") {
 						@Override
 						protected IStatus run(IProgressMonitor monitor) {
+							final TypeSystemStats stats = stats();
 							reset();
+							JavaScriptPlugin.warning(WeakTypeSystem.class
+									.getSimpleName() + ".reset " + stats);
 							return Status.OK_STATUS;
 						}
 					};

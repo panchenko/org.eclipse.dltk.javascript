@@ -632,6 +632,51 @@ public class TypeSystemImpl implements ITypeSystem {
 		return true;
 	}
 
+	public static class TypeSystemStats {
+		private final int declarationCount;
+		private final int parameterizedCount;
+		private final int contextualizedCount;
+
+		public TypeSystemStats(int declarationCount, int parameterizedCount,
+				int contextualizedCount) {
+			this.declarationCount = declarationCount;
+			this.parameterizedCount = parameterizedCount;
+			this.contextualizedCount = contextualizedCount;
+		}
+
+		public int declarationCount() {
+			return declarationCount;
+		}
+
+		public int parameterizedCount() {
+			return parameterizedCount;
+		}
+
+		public int contextualizedCount() {
+			return contextualizedCount;
+		}
+
+		public boolean isEmpty() {
+			return declarationCount == 0 && parameterizedCount == 0
+					&& contextualizedCount == 0;
+		}
+
+		@Override
+		public String toString() {
+			return getClass().getSimpleName() + "[declarationCount="
+					+ declarationCount + ",parameterizedCount="
+					+ parameterizedCount + ",contextualizedCount="
+					+ contextualizedCount + "]";
+		}
+	}
+
+	public TypeSystemStats stats() {
+		synchronized (lock) {
+			return new TypeSystemStats(declarations.size(),
+					parameterized.size(), contextualized.size());
+		}
+	}
+
 	private static final boolean TRACE = Boolean.valueOf(
 			getDebugOption("org.eclipse.dltk.javascript.core/traceTypeSystem"))
 			.booleanValue();

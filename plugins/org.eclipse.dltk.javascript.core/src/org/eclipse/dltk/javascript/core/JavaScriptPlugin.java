@@ -86,4 +86,11 @@ public class JavaScriptPlugin extends Plugin {
 		}
 	}
 
+	public static void warning(String message) {
+		final JavaScriptPlugin p = plugin;
+		if (p != null) {
+			p.getLog().log(new Status(IStatus.WARNING, PLUGIN_ID, message));
+		}
+	}
+
 }
