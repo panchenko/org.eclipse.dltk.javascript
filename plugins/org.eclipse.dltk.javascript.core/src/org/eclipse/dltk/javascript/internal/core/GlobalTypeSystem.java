@@ -20,14 +20,15 @@ public class GlobalTypeSystem extends TypeSystemImpl {
 
 	@Override
 	public Type resolveType(Type type) {
+		type = super.resolveType(type);
 		if (type != null) {
 			final Resource resource = type.eResource();
-			if (resource != null
-					&& !TypeInfoModelLoader.getInstance().hasResource(resource)) {
+			if (resource == null
+					|| !TypeInfoModelLoader.getInstance().hasResource(resource)) {
 				throw new IllegalArgumentException(type.getName());
 			}
 		}
-		return super.resolveType(type);
+		return type;
 	}
 
 	@Override
