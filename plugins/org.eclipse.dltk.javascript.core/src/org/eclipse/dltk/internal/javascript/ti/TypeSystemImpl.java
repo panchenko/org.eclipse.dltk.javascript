@@ -110,13 +110,18 @@ public class TypeSystemImpl implements ITypeSystem {
 		final ITypeSystem preferred = type.getMetaType()
 				.getPreferredTypeSystem(type);
 		if (preferred != null && preferred != this) {
-			if (preferred instanceof TypeSystemImpl) {
-				return ((TypeSystemImpl) preferred).convert1(type);
-			} else {
-				return preferred.convert(type);
-			}
+			return convertInPreferred(preferred, type);
 		}
 		return convert1(type);
+	}
+
+	private IRTypeDeclaration convertInPreferred(ITypeSystem typeSystem,
+			Type type) {
+		if (typeSystem instanceof TypeSystemImpl) {
+			return ((TypeSystemImpl) typeSystem).convert1(type);
+		} else {
+			return typeSystem.convert(type);
+		}
 	}
 
 	final IRTypeDeclaration convert1(Type type) {
@@ -148,6 +153,12 @@ public class TypeSystemImpl implements ITypeSystem {
 		}
 		if (processedTypes == null) {
 			processedTypes = new HashSet<Type>();
+		} else { // when called for super type/traits
+			final ITypeSystem preferred = type.getMetaType()
+					.getPreferredTypeSystem(type);
+			if (preferred != null && preferred != this) {
+				return (RTypeDeclaration) convertInPreferred(preferred, type);
+			}
 		}
 		if (!processedTypes.add(type)) {
 			return null;
