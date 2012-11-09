@@ -75,8 +75,10 @@ public class CommonSuperTypeFinderTest extends TestCase {
 	}
 
 	public void testArray() {
-		assertEquals(RTypes.arrayOf(a),
-				evaluate(RTypes.arrayOf(b), RTypes.arrayOf(e)));
+		assertEquals(
+				RTypes.arrayOf(typeSystem, a),
+				evaluate(RTypes.arrayOf(typeSystem, b),
+						RTypes.arrayOf(typeSystem, e)));
 	}
 
 	public void testClass() {

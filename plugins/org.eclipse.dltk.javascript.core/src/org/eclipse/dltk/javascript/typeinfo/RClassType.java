@@ -13,6 +13,7 @@ package org.eclipse.dltk.javascript.typeinfo;
 
 import org.eclipse.dltk.annotations.Nullable;
 import org.eclipse.dltk.javascript.core.Types;
+import org.eclipse.dltk.javascript.internal.core.TypeSystems;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.InternalEObject;
@@ -81,7 +82,7 @@ public class RClassType extends RType implements IRClassType {
 		if (type == null) {
 			return RTypes.any();
 		} else if (Types.ARRAY == type) {
-			return RTypes.arrayOf(RTypes.none());
+			return RTypes.arrayOf(TypeSystems.GLOBAL, RTypes.none());
 		} else {
 			return type.toRType(typeSystem);
 		}
@@ -91,7 +92,7 @@ public class RClassType extends RType implements IRClassType {
 		if (type == null) {
 			return RTypes.any();
 		} else if (Types.ARRAY == type) {
-			return RTypes.arrayOf(RTypes.none());
+			return RTypes.arrayOf(TypeSystems.GLOBAL, RTypes.none());
 		} else {
 			return type.createInstance(typeSystem);
 		}

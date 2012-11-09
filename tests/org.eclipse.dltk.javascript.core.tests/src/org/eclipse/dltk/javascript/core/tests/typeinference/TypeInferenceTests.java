@@ -621,7 +621,7 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IValueReference name = collection.getChild("name");
 		assertTrue(name.exists());
 		assertEquals(1, name.getTypes().size());
-		assertEquals(JSTypeSet.singleton(RTypes.arrayOf(RTypes.STRING)),
+		assertEquals(JSTypeSet.singleton(RTypes.arrayOf(ts(), RTypes.STRING)),
 				name.getTypes());
 
 		IValueReference name2 = collection.getChild("name2");
@@ -1073,7 +1073,8 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IValueCollection collection = inference(code.toString());
 		IValueReference child = collection.getChild("x");
 		IRType type = JavaScriptValidations.typeOf(child);
-		assertEquals(RTypes.arrayOf(RTypes.simple(ts(), Types.NUMBER)), type);
+		assertEquals(RTypes.arrayOf(ts(), RTypes.simple(ts(), Types.NUMBER)),
+				type);
 	}
 
 	public void testArrayInitializerWithLiteralStrings() {
@@ -1082,7 +1083,8 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IValueCollection collection = inference(code.toString());
 		IValueReference child = collection.getChild("x");
 		IRType type = JavaScriptValidations.typeOf(child);
-		assertEquals(RTypes.arrayOf(RTypes.simple(ts(), Types.STRING)), type);
+		assertEquals(RTypes.arrayOf(ts(), RTypes.simple(ts(), Types.STRING)),
+				type);
 	}
 
 	public void testArrayInitializerWithLiteralMixed() {
@@ -1091,7 +1093,7 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IValueCollection collection = inference(code.toString());
 		IValueReference child = collection.getChild("x");
 		IRType type = JavaScriptValidations.typeOf(child);
-		assertEquals(RTypes.arrayOf(RTypes.OBJECT), type);
+		assertEquals(RTypes.arrayOf(ts(), RTypes.OBJECT), type);
 	}
 
 	public void testArrayInitializerWithVariableNumbers() {
@@ -1101,7 +1103,8 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IValueCollection collection = inference(code.toString());
 		IValueReference child = collection.getChild("x");
 		IRType type = JavaScriptValidations.typeOf(child);
-		assertEquals(RTypes.arrayOf(RTypes.simple(ts(), Types.NUMBER)), type);
+		assertEquals(RTypes.arrayOf(ts(), RTypes.simple(ts(), Types.NUMBER)),
+				type);
 	}
 
 	public void testArrayInitializerWithVariableAndLiteralNumbers() {
@@ -1111,7 +1114,8 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IValueCollection collection = inference(code.toString());
 		IValueReference child = collection.getChild("x");
 		IRType type = JavaScriptValidations.typeOf(child);
-		assertEquals(RTypes.arrayOf(RTypes.simple(ts(), Types.NUMBER)), type);
+		assertEquals(RTypes.arrayOf(ts(), RTypes.simple(ts(), Types.NUMBER)),
+				type);
 	}
 
 	public void testArrayInitializerWithVariableStrings() {
@@ -1121,7 +1125,8 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IValueCollection collection = inference(code.toString());
 		IValueReference child = collection.getChild("x");
 		IRType type = JavaScriptValidations.typeOf(child);
-		assertEquals(RTypes.arrayOf(RTypes.simple(ts(), Types.STRING)), type);
+		assertEquals(RTypes.arrayOf(ts(), RTypes.simple(ts(), Types.STRING)),
+				type);
 	}
 
 	public void testArrayInitializerWithVariableAndLiteralStrings() {
@@ -1131,7 +1136,8 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IValueCollection collection = inference(code.toString());
 		IValueReference child = collection.getChild("x");
 		IRType type = JavaScriptValidations.typeOf(child);
-		assertEquals(RTypes.arrayOf(RTypes.simple(ts(), Types.STRING)), type);
+		assertEquals(RTypes.arrayOf(ts(), RTypes.simple(ts(), Types.STRING)),
+				type);
 	}
 
 	public void testArrayInRecordTypeVariableLookup() {

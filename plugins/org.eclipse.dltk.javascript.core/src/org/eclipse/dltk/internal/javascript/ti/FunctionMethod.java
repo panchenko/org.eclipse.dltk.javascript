@@ -19,6 +19,7 @@ import java.util.List;
 import org.eclipse.dltk.javascript.core.Types;
 import org.eclipse.dltk.javascript.internal.core.RMethod;
 import org.eclipse.dltk.javascript.internal.core.RParameter;
+import org.eclipse.dltk.javascript.internal.core.TypeSystems;
 import org.eclipse.dltk.javascript.typeinfo.IRFunctionType;
 import org.eclipse.dltk.javascript.typeinfo.IRMethod;
 import org.eclipse.dltk.javascript.typeinfo.IRParameter;
@@ -33,8 +34,9 @@ public enum FunctionMethod {
 			return Arrays.<IRParameter> asList(
 					new RParameter(FUNCTION_THIS_ARG, RTypes.any(),
 							ParameterKind.OPTIONAL),
-					new RParameter(FUNCTION_ARG_ARRAY, RTypes.arrayOf(RTypes
-							.any()), ParameterKind.OPTIONAL));
+					new RParameter(FUNCTION_ARG_ARRAY, RTypes.arrayOf(
+							TypeSystems.GLOBAL, RTypes.any()),
+							ParameterKind.OPTIONAL));
 		}
 	},
 	call {

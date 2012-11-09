@@ -56,7 +56,7 @@ public class RTypeTests extends TestCase {
 	public void testAssignableJavaScriptObject() {
 		final IRType object = simple(ts, Types.OBJECT);
 		assertEquals(TypeCompatibility.TRUE,
-				object.isAssignableFrom(arrayOf(simple(ts, Types.STRING))));
+				object.isAssignableFrom(arrayOf(ts, simple(ts, Types.STRING))));
 		assertEquals(
 				TypeCompatibility.TRUE,
 				object.isAssignableFrom(RTypes.functionType(

@@ -228,8 +228,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		if (types.isEmpty()) {
 			return new ConstantValue(RTypes.arrayOf());
 		} else {
-			return new ConstantValue(RTypes.arrayOf(CommonSuperTypeFinder
-					.evaluate(types)));
+			return new ConstantValue(RTypes.arrayOf(context,
+					CommonSuperTypeFinder.evaluate(types)));
 		}
 	}
 
@@ -503,8 +503,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			return normalizeCapture(captures.get(variable));
 		} else if (type instanceof ArrayType) {
 			final JSType itemType = ((ArrayType) type).getItemType();
-			return JSTypeSet.singleton(RTypes.arrayOf(evaluateReturnType(
-					itemType, captures).toRType()));
+			return JSTypeSet.singleton(RTypes.arrayOf(context,
+					evaluateReturnType(itemType, captures).toRType()));
 		} else if (type instanceof ParameterizedType) {
 			final ParameterizedType parameterized = (ParameterizedType) type;
 			final List<IRType> params = new ArrayList<IRType>(parameterized

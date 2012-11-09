@@ -73,7 +73,8 @@ public class TypeParameterizerTests extends TestCase {
 		{
 			final IRMethod filter = declaration.findMethod("filter", false);
 			assertNotNull(filter);
-			assertEquals(RTypes.arrayOf(RTypes.STRING), filter.getType());
+			assertEquals(RTypes.arrayOf(typeSystem, RTypes.STRING),
+					filter.getType());
 			assertEquals(1, filter.getParameterCount());
 			assertEquals(RTypes.FUNCTION, filter.getParameters().get(0)
 					.getType());
@@ -186,5 +187,18 @@ public class TypeParameterizerTests extends TestCase {
 				}
 			}
 		}
+	}
+
+	public void testX() throws Exception {
+		final Type amount = eINSTANCE.createType();
+		amount.setName("Amount");
+
+		final ITypeSystem globalTS = RTypes.OBJECT.getDeclaration()
+				.getTypeSystem();
+		final IRTypeDeclaration declaration = globalTS.parameterize(
+				Types.ARRAY,
+				Collections.singletonList(RTypes.simple(typeSystem, amount)));
+
+		// System.out.println(declaration.getTypeSystem().getPrimary());
 	}
 }

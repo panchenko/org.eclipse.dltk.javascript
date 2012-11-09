@@ -180,7 +180,7 @@ public class RTypes {
 	@Deprecated
 	public static IRType simple(Type type) {
 		if (Types.ARRAY == type) {
-			return arrayOf(none());
+			return arrayOf(TypeSystems.GLOBAL, none());
 		} else {
 			return type.toRType(null);
 		}
@@ -338,6 +338,7 @@ public class RTypes {
 	/**
 	 * Creates new instance of the array type with the specified itemType.
 	 */
+	@Deprecated
 	public static IRArrayType arrayOf(final IRType itemType) {
 		return new RArrayType(itemType != null ? itemType : none());
 	}
