@@ -17,6 +17,7 @@ import java.util.Collection;
 
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
+import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -136,6 +137,27 @@ public class MethodImpl extends MemberImpl implements Method {
 		}
 		return null;
 	}
+
+    /**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated NOT
+	 */
+    public Parameter getParameterFor(int position) {
+		if (position < 0) {
+			return null;
+		}
+		final EList<Parameter> params = getParameters();
+		if (position < params.size()) {
+			return params.get(position);
+		} else if (!params.isEmpty()) {
+			final Parameter last = params.get(params.size() - 1);
+			if (last.getKind() == ParameterKind.VARARGS) {
+				return last;
+			}
+		}
+		return null;
+    }
 
     /**
      * <!-- begin-user-doc -->

@@ -83,4 +83,15 @@ public interface Method extends Member {
      */
     Parameter getParameter(String name);
 
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * <!-- begin-model-doc -->
+     * Returns the parameter matching the specified position (e.g. it can return vararg parameter if position exceeds the number of declared parameters) or null if position is not correct.
+     * <!-- end-model-doc -->
+     * @model
+     * @generated
+     */
+    Parameter getParameterFor(int position);
+
 } // Method
