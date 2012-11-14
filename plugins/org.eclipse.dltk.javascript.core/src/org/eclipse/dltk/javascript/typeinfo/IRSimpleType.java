@@ -14,6 +14,9 @@ package org.eclipse.dltk.javascript.typeinfo;
 import org.eclipse.dltk.annotations.NonNull;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
+/**
+ * Resolved type expression representing <em>simple type reference</em>.
+ */
 public interface IRSimpleType extends IRType {
 
 	@NonNull

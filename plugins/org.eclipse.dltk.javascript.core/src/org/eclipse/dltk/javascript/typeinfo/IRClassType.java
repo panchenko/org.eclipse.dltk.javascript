@@ -14,6 +14,10 @@ package org.eclipse.dltk.javascript.typeinfo;
 import org.eclipse.dltk.annotations.Nullable;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
+/**
+ * Resolved type expression represented <em>class reference</em> - kind of
+ * static reference to the type.
+ */
 public interface IRClassType extends IRType {
 
 	@Nullable

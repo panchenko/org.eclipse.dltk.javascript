@@ -19,7 +19,7 @@ import org.eclipse.dltk.javascript.typeinference.IValueReference;
  * Optional interface which can be implemented by {@link IRType} instance to
  * allow checking assignments from the "raw" type inferencer data.
  */
-public interface IRTypeExtension extends IRType {
+public interface IRTypeExtension {
 
 	/**
 	 * Determines if this type could be assigned from the specified value.

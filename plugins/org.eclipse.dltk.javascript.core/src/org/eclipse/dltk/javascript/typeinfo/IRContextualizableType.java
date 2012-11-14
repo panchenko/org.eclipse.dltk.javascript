@@ -11,7 +11,12 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo;
 
-public interface IRContextualizableType extends IRType {
+/**
+ * Optional interface to be implemented by {@link IRType} instances if they
+ * represent references like <em>{This}</em> which should be contextualized with
+ * the actual type before usage.
+ */
+public interface IRContextualizableType {
 
 	boolean isContextualizable();
 
