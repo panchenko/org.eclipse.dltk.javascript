@@ -463,8 +463,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		final boolean genericParams[] = new boolean[method.getParameters()
 				.size()];
 		for (int i = 0; i < method.getParameters().size(); ++i) {
-			genericParams[i] = isGenericType(method.getParameters().get(i)
-					.getType());
+			genericParams[i] = TypeUtil.containsTypeVariables(method
+					.getParameters().get(i).getType());
 		}
 		final Map<TypeVariable, JSTypeSet> captures = new HashMap<TypeVariable, JSTypeSet>();
 		for (TypeVariable variable : method.getTypeParameters()) {
@@ -556,7 +556,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		}
 	}
 
-	private static final TypeInfoModelSwitch<Boolean> GENERIC_TYPE_EXPRESSION = new TypeInfoModelSwitch<Boolean>() {
+	public static final TypeInfoModelSwitch<Boolean> GENERIC_TYPE_EXPRESSION = new TypeInfoModelSwitch<Boolean>() {
 		@Override
 		public Boolean doSwitch(EObject theEObject) {
 			return theEObject != null ? super.doSwitch(theEObject) : null;
@@ -612,14 +612,6 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			return doSwitch(object.getReturnType());
 		}
 	};
-
-	private boolean isGenericType(JSType type) {
-		if (type != null) {
-			final Boolean result = GENERIC_TYPE_EXPRESSION.doSwitch(type);
-			return result != null && result.booleanValue();
-		}
-		return false;
-	}
 
 	@Override
 	public IValueReference visitCommaExpression(CommaExpression node) {

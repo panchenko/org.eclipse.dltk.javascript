@@ -20,6 +20,7 @@ import java.util.Set;
 
 import org.eclipse.dltk.annotations.NonNull;
 import org.eclipse.dltk.annotations.Nullable;
+import org.eclipse.dltk.internal.javascript.ti.TypeInferencerVisitor;
 import org.eclipse.dltk.javascript.core.Types;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
@@ -357,6 +358,18 @@ public class TypeUtil {
 				.createTypeVariableReference();
 		reference.setVariable(variable);
 		return reference;
+	}
+
+	/**
+	 * Checks if the specified type expression contains type variables.
+	 */
+	public static boolean containsTypeVariables(JSType type) {
+		if (type != null) {
+			final Boolean result = TypeInferencerVisitor.GENERIC_TYPE_EXPRESSION
+					.doSwitch(type);
+			return result != null && result.booleanValue();
+		}
+		return false;
 	}
 
 }
