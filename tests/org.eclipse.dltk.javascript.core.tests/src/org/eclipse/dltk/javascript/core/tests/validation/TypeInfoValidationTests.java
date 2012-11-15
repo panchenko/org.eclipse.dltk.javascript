@@ -2619,7 +2619,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(problems.toString(), 0, problems.size());
 	}
 
-	public void testCopy() {
+	public void testGenericCopyMethod() {
 		final StringList code = new StringList();
 		code.add("/** @param {String} value */");
 		code.add("function testStr(value) {}");
