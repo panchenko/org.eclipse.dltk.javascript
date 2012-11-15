@@ -75,6 +75,10 @@ public abstract class RType implements IRType {
 		return true;
 	}
 
+	public boolean isSynthetic() {
+		return false;
+	}
+
 	public IRType transform(IRTypeTransformer function) {
 		return this;
 	}

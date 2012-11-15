@@ -123,6 +123,11 @@ public class RTypes {
 		public boolean isExtensible() {
 			return true;
 		}
+
+		@Override
+		public boolean isSynthetic() {
+			return true;
+		}
 	}
 
 	/**

@@ -70,6 +70,12 @@ public interface IRType {
 	boolean isJavaScriptObject();
 
 	/**
+	 * Answers if this type is "synthetic", i.e. not specified type variable or
+	 * other special markers.
+	 */
+	boolean isSynthetic();
+
+	/**
 	 * Transforms the type using the specified function.
 	 */
 	IRType transform(IRTypeTransformer function);

@@ -46,6 +46,11 @@ public class RClassVariable extends RType {
 	}
 
 	@Override
+	public boolean isSynthetic() {
+		return true;
+	}
+
+	@Override
 	public int hashCode() {
 		return variable.hashCode();
 	}
