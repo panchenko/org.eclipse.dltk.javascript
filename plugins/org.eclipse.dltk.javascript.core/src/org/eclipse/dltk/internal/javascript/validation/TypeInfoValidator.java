@@ -14,7 +14,7 @@ package org.eclipse.dltk.internal.javascript.validation;
 import static org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes.PHANTOM;
 import static org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes.R_METHOD;
 import static org.eclipse.dltk.internal.javascript.validation.JavaScriptValidations.typeOf;
-import static org.eclipse.dltk.internal.javascript.validation.RUtils.locationOf;
+import static org.eclipse.dltk.javascript.typeinfo.RUtils.locationOf;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -851,9 +851,8 @@ public class TypeInfoValidator implements IBuildParticipant,
 								method);
 						return null;
 					}
-					final JSTypeSet result = evaluateGenericCall(method,
-							arguments);
-					return result != null ? new ConstantValue(result) : null;
+					final IRType result = evaluateGenericCall(method, arguments);
+					return ConstantValue.of(result);
 				} else {
 					pushExpressionValidator(new CallExpressionValidator(
 							peekFunctionScope(), node, reference, arguments,

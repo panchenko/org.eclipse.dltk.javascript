@@ -13,10 +13,8 @@ package org.eclipse.dltk.internal.javascript.ti;
 
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
@@ -105,6 +103,7 @@ import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinference.ValueReferenceUtil;
 import org.eclipse.dltk.javascript.typeinfo.CommonSuperTypeFinder;
 import org.eclipse.dltk.javascript.typeinfo.E4XTypes;
+import org.eclipse.dltk.javascript.typeinfo.GenericMethodTypeInferencer;
 import org.eclipse.dltk.javascript.typeinfo.IMemberEvaluator;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
@@ -138,11 +137,9 @@ import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.MapType;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterizedType;
-import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeVariable;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeVariableClassType;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeVariableReference;
 import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
@@ -399,11 +396,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			if (methods != null && methods.size() == 1) {
 				final IRMethod method = methods.get(0);
 				if (method.isGeneric()) {
-					final JSTypeSet type = evaluateGenericCall(method,
-							arguments);
-					if (type != null) {
-						return new ConstantValue(type);
-					}
+					final IRType type = evaluateGenericCall(method, arguments);
+					return ConstantValue.of(type);
 				} else {
 					return ConstantValue.of(method.getType());
 				}
@@ -443,117 +437,35 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		return getContext();
 	}
 
-	protected JSTypeSet evaluateGenericCall(IRMethod rMethod,
+	protected IRType evaluateGenericCall(IRMethod rMethod,
 			IValueReference[] arguments) {
 		assert rMethod.isGeneric();
 		final GenericMethod method = (GenericMethod) rMethod.getSource();
-		final JSTypeSet[] argTypes = new JSTypeSet[arguments.length];
+		final GenericMethodTypeInferencer methodTypeInferencer = new GenericMethodTypeInferencer(
+				context, method);
 		for (int i = 0; i < arguments.length; ++i) {
-			final IValueReference argument = arguments[i];
-			if (argument != null) {
-				argTypes[i] = argument.getDeclaredTypes();
-				if (argTypes[i].isEmpty()) {
-					argTypes[i] = argument.getTypes();
-				}
-			} else {
-				argTypes[i] = JSTypeSet.emptySet();
-			}
-		}
-		// TODO (alex) can be pre-evaluated in GenericParameter objects.
-		final boolean genericParams[] = new boolean[method.getParameters()
-				.size()];
-		for (int i = 0; i < method.getParameters().size(); ++i) {
-			genericParams[i] = TypeUtil.containsTypeVariables(method
-					.getParameters().get(i).getType());
-		}
-		final Map<TypeVariable, JSTypeSet> captures = new HashMap<TypeVariable, JSTypeSet>();
-		for (TypeVariable variable : method.getTypeParameters()) {
-			captures.put(variable, JSTypeSet.create());
-		}
-		for (int i = 0; i < argTypes.length; ++i) {
-			final int index = i < method.getParameters().size() ? i : method
-					.getParameters().size() - 1;
-			final Parameter parameter = method.getParameters().get(index);
-			if (genericParams[index]) {
-				final Capture capture = capture(parameter.getType(),
-						argTypes[i]);
-				if (capture != null) {
-					final JSTypeSet captured = captures.get(capture.variable);
-					if (captured != null) {
-						captured.addAll(capture.types);
+			final Parameter parameter = method.getParameterFor(i);
+			if (parameter != null) {
+				// parameter count is checked in ValidationVisitor
+				// TODO (alex) can be pre-evaluated in GenericParameter objects.
+				if (TypeUtil.containsTypeVariables(parameter.getType())) {
+					final IValueReference argument = arguments[i];
+					JSTypeSet argTypes;
+					if (argument != null) {
+						argTypes = argument.getDeclaredTypes();
+						if (argTypes.isEmpty()) {
+							argTypes = argument.getTypes();
+						}
+					} else {
+						argTypes = JSTypeSet.emptySet();
 					}
-				}
-			} else {
-				// TODO (alex) check parameter compatibility
-			}
-		}
-		if (method.getType() != null) {
-			// TODO (alex) optimize if return type is not parameterized
-			return evaluateReturnType(method.getType(), captures);
-		} else {
-			return null;
-		}
-	}
-
-	private JSTypeSet evaluateReturnType(JSType type,
-			Map<TypeVariable, JSTypeSet> captures) {
-		if (type instanceof TypeVariableReference) {
-			final TypeVariable variable = ((TypeVariableReference) type)
-					.getVariable();
-			return normalizeCapture(captures.get(variable));
-		} else if (type instanceof ArrayType) {
-			final JSType itemType = ((ArrayType) type).getItemType();
-			return JSTypeSet.singleton(RTypes.arrayOf(context,
-					evaluateReturnType(itemType, captures).toRType()));
-		} else if (type instanceof ParameterizedType) {
-			final ParameterizedType parameterized = (ParameterizedType) type;
-			final List<IRType> params = new ArrayList<IRType>(parameterized
-					.getActualTypeArguments().size());
-			for (JSType param : parameterized.getActualTypeArguments()) {
-				params.add(evaluateReturnType(param, captures).toRType());
-			}
-			final IRTypeDeclaration declaration = getContext().parameterize(
-					parameterized.getTarget(), params);
-			return JSTypeSet
-					.singleton(RTypes.simple(getContext(), declaration));
-		} else if (type instanceof SimpleType) {
-			return JSTypeSet.create(RTypes.create(getContext(), type));
-		} else {
-			return JSTypeSet.emptySet();
-		}
-	}
-
-	private JSTypeSet normalizeCapture(JSTypeSet types) {
-		return types;
-	}
-
-	private static class Capture {
-		final TypeVariable variable;
-		final JSTypeSet types;
-
-		public Capture(TypeVariable variable, JSTypeSet types) {
-			this.variable = variable;
-			this.types = types;
-		}
-	}
-
-	private Capture capture(JSType paramType, JSTypeSet argTypes) {
-		if (paramType instanceof TypeVariableReference) {
-			return new Capture(
-					((TypeVariableReference) paramType).getVariable(), argTypes);
-		} else if (paramType instanceof TypeVariableClassType) {
-			final JSTypeSet result = JSTypeSet.create();
-			for (IRType type : argTypes) {
-				if (type instanceof IRClassType) {
-					result.add(((IRClassType) type).toItemType());
+					methodTypeInferencer.capture(parameter.getType(), argTypes);
+				} else {
+					// TODO (alex) check parameter compatibility
 				}
 			}
-			return new Capture(
-					((TypeVariableClassType) paramType).getVariable(), result);
-		} else {
-			// TODO alex other type expressions
-			return null;
 		}
+		return RTypes.create(methodTypeInferencer, method.getType());
 	}
 
 	public static final TypeInfoModelSwitch<Boolean> GENERIC_TYPE_EXPRESSION = new TypeInfoModelSwitch<Boolean>() {
@@ -588,6 +500,17 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				return result;
 			}
 			return doSwitch(object.getValueType());
+		}
+
+		@Override
+		public Boolean caseParameterizedType(ParameterizedType object) {
+			for (JSType type : object.getActualTypeArguments()) {
+				final Boolean result = doSwitch(type);
+				if (result == Boolean.TRUE) {
+					return result;
+				}
+			}
+			return Boolean.FALSE;
 		}
 
 		@Override

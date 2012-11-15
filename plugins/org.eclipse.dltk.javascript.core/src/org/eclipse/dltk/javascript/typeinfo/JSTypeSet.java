@@ -18,10 +18,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.eclipse.dltk.javascript.core.Types;
-import org.eclipse.dltk.javascript.internal.core.TypeSystems;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 
 public abstract class JSTypeSet implements Iterable<IRType> {
 
@@ -78,7 +76,7 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 		}
 
 		@Override
-		public void addAll(JSTypeSet types) {
+		public void addAll(Iterable<IRType> types) {
 			throw new UnsupportedOperationException();
 		}
 
@@ -187,7 +185,7 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 		}
 
 		@Override
-		public void addAll(JSTypeSet types) {
+		public void addAll(Iterable<IRType> types) {
 			throw new UnsupportedOperationException();
 		}
 
@@ -321,7 +319,7 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 		}
 
 		@Override
-		public void addAll(JSTypeSet types) {
+		public void addAll(Iterable<IRType> types) {
 			for (IRType type : types) {
 				add(type);
 			}
@@ -373,6 +371,23 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 		}
 	}
 
+	public static JSTypeSet of(Iterable<? extends IRType> argTypes) {
+		if (argTypes instanceof JSTypeSet) {
+			return (JSTypeSet) argTypes;
+		} else {
+			final Iterator<? extends IRType> i = argTypes.iterator();
+			if (i.hasNext()) {
+				final JSTypeSet result = create();
+				do {
+					result.add(i.next());
+				} while (i.hasNext());
+				return result;
+			} else {
+				return emptySet();
+			}
+		}
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof JSTypeSet) {
@@ -399,7 +414,7 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 
 	public abstract int size();
 
-	public abstract void addAll(JSTypeSet types);
+	public abstract void addAll(Iterable<IRType> types);
 
 	public abstract boolean isEmpty();
 

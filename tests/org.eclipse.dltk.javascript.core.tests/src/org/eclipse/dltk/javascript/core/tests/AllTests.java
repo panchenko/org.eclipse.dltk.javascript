@@ -20,6 +20,7 @@ import org.eclipse.dltk.javascript.core.tests.search.SearchTypeReferenceTests;
 import org.eclipse.dltk.javascript.core.tests.structure.JSLintModelTests;
 import org.eclipse.dltk.javascript.core.tests.structure.StructureParserTests;
 import org.eclipse.dltk.javascript.core.tests.typeinference.TypeInferenceTests;
+import org.eclipse.dltk.javascript.core.tests.typeinfo.GenericMethodTypeInferenceTest;
 import org.eclipse.dltk.javascript.core.tests.typeinfo.JSDocSupportTests;
 import org.eclipse.dltk.javascript.core.tests.typeinfo.JSDocTypeParserTests;
 import org.eclipse.dltk.javascript.core.tests.typeinfo.CommonSuperTypeFinderTest;
@@ -76,6 +77,7 @@ public class AllTests {
 		suite.addTest(SearchFunctionTests.suite());
 		suite.addTest(SearchExternalLibraryTests.suite());
 		suite.addTestSuite(VariableRemoveTest.class);
+		suite.addTestSuite(GenericMethodTypeInferenceTest.class);
 		// $JUnit-END$
 		return suite;
 	}
