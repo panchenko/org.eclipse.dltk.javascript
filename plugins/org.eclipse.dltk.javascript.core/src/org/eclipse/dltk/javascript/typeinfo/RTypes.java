@@ -138,7 +138,7 @@ public class RTypes {
 	 * Returns the instance of the <b>empty array literal</b>.
 	 */
 	public static IRArrayType arrayOf() {
-		return arrayOf(EMPTY_ARRAY_ITEM_TYPE);
+		return arrayOf(TypeSystems.GLOBAL, EMPTY_ARRAY_ITEM_TYPE);
 	}
 
 	static final IRType EMPTY_ARRAY_ITEM_TYPE = new EmptyArrayItem();
