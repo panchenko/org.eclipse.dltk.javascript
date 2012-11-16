@@ -139,4 +139,12 @@ public class RTypeTests extends TestCase {
 				.size());
 	}
 
+	public void testAssignableFunction() {
+		final FunctionType functionType = TIMF.createFunctionType();
+		functionType.setReturnType(TypeUtil.ref(Types.NUMBER));
+		final IRType f = RTypes.create(ts, functionType);
+		assertEquals(TypeCompatibility.TRUE,
+				RTypes.FUNCTION.isAssignableFrom(f));
+	}
+
 }
