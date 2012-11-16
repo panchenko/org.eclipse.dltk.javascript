@@ -339,7 +339,7 @@ public class TypeInfoValidator implements IBuildParticipant,
 									node.sourceStart(), node.sourceEnd());
 				}
 				if (firstType == null && type != null) {
-					firstType = type;
+					firstType = type.normalize();
 				}
 			}
 
@@ -348,19 +348,21 @@ public class TypeInfoValidator implements IBuildParticipant,
 					ReturnNode next = lst.get(i);
 					IRType nextType = JavaScriptValidations
 							.typeOf(next.returnValueReference);
-					if (nextType != null
-							&& (!nextType.isAssignableFrom(firstType).ok() && !firstType
-									.isAssignableFrom(nextType).ok())) {
-						visitor.getProblemReporter()
-								.reportProblem(
-										JavaScriptProblems.RETURN_INCONSISTENT,
-										NLS.bind(
-												ValidationMessages.ReturnTypeInconsistentWithPreviousReturn,
-												new String[] {
-														TypeUtil.getName(nextType),
-														TypeUtil.getName(firstType) }),
-										next.node.sourceStart(),
-										next.node.sourceEnd());
+					if (nextType != null) {
+						nextType = nextType.normalize();
+						if (!nextType.isAssignableFrom(firstType).ok()
+								&& !firstType.isAssignableFrom(nextType).ok()) {
+							visitor.getProblemReporter()
+									.reportProblem(
+											JavaScriptProblems.RETURN_INCONSISTENT,
+											NLS.bind(
+													ValidationMessages.ReturnTypeInconsistentWithPreviousReturn,
+													new String[] {
+															TypeUtil.getName(nextType),
+															TypeUtil.getName(firstType) }),
+											next.node.sourceStart(),
+											next.node.sourceEnd());
+						}
 					}
 				}
 			}
@@ -2236,13 +2238,14 @@ public class TypeInfoValidator implements IBuildParticipant,
 						if (result == ValidationStatus.OK) {
 							return;
 						} else {
-							IRMember rMember = memberValidationEvent.getRMember();
+							IRMember rMember = memberValidationEvent
+									.getRMember();
 							JavaScriptValidations.reportValidationStatus(
 									reporter, result, expression,
 									JavaScriptProblems.INACCESSIBLE_MEMBER,
-									ValidationMessages.InaccessibleMember,rMember == null?reference.getName():
-									rMember
-											.getName());
+									ValidationMessages.InaccessibleMember,
+									rMember == null ? reference.getName()
+											: rMember.getName());
 							return;
 						}
 					}
