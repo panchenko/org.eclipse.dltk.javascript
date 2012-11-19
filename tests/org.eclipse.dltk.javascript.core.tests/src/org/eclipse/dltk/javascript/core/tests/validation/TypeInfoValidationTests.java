@@ -2633,4 +2633,24 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(problems.toString(), 0, problems.size());
 	}
 
+	public void testMapRecordCompatibilityOK() {
+		final StringList code = new StringList();
+		code.add("/** @param {Object<Number>} m */");
+		code.add("function withMap(m) {}");
+		code.add("withMap({ a: 1, b: 2, c: 3 })");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+
+	public void testMapRecordCompatibilityError() {
+		final StringList code = new StringList();
+		code.add("/** @param {Object<Number>} m */");
+		code.add("function withMap(m) {}");
+		code.add("withMap({ a: 1, b: 2, c: '' })");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JavaScriptProblems.WRONG_PARAMETERS, problems.get(0)
+				.getID());
+	}
+
 }

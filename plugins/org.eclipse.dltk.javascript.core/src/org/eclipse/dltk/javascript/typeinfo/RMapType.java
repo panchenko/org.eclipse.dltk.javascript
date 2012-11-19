@@ -63,6 +63,19 @@ class RMapType extends RType implements IRMapType {
 		}
 		if (type instanceof RMapType) {
 			return valueType.isAssignableFrom(((RMapType) type).valueType);
+		} else if (type instanceof IRRecordType) {
+			TypeCompatibility result = TypeCompatibility.TRUE;
+			for (IRRecordMember member : ((IRRecordType) type).getMembers()) {
+				final TypeCompatibility compatibility = valueType
+						.isAssignableFrom(member.getType());
+				if (compatibility == TypeCompatibility.FALSE) {
+					return compatibility;
+				} else if (compatibility != result
+						&& compatibility.after(result)) {
+					result = compatibility;
+				}
+			}
+			return result;
 		}
 		return TypeCompatibility.FALSE;
 	}
