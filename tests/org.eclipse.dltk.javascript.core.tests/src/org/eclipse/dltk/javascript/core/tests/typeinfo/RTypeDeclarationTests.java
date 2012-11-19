@@ -95,4 +95,24 @@ public class RTypeDeclarationTests extends TestCase {
 				arrayOfString.isAssignableFrom(listOfString));
 	}
 
+	public void testAssignableFromParameterized() {
+		final GenericType listType = TypeInfoModelFactory.eINSTANCE
+				.createGenericType();
+		listType.setName("List");
+		final TypeVariable variable = TypeInfoModelFactory.eINSTANCE
+				.createTypeVariable();
+		variable.setName("T");
+		listType.getTypeParameters().add(variable);
+
+		final IRTypeDeclaration list = typeSystem.convert(listType);
+
+		final IRTypeDeclaration listOfString = typeSystem.parameterize(
+				listType, singletonList(simple(typeSystem, STRING)));
+
+		assertEquals(TypeCompatibility.TRUE,
+				list.isAssignableFrom(listOfString));
+		assertEquals(TypeCompatibility.TRUE,
+				listOfString.isAssignableFrom(list));
+	}
+
 }
