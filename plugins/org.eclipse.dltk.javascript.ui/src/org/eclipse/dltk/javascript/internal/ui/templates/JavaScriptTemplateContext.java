@@ -26,6 +26,7 @@ import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.TextUtilities;
+import org.eclipse.jface.text.templates.GlobalTemplateVariables;
 import org.eclipse.jface.text.templates.Template;
 import org.eclipse.jface.text.templates.TemplateBuffer;
 import org.eclipse.jface.text.templates.TemplateContextType;
@@ -59,9 +60,9 @@ public class JavaScriptTemplateContext extends ScriptTemplateContext {
 					TextUtilities.getDefaultLineDelimiter(getDocument()),
 					factory.retrievePreferences(getPreferences()));
 			try {
-				final Map<String, String> remeberedVariables = new HashMap<String, String>();
+				final Map<String, String> rememberedVariables = new HashMap<String, String>();
 				final String encoded = encodeVariables(template.getPattern(),
-						remeberedVariables);
+						rememberedVariables);
 				final TextEdit edit = formatter.format(encoded, 0,
 						encoded.length(), 0);
 				if (edit != null) {
@@ -70,7 +71,7 @@ public class JavaScriptTemplateContext extends ScriptTemplateContext {
 					template = new Template(template.getName(),
 							template.getDescription(),
 							template.getContextTypeId(), restoreVariables(
-									document.get(), remeberedVariables),
+									document.get(), rememberedVariables),
 							template.isAutoInsertable());
 				}
 			} catch (FormatterSyntaxProblemException e) {
@@ -107,9 +108,12 @@ public class JavaScriptTemplateContext extends ScriptTemplateContext {
 					}
 			} else if (in) {
 				if (c == '}') {
-					// TODO better handling for ${cursor}...
 					String variableValue = content.substring(pos, a + 1);
 					String variableKey = prefix + r++;
+					if (variableValue.equals("${"
+							+ GlobalTemplateVariables.Cursor.NAME + "}")) {
+						variableKey = "/*" + variableKey + "*/";
+					}
 					bf.append(variableKey);
 					variables.put(variableKey, variableValue);
 					in = false;
