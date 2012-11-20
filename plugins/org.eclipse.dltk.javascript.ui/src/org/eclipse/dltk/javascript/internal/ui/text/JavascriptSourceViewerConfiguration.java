@@ -18,6 +18,7 @@ import org.eclipse.dltk.ui.text.AbstractScriptScanner;
 import org.eclipse.dltk.ui.text.IColorManager;
 import org.eclipse.dltk.ui.text.ScriptPresentationReconciler;
 import org.eclipse.dltk.ui.text.ScriptSourceViewerConfiguration;
+import org.eclipse.dltk.ui.text.SingleTokenScriptScanner;
 import org.eclipse.dltk.ui.text.TodoTaskPreferencesOnPreferenceStore;
 import org.eclipse.dltk.ui.text.completion.ContentAssistPreference;
 import org.eclipse.dltk.ui.text.completion.ContentAssistProcessor;
@@ -255,8 +256,8 @@ public class JavascriptSourceViewerConfiguration extends
 	protected void initializeScanners() {
 		fCodeScanner = new JavascriptCodeScanner(getColorManager(),
 				fPreferenceStore);
-		fStringScanner = new JavascriptStringScanner(getColorManager(),
-				fPreferenceStore);
+		fStringScanner = new SingleTokenScriptScanner(getColorManager(),
+				fPreferenceStore, JavascriptColorConstants.JS_STRING);
 
 		fCommentScanner = new JavaScriptScriptCommentScanner(getColorManager(),
 				fPreferenceStore,
