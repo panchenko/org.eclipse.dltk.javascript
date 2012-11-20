@@ -1,0 +1,13 @@
+var timer = {
+	/**
+	 * @return {Number}
+	 */
+	start: function() {
+	},
+	/**
+	 * @param {type} param 
+	 */
+	stop: function (param) {
+		
+	}
+}

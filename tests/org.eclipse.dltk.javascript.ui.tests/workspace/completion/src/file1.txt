@@ -1,0 +1,8 @@
+var figure = {
+	/**
+	 * @param {type} param 
+	 */
+	draw: function (param) {
+		
+	}
+}

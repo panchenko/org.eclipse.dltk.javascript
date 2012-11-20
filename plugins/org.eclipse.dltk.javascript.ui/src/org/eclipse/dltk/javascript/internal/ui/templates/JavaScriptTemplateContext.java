@@ -9,12 +9,18 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.ui.templates;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.dltk.core.ISourceModule;
+import org.eclipse.dltk.javascript.ast.MultiLineComment;
+import org.eclipse.dltk.javascript.ast.PropertyInitializer;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
 import org.eclipse.dltk.javascript.internal.ui.JavaScriptUI;
+import org.eclipse.dltk.javascript.internal.ui.templates.JavaScriptCompletionUtil.ExpressionContext;
+import org.eclipse.dltk.javascript.internal.ui.templates.JavaScriptCompletionUtil.ExpressionType;
 import org.eclipse.dltk.ui.formatter.FormatterException;
 import org.eclipse.dltk.ui.formatter.FormatterSyntaxProblemException;
 import org.eclipse.dltk.ui.formatter.IScriptFormatter;
@@ -31,6 +37,7 @@ import org.eclipse.jface.text.templates.Template;
 import org.eclipse.jface.text.templates.TemplateBuffer;
 import org.eclipse.jface.text.templates.TemplateContextType;
 import org.eclipse.jface.text.templates.TemplateException;
+import org.eclipse.jface.text.templates.TemplateVariable;
 import org.eclipse.text.edits.TextEdit;
 
 public class JavaScriptTemplateContext extends ScriptTemplateContext {
@@ -80,7 +87,98 @@ public class JavaScriptTemplateContext extends ScriptTemplateContext {
 				JavaScriptUI.log(e);
 			}
 		}
-		return super.evaluate(template);
+		final TemplateBuffer templateBuffer = super.evaluate(template);
+		if (templateBuffer != null
+				&& !isReadOnly()
+				&& templateBuffer.getString().startsWith(
+						MultiLineComment.JSDOC_PREFIX)) {
+			final ExpressionContext expressionContext = JavaScriptCompletionUtil
+					.evaluateExpressionContext(getDocument(), getEnd());
+			if (expressionContext != null
+					&& expressionContext.expressionType == ExpressionType.PROPERTY_INITIALIZER_VALUE) {
+				final String replacement = templateBuffer.getString();
+				int docEnd = replacement
+						.indexOf(JavaScriptTemplateProposal.C_END);
+				if (docEnd > 0) {
+					docEnd += JavaScriptTemplateProposal.C_END.length();
+					final PropertyInitializer propertyInitializer = (PropertyInitializer) expressionContext.node
+							.getParent();
+
+					final String doc = replacement.substring(0, docEnd)
+							+ TextUtilities
+									.getDefaultLineDelimiter(getDocument())
+							+ calculateIndent(getDocument(),
+									propertyInitializer.start());
+
+					while (docEnd + 1 < replacement.length()
+							&& Character.isWhitespace(replacement
+									.charAt(docEnd))) {
+						++docEnd;
+					}
+					if (propertyInitializer.getName().getDocumentation() != null) {
+						templateBuffer.setContent(
+								replacement.substring(docEnd),
+								filterTemplateVariables(
+										templateBuffer.getVariables(), docEnd));
+					} else {
+						final int docOffset = getStart()
+								- propertyInitializer.start() + doc.length();
+						getDocument().replace(propertyInitializer.start(), 0,
+								doc);
+						setCompletionOffset(getCompletionOffset()
+								+ doc.length());
+						for (TemplateVariable variable : templateBuffer
+								.getVariables()) {
+							int[] offsets = variable.getOffsets();
+							for (int i = 0; i < offsets.length; ++i) {
+								if (offsets[i] < docEnd) {
+									offsets[i] -= docOffset;
+								} else {
+									offsets[i] -= docEnd;
+								}
+							}
+						}
+						templateBuffer.setContent(
+								replacement.substring(docEnd),
+								templateBuffer.getVariables());
+					}
+				}
+			}
+		}
+		return templateBuffer;
+	}
+
+	private TemplateVariable[] filterTemplateVariables(
+			TemplateVariable[] variables, int offset) {
+		List<TemplateVariable> result = new ArrayList<TemplateVariable>(
+				variables.length);
+		for (TemplateVariable variable : variables) {
+			int[] offsets = filterOffsets(variable.getOffsets(), offset);
+			if (offsets != null) {
+				variable.setOffsets(offsets);
+				result.add(variable);
+			}
+		}
+		return result.toArray(new TemplateVariable[result.size()]);
+	}
+
+	private int[] filterOffsets(int[] offsets, int offset) {
+		int[] result = new int[offset];
+		int count = 0;
+		for (int i = 0; i < offsets.length; ++i) {
+			if (offsets[i] >= offset) {
+				result[count++] -= offsets[i] - offset;
+			}
+		}
+		if (count == 0) {
+			return null;
+		} else if (count == result.length) {
+			return result;
+		} else {
+			int[] newResult = new int[count];
+			System.arraycopy(result, 0, newResult, 0, count);
+			return newResult;
+		}
 	}
 
 	/**

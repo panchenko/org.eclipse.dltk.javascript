@@ -1382,13 +1382,23 @@ public class JSTransformer {
 
 		initializer.setName(transformExpression(node.getChild(0), initializer));
 
-		initializer.setColon(getTokenOffset(JSParser.COLON, node.getChild(0)
-				.getTokenStopIndex() + 1, node.getChildCount() == 2 ? node
-				.getChild(1).getTokenStartIndex() : node.getTokenStopIndex()));
+		final Expression value;
+		final int colonPos;
+		if (node.getChildCount() == 2) {
+			colonPos = getTokenOffset(JSParser.COLON, node.getChild(0)
+					.getTokenStopIndex() + 1, node.getChild(1)
+					.getTokenStartIndex());
+			value = transformExpression(node.getChild(1), initializer);
+		} else {
+			colonPos = getTokenOffset(JSParser.COLON, node.getChild(0)
+					.getTokenStopIndex() + 1, node.getTokenStopIndex());
+			value = new ErrorExpression(initializer, Util.EMPTY_STRING);
+			value.setStart(colonPos + 1);
+			value.setEnd(colonPos + 1);
+		}
 
-		initializer
-				.setValue(transformExpression(node.getChild(1), initializer));
-
+		initializer.setValue(value);
+		initializer.setColon(colonPos);
 		initializer.setStart(getTokenOffset(node.getTokenStartIndex()));
 		initializer.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
 

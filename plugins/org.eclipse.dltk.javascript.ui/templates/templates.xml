@@ -3,7 +3,7 @@
 
 <template 
 	context="javascriptUniversalTemplateContextType" 
-	description="%defTemplate1.description" 
+	description="%functionDefinition.description" 
 	id="org.eclipse.dltk.javascript.ui.templates.func1" 
 	name="function">function ${funcName}(${args}){ 
   	${cursor}
@@ -15,13 +15,22 @@
 <template id="org.eclipse.dltk.javascript.ui.templates.javascript.for" name="for" description="Simple loop" context="javascriptUniversalTemplateContextType" enabled="true" deleted="false" autoinsert="true">for(var ${index}=0; ${index}&lt;${array}.length; ${index}++) {
 	${line_selection}${cursor}
 }</template>
-<template id="org.eclipse.dltk.javascript.ui.templates.javascript.function" name="function" description="simple function with comment" context="javascriptUniversalTemplateContextType" enabled="true" deleted="false" autoinsert="true">/**
+<template id="org.eclipse.dltk.javascript.ui.templates.javascript.function" name="function" description="%functionDefinitionWithComment.description" context="javascriptUniversalTemplateContextType" enabled="true" deleted="false" autoinsert="true">/**
  * ${name}
  * @param {${type}} ${param} 
  */
  function ${name}(${param}) {
  	${cursor}
  }</template>
+<template id="org.eclipse.dltk.javascript.ui.templates.javascript.function.method" name="function" description="%methodDefinition.description" context="javascriptExpressionTemplateContextType" enabled="true" deleted="false" autoinsert="true">/**
+ * @param {${type}} ${param} 
+ */
+function (${param}) {
+	${cursor}
+}</template>
+<template id="org.eclipse.dltk.javascript.ui.templates.javascript.function.expression" name="function" description="%functionExpression.description" context="javascriptExpressionTemplateContextType" enabled="true" deleted="false" autoinsert="true">function (${param}) {
+	${cursor}
+}</template>
 <template id="org.eclipse.dltk.javascript.ui.templates.javascript.ifelse" name="ifelse" description="if - else " context="javascriptUniversalTemplateContextType" enabled="true" deleted="false" autoinsert="true">if (${condition}) {
 	${cursor}
 } else {

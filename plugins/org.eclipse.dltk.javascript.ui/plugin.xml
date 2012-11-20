@@ -621,6 +621,11 @@
           id="javascriptUniversalTemplateContextType"
           name="%JavaScriptTemplateContextName">
     </contextType>
+    <contextType
+          class="org.eclipse.dltk.javascript.internal.ui.templates.JavaScriptExpressionTemplateContextType"
+          id="javascriptExpressionTemplateContextType"
+          name="%JavaScriptExpressionTemplateContextName">
+    </contextType>
     <include
           file="templates/templates.xml"
           translations="templates/templates.properties">
