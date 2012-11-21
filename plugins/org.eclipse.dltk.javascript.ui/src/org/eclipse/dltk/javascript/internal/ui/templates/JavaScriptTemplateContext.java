@@ -18,15 +18,17 @@ import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.javascript.ast.MultiLineComment;
 import org.eclipse.dltk.javascript.ast.PropertyInitializer;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
+import org.eclipse.dltk.javascript.internal.core.codeassist.JavaScriptCompletionUtil;
+import org.eclipse.dltk.javascript.internal.core.codeassist.JavaScriptCompletionUtil.ExpressionContext;
+import org.eclipse.dltk.javascript.internal.core.codeassist.JavaScriptCompletionUtil.ExpressionType;
 import org.eclipse.dltk.javascript.internal.ui.JavaScriptUI;
-import org.eclipse.dltk.javascript.internal.ui.templates.JavaScriptCompletionUtil.ExpressionContext;
-import org.eclipse.dltk.javascript.internal.ui.templates.JavaScriptCompletionUtil.ExpressionType;
 import org.eclipse.dltk.ui.formatter.FormatterException;
 import org.eclipse.dltk.ui.formatter.FormatterSyntaxProblemException;
 import org.eclipse.dltk.ui.formatter.IScriptFormatter;
 import org.eclipse.dltk.ui.formatter.IScriptFormatterFactory;
 import org.eclipse.dltk.ui.formatter.ScriptFormatterManager;
 import org.eclipse.dltk.ui.templates.ScriptTemplateContext;
+import org.eclipse.dltk.ui.text.DocumentUtils;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
@@ -93,7 +95,9 @@ public class JavaScriptTemplateContext extends ScriptTemplateContext {
 				&& templateBuffer.getString().startsWith(
 						MultiLineComment.JSDOC_PREFIX)) {
 			final ExpressionContext expressionContext = JavaScriptCompletionUtil
-					.evaluateExpressionContext(getDocument(), getEnd());
+					.evaluateExpressionContext(getSourceModule(),
+							DocumentUtils.asCharSequence(getDocument()),
+							getEnd());
 			if (expressionContext != null
 					&& expressionContext.expressionType == ExpressionType.PROPERTY_INITIALIZER_VALUE) {
 				final String replacement = templateBuffer.getString();

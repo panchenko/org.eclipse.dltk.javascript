@@ -9,10 +9,11 @@
  * Contributors:
  *     NumberFour AG - initial API and Implementation (Alex Panchenko)
  *******************************************************************************/
-package org.eclipse.dltk.javascript.internal.ui.templates;
+package org.eclipse.dltk.javascript.internal.core.codeassist;
 
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.compiler.env.ModuleSource;
+import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.javascript.ast.ErrorExpression;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.JSNode;
@@ -21,17 +22,21 @@ import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.StatementBlock;
 import org.eclipse.dltk.javascript.core.NodeFinder;
 import org.eclipse.dltk.javascript.parser.JavaScriptParserUtil;
-import org.eclipse.jface.text.IDocument;
 
+/**
+ * Static functions for evaluating the context at the specified position, to
+ * limit which proposals should be offered, e.g. exclude keywords in the
+ * expression context.
+ */
 public class JavaScriptCompletionUtil {
 
-	enum ExpressionType {
+	public enum ExpressionType {
 		PROPERTY_INITIALIZER_VALUE, OTHER
 	}
 
-	static class ExpressionContext {
-		final ExpressionType expressionType;
-		final JSNode node;
+	public static class ExpressionContext {
+		public final ExpressionType expressionType;
+		public final JSNode node;
 
 		public ExpressionContext(ExpressionType expressionType, JSNode node) {
 			this.expressionType = expressionType;
@@ -39,24 +44,30 @@ public class JavaScriptCompletionUtil {
 		}
 	}
 
-	public static ExpressionType evaluateExpressionType(IDocument document,
-			int position) {
-		final ExpressionContext context = evaluateExpressionContext(document,
-				position);
+	public static ExpressionType evaluateExpressionType(ISourceModule module,
+			CharSequence document, int position) {
+		final ExpressionContext context = evaluateExpressionContext(module,
+				document, position);
 		return context != null ? context.expressionType : null;
 	}
 
 	public static ExpressionContext evaluateExpressionContext(
-			IDocument document, int position) {
-		final String text = document.get();
-		final Script script = JavaScriptParserUtil.parse(
-				new ModuleSource(text), null);
+			ISourceModule module, CharSequence document, int position) {
+		final Script script = module != null ? JavaScriptParserUtil
+				.parse(module) : JavaScriptParserUtil.parse(new ModuleSource(
+				document.toString()), null);
+		return evaluateExpressionContext(script, document, position);
+	}
+
+	public static ExpressionContext evaluateExpressionContext(Script script,
+			CharSequence document, int position) {
 		if (script != null) {
 			int begin = position;
-			while (begin > 0 && Character.isWhitespace(text.charAt(begin - 1))) {
+			while (begin > 0
+					&& Character.isWhitespace(document.charAt(begin - 1))) {
 				--begin;
 			}
-			final NodeFinder nodeFinder = new NodeFinder(begin, position);
+			final NodeFinder nodeFinder = new NodeFinder(true, begin, position);
 			// TODO CallExpression: setTimeout(<Ctrl-Space>)
 			nodeFinder.locate(script);
 			final ASTNode node = nodeFinder.getNode();

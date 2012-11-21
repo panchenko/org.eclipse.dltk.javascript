@@ -167,7 +167,7 @@ public class JSDocCompletionProposalComputer implements
 			} else {
 				collector.setIgnored(CompletionProposal.KEYWORD, true);
 				collector.setIgnored(CompletionProposal.TYPE_REF, true);
-				engine.setAllowGlobals(false);
+				engine.setGlobalOptions(JSCompletionEngine.OPTION_NONE);
 				engine.completeGlobals(module, prefix.substring(1),
 						context.getInvocationOffset(), true);
 				return Arrays.<ICompletionProposal> asList(collector

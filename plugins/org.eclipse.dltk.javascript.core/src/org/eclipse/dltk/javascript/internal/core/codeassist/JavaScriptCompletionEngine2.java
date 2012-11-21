@@ -45,6 +45,8 @@ import org.eclipse.dltk.javascript.core.JavaScriptKeywords;
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 import org.eclipse.dltk.javascript.core.NodeFinder;
 import org.eclipse.dltk.javascript.core.Types;
+import org.eclipse.dltk.javascript.internal.core.codeassist.JavaScriptCompletionUtil.ExpressionContext;
+import org.eclipse.dltk.javascript.internal.core.codeassist.JavaScriptCompletionUtil.ExpressionType;
 import org.eclipse.dltk.javascript.parser.JavaScriptParserUtil;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueParent;
@@ -78,19 +80,19 @@ import org.eclipse.dltk.javascript.validation.IValidatorExtension;
 public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		implements JSCompletionEngine {
 
-	private boolean allowGlobals = true;
+	private int globalOptions = JSCompletionEngine.OPTION_ALL;
 
-	public boolean isAllowGlobals() {
-		return allowGlobals;
+	public int getGlobalOptions() {
+		return globalOptions;
 	}
 
-	public void setAllowGlobals(boolean value) {
-		this.allowGlobals = value;
+	public void setGlobalOptions(int value) {
+		this.globalOptions = value;
 	}
 
 	public void complete(final IModuleSource cu, final int position, int i) {
 		this.requestor.beginReporting();
-		String content = cu.getSourceContents();
+		final String content = cu.getSourceContents();
 		if (position < 0 || position > content.length()) {
 			return;
 		}
@@ -139,7 +141,9 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 					doCompletionOnMember(inferencer2, visitor.getCollection(),
 							path, reporter);
 				} else {
-					doGlobalCompletion(visitor.getCollection(), reporter);
+					doGlobalCompletion(visitor.getCollection(), reporter,
+							JavaScriptCompletionUtil.evaluateExpressionContext(
+									script, content, position));
 				}
 			}
 		});
@@ -178,7 +182,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 				final Reporter reporter = new Reporter(inferencer2, prefix,
 						offset, TypeInfoManager.createExtensions(inferencer2,
 								IValidatorExtension.class, null));
-				doGlobalCompletion(visitor.getCollection(), reporter);
+				doGlobalCompletion(visitor.getCollection(), reporter, null);
 			}
 		});
 	}
@@ -660,26 +664,38 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 	 * @param context
 	 * @param collection
 	 * @param reporter
+	 * @param expressionContext
 	 */
 	private void doGlobalCompletion(IValueCollection collection,
-			Reporter reporter) {
+			Reporter reporter, ExpressionContext expressionContext) {
 		reportItems(reporter, collection);
-		if (allowGlobals) {
+		if ((globalOptions & OPTION_GLOBALS) != 0) {
 			if (!requestor.isIgnored(CompletionProposal.TYPE_REF)) {
 				doCompletionOnType(TypeMode.CODE, reporter);
 			}
+			reportGlobals(reporter);
+		}
+		if ((globalOptions & OPTION_KEYWORDS) != 0) {
 			if (!requestor.isIgnored(CompletionProposal.KEYWORD)) {
 				doCompletionOnKeyword(reporter.getPrefix(),
-						reporter.getPosition());
+						reporter.getPosition(), expressionContext);
 			}
-			reportGlobals(reporter);
 		}
 	}
 
-	private void doCompletionOnKeyword(String startPart, int position) {
-		setSourceRange(position - startPart.length(), position);
-		String[] keywords = JavaScriptKeywords.getJavaScriptKeywords();
-		findKeywords(startPart.toCharArray(), keywords, true);
+	private void doCompletionOnKeyword(String prefix, int position,
+			ExpressionContext expressionContext) {
+		final String[] keywords;
+		if (expressionContext != null) {
+			if (expressionContext.expressionType == ExpressionType.PROPERTY_INITIALIZER_VALUE) {
+				keywords = JavaScriptKeywords.getJavaScriptValueKeywords();
+			} else {
+				keywords = JavaScriptKeywords.getJavaScriptExpressionKeywords();
+			}
+		} else {
+			keywords = JavaScriptKeywords.getJavaScriptKeywords();
+		}
+		findKeywords(prefix.toCharArray(), keywords, true);
 	}
 
 }

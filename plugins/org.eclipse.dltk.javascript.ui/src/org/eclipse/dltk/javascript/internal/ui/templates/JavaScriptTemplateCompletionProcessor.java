@@ -9,8 +9,10 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.ui.templates;
 
+import org.eclipse.dltk.javascript.internal.core.codeassist.JavaScriptCompletionUtil;
 import org.eclipse.dltk.ui.templates.ScriptTemplateAccess;
 import org.eclipse.dltk.ui.templates.ScriptTemplateCompletionProcessor;
+import org.eclipse.dltk.ui.text.DocumentUtils;
 import org.eclipse.dltk.ui.text.completion.ScriptContentAssistInvocationContext;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextViewer;
@@ -72,8 +74,9 @@ public class JavaScriptTemplateCompletionProcessor extends
 	protected TemplateContextType getContextType(ITextViewer viewer,
 			IRegion region) {
 		if (isValidLocation(viewer, region)
-				&& JavaScriptCompletionUtil.evaluateExpressionType(
-						viewer.getDocument(),
+				&& JavaScriptCompletionUtil.evaluateExpressionType(getContext()
+						.getSourceModule(), DocumentUtils.asCharSequence(viewer
+						.getDocument()),
 						region.getOffset() + region.getLength()) != null) {
 			return getTemplateAccess()
 					.getContextTypeRegistry()

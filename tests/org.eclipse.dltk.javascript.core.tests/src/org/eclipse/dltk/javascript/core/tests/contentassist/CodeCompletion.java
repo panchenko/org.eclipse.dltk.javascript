@@ -4,12 +4,18 @@ import static org.eclipse.dltk.core.tests.TestSupport.notYetImplemented;
 import static org.eclipse.dltk.javascript.typeinfo.ITypeNames.NUMBER;
 import static org.eclipse.dltk.javascript.typeinfo.MemberPredicates.STATIC;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.eclipse.dltk.codeassist.ICompletionEngine;
 import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.core.CompletionProposal;
 import org.eclipse.dltk.core.tests.util.StringList;
+import org.eclipse.dltk.javascript.ast.Keywords;
+import org.eclipse.dltk.javascript.core.JavaScriptKeywords;
+import org.eclipse.dltk.javascript.internal.core.codeassist.JSCompletionEngine;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.MemberPredicates;
 
@@ -22,7 +28,8 @@ public class CodeCompletion extends AbstractCompletionTest {
 	 */
 	public void test0() {
 		LinkedList<CompletionProposal> results = new LinkedList<CompletionProposal>();
-		ICompletionEngine c = createEngine(results, false);
+		ICompletionEngine c = createEngine(results,
+				JSCompletionEngine.OPTION_NONE);
 		c.complete(new TestModule(""), 0, 0);
 		assertEquals(0, results.size());
 	}
@@ -32,7 +39,8 @@ public class CodeCompletion extends AbstractCompletionTest {
 	 */
 	public void test1() {
 		LinkedList<CompletionProposal> results = new LinkedList<CompletionProposal>();
-		ICompletionEngine c = createEngine(results, false);
+		ICompletionEngine c = createEngine(results,
+				JSCompletionEngine.OPTION_NONE);
 		c.complete(createModule("test1.js"), 0, 0);
 		assertEquals(0, results.size());
 	}
@@ -570,6 +578,42 @@ public class CodeCompletion extends AbstractCompletionTest {
 		String[] names = new String[] { "x", "y" };
 		int position = lastPositionInFile(".", module);
 		basicTest(module, position, concat(getMethodsOfObject(), names));
+	}
+
+	public void testPropertyInitializerValue_FilteredKeywords1() {
+		final StringList code = new StringList();
+		code.add("var figure = {");
+		code.add("	draw: ");
+		code.add("}");
+		final IModuleSource module = new TestModule(code.toString());
+		final List<CompletionProposal> results = new ArrayList<CompletionProposal>();
+		final ICompletionEngine completionEngine = createEngine(results,
+				JSCompletionEngine.OPTION_KEYWORDS);
+		completionEngine.complete(module, lastPositionInFile(": ", module), 0);
+		final String[] expectedProposals = concat(
+				Collections.singletonList("figure"),
+				JavaScriptKeywords.getJavaScriptValueKeywords());
+		if (!compareProposalNames(results, expectedProposals)) {
+			assertEquals(new StringList(expectedProposals).sort().toString(),
+					exractProposalNames(results, false).sort().toString());
+		}
+	}
+
+	public void testPropertyInitializerValue_FilteredKeywords2() {
+		final StringList code = new StringList();
+		code.add("var figure = {");
+		code.add("	draw: fu");
+		code.add("}");
+		final IModuleSource module = new TestModule(code.toString());
+		final List<CompletionProposal> results = new ArrayList<CompletionProposal>();
+		final ICompletionEngine completionEngine = createEngine(results,
+				JSCompletionEngine.OPTION_KEYWORDS);
+		completionEngine.complete(module, lastPositionInFile("fu", module), 0);
+		final String[] expectedProposals = { Keywords.FUNCTION };
+		if (!compareProposalNames(results, expectedProposals)) {
+			assertEquals(new StringList(expectedProposals).sort().toString(),
+					exractProposalNames(results, false).sort().toString());
+		}
 	}
 
 }

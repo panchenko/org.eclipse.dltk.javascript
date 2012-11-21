@@ -9,7 +9,6 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.core;
 
-
 public class JavaScriptKeywords {
 
 	private static final String[] fgKeywords = { "break", "else", "new",
@@ -22,6 +21,16 @@ public class JavaScriptKeywords {
 
 	public static String[] getJavaScriptKeywords() {
 		return fgKeywords;
+	}
+
+	public static String[] getJavaScriptExpressionKeywords() {
+		return new String[] { "new", "function", "this", "delete",
+				"instanceof", "typeof", "null", "true", "false" };
+	}
+
+	public static String[] getJavaScriptValueKeywords() {
+		return new String[] { "new", "function", "this", "delete", "null",
+				"true", "false" };
 	}
 
 	public static String[] getHighLightOnlyKeywords() {

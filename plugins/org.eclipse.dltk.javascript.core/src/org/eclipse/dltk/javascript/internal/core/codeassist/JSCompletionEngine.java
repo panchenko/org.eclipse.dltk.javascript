@@ -18,9 +18,14 @@ import org.eclipse.dltk.javascript.typeinfo.TypeMode;
 
 public interface JSCompletionEngine extends ICompletionEngine {
 
-	boolean isAllowGlobals();
+	int OPTION_NONE = 0;
+	int OPTION_GLOBALS = 1;
+	int OPTION_KEYWORDS = 2;
+	int OPTION_ALL = OPTION_GLOBALS | OPTION_KEYWORDS;
 
-	void setAllowGlobals(boolean value);
+	int getGlobalOptions();
+
+	void setGlobalOptions(int value);
 
 	void completeTypes(ISourceModule module, TypeMode mode, String prefix,
 			int offset);

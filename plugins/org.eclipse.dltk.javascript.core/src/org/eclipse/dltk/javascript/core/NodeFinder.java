@@ -21,10 +21,13 @@ import org.eclipse.dltk.ast.ASTVisitor;
 import org.eclipse.dltk.javascript.ast.Comment;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.ISemicolonStatement;
+import org.eclipse.dltk.javascript.ast.JSNode;
+import org.eclipse.dltk.javascript.ast.JSUserNode;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.Statement;
 
 public class NodeFinder extends ASTVisitor {
+	private final boolean skipUserExpressions;
 	private final int start;
 	private final int end;
 
@@ -33,8 +36,13 @@ public class NodeFinder extends ASTVisitor {
 	}
 
 	public NodeFinder(int s, int e) {
+		this(false, s, e);
+	}
+
+	public NodeFinder(boolean skipUserExpressions, int s, int e) {
 		this.start = s;
 		this.end = e;
+		this.skipUserExpressions = skipUserExpressions;
 	}
 
 	private ASTNode before = null;
@@ -47,6 +55,19 @@ public class NodeFinder extends ASTVisitor {
 
 	@Override
 	public boolean visit(ASTNode node) {
+		if (skipUserExpressions && node instanceof JSUserNode) {
+			final JSNode original = ((JSUserNode) node).getOriginal();
+			if (original != null) {
+				try {
+					original.traverse(this);
+				} catch (RuntimeException e) {
+					throw e;
+				} catch (Exception e) {
+					JavaScriptPlugin.error(e);
+				}
+				return false;
+			}
+		}
 		if (isBlock(node)) {
 			if (node.sourceEnd() < start || node.sourceStart() > end) {
 				return false;

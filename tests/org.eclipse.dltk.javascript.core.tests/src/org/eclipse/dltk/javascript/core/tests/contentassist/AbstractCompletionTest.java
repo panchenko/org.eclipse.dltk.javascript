@@ -57,12 +57,12 @@ public abstract class AbstractCompletionTest extends AbstractContentAssistTest {
 	 * engines are allowed then compound one is constructed.
 	 * 
 	 * @param results
-	 * @param allowGlobals
+	 * @param globalOptions
 	 * @return
 	 * @see #getAllowedEngines()
 	 */
 	protected ICompletionEngine createEngine(List<CompletionProposal> results,
-			boolean allowGlobals) {
+			int globalOptions) {
 		final ICompletionEngine[] engines = DLTKLanguageManager
 				.getCompletionEngines(JavaScriptNature.NATURE_ID);
 		if (engines == null) {
@@ -74,7 +74,8 @@ public abstract class AbstractCompletionTest extends AbstractContentAssistTest {
 			if (isAllowed(engine, allowedEngines)) {
 				selection.add(engine);
 				if (engine instanceof JSCompletionEngine) {
-					((JSCompletionEngine) engine).setAllowGlobals(allowGlobals);
+					((JSCompletionEngine) engine)
+							.setGlobalOptions(globalOptions);
 				}
 			}
 		}
@@ -115,7 +116,7 @@ public abstract class AbstractCompletionTest extends AbstractContentAssistTest {
 		return false;
 	}
 
-	private static boolean compareProposalNames(
+	protected static boolean compareProposalNames(
 			List<CompletionProposal> proposals, String[] names) {
 		if (names.length != proposals.size()) {
 			return false;
@@ -136,7 +137,7 @@ public abstract class AbstractCompletionTest extends AbstractContentAssistTest {
 		return true;
 	}
 
-	private static StringList exractProposalNames(
+	protected static StringList exractProposalNames(
 			List<CompletionProposal> proposals, boolean withKinds) {
 		final StringList list = new StringList(proposals.size());
 		for (int i = 0, size = proposals.size(); i < size; ++i) {
@@ -154,7 +155,8 @@ public abstract class AbstractCompletionTest extends AbstractContentAssistTest {
 	protected void basicTest(IModuleSource module, int position,
 			String[] compNames) {
 		List<CompletionProposal> results = new ArrayList<CompletionProposal>();
-		ICompletionEngine c = createEngine(results, false);
+		ICompletionEngine c = createEngine(results,
+				JSCompletionEngine.OPTION_NONE);
 		c.complete(module, position, 0);
 		if (!compareProposalNames(results, compNames)) {
 			assertEquals(new StringList(compNames).sort().toString(),
@@ -165,7 +167,8 @@ public abstract class AbstractCompletionTest extends AbstractContentAssistTest {
 	protected void testWithKinds(IModuleSource module, int position,
 			String[] compNames) {
 		List<CompletionProposal> results = new ArrayList<CompletionProposal>();
-		ICompletionEngine c = createEngine(results, false);
+		ICompletionEngine c = createEngine(results,
+				JSCompletionEngine.OPTION_NONE);
 		c.complete(module, position, 0);
 		if (!compareProposalNames(results, compNames)) {
 			assertEquals(new StringList(compNames).sort().toString(),
