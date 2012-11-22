@@ -238,6 +238,11 @@ public class RModelBuilder {
 		}
 	}
 
+	public static IRParameter createParameter(String name, IRType type,
+			ParameterKind kind) {
+		return new RParameter(name, type, kind);
+	}
+
 	private static List<IRParameter> convertParams0(ITypeSystem context,
 			List<IParameter> parameters) {
 		if (parameters.isEmpty()) {

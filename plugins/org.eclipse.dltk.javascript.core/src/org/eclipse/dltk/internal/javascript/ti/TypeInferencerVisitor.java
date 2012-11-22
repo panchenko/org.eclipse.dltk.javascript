@@ -93,6 +93,7 @@ import org.eclipse.dltk.javascript.internal.core.RRecordMember;
 import org.eclipse.dltk.javascript.parser.ISuppressWarningsState;
 import org.eclipse.dltk.javascript.parser.JSParser;
 import org.eclipse.dltk.javascript.parser.PropertyExpressionUtils;
+import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTag;
 import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTags;
 import org.eclipse.dltk.javascript.typeinference.IAssignProtection;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
@@ -1120,11 +1121,17 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					visit(pi.getValue());
 					continue;
 				}
+				final JSDocTags tags = pi.getName().getDocumentation() != null ? JSDocSupport
+						.parse(pi.getName().getDocumentation())
+						: JSDocTags.EMPTY;
+
 				final IValueReference value = visit(pi.getValue());
 				if (value != null) {
 					final IRMethod method = (IRMethod) value
 							.getAttribute(IReferenceAttributes.R_METHOD);
-					if (method != null) {
+					if (method != null
+							&& (pi.getValue() instanceof FunctionStatement || tags
+									.get(JSDocTag.TYPE) == null)) {
 						if (method.getSource() instanceof IMethod) {
 							final IMethod m = (IMethod) method.getSource();
 							final ReferenceLocation loc = m.getLocation();
@@ -1151,21 +1158,17 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					source.setName(childName);
 					source.setLocation(ReferenceLocation.create(getSource(), pi
 							.getName().sourceStart(), pi.getName().sourceEnd()));
-					if (pi.getName().getDocumentation() != null) {
-						final JSDocTags tags = JSDocSupport.parse(pi.getName()
-								.getDocumentation());
-						if (!tags.isEmpty()) {
-							final IModelBuilder[] modelBuilders = this.context
-									.getModelBuilders();
-							if (modelBuilders.length > 0
-									&& modelBuilders[0] instanceof JSDocSupport) {
-								final JSDocSupport jsdocSupport = (JSDocSupport) modelBuilders[0];
-								jsdocSupport.parseType(source, tags,
-										JSDocSupport.TYPE_TAGS, reporter,
-										typeChecker);
-								jsdocSupport.parseDeprecation(source, tags,
-										reporter);
-							}
+					if (!tags.isEmpty()) {
+						final IModelBuilder[] modelBuilders = this.context
+								.getModelBuilders();
+						if (modelBuilders.length > 0
+								&& modelBuilders[0] instanceof JSDocSupport) {
+							final JSDocSupport jsdocSupport = (JSDocSupport) modelBuilders[0];
+							jsdocSupport.parseType(source, tags,
+									JSDocSupport.TYPE_TAGS, reporter,
+									typeChecker);
+							jsdocSupport.parseDeprecation(source, tags,
+									reporter);
 						}
 					}
 				} else {

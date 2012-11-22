@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.core.tests.typeinference;
 
+import static org.eclipse.dltk.javascript.typeinfo.RModelBuilder.createParameter;
+
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -42,6 +45,7 @@ import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.RTypes;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
+import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 
@@ -1207,4 +1211,47 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 					JavaScriptValidations.typeOf(collection.getChild("b")));
 		}
 	}
+
+	public void testObjectLiteral() {
+		final StringList code = new StringList();
+		code.add("var person = { name:'John', age: 18 }");
+		final IValueCollection collection = inference(code.toString());
+		final IRRecordType point = (IRRecordType) JavaScriptValidations
+				.typeOf(collection.getChild("person"));
+		assertEquals(RTypes.STRING, point.getMember("name").getType());
+		assertEquals(RTypes.NUMBER, point.getMember("age").getType());
+	}
+
+	public void testObjectLiteralFunctionMember() {
+		final StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @param {Number} x");
+		code.add(" * @param {Number} y");
+		code.add(" */");
+		code.add("function drawRect(x,y) {}");
+		code.add("var figure = { draw: drawRect }");
+		final IValueCollection collection = inference(code.toString());
+		final IRRecordType figure = (IRRecordType) JavaScriptValidations
+				.typeOf(collection.getChild("figure"));
+		final IRFunctionType expected = RTypes.functionType(Arrays.asList(
+				createParameter("x", RTypes.NUMBER, ParameterKind.NORMAL),
+				createParameter("y", RTypes.NUMBER, ParameterKind.NORMAL)),
+				null);
+		assertEquals(expected, figure.getMember("draw").getType());
+	}
+
+	public void testObjectLiteralFunctionMemberTypeOverride() {
+		final StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @param {Number} x");
+		code.add(" * @param {Number} y");
+		code.add(" */");
+		code.add("function drawRect(x,y) {}");
+		code.add("var figure = { /** @type {String} */ draw: drawRect }");
+		final IValueCollection collection = inference(code.toString());
+		final IRRecordType figure = (IRRecordType) JavaScriptValidations
+				.typeOf(collection.getChild("figure"));
+		assertEquals(RTypes.STRING, figure.getMember("draw").getType());
+	}
+
 }
