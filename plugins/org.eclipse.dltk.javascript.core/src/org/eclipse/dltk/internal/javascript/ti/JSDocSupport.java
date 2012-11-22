@@ -88,6 +88,26 @@ public class JSDocSupport implements IModelBuilder {
 				comment.sourceStart());
 	}
 
+	public enum JSDocFunctionContext {
+		DECLARATION {
+			@Override
+			String[] getReturnTags() {
+				return JSDocTag.RETURN_TAGS;
+			}
+		},
+		EXPRESSION {
+			@Override
+			String[] getReturnTags() {
+				return RETURN_ONLY_TAGS;
+			}
+		};
+
+		static final String[] RETURN_ONLY_TAGS = { JSDocTag.RETURNS,
+				JSDocTag.RETURN };
+
+		abstract String[] getReturnTags();
+	}
+
 	public void processMethod(FunctionStatement statement, IMethod method,
 			JSProblemReporter reporter, ITypeChecker typeChecker) {
 		Comment comment = getComment(statement);
@@ -95,13 +115,24 @@ public class JSDocSupport implements IModelBuilder {
 			return;
 		}
 		final JSDocTags tags = parse(comment);
-		processMethod(method, tags, reporter, typeChecker);
+		processMethod(method,
+				statement.isDeclaration() ? JSDocFunctionContext.DECLARATION
+						: JSDocFunctionContext.EXPRESSION, tags, reporter,
+				typeChecker);
 	}
 
-	public void processMethod(IMethod method, final JSDocTags tags,
+	public final void processMethod(IMethod method, final JSDocTags tags,
 			JSProblemReporter reporter, ITypeChecker typeChecker) {
+		processMethod(method, JSDocFunctionContext.EXPRESSION, tags, reporter,
+				typeChecker);
+	}
+
+	public void processMethod(IMethod method, JSDocFunctionContext context,
+			final JSDocTags tags, JSProblemReporter reporter,
+			ITypeChecker typeChecker) {
 		if (method.getType() == null) {
-			parseType(method, tags, JSDocTag.RETURN_TAGS, reporter, typeChecker);
+			parseType(method, tags, context.getReturnTags(), reporter,
+					typeChecker);
 		}
 		parseParams(method, tags, reporter, typeChecker);
 		parseThis(method, tags, reporter, typeChecker);
