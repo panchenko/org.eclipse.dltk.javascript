@@ -45,12 +45,12 @@ public class JSCodeAssistUITest extends Assert {
 
 	@BeforeClass
 	public static void createProject() throws Throwable {
-		PROJECT.before();
+		ProjectSetup.create(PROJECT);
 	}
 
 	@AfterClass
 	public static void deleteProject() {
-		PROJECT.after();
+		ProjectSetup.delete(PROJECT);
 	}
 
 	@After
