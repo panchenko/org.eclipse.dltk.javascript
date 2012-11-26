@@ -1,12 +1,10 @@
 package org.eclipse.dltk.javascript.core.tests;
 
-import junit.framework.JUnit4TestAdapter;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import org.eclipse.dltk.core.tests.WorkspaceSetup;
 import org.eclipse.dltk.javascript.core.tests.builder.BuildChangeTests;
-import org.eclipse.dltk.javascript.core.tests.builder.SourceModuleInfoCacheTest;
 import org.eclipse.dltk.javascript.core.tests.contentassist.CodeCompletion;
 import org.eclipse.dltk.javascript.core.tests.contentassist.CompletionStringParsing;
 import org.eclipse.dltk.javascript.core.tests.contentassist.SelectionTests;
@@ -83,7 +81,6 @@ public class AllTests {
 		suite.addTest(SearchExternalLibraryTests.suite());
 		suite.addTestSuite(VariableRemoveTest.class);
 		suite.addTestSuite(GenericMethodTypeInferenceTest.class);
-		suite.addTest(new JUnit4TestAdapter(SourceModuleInfoCacheTest.class));
 		// $JUnit-END$
 		return suite;
 	}
