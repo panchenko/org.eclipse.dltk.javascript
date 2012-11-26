@@ -98,7 +98,11 @@ public abstract class JSAutoEditStrategyTestCase extends org.junit.Assert {
 	}
 
 	protected Document createDocument(StringList code) {
-		final Document document = new Document(code);
+		return createDocument(code.toString());
+	}
+
+	protected Document createDocument(String initialContent) {
+		final Document document = new Document(initialContent);
 		new JavaScriptDocumentSetupParticipant().setup(document);
 		return document;
 	}

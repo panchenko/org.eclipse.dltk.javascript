@@ -47,6 +47,8 @@ public class JSDocAutoIndentStrategy extends
 				indentAfterNewLine(document, command);
 			} else if (command.text.equals("/")) { //$NON-NLS-1$
 				indentAfterCommentEnd(document, command);
+			} else if (command.text.equals("*")) {
+				JavascriptAutoEditStrategy.smartCloseJSDoc(document, command);
 			}
 		}
 	}

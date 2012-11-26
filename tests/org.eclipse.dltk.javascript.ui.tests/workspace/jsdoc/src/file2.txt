@@ -1,0 +1,9 @@
+var figure = {
+	/**
+	 * @param {Object} x
+	 * @param {Object} y
+	 * @return {Object}
+	 */
+	draw: function (x, y) {
+	}
+}

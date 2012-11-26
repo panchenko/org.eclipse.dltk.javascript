@@ -12,6 +12,7 @@ package org.eclipse.dltk.javascript.scriptdoc;
 import java.util.Arrays;
 
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.dltk.annotations.Internal;
 import org.eclipse.dltk.javascript.internal.ui.text.Symbols;
 import org.eclipse.dltk.javascript.ui.text.IJavaScriptPartitions;
 import org.eclipse.jface.text.BadLocationException;
@@ -116,7 +117,19 @@ public final class JavaHeuristicScanner implements Symbols {
 						--position;
 						prev = document.getChar(position);
 					}
-					if (prev != '\\' && prev != ';' && prev != ','
+					if (Character.isJavaIdentifierPart(prev)) {
+						int begin = position;
+						while (begin > 0
+								&& Character.isJavaIdentifierPart(document
+										.getChar(begin - 1))) {
+							--begin;
+						}
+						final int token = getToken(document.get(begin, position
+								- begin + 1));
+						return token == TokenRETURN || token == TokenBREAK
+								|| token == TokenCONTINUE
+								|| token == TokenTHROW;
+					} else if (prev != '\\' && prev != ';' && prev != ','
 							&& prev != '{' && prev != ')') {
 						return true;
 					}
@@ -517,7 +530,8 @@ public final class JavaHeuristicScanner implements Symbols {
 	 *            a scanned identifier
 	 * @return one of the constants defined in {@link Symbols}
 	 */
-	private int getToken(String s) {
+	@Internal
+	static int getToken(String s) {
 		Assert.isNotNull(s);
 
 		switch (s.length()) {
@@ -534,6 +548,8 @@ public final class JavaHeuristicScanner implements Symbols {
 				return TokenTRY;
 			if ("new".equals(s)) //$NON-NLS-1$
 				return TokenNEW;
+			if ("var".equals(s)) //$NON-NLS-1$
+				return TokenVAR;
 			break;
 		case 4:
 			if ("case".equals(s)) //$NON-NLS-1$
@@ -554,6 +570,8 @@ public final class JavaHeuristicScanner implements Symbols {
 				return TokenCLASS;
 			if ("while".equals(s)) //$NON-NLS-1$
 				return TokenWHILE;
+			if ("throw".equals(s)) //$NON-NLS-1$
+				return TokenTHROW;
 			break;
 		case 6:
 			if ("return".equals(s)) //$NON-NLS-1$
@@ -568,6 +586,12 @@ public final class JavaHeuristicScanner implements Symbols {
 				return TokenDEFAULT;
 			if ("finally".equals(s)) //$NON-NLS-1$
 				return TokenFINALLY;
+			break;
+		case 8:
+			if ("continue".equals(s)) //$NON-NLS-1$
+				return TokenCONTINUE;
+			if ("function".equals(s)) //$NON-NLS-1$
+				return TokenFUNCTION;
 			break;
 		case 9:
 			if ("interface".equals(s)) //$NON-NLS-1$
@@ -1183,4 +1207,38 @@ public final class JavaHeuristicScanner implements Symbols {
 		return false;
 	}
 
+	/**
+	 * Returns <code>true</code> if the document, when scanned backwards from
+	 * <code>start</code> appears to contain <code>var</code> statement.
+	 */
+	public boolean looksLikeVarStatement(int start) {
+		fPos = start;
+		LOOP: for (int i = 0; i < 100; ++i) {
+			int token = previousToken(fPos, UNBOUND);
+			switch (token) {
+			case TokenVAR:
+				return true;
+			case TokenEOF:
+			case TokenSEMICOLON:
+			case TokenIF:
+			case TokenDO:
+			case TokenFOR:
+			case TokenTRY:
+			case TokenCASE:
+			case TokenELSE:
+			case TokenBREAK:
+			case TokenCATCH:
+			case TokenWHILE:
+			case TokenRETURN:
+			case TokenSWITCH:
+			case TokenGOTO:
+			case TokenDEFAULT:
+			case TokenCONTINUE:
+			case TokenTHROW:
+			case TokenFUNCTION:
+				break LOOP;
+			}
+		}
+		return false;
+	}
 }

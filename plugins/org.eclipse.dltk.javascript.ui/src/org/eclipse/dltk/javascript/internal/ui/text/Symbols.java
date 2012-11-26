@@ -46,5 +46,9 @@ public interface Symbols {
 	int TokenCLASS= 1026;
 	int TokenINTERFACE= 1027;
 	int TokenENUM= 1028;
+	int TokenVAR = 1029;
+	int TokenTHROW = 1030;
+	int TokenCONTINUE = 1031;
+	int TokenFUNCTION = 1032;
 	int TokenIDENT= 2000;
 }

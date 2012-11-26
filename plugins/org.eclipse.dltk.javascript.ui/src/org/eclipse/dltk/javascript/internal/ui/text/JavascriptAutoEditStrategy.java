@@ -19,6 +19,7 @@ import org.eclipse.dltk.core.ScriptModelUtil;
 import org.eclipse.dltk.internal.ui.editor.EditorUtility;
 import org.eclipse.dltk.javascript.internal.corext.codemanipulation.JSCodeGeneration;
 import org.eclipse.dltk.javascript.internal.ui.JavaScriptUI;
+import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTag;
 import org.eclipse.dltk.javascript.scriptdoc.JavaHeuristicScanner;
 import org.eclipse.dltk.javascript.scriptdoc.JavaIndenter;
 import org.eclipse.dltk.javascript.ui.text.IJavaScriptPartitions;
@@ -1072,6 +1073,9 @@ public class JavascriptAutoEditStrategy extends
 		case 'e':
 			smartIndentUponE(document, command);
 			break;
+		case '*':
+			smartCloseJSDoc(document, command);
+			break;
 		}
 	}
 
@@ -1173,6 +1177,51 @@ public class JavascriptAutoEditStrategy extends
 				return;
 			}
 
+		} catch (BadLocationException e) {
+			DLTKUIPlugin.log(e);
+		}
+	}
+
+	static void smartCloseJSDoc(IDocument d, DocumentCommand c) {
+		if (c.offset < 3 || d.getLength() == 0)
+			return;
+		try {
+			final String content = d.get(c.offset - 2, 2);
+			if (content.equals("/*")) { //$NON-NLS-1$
+				final JavaHeuristicScanner scanner = new JavaHeuristicScanner(d);
+				int pos = c.offset - 2;
+				pos = scanner.findNonWhitespaceBackward(pos - 1,
+						JavaHeuristicScanner.UNBOUND);
+				if (pos == JavaHeuristicScanner.NOT_FOUND) {
+					return;
+				}
+				final int prevToken = scanner.previousToken(pos,
+						JavaHeuristicScanner.UNBOUND);
+				if (prevToken == Symbols.TokenVAR
+						|| prevToken == Symbols.TokenCOMMA
+						&& scanner.looksLikeVarStatement(scanner.getPosition())) {
+					c.text += " " + JSDocTag.TYPE + " {} */ ";
+					c.shiftsCaret = false;
+					c.caretOffset = c.offset + c.text.indexOf('}');
+				} else {
+					pos = scanner.findNonWhitespaceForward(c.offset,
+							JavaHeuristicScanner.UNBOUND);
+					if (pos == JavaHeuristicScanner.NOT_FOUND) {
+						return;
+					}
+					final int nextToken = scanner.nextToken(pos,
+							JavaHeuristicScanner.UNBOUND);
+					if (nextToken == Symbols.TokenFUNCTION) {
+						c.text += "  */";
+						if (c.offset < d.getLength()
+								&& !Character.isWhitespace(d.getChar(c.offset))) {
+							c.text += " ";
+						}
+						c.shiftsCaret = false;
+						c.caretOffset = c.offset + 2;
+					}
+				}
+			}
 		} catch (BadLocationException e) {
 			DLTKUIPlugin.log(e);
 		}

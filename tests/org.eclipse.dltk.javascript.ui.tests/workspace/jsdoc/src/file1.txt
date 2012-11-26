@@ -1,0 +1,7 @@
+/**
+ * @param {Object} x
+ * @param {Object} y
+ * @return {Object}
+ */
+function test(x, y) {
+}

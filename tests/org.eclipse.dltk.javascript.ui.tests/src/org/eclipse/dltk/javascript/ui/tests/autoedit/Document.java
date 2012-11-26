@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.ui.tests.autoedit;
 
-import org.eclipse.dltk.core.tests.util.StringList;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
@@ -20,10 +19,6 @@ public class Document extends org.eclipse.jface.text.Document {
 
 	public Document(String initialContent) {
 		super(initialContent);
-	}
-
-	public Document(StringList strings) {
-		this(strings.toString());
 	}
 
 	public int getEndOfLineOffset(int line) throws BadLocationException {
@@ -35,4 +30,17 @@ public class Document extends org.eclipse.jface.text.Document {
 		IRegion line1 = document.getLineInformation(line);
 		return line1.getOffset() + line1.getLength();
 	}
+
+	public int indexOf(String substring) throws BadLocationException {
+		for (int i = 0, numberOfLines = getNumberOfLines(); i < numberOfLines; ++i) {
+			final IRegion region = getLineInformation(i);
+			final String line = get(region.getOffset(), region.getLength());
+			final int pos = line.indexOf(substring);
+			if (pos >= 0) {
+				return region.getOffset() + pos;
+			}
+		}
+		return -1;
+	}
+
 }

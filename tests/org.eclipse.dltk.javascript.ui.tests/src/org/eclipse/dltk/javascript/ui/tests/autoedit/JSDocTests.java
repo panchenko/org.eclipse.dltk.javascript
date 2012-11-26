@@ -126,4 +126,164 @@ public class JSDocTests extends JSAutoEditStrategyTestCase {
 		assertEquals(expected.toString(), document.get());
 	}
 
+	@Test
+	public void testVarTypeSimple() throws BadLocationException {
+		final StringList code = new StringList();
+		code.add("var /*");
+		final Document document = createDocument(code);
+		execute(document, createCommand("*", document.getEndOfLineOffset(0)));
+		final StringList expected = new StringList();
+		expected.add("var /** @type {} */ ");
+		assertEquals(expected.toString(), document.get());
+	}
+
+	private static final String COMMENT = "/* comment */";
+
+	@Test
+	public void testVarTypeSimple_comment() throws BadLocationException {
+		final StringList code = new StringList();
+		code.add("var /*");
+		code.add(COMMENT);
+		final Document document = createDocument(code);
+		execute(document, createCommand("*", document.getEndOfLineOffset(0)));
+		final StringList expected = new StringList();
+		expected.add("var /** @type {} */ ");
+		expected.add(COMMENT);
+		assertEquals(expected.toString(), document.get());
+	}
+
+	@Test
+	public void testVarTypeContinuationLine() throws BadLocationException {
+		final StringList code = new StringList();
+		code.add("var /** @type {String} name,");
+		code.add("    /*");
+		final Document document = createDocument(code);
+		execute(document, createCommand("*", document.getEndOfLineOffset(1)));
+		final StringList expected = new StringList();
+		expected.add("var /** @type {String} name,");
+		expected.add("    /** @type {} */ ");
+		assertEquals(expected.toString(), document.get());
+	}
+
+	@Test
+	public void testVarTypeContinuationLine_comment()
+			throws BadLocationException {
+		final StringList code = new StringList();
+		code.add("var /** @type {String} name,");
+		code.add("    /*");
+		code.add(COMMENT);
+		final Document document = createDocument(code);
+		execute(document, createCommand("*", document.getEndOfLineOffset(1)));
+		final StringList expected = new StringList();
+		expected.add("var /** @type {String} name,");
+		expected.add("    /** @type {} */ ");
+		expected.add(COMMENT);
+		assertEquals(expected.toString(), document.get());
+	}
+
+	@Test
+	public void testVarTypeKeywordOnPreviousLine() throws BadLocationException {
+		final StringList code = new StringList();
+		code.add("var");
+		code.add("    /*");
+		final Document document = createDocument(code);
+		execute(document, createCommand("*", document.getEndOfLineOffset(1)));
+		final StringList expected = new StringList();
+		expected.add("var");
+		expected.add("    /** @type {} */ ");
+		assertEquals(expected.toString(), document.get());
+	}
+
+	@Test
+	public void testVarTypeKeywordOnPreviousLine_comment()
+			throws BadLocationException {
+		final StringList code = new StringList();
+		code.add("var");
+		code.add("    /*");
+		code.add(COMMENT);
+		final Document document = createDocument(code);
+		execute(document, createCommand("*", document.getEndOfLineOffset(1)));
+		final StringList expected = new StringList();
+		expected.add("var");
+		expected.add("    /** @type {} */ ");
+		expected.add(COMMENT);
+		assertEquals(expected.toString(), document.get());
+	}
+
+	@Test
+	public void testVarTypeContinuationKeywordOnPreviousLine()
+			throws BadLocationException {
+		final StringList code = new StringList();
+		code.add("var");
+		code.add("    /** @type {String} name,");
+		code.add("    /*");
+		final Document document = createDocument(code);
+		execute(document, createCommand("*", document.getEndOfLineOffset(2)));
+		final StringList expected = new StringList();
+		expected.add("var");
+		expected.add("    /** @type {String} name,");
+		expected.add("    /** @type {} */ ");
+		assertEquals(expected.toString(), document.get());
+	}
+
+	@Test
+	public void testVarTypeContinuationKeywordOnPreviousLine_comment()
+			throws BadLocationException {
+		final StringList code = new StringList();
+		code.add("var");
+		code.add("    /** @type {String} name,");
+		code.add("    /*");
+		code.add(COMMENT);
+		final Document document = createDocument(code);
+		execute(document, createCommand("*", document.getEndOfLineOffset(2)));
+		final StringList expected = new StringList();
+		expected.add("var");
+		expected.add("    /** @type {String} name,");
+		expected.add("    /** @type {} */ ");
+		expected.add(COMMENT);
+		assertEquals(expected.toString(), document.get());
+	}
+
+	@Test
+	public void testFunctionExpression() throws BadLocationException {
+		final StringList code = new StringList();
+		code.add("$(link).click(/*function(){");
+		code.add("});");
+		final Document document = createDocument(code);
+		execute(document, createCommand("*", document.indexOf("function")));
+		final StringList expected = new StringList();
+		expected.add("$(link).click(/**  */ function(){");
+		expected.add("});");
+		assertEquals(expected.toString(), document.get());
+	}
+
+	@Test
+	public void testFunctionExpression_space() throws BadLocationException {
+		final StringList code = new StringList();
+		code.add("$(link).click(/* function(){");
+		code.add("});");
+		final Document document = createDocument(code);
+		execute(document, createCommand("*", document.indexOf(" function")));
+		final StringList expected = new StringList();
+		expected.add("$(link).click(/**  */ function(){");
+		expected.add("});");
+		assertEquals(expected.toString(), document.get());
+	}
+
+	@Test
+	public void testBeforeFunctionDeclaration_noExpansion()
+			throws BadLocationException {
+		final StringList code = new StringList();
+		code.add("/*");
+		code.add("function test() {");
+		code.add("}");
+		final Document document = createDocument(code);
+		execute(document, createCommand("*", document.indexOf("/*") + 2));
+		final StringList expected = new StringList();
+		expected.add("/**");
+		expected.add("function test() {");
+		expected.add("}");
+		assertEquals(expected.toString(), document.get());
+	}
+
 }
