@@ -34,8 +34,6 @@ public class SearchFunctionTests extends AbstractSearchTest {
 	}
 
 	public void testFunctionGlobalField() throws CoreException {
-		if (notYetImplemented())
-			return;
 		IModuleSource module = getModule("functions.js");
 		IModelElement[] elements = select(module,
 				lastPositionInFile("fun1", module, false));
