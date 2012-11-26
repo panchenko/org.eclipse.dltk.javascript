@@ -13,9 +13,11 @@ package org.eclipse.dltk.javascript.ui.tests.autoedit;
 
 import org.eclipse.dltk.core.tests.util.StringList;
 import org.eclipse.jface.text.BadLocationException;
+import org.junit.Test;
 
 public class JSDocTests extends JSAutoEditStrategyTestCase {
 
+	@Test
 	public void testStartJsDoc() throws BadLocationException {
 		StringList code = new StringList();
 		code.add("/**");
@@ -32,6 +34,7 @@ public class JSDocTests extends JSAutoEditStrategyTestCase {
 		assertEquals(expected.toString(), document.get());
 	}
 
+	@Test
 	public void testStartJsDocViaDocStrategy() throws BadLocationException {
 		StringList code = new StringList();
 		code.add("/**");
@@ -50,6 +53,7 @@ public class JSDocTests extends JSAutoEditStrategyTestCase {
 		assertEquals(expected.toString(), document.get());
 	}
 
+	@Test
 	public void testContinueJsDoc() throws BadLocationException {
 		StringList code = new StringList();
 		code.add("/**");
@@ -69,6 +73,7 @@ public class JSDocTests extends JSAutoEditStrategyTestCase {
 		assertEquals(expected.toString(), document.get());
 	}
 
+	@Test
 	public void testStartMultiLineComment() throws BadLocationException {
 		StringList code = new StringList();
 		code.add("/*");
@@ -85,6 +90,7 @@ public class JSDocTests extends JSAutoEditStrategyTestCase {
 		assertEquals(expected.toString(), document.get());
 	}
 
+	@Test
 	public void testContinueMultiLineComment() throws BadLocationException {
 		StringList code = new StringList();
 		code.add("/*");
@@ -104,6 +110,7 @@ public class JSDocTests extends JSAutoEditStrategyTestCase {
 		assertEquals(expected.toString(), document.get());
 	}
 
+	@Test
 	public void testDontStartMultiLineComment() throws BadLocationException {
 		StringList code = new StringList();
 		code.add("/* */");

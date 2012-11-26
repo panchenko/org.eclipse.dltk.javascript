@@ -63,9 +63,6 @@
 				<configuration>
 					<useUIHarness>true</useUIHarness>
 					<argLine>${ui.test.vmargs}</argLine>
-					<includes>
-						<include>**/AllTests.java</include>
-					</includes>
 					<dependencies>
 						<dependency>
 							<type>p2-installable-unit</type>

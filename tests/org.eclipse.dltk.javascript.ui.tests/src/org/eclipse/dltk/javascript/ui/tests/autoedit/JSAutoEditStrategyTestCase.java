@@ -1,11 +1,18 @@
+/*******************************************************************************
+ * Copyright (c) 2010 xored software, Inc.
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
+ *******************************************************************************/
 package org.eclipse.dltk.javascript.ui.tests.autoedit;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-
-import junit.framework.Assert;
-import junit.framework.AssertionFailedError;
-import junit.framework.TestCase;
 
 import org.eclipse.dltk.core.tests.util.StringList;
 import org.eclipse.dltk.javascript.internal.ui.JavaScriptUI;
@@ -18,7 +25,7 @@ import org.eclipse.jface.text.IAutoEditStrategy;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.TextUtilities;
 
-public abstract class JSAutoEditStrategyTestCase extends TestCase {
+public abstract class JSAutoEditStrategyTestCase extends org.junit.Assert {
 
 	protected static final String TAB = "\t";
 
@@ -28,13 +35,13 @@ public abstract class JSAutoEditStrategyTestCase extends TestCase {
 	private final JSDocAutoIndentStrategy docStrategy = new JSDocAutoIndentStrategy(
 			JavaScriptUI.getDefault().getPreferenceStore());
 
-	private IAutoEditStrategy getStrategy(Document document, int offset) {
+	private IAutoEditStrategy getStrategy(IDocument document, int offset) {
 		final String contentType;
 		try {
 			contentType = TextUtilities.getContentType(document,
 					IJavaScriptPartitions.JS_PARTITIONING, offset, true);
 		} catch (BadLocationException e) {
-			throw new AssertionFailedError(e.toString());
+			throw new AssertionError(e.toString());
 		}
 		if (IJavaScriptPartitions.JS_DOC.equals(contentType)
 				|| IJavaScriptPartitions.JS_MULTI_LINE_COMMENT
@@ -47,7 +54,7 @@ public abstract class JSAutoEditStrategyTestCase extends TestCase {
 		}
 	}
 
-	protected void execute(Document document, DocumentCommand cmd) {
+	protected void execute(IDocument document, DocumentCommand cmd) {
 		final IAutoEditStrategy strategy = getStrategy(document, cmd.offset);
 		assertNotNull(strategy);
 		strategy.customizeDocumentCommand(document, cmd);
@@ -62,15 +69,15 @@ public abstract class JSAutoEditStrategyTestCase extends TestCase {
 				execute.setAccessible(true);
 			execute.invoke(cmd, document);
 		} catch (SecurityException e) {
-			Assert.fail(e.toString());
+			throw new AssertionError(e);
 		} catch (NoSuchMethodException e) {
-			Assert.fail(e.toString());
+			throw new AssertionError(e);
 		} catch (IllegalArgumentException e) {
-			Assert.fail(e.toString());
+			throw new AssertionError(e);
 		} catch (IllegalAccessException e) {
-			Assert.fail(e.toString());
+			throw new AssertionError(e);
 		} catch (InvocationTargetException e) {
-			Assert.fail(e.toString());
+			throw new AssertionError(e);
 		}
 	}
 

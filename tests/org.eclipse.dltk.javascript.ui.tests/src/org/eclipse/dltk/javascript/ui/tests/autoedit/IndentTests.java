@@ -13,9 +13,11 @@ package org.eclipse.dltk.javascript.ui.tests.autoedit;
 
 import org.eclipse.dltk.core.tests.util.StringList;
 import org.eclipse.jface.text.BadLocationException;
+import org.junit.Test;
 
 public class IndentTests extends JSAutoEditStrategyTestCase {
 
+	@Test
 	public void testIndentInFunctionBody() throws BadLocationException {
 		StringList code = new StringList();
 		code.add("function test() {");
@@ -29,6 +31,7 @@ public class IndentTests extends JSAutoEditStrategyTestCase {
 		assertEquals(expected.toString(), document.get());
 	}
 
+	@Test
 	public void testIndentInObjectLiteral() throws BadLocationException {
 		StringList code = new StringList();
 		code.add("var x = {");
@@ -42,6 +45,7 @@ public class IndentTests extends JSAutoEditStrategyTestCase {
 		assertEquals(expected.toString(), document.get());
 	}
 
+	@Test
 	public void testIndentInObjectLiteralInFunctionCall()
 			throws BadLocationException {
 		StringList code = new StringList();
@@ -56,6 +60,7 @@ public class IndentTests extends JSAutoEditStrategyTestCase {
 		assertEquals(expected.toString(), document.get());
 	}
 
+	@Test
 	public void testIndentInObjectLiteralFunctionBody()
 			throws BadLocationException {
 		StringList code = new StringList();
@@ -82,6 +87,7 @@ public class IndentTests extends JSAutoEditStrategyTestCase {
 		assertEquals(expected.toString(), document.get());
 	}
 
+	@Test
 	public void testIndentIfBetweenFunctionAndDoc() throws BadLocationException {
 		StringList code = new StringList();
 		code.add("var methods = {");
@@ -107,6 +113,7 @@ public class IndentTests extends JSAutoEditStrategyTestCase {
 		assertEquals(expected.toString(), document.get());
 	}
 
+	@Test
 	public void testIndentInObjectLiteralFunctionBody1()
 			throws BadLocationException {
 		StringList code = new StringList();
@@ -135,6 +142,7 @@ public class IndentTests extends JSAutoEditStrategyTestCase {
 		assertEquals(expected.toString(), document.get());
 	}
 
+	@Test
 	public void testIndentInObjectLiteralFunctionBody2()
 			throws BadLocationException {
 		StringList code = new StringList();
@@ -165,6 +173,7 @@ public class IndentTests extends JSAutoEditStrategyTestCase {
 		assertEquals(expected.toString(), document.get());
 	}
 
+	@Test
 	public void testIndentInObjectLiteralFunctionBody2ws()
 			throws BadLocationException {
 		StringList code = new StringList();
@@ -195,6 +204,7 @@ public class IndentTests extends JSAutoEditStrategyTestCase {
 		assertEquals(expected.toString(), document.get());
 	}
 
+	@Test
 	public void testAfterClassCreate() throws BadLocationException {
 		StringList code = new StringList();
 		code.add("var x = test1(),");
@@ -213,6 +223,7 @@ public class IndentTests extends JSAutoEditStrategyTestCase {
 		assertEquals(expected.toString(), document.get());
 	}
 
+	@Test
 	public void testAfterVarStatement() throws BadLocationException {
 		StringList code = new StringList();
 		code.add("function test() {");
@@ -228,6 +239,7 @@ public class IndentTests extends JSAutoEditStrategyTestCase {
 		assertEquals(expected.toString(), document.get());
 	}
 
+	@Test
 	public void testAfterTypedVarStatement() throws BadLocationException {
 		StringList code = new StringList();
 		code.add("function test() {");
@@ -243,6 +255,7 @@ public class IndentTests extends JSAutoEditStrategyTestCase {
 		assertEquals(expected.toString(), document.get());
 	}
 
+	@Test
 	public void testVarInitializedWithArray() throws BadLocationException {
 		StringList code = new StringList();
 		code.add("var x = []");
@@ -254,6 +267,7 @@ public class IndentTests extends JSAutoEditStrategyTestCase {
 		assertEquals(expected.toString(), document.get());
 	}
 
+	@Test
 	public void testAfterFunction() throws BadLocationException {
 		StringList code = new StringList();
 		code.add("function test() {");
@@ -266,6 +280,7 @@ public class IndentTests extends JSAutoEditStrategyTestCase {
 		assertEquals(expected.toString(), document.get());
 	}
 
+	@Test
 	public void testAfterIf() throws BadLocationException {
 		StringList code = new StringList();
 		code.add("if (a > b)");
@@ -277,6 +292,7 @@ public class IndentTests extends JSAutoEditStrategyTestCase {
 		assertEquals(expected.toString(), document.get());
 	}
 
+	@Test
 	public void testAfterIfBrace() throws BadLocationException {
 		StringList code = new StringList();
 		code.add("if (a > b) {");
@@ -289,6 +305,7 @@ public class IndentTests extends JSAutoEditStrategyTestCase {
 		assertEquals(expected.toString(), document.get());
 	}
 
+	@Test
 	public void testElse() throws BadLocationException {
 		StringList code = new StringList();
 		code.add("if (a > b)");
@@ -301,6 +318,7 @@ public class IndentTests extends JSAutoEditStrategyTestCase {
 		assertEquals(expected.toString(), document.get());
 	}
 
+	@Test
 	public void testCaseIndent() throws BadLocationException {
 		StringList code = new StringList();
 		code.add("switch (x) {");
@@ -316,6 +334,7 @@ public class IndentTests extends JSAutoEditStrategyTestCase {
 		assertEquals(expected.toString(), document.get());
 	}
 
+	@Test
 	public void testCaseNext() throws BadLocationException {
 		StringList code = new StringList();
 		code.add("switch (x) {");
@@ -332,6 +351,7 @@ public class IndentTests extends JSAutoEditStrategyTestCase {
 		assertEquals(expected.toString(), document.get());
 	}
 
+	@Test
 	public void testAfterArrayLiteralNext() throws BadLocationException {
 		StringList code = new StringList();
 		code.add("var a = [1, 2, 3]");
@@ -343,6 +363,7 @@ public class IndentTests extends JSAutoEditStrategyTestCase {
 		assertEquals(expected.toString(), document.get());
 	}
 
+	@Test
 	public void testRightBrace() throws BadLocationException {
 		StringList code = new StringList();
 		code.add("if (a > b) {");

@@ -11,28 +11,11 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.ui.tests;
 
-import junit.framework.JUnit4TestAdapter;
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
 import org.eclipse.dltk.core.tests.WorkspaceSetup;
-import org.eclipse.dltk.javascript.ui.tests.autoedit.IndentTests;
-import org.eclipse.dltk.javascript.ui.tests.autoedit.JSDocTests;
-import org.eclipse.dltk.javascript.ui.tests.codeassist.JSCodeAssistUITest;
 
 public class AllTests {
 
 	public static final WorkspaceSetup WORKSPACE = new WorkspaceSetup(
 			AllTests.class);
-
-	public static Test suite() {
-		TestSuite suite = new TestSuite("org.eclipse.dltk.javascript.ui.tests");
-		// $JUnit-BEGIN$
-		suite.addTestSuite(IndentTests.class);
-		suite.addTestSuite(JSDocTests.class);
-		suite.addTest(new JUnit4TestAdapter(JSCodeAssistUITest.class));
-		// $JUnit-END$
-		return suite;
-	}
 
 }
