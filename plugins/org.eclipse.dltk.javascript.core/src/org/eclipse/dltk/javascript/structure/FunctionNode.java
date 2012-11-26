@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.structure;
 
+import static java.lang.Math.min;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -92,7 +94,8 @@ public abstract class FunctionNode extends Scope {
 		final boolean allowed = context.allow(IStructureContext.METHOD);
 		if (allowed) {
 			final MethodInfo info = new MethodInfo();
-			info.declarationStart = function.start();
+			final ISourceNode nameNode = getNameNode();
+			info.declarationStart = min(nameNode.start(), function.start());
 			info.name = getName();
 			if (method.getVisibility() != null) {
 				info.modifiers |= method.getVisibility().getFlags();
@@ -100,7 +103,6 @@ public abstract class FunctionNode extends Scope {
 			if (method.isDeprecated()) {
 				info.modifiers |= JSModifiers.DEPRECATED;
 			}
-			final ISourceNode nameNode = getNameNode();
 			info.nameSourceStart = nameNode.start();
 			info.nameSourceEnd = nameNode.end() - 1;
 			final List<ArgumentNode> arguments = getArguments();

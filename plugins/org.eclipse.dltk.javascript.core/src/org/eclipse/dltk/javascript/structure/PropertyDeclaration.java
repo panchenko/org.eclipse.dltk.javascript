@@ -96,7 +96,7 @@ public class PropertyDeclaration extends ParentNode implements IDeclaration {
 		} else {
 			if (allowed) {
 				final FieldInfo info = new FieldInfo();
-				info.declarationStart = initializer.start();
+				info.declarationStart = initializer.getName().start();
 				info.name = getName();
 				info.nameSourceStart = initializer.getName().start();
 				info.nameSourceEnd = initializer.getName().end() - 1;
