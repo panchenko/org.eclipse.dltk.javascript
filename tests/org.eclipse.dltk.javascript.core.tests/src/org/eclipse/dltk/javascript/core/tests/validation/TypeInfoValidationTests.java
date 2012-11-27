@@ -18,8 +18,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.dltk.compiler.problem.IProblem;
+import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
 import org.eclipse.dltk.core.tests.util.StringList;
 import org.eclipse.dltk.internal.javascript.validation.ValidationMessages;
@@ -2652,5 +2654,93 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(JavaScriptProblems.WRONG_PARAMETERS, problems.get(0)
 				.getID());
 	}
+	
 
+	public void testReturnWith2NewInstances() throws Exception {
+		StringList code = new StringList();
+		code.add("function myObject() { this.me = 'myself'; }");
+		code.add("function createMyObject(myParam) {");
+		code.add(" if (!myParam) { return new myObject(); }");
+		code.add(" return new myObject();");
+		code.add("}");
+		final List<IProblem> problems = validate(code
+				.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
+
+	public void testReturnWith1NewInstanceAnd1CallInstance() throws Exception {
+		StringList code = new StringList();
+		code.add("function myObject() { this.me = 'myself'; }");
+		code.add("function getMyObject() {");
+		code.add(" return new myObject();");
+		code.add("}");
+		code.add("function createMyObject(myParam) {");
+		code.add(" if (!myParam) { return new myObject(); }");
+		code.add(" return getMyObject();");
+		code.add("}");
+		final List<IProblem> problems = validate(code
+				.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
+	public void testReturnWith2CallInstance() throws Exception {
+		StringList code = new StringList();
+		code.add("function myObject() { this.me = 'myself'; }");
+		code.add("function getMyObject() {");
+		code.add(" return new myObject();");
+		code.add("}");
+		code.add("function getMyObject2() {");
+		code.add(" return new myObject();");
+		code.add("}");
+		code.add("function createMyObject(myParam) {");
+		code.add(" if (!myParam) { return getMyObject2(); }");
+		code.add(" return getMyObject();");
+		code.add("}");
+		final List<IProblem> problems = validate(code
+				.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
+	public void testReturnWith1CallJSDocInstanceAnd1NewInstance() throws Exception {
+		StringList code = new StringList();
+		code.add("function myObject() { this.me = 'myself'; }");
+		code.add("/**"); 
+		code.add(" * @return {myObject}");
+		code.add(" */"); 
+		code.add("function getMyObject() {");
+		code.add(" return null;");
+		code.add("}");
+		code.add("function createMyObject(myParam) {");
+		code.add(" if (!myParam) { return new myObject(); }");
+		code.add(" return getMyObject();");
+		code.add("}");
+		final List<IProblem> problems = validate(code
+				.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
+	public void testReturnWith2CallJSDocInstance() throws Exception {
+		StringList code = new StringList();
+		code.add("function myObject() { this.me = 'myself'; }");
+		code.add("/**"); 
+		code.add(" * @return {myObject}");
+		code.add(" */"); 
+		code.add("function getMyObject() {");
+		code.add(" return null;");
+		code.add("}");
+		code.add("/**"); 
+		code.add(" * @return {myObject}");
+		code.add(" */"); 
+		code.add("function getMyObject2() {");
+		code.add(" return null;");
+		code.add("}");
+		code.add("function createMyObject(myParam) {");
+		code.add(" if (!myParam) { return getMyObject2(); }");
+		code.add(" return getMyObject();");
+		code.add("}");
+		final List<IProblem> problems = validate(code
+				.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}	
 }
