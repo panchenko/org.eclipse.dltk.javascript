@@ -616,4 +616,20 @@ public class CodeCompletion extends AbstractCompletionTest {
 		}
 	}
 
+	public void testArrayOfLazyTypeInitializedEmpty() {
+		final StringList code = new StringList();
+		code.add("function MyObject() {");
+		code.add("	this.test = 10;");
+		code.add("}");
+		code.add("/**");
+		code.add(" * @type {Array<MyObject>}");
+		code.add(" */");
+		code.add("var x = [];");
+		code.add("x[0].");
+		final IModuleSource module = new TestModule(code.toString());
+		String[] names = new String[] { "test" };
+		int position = lastPositionInFile(".", module);
+		basicTest(module, position, concat(getMethodsOfObject(), names));
+	}
+
 }

@@ -115,7 +115,8 @@ public abstract class ElementValue implements IValue {
 			// NoneType
 			if (arrayType != null
 					&& TypeUtil.kind(arrayType) != TypeKind.UNKNOWN
-					&& arrayType != RTypes.none()) {
+					&& arrayType != RTypes.none()
+					&& arrayType != RTypes.arrayOf().getItemType()) {
 				return new TypeValue(context, arrayType);
 			}
 		}

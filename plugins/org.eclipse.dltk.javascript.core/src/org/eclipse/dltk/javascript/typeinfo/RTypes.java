@@ -143,10 +143,13 @@ public class RTypes {
 	 * Returns the instance of the <b>empty array literal</b>.
 	 */
 	public static IRArrayType arrayOf() {
-		return arrayOf(TypeSystems.GLOBAL, EMPTY_ARRAY_ITEM_TYPE);
+		return ARRAY_OF;
 	}
 
 	static final IRType EMPTY_ARRAY_ITEM_TYPE = new EmptyArrayItem();
+
+	private static final IRArrayType ARRAY_OF = arrayOf(TypeSystems.GLOBAL,
+			EMPTY_ARRAY_ITEM_TYPE);
 
 	static class EmptyArrayItem extends RType {
 		public String getName() {
