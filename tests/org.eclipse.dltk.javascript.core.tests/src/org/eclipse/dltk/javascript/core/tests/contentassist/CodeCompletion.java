@@ -17,7 +17,6 @@ import org.eclipse.dltk.javascript.ast.Keywords;
 import org.eclipse.dltk.javascript.core.JavaScriptKeywords;
 import org.eclipse.dltk.javascript.internal.core.codeassist.JSCompletionEngine;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
-import org.eclipse.dltk.javascript.typeinfo.MemberPredicates;
 
 public class CodeCompletion extends AbstractCompletionTest {
 
@@ -60,7 +59,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 	 * dumb completion on function
 	 */
 	public void test3() {
-		String[] names = concat(getMethodsOfObject(), "world");
+		String[] names = concat(getMembersOfObject(), "world");
 		IModuleSource module = createModule("test3.js");
 		int position = lastPositionInFile("firstVar.", module);
 		basicTest(module, position, names);
@@ -72,7 +71,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 	 * dumb completion on function
 	 */
 	public void test4() {
-		String[] names = concat(getMethodsOfString(), "temperature");
+		String[] names = concat(getMembersOfString(), "temperature");
 		IModuleSource module = createModule("test4.js");
 		int position = lastPositionInFile("firstVar.world.", module);
 		basicTest(module, position, names);
@@ -80,8 +79,8 @@ public class CodeCompletion extends AbstractCompletionTest {
 	}
 
 	public void test5() {
-		String[] names = concat(getMethodsOfString(), "world");
-		String[] names1 = concat(getMethodsOfString(), "temperature");
+		String[] names = concat(getMembersOfString(), "world");
+		String[] names1 = concat(getMembersOfString(), "temperature");
 		IModuleSource module = createModule("test5.js");
 		int positionFirst = lastPositionInFile("secondVar.", module);
 		basicTest(module, positionFirst, names);
@@ -92,7 +91,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 	}
 
 	public void test6() {
-		String[] names = concat(getMethodsOfString(), "world");
+		String[] names = concat(getMembersOfString(), "world");
 		// String[] names1=new String[]{"temperature"};
 		IModuleSource module = createModule("test6.js");
 		int position = lastPositionInFile("world.", module);
@@ -102,7 +101,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 	}
 
 	public void test7() {
-		String[] names = concat(getMethodsOfString(), "world");
+		String[] names = concat(getMembersOfString(), "world");
 		// String[] names1=new String[]{"temperature"};
 		IModuleSource module = createModule("test7.js");
 		int position = lastPositionInFile("world.", module);
@@ -112,7 +111,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 	}
 
 	public void test8() {
-		String[] names = concat(getMethodsOfString(), "mission", "target");
+		String[] names = concat(getMembersOfString(), "mission", "target");
 		// String[] names1=new String[]{"temperature"};
 		IModuleSource module = createModule("test8.js");
 		int position = lastPositionInFile("firstVar.", module);
@@ -122,7 +121,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 	}
 
 	public void test9() {
-		String[] names = concat(getMethodsOfString());
+		String[] names = concat(getMembersOfString());
 		// String[] names1=new String[]{"temperature"};
 		IModuleSource module = createModule("test9.js");
 		int position = lastPositionInFile("firstVar.", module);
@@ -132,7 +131,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 	}
 
 	public void test10() {
-		String[] names = concat(getMethodsOfString(), "mission", "target");
+		String[] names = concat(getMembersOfString(), "mission", "target");
 		// String[] names1=new String[]{"temperature"};
 		IModuleSource module = createModule("test10.js");
 		// basicTest(module, 139, names);
@@ -158,14 +157,14 @@ public class CodeCompletion extends AbstractCompletionTest {
 	}
 
 	public void test13() {
-		String[] names = concat(getMethodsOfString(), "element");
+		String[] names = concat(getMembersOfString(), "element");
 		IModuleSource module = createModule("test13.js");
 		int position = lastPositionInFile("firstVar.", module);
 		basicTest(module, position, names);
 	}
 
 	public void test14() {
-		String[] names = concat(getMethodsOfString(), "element");
+		String[] names = concat(getMembersOfString(), "element");
 		IModuleSource module = createModule("test14.js");
 		int position = lastPositionInFile("firstVar.", module);
 		basicTest(module, position, names);
@@ -173,7 +172,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 	}
 
 	public void test15() {
-		String[] names = concat(getMethodsOfNumber());
+		String[] names = concat(getMembersOfNumber());
 		IModuleSource module = createModule("test15.js");
 		int position = lastPositionInFile("firstVar.", module);
 		basicTest(module, position, names);
@@ -205,7 +204,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 	}
 
 	public void test19() {
-		String[] names = concat(getMethodsOfNumber());
+		String[] names = concat(getMembersOfNumber());
 		IModuleSource module = createModule("test19.js");
 		int position = lastPositionInFile("hello.", module);
 		basicTest(module, position, names);
@@ -213,7 +212,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 	}
 
 	public void test20() {
-		String[] names = concat(getMethodsOfNumber(), "my");
+		String[] names = concat(getMembersOfNumber(), "my");
 		IModuleSource module = createModule("test20.js");
 		int position = lastPositionInFile("hello.", module);
 		basicTest(module, position, names);
@@ -221,7 +220,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 	}
 
 	public void test21() {
-		String[] names = concat(getMethodsOfNumber(), "favorite");
+		String[] names = concat(getMembersOfNumber(), "favorite");
 		IModuleSource module = createModule("test21.js");
 		int position = lastPositionInFile("hello.my.", module);
 		basicTest(module, position, names);
@@ -231,7 +230,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 	public void test22() {
 		if (notYetImplemented(this))
 			return;
-		String[] names = concat(getMethodsOfNumber());
+		String[] names = concat(getMembersOfNumber());
 		IModuleSource module = createModule("test22.js");
 		int position = lastPositionInFile("hello.", module);
 		basicTest(module, position, names);
@@ -247,7 +246,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 	}
 
 	public void test24() {
-		String[] names = concat(getMethodsOfNumber(), "age", "wine");
+		String[] names = concat(getMembersOfNumber(), "age", "wine");
 		IModuleSource module = createModule("test24.js");
 		int position = lastPositionInFile("hello.olive.", module);
 		basicTest(module, position, names);
@@ -255,7 +254,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 	}
 
 	public void test25() {
-		String[] names = concat(getMethodsOfNumber(), "age", "my", "olive",
+		String[] names = concat(getMembersOfNumber(), "age", "my", "olive",
 				"wine");
 
 		IModuleSource module = createModule("test25.js");
@@ -267,7 +266,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 	public void test26() {
 		if (notYetImplemented(this))
 			return;
-		String[] names = concat(getMethodsOfNumber(), "wine");
+		String[] names = concat(getMembersOfNumber(), "wine");
 
 		IModuleSource module = createModule("test26.js");
 		int position = lastPositionInFile("hello.olive.", module);
@@ -284,7 +283,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 	}
 
 	public void test28() {
-		String[] names = concat(getMethodsOfNumber());
+		String[] names = concat(getMembersOfNumber());
 		IModuleSource module = createModule("test28.js");
 		int position = lastPositionInFile("hello.", module);
 		basicTest(module, position, names);
@@ -300,7 +299,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 	}
 
 	public void test30() {
-		String[] names = concat(getMethodsOfNumber(), "xsd");
+		String[] names = concat(getMembersOfNumber(), "xsd");
 		IModuleSource module = createModule("test30.js");
 		int position = lastPositionInFile("sz.", module);
 		basicTest(module, position, names);
@@ -308,7 +307,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 	}
 
 	public void test31() {
-		String[] names = concat(getMethodsOfString(), "x");
+		String[] names = concat(getMembersOfString(), "x");
 		IModuleSource module = createModule("test31.js");
 		int position = lastPositionInFile("node.", module);
 		basicTest(module, position, names);
@@ -316,7 +315,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 	}
 
 	public void test32() {
-		String[] names = concat(getMethodsOfString(), "x");
+		String[] names = concat(getMembersOfString(), "x");
 		IModuleSource module = createModule("test32.js");
 		int position = lastPositionInFile("node.", module);
 		basicTest(module, position, names);
@@ -341,7 +340,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 	}
 
 	public void test35() {
-		String[] names = concat(getMethodsOfNumber(), "x");
+		String[] names = concat(getMembersOfNumber(), "x");
 		IModuleSource module = createModule("test35.js");
 		int position = lastPositionInFile("c.", module);
 		basicTest(module, position, names);
@@ -374,7 +373,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 	}
 
 	public void test39() {
-		String[] names = concat(getMethodsOfNumber(), "er");
+		String[] names = concat(getMembersOfNumber(), "er");
 		IModuleSource module = createModule("test39.js");
 		int position = lastPositionInFile("eer.", module);
 		basicTest(module, position, names);
@@ -425,7 +424,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 		String[] names = new String[] { "word", "other_word" };
 		IModuleSource module = createModule("test45.js");
 		int position = lastPositionInFile("x.hello.", module);
-		basicTest(module, position, concat(getMethodsOfObject(), names));
+		basicTest(module, position, concat(getMembersOfObject(), names));
 		// basicTest(module, 139, names);
 	}
 
@@ -458,7 +457,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 	public void test49() {
 		IModuleSource module = createModule("test49.js");
 		int position = lastPositionInFile("name.", module);
-		basicTest(module, position, concat(getMethodsOfString()));
+		basicTest(module, position, concat(getMembersOfString()));
 		// basicTest(module, 105, names);
 	}
 
@@ -491,7 +490,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 		String[] names = new String[] { "a", "b" };
 		IModuleSource module = createModule("test-return-value.js");
 		int position = lastPositionInFile("execute().", module);
-		basicTest(module, position, concat(getMethodsOfObject(), names));
+		basicTest(module, position, concat(getMembersOfObject(), names));
 	}
 
 	public void testFunctionRefs() {
@@ -511,7 +510,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 	public void testArrayInitializer() {
 		IModuleSource module = createModule("test-array-intializer.js");
 		int position = lastPositionInFile("].", module);
-		basicTest(module, position, concat(getMethodsOfArray()));
+		basicTest(module, position, concat(getMembersOfArray()));
 	}
 
 	public void testParamType() {
@@ -530,13 +529,13 @@ public class CodeCompletion extends AbstractCompletionTest {
 	public void testNewViaClassRef() {
 		IModuleSource module = createModule("test-new-via-class-ref.js");
 		int position = lastPositionInFile(".", module);
-		basicTest(module, position, concat(getMethodsOfNumber()));
+		basicTest(module, position, concat(getMembersOfNumber()));
 	}
 
 	public void testXmlVar() {
 		IModuleSource module = createModule("test-xml-name.js");
 		int position = lastPositionInFile(".", module);
-		basicTest(module, position, concat(getMethodsOfNumber()));
+		basicTest(module, position, concat(getMembersOfNumber()));
 	}
 
 	public void testObjectLiteral() {
@@ -561,12 +560,8 @@ public class CodeCompletion extends AbstractCompletionTest {
 	public void testStaticMath() {
 		IModuleSource module = new TestModule("Math.");
 		int position = lastPositionInFile(".", module);
-		basicTest(
-				module,
-				position,
-				concat(getMembers("Math", STATIC),
-						getMembers(ITypeNames.OBJECT,
-								MemberPredicates.NON_STATIC)));
+		basicTest(module, position,
+				concat(getMembers("Math", STATIC), getMembersOfObject()));
 	}
 
 	public void testArrayOfRecords() {
@@ -577,7 +572,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 		final IModuleSource module = new TestModule(code.toString());
 		String[] names = new String[] { "x", "y" };
 		int position = lastPositionInFile(".", module);
-		basicTest(module, position, concat(getMethodsOfObject(), names));
+		basicTest(module, position, concat(getMembersOfObject(), names));
 	}
 
 	public void testPropertyInitializerValue_FilteredKeywords1() {
@@ -629,7 +624,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 		final IModuleSource module = new TestModule(code.toString());
 		String[] names = new String[] { "test" };
 		int position = lastPositionInFile(".", module);
-		basicTest(module, position, concat(getMethodsOfObject(), names));
+		basicTest(module, position, concat(getMembersOfObject(), names));
 	}
 
 }

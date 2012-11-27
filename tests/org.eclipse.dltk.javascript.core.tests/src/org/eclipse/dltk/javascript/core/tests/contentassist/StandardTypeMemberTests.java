@@ -14,23 +14,23 @@ package org.eclipse.dltk.javascript.core.tests.contentassist;
 public class StandardTypeMemberTests extends AbstractCompletionTest {
 
 	public void testString() {
-		assertEquals(40, getMethodsOfString().size());
+		assertEquals(40, getMembersOfString().size());
 	}
 
 	public void testNumber() {
-		assertEquals(10, getMethodsOfNumber().size());
+		assertEquals(10, getMembersOfNumber().size());
 	}
 
 	public void testObject() {
-		assertEquals(7, getMethodsOfObject().size());
+		assertEquals(7, getMembersOfObject().size());
 	}
 
 	public void testXML() {
-		assertEquals(39, getMethodsOfXML().size());
+		assertEquals(39, getMembersOfXML().size());
 	}
 	
 	public void testArray() {
-		assertEquals(25, getMethodsOfArray().size());
+		assertEquals(25, getMembersOfArray().size());
 	}
 
 	public void testFunction() {

@@ -229,11 +229,11 @@ public abstract class AbstractCompletionTest extends AbstractContentAssistTest {
 		return m;
 	}
 
-	protected static List<String> getMethodsOfObject() {
+	protected static List<String> getMembersOfObject() {
 		return getMembers(ITypeNames.OBJECT, MemberPredicates.NON_STATIC);
 	}
 
-	protected static List<String> getMethodsOfArray() {
+	protected static List<String> getMembersOfArray() {
 		return getMembers(ITypeNames.ARRAY, MemberPredicates.NON_STATIC);
 	}
 
@@ -241,15 +241,15 @@ public abstract class AbstractCompletionTest extends AbstractContentAssistTest {
 		return getMembers(ITypeNames.FUNCTION, MemberPredicates.NON_STATIC);
 	}
 
-	protected static List<String> getMethodsOfNumber() {
+	protected static List<String> getMembersOfNumber() {
 		return getMembers(ITypeNames.NUMBER, MemberPredicates.NON_STATIC);
 	}
 
-	protected static List<String> getMethodsOfString() {
+	protected static List<String> getMembersOfString() {
 		return getMembers(ITypeNames.STRING, MemberPredicates.NON_STATIC);
 	}
 
-	protected static List<String> getMethodsOfXML() {
+	protected static List<String> getMembersOfXML() {
 		return getMembers(ITypeNames.XML, MemberPredicates.NON_STATIC);
 	}
 
