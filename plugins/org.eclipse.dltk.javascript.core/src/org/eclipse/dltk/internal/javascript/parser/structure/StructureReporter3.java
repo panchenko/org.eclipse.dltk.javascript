@@ -127,7 +127,7 @@ public class StructureReporter3 extends
 
 	@Override
 	public IStructureNode visitFunctionStatement(FunctionStatement node) {
-		final JSMethod method = new JSMethod(node, ReferenceSource.UNKNOWN);
+		final JSMethod method = new JSMethod(node, referenceSource);
 		jsdocSupport.processMethod(node, method, fReporter, fTypeChecker);
 		final FunctionNode functionNode;
 		if (node.isDeclaration()) {
