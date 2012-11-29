@@ -1,0 +1,6 @@
+/**
+ * @param {Number} y
+ */
+function square(y) {
+	return y * y;
+}
