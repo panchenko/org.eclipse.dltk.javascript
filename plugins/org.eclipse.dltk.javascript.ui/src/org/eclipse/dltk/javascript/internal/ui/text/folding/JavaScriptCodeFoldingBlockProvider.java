@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.Map;
 
+import org.eclipse.dltk.annotations.Internal;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.parser.IModuleDeclaration;
 import org.eclipse.dltk.core.DLTKCore;
@@ -25,13 +26,11 @@ import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.core.SourceParserUtil;
-import org.eclipse.dltk.core.SourceRange;
 import org.eclipse.dltk.javascript.ast.AbstractNavigationVisitor;
 import org.eclipse.dltk.javascript.ast.BinaryOperation;
 import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.IVariableStatement;
-import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.Method;
 import org.eclipse.dltk.javascript.ast.ObjectInitializer;
 import org.eclipse.dltk.javascript.ast.Script;
@@ -87,34 +86,27 @@ public class JavaScriptCodeFoldingBlockProvider extends
 	}
 
 	@SuppressWarnings("serial")
-	public static class MethodCollector extends
-			HashMap<ISourceRange, IModelElement> implements
-			IModelElementVisitor {
+	@Internal
+	static class MethodCollector extends HashMap<Integer, IModelElement>
+			implements IModelElementVisitor {
 
 		public boolean visit(IModelElement element) {
-
 			if (element instanceof IMethod) {
 				try {
-					put(new SourceRange(((IMethod) element).getNameRange()),
-							element);
+					final ISourceRange range = ((IMethod) element)
+							.getSourceRange();
+					// end offset works for both function declarations and
+					// expressions.
+					put(range.getOffset() + range.getLength(), element);
 				} catch (ModelException e) {
 					// empty
 				}
 			}
 			return true;
 		}
-
-		/**
-		 * @param offset
-		 * @param length
-		 */
-		public IModelElement get(int offset, int length) {
-			return get(new SourceRange(offset, length));
-		}
-
 	}
 
-	private MethodCollector methodCollector = new MethodCollector();
+	private final MethodCollector methodCollector = new MethodCollector();
 
 	public void computeFoldableBlocks(IFoldingContent content) {
 		names.clear();
@@ -135,12 +127,7 @@ public class JavaScriptCodeFoldingBlockProvider extends
 
 	@Override
 	public Object visitFunctionStatement(FunctionStatement node) {
-		IModelElement element = null;
-		final Identifier name = node.getName();
-		if (name != null) {
-			element = methodCollector.get(name.sourceStart(), name.sourceEnd()
-					- name.sourceStart());
-		}
+		final IModelElement element = methodCollector.get(node.end());
 
 		requestor.acceptBlock(node.sourceStart(), node.sourceEnd(),
 				JavaScriptFoldingBlockKind.FUNCTION, element, collapseMethods);
@@ -209,7 +196,7 @@ public class JavaScriptCodeFoldingBlockProvider extends
 		return super.visitVariableStatement(node);
 	}
 
-	static class Key {
+	private static class Key {
 		final String name;
 		final int occurence;
 
@@ -235,7 +222,7 @@ public class JavaScriptCodeFoldingBlockProvider extends
 	}
 
 	@SuppressWarnings("serial")
-	static class Scope extends IdentityHashMap<ASTNode, Key> {
+	private static class Scope extends IdentityHashMap<ASTNode, Key> {
 		final String name;
 
 		public Scope(String name) {
