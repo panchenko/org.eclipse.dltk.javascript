@@ -9,11 +9,13 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.ui.templates;
 
+import org.eclipse.dltk.internal.javascript.typeinference.CompletionString;
 import org.eclipse.dltk.javascript.internal.core.codeassist.JavaScriptCompletionUtil;
 import org.eclipse.dltk.ui.templates.ScriptTemplateAccess;
 import org.eclipse.dltk.ui.templates.ScriptTemplateCompletionProcessor;
 import org.eclipse.dltk.ui.text.DocumentUtils;
 import org.eclipse.dltk.ui.text.completion.ScriptContentAssistInvocationContext;
+import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
@@ -32,6 +34,16 @@ public class JavaScriptTemplateCompletionProcessor extends
 	public JavaScriptTemplateCompletionProcessor(
 			ScriptContentAssistInvocationContext context) {
 		super(context);
+	}
+
+	@Override
+	protected String extractPrefix(ITextViewer viewer, int offset) {
+		int i = offset;
+		IDocument document = viewer.getDocument();
+		if (i > document.getLength())
+			return "";
+		return CompletionString.parse(document.get().substring(0, offset),
+				false, true);
 	}
 
 	/*

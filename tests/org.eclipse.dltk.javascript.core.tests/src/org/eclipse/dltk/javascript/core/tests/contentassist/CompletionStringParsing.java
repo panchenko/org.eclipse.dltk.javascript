@@ -80,7 +80,14 @@ public class CompletionStringParsing extends TestCase {
 		assertEquals("forms.xxx.[].yyy.[]",
 				parse("someCode forms.xxx[xxx].yyy[yyy]", true));
 		assertEquals("", parse("someCode forms.xxx[xxx].yyy[yyy] ", true));
-
+		assertEquals("", parse("x.f2()\n .\n\tf2()\n\t.\n\tf1()\n", true));
+	}
+	
+	public void testWithValidWhiteSpace() throws Exception {
+		assertEquals("x.f2.f2", parse("x.f2().\n\tf2()", true));
+		assertEquals("x.f2.f2", parse("x.f2()\n .\n\tf2()", true));
+		assertEquals("x.f2.f2.f1", parse("x.f2()\n .\n\tf2()\n\t.\n\tf1()", true));
+		assertEquals("x.f2.f2.f1.", parse("x.f2()\n .\n\tf2()\n\t.\n\tf1()\n.", true));
 	}
 
 	public void testWithMultiplyParams() throws Exception {
@@ -125,5 +132,5 @@ public class CompletionStringParsing extends TestCase {
 	public void testFunctionArray() throws Exception {
 		assertEquals("execute.[]", parse("execute()[0]", true));
 	}
-
+	
 }

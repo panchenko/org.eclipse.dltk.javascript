@@ -673,5 +673,30 @@ public class CodeCompletion extends AbstractCompletionTest {
 		assertEquals(1, results.size());
 		assertEquals(CompletionProposal.METHOD_REF, results.get(0).getKind());
 	}
-	
+
+	public void testCodeCompletionWithValidWhiteSpace() {
+		final StringList code = new StringList();
+		
+		code.add("function Test() {");
+		code.add("	/**@return {Test}*/");
+		code.add("	this.f1 = function(){return this;}");
+		code.add("  /**@return {Test}*/");
+		code.add("  this.f2 = function(){return this;}");
+		code.add("}");
+		
+		code.add("function testCC() {"); 
+		code.add("	var x = new Test();");
+		code.add("  x.f1().f2().");
+		code.add("  f1()");
+		code.add("  .f1().  f1()");
+		code.add("  .f1().");
+		code.add("   ");
+		code.add(" }");
+		final IModuleSource module = new TestModule(code.toString());
+		int position = lastPositionInFile("   ", module);
+		List<CompletionProposal> results = new ArrayList<CompletionProposal>();
+		ICompletionEngine c = createEngine(results, JSCompletionEngine.OPTION_NONE);
+		c.complete(module, position, 0);
+		assertEquals(2, results.size());
+	}
 }

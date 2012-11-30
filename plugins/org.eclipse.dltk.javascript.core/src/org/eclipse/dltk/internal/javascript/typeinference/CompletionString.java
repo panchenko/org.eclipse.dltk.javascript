@@ -38,7 +38,7 @@ public class CompletionString {
 		final Stack<Bracket> inBrackStack = new Stack<Bracket>();
 		boolean inStringSingle = false;
 		boolean inStringDouble = false;
-		for (int i = id.length(); --i >= 0;) {
+		outer: for (int i = id.length(); --i >= 0;) {
 			char c = id.charAt(i);
 			if (c == '\'') {
 				if (inStringSingle) {
@@ -126,9 +126,29 @@ public class CompletionString {
 					&& inBrackStack.isEmpty()
 					&& (Character.isWhitespace(c) || !Character
 							.isJavaIdentifierPart(c))) {
+				int k = i;
+				while (k-- > 0) {
+					if (!Character.isWhitespace(id.charAt(k))) {
+						if (id.charAt(k) == '.') {
+							i = k + 1;
+							continue outer;
+						}
+						break;
+					}
+				}
 				start = i + 1;
 				break;
 			}
+			if (c == '.') {
+				// skip white space
+				while (--i >= 0) {
+					if (!Character.isWhitespace(id.charAt(i))) {
+						i++;
+						break;
+					}
+				}
+			}
+
 		}
 		if (start == 0 && current == id.length() && inBrackStack.isEmpty())
 			return id;
@@ -145,7 +165,7 @@ public class CompletionString {
 			// the start of the completion is the array itself)
 			return sb.substring(1);
 		}
-		return sb.toString();
+		return sb.toString().replaceAll("\\s", "");
 	}
 
 }
