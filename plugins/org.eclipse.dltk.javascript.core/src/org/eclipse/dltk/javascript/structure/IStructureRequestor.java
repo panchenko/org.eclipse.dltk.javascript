@@ -18,7 +18,7 @@ public interface IStructureRequestor {
 
 	void acceptMethodReference(Identifier node, int argCount);
 
-	void acceptTypeReference(JSType type, int position);
+	// void acceptTypeReference(JSType type, int position);
 
 	void enterNamespace(String[] namespace);
 
