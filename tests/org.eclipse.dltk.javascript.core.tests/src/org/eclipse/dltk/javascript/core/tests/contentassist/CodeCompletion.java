@@ -18,6 +18,7 @@ import org.eclipse.dltk.javascript.core.JavaScriptKeywords;
 import org.eclipse.dltk.javascript.internal.core.codeassist.JSCompletionEngine;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 
+@SuppressWarnings("restriction")
 public class CodeCompletion extends AbstractCompletionTest {
 
 	private static final String ARGUMENTS = "arguments";
@@ -626,24 +627,25 @@ public class CodeCompletion extends AbstractCompletionTest {
 		int position = lastPositionInFile(".", module);
 		basicTest(module, position, concat(getMembersOfObject(), names));
 	}
-	
+
 	public void testRecordTypeFunction() {
 		final StringList code = new StringList();
-		
+
 		code.add("function test() {");
 		code.add("	return {");
 		code.add("   testProp: 10,");
 		code.add("testFunc: function(x){}");
 		code.add(" }");
 		code.add("}");
-		
-		code.add("function testtest() {"); 
+
+		code.add("function testtest() {");
 		code.add("	test().testFunc");
 		code.add(" }");
 		final IModuleSource module = new TestModule(code.toString());
 		int position = lastPositionInFile(".testFunc", module);
 		List<CompletionProposal> results = new ArrayList<CompletionProposal>();
-		ICompletionEngine c = createEngine(results, JSCompletionEngine.OPTION_NONE);
+		ICompletionEngine c = createEngine(results,
+				JSCompletionEngine.OPTION_NONE);
 		c.complete(module, position, 0);
 		assertEquals(1, results.size());
 		assertEquals(CompletionProposal.METHOD_REF, results.get(0).getKind());
@@ -651,7 +653,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 
 	public void testRecordTypeFunctionWithConstructor() {
 		final StringList code = new StringList();
-		
+
 		code.add("function testConstructor() {");
 		code.add("	this.testMethod = function() {");
 		code.add("	return {");
@@ -660,15 +662,16 @@ public class CodeCompletion extends AbstractCompletionTest {
 		code.add("  }");
 		code.add(" }");
 		code.add("}");
-		
-		code.add("function testtest() {"); 
+
+		code.add("function testtest() {");
 		code.add("	var x = new testConstructor();");
 		code.add("  x.testMethod().testFunc");
 		code.add(" }");
 		final IModuleSource module = new TestModule(code.toString());
 		int position = lastPositionInFile(".testFunc", module);
 		List<CompletionProposal> results = new ArrayList<CompletionProposal>();
-		ICompletionEngine c = createEngine(results, JSCompletionEngine.OPTION_NONE);
+		ICompletionEngine c = createEngine(results,
+				JSCompletionEngine.OPTION_NONE);
 		c.complete(module, position, 0);
 		assertEquals(1, results.size());
 		assertEquals(CompletionProposal.METHOD_REF, results.get(0).getKind());
@@ -676,15 +679,15 @@ public class CodeCompletion extends AbstractCompletionTest {
 
 	public void testCodeCompletionWithValidWhiteSpace() {
 		final StringList code = new StringList();
-		
+
 		code.add("function Test() {");
 		code.add("	/**@return {Test}*/");
 		code.add("	this.f1 = function(){return this;}");
 		code.add("  /**@return {Test}*/");
 		code.add("  this.f2 = function(){return this;}");
 		code.add("}");
-		
-		code.add("function testCC() {"); 
+
+		code.add("function testCC() {");
 		code.add("	var x = new Test();");
 		code.add("  x.f1().f2().");
 		code.add("  f1()");
@@ -695,8 +698,9 @@ public class CodeCompletion extends AbstractCompletionTest {
 		final IModuleSource module = new TestModule(code.toString());
 		int position = lastPositionInFile("   ", module);
 		List<CompletionProposal> results = new ArrayList<CompletionProposal>();
-		ICompletionEngine c = createEngine(results, JSCompletionEngine.OPTION_NONE);
+		ICompletionEngine c = createEngine(results,
+				JSCompletionEngine.OPTION_NONE);
 		c.complete(module, position, 0);
-		assertEquals(9, results.size());
+		assertEquals(2 + getMembersOfObject().size(), results.size());
 	}
 }
