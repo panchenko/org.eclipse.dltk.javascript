@@ -697,6 +697,6 @@ public class CodeCompletion extends AbstractCompletionTest {
 		List<CompletionProposal> results = new ArrayList<CompletionProposal>();
 		ICompletionEngine c = createEngine(results, JSCompletionEngine.OPTION_NONE);
 		c.complete(module, position, 0);
-		assertEquals(2, results.size());
+		assertEquals(9, results.size());
 	}
 }
