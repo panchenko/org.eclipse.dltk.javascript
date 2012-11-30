@@ -46,6 +46,7 @@ public class StructureRequestor implements IStructureRequestor {
 	}
 
 	public void enterLocal(Identifier identifer, JSType type) {
+		acceptTypeReference(type, identifer.start());
 	}
 
 	public void exitLocal(int sourceEnd) {
@@ -81,11 +82,11 @@ public class StructureRequestor implements IStructureRequestor {
 	public void enterMethod(MethodInfo methodInfo, Expression identifier,
 			FunctionStatement function, IMethod method) {
 		requestor.enterMethod(methodInfo);
-		reportTypeReferences(method.getType(), methodInfo.declarationStart);
-		reportTypeReferences(method.getThisType(), methodInfo.declarationStart);
+		reportTypeRef(method.getType(), methodInfo.declarationStart, true);
+		reportTypeRef(method.getThisType(), methodInfo.declarationStart, true);
 		for (IParameter parameter : method.getParameters()) {
-			reportTypeReferences(parameter.getType(),
-					methodInfo.declarationStart);
+			reportTypeRef(parameter.getType(), methodInfo.declarationStart,
+					true);
 		}
 	}
 
@@ -104,27 +105,31 @@ public class StructureRequestor implements IStructureRequestor {
 		elementTypes.push(local ? ElementType.FIELD_LOCAL : ElementType.FIELD);
 		if (!local) {
 			requestor.enterField(fieldInfo);
-			reportTypeReferences(type, fieldInfo.declarationStart);
+			reportTypeRef(type, fieldInfo.declarationStart, true);
 		} else {
 			requestor.acceptFieldReference(fieldInfo.name,
 					identifer.sourceStart());
 		}
 	}
 
-	private void reportTypeReferences(JSType type, int position) {
-		if (type == null || type instanceof SimpleType) {
+	public void acceptTypeReference(JSType type, int position) {
+		reportTypeRef(type, position, false);
+	}
+
+	private void reportTypeRef(JSType type, int position, boolean skipSimple) {
+		if (type == null || skipSimple && type instanceof SimpleType) {
 			return;
 		}
-		reportSimpleTypeReference(type, position);
+		reportSimpleTypeRef(type, position);
 		for (Iterator<EObject> i = type.eAllContents(); i.hasNext();) {
 			final EObject child = i.next();
 			if (child instanceof JSType) {
-				reportSimpleTypeReference((JSType) child, position);
+				reportSimpleTypeRef((JSType) child, position);
 			}
 		}
 	}
 
-	private void reportSimpleTypeReference(JSType type, int position) {
+	private void reportSimpleTypeRef(JSType type, int position) {
 		final Type t;
 		if (type instanceof MapType) {
 			t = Types.OBJECT;

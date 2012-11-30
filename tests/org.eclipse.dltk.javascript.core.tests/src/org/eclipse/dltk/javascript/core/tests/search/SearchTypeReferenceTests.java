@@ -33,7 +33,7 @@ public class SearchTypeReferenceTests extends AbstractSingleProjectSearchTests {
 
 	public void testReturnType() throws CoreException {
 		final TestSearchResults results = search("Database", TYPE, REFERENCES);
-		assertEquals(2, results.size());
+		assertEquals(3, results.size());
 		{
 			final IModelElement method = results.locate(IMethod.class,
 					"getDatabase");
@@ -47,6 +47,12 @@ public class SearchTypeReferenceTests extends AbstractSingleProjectSearchTests {
 			final IModelElement parent = method.getParent();
 			assertEquals(IModelElement.SOURCE_MODULE, parent.getElementType());
 			assertEquals("returnFunctionType.js", parent.getElementName());
+		}
+		{
+			final IModelElement method = results.locate(IMethod.class, "test");
+			final IModelElement parent = method.getParent();
+			assertEquals(IModelElement.SOURCE_MODULE, parent.getElementType());
+			assertEquals("localVarType.js", parent.getElementName());
 		}
 	}
 
