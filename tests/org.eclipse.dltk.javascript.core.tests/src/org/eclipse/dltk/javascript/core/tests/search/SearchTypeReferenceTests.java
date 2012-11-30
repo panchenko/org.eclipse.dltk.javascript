@@ -19,6 +19,7 @@ import org.eclipse.dltk.core.IMethod;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.tests.model.AbstractSingleProjectSearchTests;
 import org.eclipse.dltk.core.tests.model.TestSearchResults;
+import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 
 public class SearchTypeReferenceTests extends AbstractSingleProjectSearchTests {
 
@@ -32,12 +33,32 @@ public class SearchTypeReferenceTests extends AbstractSingleProjectSearchTests {
 
 	public void testReturnType() throws CoreException {
 		final TestSearchResults results = search("Database", TYPE, REFERENCES);
+		assertEquals(2, results.size());
+		{
+			final IModelElement method = results.locate(IMethod.class,
+					"getDatabase");
+			final IModelElement parent = method.getParent();
+			assertEquals(IModelElement.SOURCE_MODULE, parent.getElementType());
+			assertEquals("returnType.js", parent.getElementName());
+		}
+		{
+			final IModelElement method = results.locate(IMethod.class,
+					"getDatabaseFunction");
+			final IModelElement parent = method.getParent();
+			assertEquals(IModelElement.SOURCE_MODULE, parent.getElementType());
+			assertEquals("returnFunctionType.js", parent.getElementName());
+		}
+	}
+
+	public void testFunction() throws CoreException {
+		final TestSearchResults results = search(ITypeNames.FUNCTION, TYPE,
+				REFERENCES);
 		assertEquals(1, results.size());
 		final IModelElement method = results.locate(IMethod.class,
-				"getDatabase");
+				"getDatabaseFunction");
 		final IModelElement parent = method.getParent();
 		assertEquals(IModelElement.SOURCE_MODULE, parent.getElementType());
-		assertEquals("returnType.js", parent.getElementName());
+		assertEquals("returnFunctionType.js", parent.getElementName());
 	}
 
 	public void testParamType() throws CoreException {
