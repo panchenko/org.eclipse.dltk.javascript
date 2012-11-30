@@ -58,6 +58,8 @@ import org.eclipse.dltk.javascript.typeinfo.IRElement;
 import org.eclipse.dltk.javascript.typeinfo.IRFunctionType;
 import org.eclipse.dltk.javascript.typeinfo.IRMember;
 import org.eclipse.dltk.javascript.typeinfo.IRMethod;
+import org.eclipse.dltk.javascript.typeinfo.IRParameter;
+import org.eclipse.dltk.javascript.typeinfo.IRRecordMember;
 import org.eclipse.dltk.javascript.typeinfo.IRRecordType;
 import org.eclipse.dltk.javascript.typeinfo.IRSimpleType;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
@@ -399,7 +401,9 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 					valueRef);
 			collectTypes(valueRef.getTypes(), typeQuery, members, valueRef);
 			for (IRMember member : members) {
-				reportMember(member, member.getName(), true);
+				if (member.isVisible() && matches(member.getName())) {
+					reportMember(member, member.getName(), true);
+				}
 			}
 			for (IRMember member : typeQuery.ignoreDuplicates(processed)) {
 				if (member.isVisible() && matches(member.getName())) {
@@ -522,7 +526,8 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 					}
 				}
 			}
-			boolean isFunction = member instanceof IRMethod;
+			boolean isFunction = member instanceof IRMethod
+					|| (member instanceof IRRecordMember && member.getType() instanceof IRFunctionType);
 			CompletionProposal proposal = CompletionProposal.create(
 					isFunction ? CompletionProposal.METHOD_REF
 							: CompletionProposal.FIELD_REF, position);
@@ -542,23 +547,29 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 			proposal.setReplaceRange(startPosition - offset, endPosition
 					- offset);
 			if (isFunction) {
-				final IRMethod method = (IRMethod) member;
-				int paramCount = method.getParameters().size();
+				List<IRParameter> parameters = null;
+				if (member.getType() instanceof IRFunctionType) {
+					parameters = ((IRFunctionType) member.getType())
+							.getParameters();
+				} else {
+					parameters = ((IRMethod) member).getParameters();
+				}
+				int paramCount = parameters.size();
 				if (paramCount > 0) {
 					final String[] params = new String[paramCount];
 					for (int i = 0; i < paramCount; ++i) {
-						params[i] = method.getParameters().get(i).getName();
+						params[i] = parameters.get(i).getName();
 					}
 					proposal.setParameterNames(params);
-					if (method.getParameters().get(paramCount - 1).getKind() != ParameterKind.NORMAL) {
-						int requiredCount = method.getParameters().size();
+					if (parameters.get(paramCount - 1).getKind() != ParameterKind.NORMAL) {
+						int requiredCount = parameters.size();
 						while (requiredCount > 0
-								&& method.getParameters()
+								&& parameters
 										.get(requiredCount - 1).getKind() != ParameterKind.NORMAL) {
 							--requiredCount;
 						}
 						if (requiredCount == 0
-								&& method.getParameters().get(requiredCount)
+								&& parameters.get(requiredCount)
 										.getKind() == ParameterKind.VARARGS) {
 							++requiredCount; // heuristic...
 						}
