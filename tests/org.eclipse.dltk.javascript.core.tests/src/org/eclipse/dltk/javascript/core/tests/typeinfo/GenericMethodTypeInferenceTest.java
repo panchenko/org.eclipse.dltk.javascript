@@ -26,6 +26,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeVariable;
 
+@SuppressWarnings("restriction")
 public class GenericMethodTypeInferenceTest extends TestCase {
 
 	private static final TypeInfoModelFactory TIMF = TypeInfoModelFactory.eINSTANCE;

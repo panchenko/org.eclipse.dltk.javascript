@@ -23,6 +23,7 @@ import org.eclipse.dltk.internal.javascript.validation.FlowValidation;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.core.tests.AbstractValidationTest;
 
+@SuppressWarnings("restriction")
 public class FlowValidationTests extends AbstractValidationTest {
 
 	@Override

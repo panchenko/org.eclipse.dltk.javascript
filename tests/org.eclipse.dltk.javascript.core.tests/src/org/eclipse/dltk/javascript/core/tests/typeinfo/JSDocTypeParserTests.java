@@ -29,6 +29,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
 import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
 
+@SuppressWarnings("restriction")
 public class JSDocTypeParserTests extends TestCase {
 
 	private JSType parse(String expression) {

@@ -11,6 +11,7 @@ import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.core.tests.AbstractValidationTest;
 import org.eclipse.dltk.javascript.parser.JavaScriptParserProblems;
 
+@SuppressWarnings("restriction")
 public class CodeValidatorValidationTests extends AbstractValidationTest {
 
 	@Override

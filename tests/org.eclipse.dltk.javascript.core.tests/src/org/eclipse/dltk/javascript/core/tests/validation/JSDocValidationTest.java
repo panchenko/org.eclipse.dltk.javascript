@@ -11,6 +11,7 @@ import org.eclipse.dltk.internal.javascript.validation.TypeInfoValidator;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.core.tests.AbstractValidationTest;
 
+@SuppressWarnings("restriction")
 public class JSDocValidationTest extends AbstractValidationTest {
 
 	@Override

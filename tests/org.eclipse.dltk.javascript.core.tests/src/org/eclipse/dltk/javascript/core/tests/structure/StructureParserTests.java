@@ -17,6 +17,7 @@ import org.eclipse.dltk.compiler.env.ModuleSource;
 import org.eclipse.dltk.core.ISourceElementParser;
 import org.eclipse.dltk.core.tests.util.StringList;
 
+@SuppressWarnings("restriction")
 public class StructureParserTests extends TestCase {
 
 	protected ISourceElementParser createParser() {
