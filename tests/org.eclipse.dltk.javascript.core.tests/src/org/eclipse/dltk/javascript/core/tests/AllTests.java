@@ -10,6 +10,7 @@ import org.eclipse.dltk.javascript.core.tests.contentassist.CompletionStringPars
 import org.eclipse.dltk.javascript.core.tests.contentassist.SelectionTests;
 import org.eclipse.dltk.javascript.core.tests.contentassist.StandardTypeMemberTests;
 import org.eclipse.dltk.javascript.core.tests.contentassist.XMLCompletionTests;
+import org.eclipse.dltk.javascript.core.tests.rewrite.RewriteTest;
 import org.eclipse.dltk.javascript.core.tests.rewrite.VariableRemoveTest;
 import org.eclipse.dltk.javascript.core.tests.search.SearchDeclarationTests;
 import org.eclipse.dltk.javascript.core.tests.search.SearchExternalLibraryTests;
@@ -80,6 +81,7 @@ public class AllTests {
 		suite.addTest(SearchFunctionTests.suite());
 		suite.addTest(SearchExternalLibraryTests.suite());
 		suite.addTestSuite(VariableRemoveTest.class);
+		suite.addTestSuite(RewriteTest.class);
 		suite.addTestSuite(GenericMethodTypeInferenceTest.class);
 		// $JUnit-END$
 		return suite;

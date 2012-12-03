@@ -31,6 +31,7 @@ import org.eclipse.dltk.javascript.core.dom.Label;
 import org.eclipse.dltk.javascript.core.dom.Node;
 import org.eclipse.dltk.javascript.core.dom.Source;
 import org.eclipse.dltk.javascript.core.dom.Statement;
+import org.eclipse.dltk.javascript.core.dom.StringLiteral;
 import org.eclipse.dltk.javascript.core.dom.TryStatement;
 import org.eclipse.dltk.javascript.core.dom.UnaryExpression;
 import org.eclipse.dltk.javascript.core.dom.UnaryOperator;
@@ -271,6 +272,16 @@ public class RewriteAnalyzer extends DomSwitch<Boolean> {
 				if (fc.getFeature() == DomPackage.Literals.IDENTIFIER__NAME)
 					addEdit(new ReplaceEdit(node.getBegin(), node.getEnd()
 							- node.getBegin(), node.getName()), node);
+		return true;
+	}
+
+	@Override
+	public Boolean caseStringLiteral(StringLiteral node) {
+		if (cd.getObjectChanges().get(node) != null)
+			for (FeatureChange fc : cd.getObjectChanges().get(node))
+				if (fc.getFeature() == DomPackage.Literals.STRING_LITERAL__TEXT)
+					addEdit(new ReplaceEdit(node.getBegin(), node.getEnd()
+							- node.getBegin(), node.getText()), node);
 		return true;
 	}
 
