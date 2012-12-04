@@ -2605,6 +2605,14 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(problems.toString(), 0, problems.size());
 	}
 
+	public void testJavaScriptNewArray() {
+		final StringList code = new StringList();
+		code.add("var x = new Array();");
+		code.add("x[0].aaa;");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+
 	public void testJavaObjectDynamicArrayAcces() {
 		final StringList code = new StringList();
 		code.add("exampleForms['test']();");
