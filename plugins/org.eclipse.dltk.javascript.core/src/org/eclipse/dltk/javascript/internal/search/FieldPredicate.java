@@ -21,6 +21,7 @@ import org.eclipse.dltk.core.search.matching2.MatchLevel;
 import org.eclipse.dltk.internal.core.search.matching.FieldPattern;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 
+@SuppressWarnings("restriction")
 public class FieldPredicate extends AbstractMatchingPredicate<MatchingNode> {
 
 	private final boolean declarations;
@@ -68,16 +69,21 @@ public class FieldPredicate extends AbstractMatchingPredicate<MatchingNode> {
 			if (!references)
 				return null;
 			final FieldReferenceNode fieldNode = (FieldReferenceNode) node;
-
-			final ReferenceLocation location = fieldNode.location;
-			if (location != null && nameStart != -1 && nameEnd != -1) {
-				if (location.getNameStart() == nameStart
-						&& location.getNameEnd() == nameEnd
-						&& isSame(location.getSourceModule())) {
+			if (nameStart != -1 && nameEnd != -1) {
+				final ReferenceLocation location = fieldNode.location;
+				if (location != null) {
+					if (location.getNameStart() == nameStart
+							&& location.getNameEnd() == nameEnd
+							&& isSame(location.getSourceModule())) {
+						return matchName(fieldNode.node.getName(),
+								MatchLevel.ACCURATE_MATCH);
+					}
+				} else {
 					return matchName(fieldNode.node.getName());
 				}
 			} else {
-				return matchName(fieldNode.node.getName());
+				return matchName(fieldNode.node.getName(),
+						MatchLevel.INACCURATE_MATCH);
 			}
 
 		}

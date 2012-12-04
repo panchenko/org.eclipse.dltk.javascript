@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010 xored software, Inc.
+ * Copyright (c) 2012 NumberFour AG
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,39 +7,40 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
+ *     NumberFour AG - initial API and Implementation (Alex Panchenko)
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.search;
 
+import java.util.Collection;
+import java.util.Collections;
+
+import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.core.IModelElement;
-import org.eclipse.dltk.core.ISourceModule;
-import org.eclipse.dltk.core.search.FieldDeclarationMatch;
 import org.eclipse.dltk.core.search.SearchMatch;
 import org.eclipse.dltk.core.search.SearchParticipant;
+import org.eclipse.dltk.core.search.TypeReferenceMatch;
 import org.eclipse.dltk.core.search.matching2.MatchLevel;
-import org.eclipse.dltk.javascript.ast.Expression;
-import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
-public class FieldDeclarationNode extends AbstractMatchingNode<Expression> {
+public class TypeReferenceNode extends AbstractMatchingNode<ASTNode> {
 
-	final ISourceModule module;
-	final JSType declaredType;
 
-	/**
-	 * @param node
-	 */
-	public FieldDeclarationNode(Expression node, ISourceModule module,
-			JSType declaredType) {
+	final Collection<String> typeNames;
+
+	public TypeReferenceNode(ASTNode node, String typeName) {
 		super(node);
-		this.module = module;
-		this.declaredType = declaredType;
+		this.typeNames = Collections.singletonList(typeName);
+	}
+
+	public TypeReferenceNode(ASTNode node, Collection<String> typeNames) {
+		super(node);
+		this.typeNames = typeNames;
 	}
 
 	public SearchMatch createMatch(IModelElement element,
 			SearchParticipant participant, MatchLevel level) {
-		return new FieldDeclarationMatch(element,
-				level.toSearchMatchAccuracy(), node.sourceStart(), length(),
-				participant, element.getResource());
+		return new TypeReferenceMatch(element, level.toSearchMatchAccuracy(),
+				node.sourceStart(), length(), false, participant,
+				element.getResource());
 	}
 
 }

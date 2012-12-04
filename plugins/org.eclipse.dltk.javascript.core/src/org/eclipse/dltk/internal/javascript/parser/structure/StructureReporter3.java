@@ -80,10 +80,6 @@ public class StructureReporter3 extends
 				.size()]);
 	}
 
-	protected boolean isStructure() {
-		return true;
-	}
-
 	@Override
 	public IStructureNode visit(ASTNode node) {
 		for (IStructureHandler handler : handlers) {
@@ -146,15 +142,13 @@ public class StructureReporter3 extends
 
 	@Override
 	protected void processVariable(VariableDeclaration declaration) {
-		if (isStructure()) {
-			for (IStructureHandler handler : handlers) {
-				final IStructureNode value = handler.handle(declaration);
-				if (value != IStructureHandler.CONTINUE) {
-					if (value != null) {
-						peek().getScope().addChild(value);
-					}
-					return;
+		for (IStructureHandler handler : handlers) {
+			final IStructureNode value = handler.handle(declaration);
+			if (value != IStructureHandler.CONTINUE) {
+				if (value != null) {
+					peek().getScope().addChild(value);
 				}
+				return;
 			}
 		}
 		if (declaration.getInitializer() instanceof FunctionStatement) {
@@ -371,13 +365,13 @@ public class StructureReporter3 extends
 		return true;
 	}
 
-	private boolean isCallExpression(Expression node) {
+	public static boolean isCallExpression(Expression node) {
 		final ASTNode parent = node.getParent();
 		return parent instanceof CallExpression
 				&& ((CallExpression) parent).getExpression() == node;
 	}
 
-	private int getCallArgumentCount(Expression node) {
+	public static int getCallArgumentCount(Expression node) {
 		return ((CallExpression) node.getParent()).getArguments().size();
 	}
 

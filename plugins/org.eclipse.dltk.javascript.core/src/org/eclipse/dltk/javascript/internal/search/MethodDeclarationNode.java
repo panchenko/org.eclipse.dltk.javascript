@@ -11,6 +11,11 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.search;
 
+import org.eclipse.dltk.core.IModelElement;
+import org.eclipse.dltk.core.search.MethodDeclarationMatch;
+import org.eclipse.dltk.core.search.SearchMatch;
+import org.eclipse.dltk.core.search.SearchParticipant;
+import org.eclipse.dltk.core.search.matching2.MatchLevel;
 import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 
@@ -21,6 +26,13 @@ public class MethodDeclarationNode extends AbstractMatchingNode<Expression> {
 	public MethodDeclarationNode(Expression node, IMethod method) {
 		super(node);
 		this.method = method;
+	}
+
+	public SearchMatch createMatch(IModelElement element,
+			SearchParticipant participant, MatchLevel level) {
+		return new MethodDeclarationMatch(element,
+				level.toSearchMatchAccuracy(), node.sourceStart(), length(),
+				participant, element.getResource());
 	}
 
 }

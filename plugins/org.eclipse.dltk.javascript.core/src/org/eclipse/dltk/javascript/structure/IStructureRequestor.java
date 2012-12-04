@@ -1,5 +1,6 @@
 package org.eclipse.dltk.javascript.structure;
 
+import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.compiler.IElementRequestor.FieldInfo;
 import org.eclipse.dltk.compiler.IElementRequestor.ImportInfo;
 import org.eclipse.dltk.compiler.IElementRequestor.MethodInfo;
@@ -13,6 +14,13 @@ import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 public interface IStructureRequestor {
 
 	public void acceptImport(ImportInfo importInfo);
+
+	/**
+	 * Adds simple type name to the index
+	 */
+	void acceptTypeReference(ASTNode node, String typeName);
+
+	void acceptTypeReference(int position, JSType type);
 
 	void acceptFieldReference(Identifier node);
 

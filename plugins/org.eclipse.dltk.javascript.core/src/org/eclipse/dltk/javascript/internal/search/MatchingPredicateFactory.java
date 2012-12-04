@@ -22,9 +22,9 @@ import org.eclipse.dltk.internal.core.search.matching.OrPattern;
 import org.eclipse.dltk.internal.core.search.matching.TypeReferencePattern;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 
+@SuppressWarnings("restriction")
 public class MatchingPredicateFactory {
 
-	@SuppressWarnings("restriction")
 	static IMatchingPredicate<MatchingNode> create(ITypeInfoContext context,
 			SearchPattern pattern) {
 		if (pattern instanceof FieldPattern) {

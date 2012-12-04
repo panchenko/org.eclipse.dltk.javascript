@@ -11,53 +11,68 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.core.tests.search;
 
-import static org.eclipse.dltk.javascript.core.tests.AllTests.PLUGIN_ID;
-import static org.eclipse.dltk.javascript.core.tests.contentassist.AbstractContentAssistTest.firstPositionInFile;
-import static org.eclipse.dltk.javascript.core.tests.contentassist.AbstractContentAssistTest.lastPositionInFile;
+import static org.eclipse.dltk.core.index2.search.ISearchEngine.SearchFor.ALL_OCCURRENCES;
+import static org.eclipse.dltk.core.tests.CodeAssistUtil.on;
+import static org.hamcrest.CoreMatchers.instanceOf;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.core.IModelElement;
+import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.core.search.FieldDeclarationMatch;
 import org.eclipse.dltk.core.search.FieldReferenceMatch;
+import org.eclipse.dltk.core.tests.ProjectSetup;
 import org.eclipse.dltk.core.tests.model.TestSearchResults;
+import org.eclipse.dltk.javascript.core.tests.AllTests;
+import org.junit.Assert;
+import org.junit.ClassRule;
+import org.junit.Test;
 
-public class SearchFieldTests extends AbstractSearchTest {
+public class SearchFieldTests extends Assert {
 
-	public SearchFieldTests(String testName) {
-		super(PLUGIN_ID, testName, "selection");
-	}
+	@ClassRule
+	public static final ProjectSetup PROJECT = new ProjectSetup(
+			AllTests.WORKSPACE, "selection",
+			ProjectSetup.Option.WAIT_INDEXES_READY);
 
-	public static Suite suite() {
-		return new Suite(SearchFieldTests.class);
-	}
-
+	@Test
 	public void testFieldAA() throws CoreException {
-		if (notYetImplemented())
-			return;
-		IModuleSource module = getModule("fields.js");
-		IModelElement[] elements = select(module,
-				lastPositionInFile("aa", module, false));
+		ISourceModule module = PROJECT.getSourceModule("src", "fields.js");
+		IModelElement[] elements = on(module).beforeLast("aa").codeSelect();
 		assertEquals(1, elements.length);
 		final IModelElement field = elements[0];
-		final TestSearchResults results = search(field, ALL_OCCURRENCES);
+		final TestSearchResults results = PROJECT
+				.search(field, ALL_OCCURRENCES);
 		assertEquals(results.toString(), 2, results.size());
-		assertTrue(results.getMatch(0) instanceof FieldDeclarationMatch);
-		assertTrue(results.getMatch(1) instanceof FieldReferenceMatch);
+		results.sortByOffset();
+		assertThat(results.getMatch(0), instanceOf(FieldDeclarationMatch.class));
+		assertThat(results.getMatch(1), instanceOf(FieldReferenceMatch.class));
 	}
 
+	@Test
 	public void testLazyFieldCC() throws CoreException {
-		if (notYetImplemented())
-			return;
-		IModuleSource module = getModule("fields.js");
-		IModelElement[] elements = select(module,
-				firstPositionInFile("cc", module, false));
+		ISourceModule module = PROJECT.getSourceModule("src", "fields.js");
+		IModelElement[] elements = on(module).before("cc").codeSelect();
 		assertEquals(1, elements.length);
 		final IModelElement field = elements[0];
-		final TestSearchResults results = search(field, ALL_OCCURRENCES);
+		final TestSearchResults results = PROJECT
+				.search(field, ALL_OCCURRENCES);
 		assertEquals(results.toString(), 2, results.size());
-		assertTrue(results.getMatch(0) instanceof FieldReferenceMatch);
-		assertTrue(results.getMatch(1) instanceof FieldDeclarationMatch);
+		assertThat(results.getMatch(0), instanceOf(FieldReferenceMatch.class));
+		assertThat(results.getMatch(1), instanceOf(FieldDeclarationMatch.class));
+	}
+
+	@Test
+	public void testNestedVarUsage() throws CoreException {
+		ISourceModule module = PROJECT.getSourceModule("src",
+				"nested-var-usage.js");
+		IModelElement[] elements = on(module).beforeLast("value").codeSelect();
+		assertEquals(1, elements.length);
+		final IModelElement value = elements[0];
+		final TestSearchResults results = PROJECT
+				.search(value, ALL_OCCURRENCES);
+		assertEquals(results.toString(), 2, results.size());
+		assertThat(results.getMatch(0), instanceOf(FieldDeclarationMatch.class));
+		assertThat(results.getMatch(1), instanceOf(FieldReferenceMatch.class));
 	}
 
 }

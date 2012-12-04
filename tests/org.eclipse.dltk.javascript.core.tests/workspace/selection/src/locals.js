@@ -7,3 +7,10 @@ function second() {
 	++beta;
 	return beta;
 }
+
+/**
+ * @param {String} foo
+ */
+function third(foo) {
+	return foo;
+}

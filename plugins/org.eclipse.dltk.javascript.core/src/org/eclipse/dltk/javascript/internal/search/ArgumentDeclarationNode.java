@@ -15,19 +15,11 @@ import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.javascript.ast.Argument;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
-public class ArgumentDeclarationNode extends AbstractMatchingNode<Argument> {
+public class ArgumentDeclarationNode extends LocalVariableDeclarationNode {
 
-	final ISourceModule module;
-	final JSType declaredType;
-
-	/**
-	 * @param node
-	 */
 	public ArgumentDeclarationNode(Argument node, ISourceModule module,
 			JSType declaredType) {
-		super(node);
-		this.module = module;
-		this.declaredType = declaredType;
+		super(node.getIdentifier(), module, declaredType);
 	}
 
 }

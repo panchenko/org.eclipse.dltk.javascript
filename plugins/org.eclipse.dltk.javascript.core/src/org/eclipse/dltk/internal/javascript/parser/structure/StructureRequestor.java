@@ -1,8 +1,13 @@
 package org.eclipse.dltk.internal.javascript.parser.structure;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.Stack;
 
+import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.compiler.IElementRequestor.FieldInfo;
 import org.eclipse.dltk.compiler.IElementRequestor.ImportInfo;
 import org.eclipse.dltk.compiler.IElementRequestor.MethodInfo;
@@ -11,11 +16,11 @@ import org.eclipse.dltk.compiler.ISourceElementRequestor;
 import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.Identifier;
-import org.eclipse.dltk.javascript.core.Types;
 import org.eclipse.dltk.javascript.structure.IDeclaration;
 import org.eclipse.dltk.javascript.structure.IStructureRequestor;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
+import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
 import org.eclipse.dltk.javascript.typeinfo.model.FunctionType;
@@ -42,11 +47,15 @@ public class StructureRequestor implements IStructureRequestor {
 		requestor.acceptImport(importInfo);
 	}
 
+	public void acceptTypeReference(ASTNode node, String typeName) {
+		requestor.acceptTypeReference(typeName, node.sourceStart());
+	}
+
 	public void acceptLocalReference(Identifier node, IDeclaration target) {
 	}
 
 	public void enterLocal(Identifier identifer, JSType type) {
-		acceptTypeReference(type, identifer.start());
+		acceptTypeReference(identifer.start(), type);
 	}
 
 	public void exitLocal(int sourceEnd) {
@@ -82,11 +91,12 @@ public class StructureRequestor implements IStructureRequestor {
 	public void enterMethod(MethodInfo methodInfo, Expression identifier,
 			FunctionStatement function, IMethod method) {
 		requestor.enterMethod(methodInfo);
-		reportTypeRef(method.getType(), methodInfo.declarationStart, true);
-		reportTypeRef(method.getThisType(), methodInfo.declarationStart, true);
+		reportTypeRef(method.getType(), methodInfo.declarationStart,
+				methodInfo.returnType != null);
+		reportTypeRef(method.getThisType(), methodInfo.declarationStart, false);
 		for (IParameter parameter : method.getParameters()) {
 			reportTypeRef(parameter.getType(), methodInfo.declarationStart,
-					true);
+					methodInfo.parameterTypes != null);
 		}
 	}
 
@@ -105,14 +115,15 @@ public class StructureRequestor implements IStructureRequestor {
 		elementTypes.push(local ? ElementType.FIELD_LOCAL : ElementType.FIELD);
 		if (!local) {
 			requestor.enterField(fieldInfo);
-			reportTypeRef(type, fieldInfo.declarationStart, true);
+			reportTypeRef(type, fieldInfo.declarationStart,
+					fieldInfo.type != null);
 		} else {
 			requestor.acceptFieldReference(fieldInfo.name,
 					identifer.sourceStart());
 		}
 	}
 
-	public void acceptTypeReference(JSType type, int position) {
+	public void acceptTypeReference(int position, JSType type) {
 		reportTypeRef(type, position, false);
 	}
 
@@ -120,33 +131,65 @@ public class StructureRequestor implements IStructureRequestor {
 		if (type == null || skipSimple && type instanceof SimpleType) {
 			return;
 		}
-		reportSimpleTypeRef(type, position);
-		for (Iterator<EObject> i = type.eAllContents(); i.hasNext();) {
-			final EObject child = i.next();
-			if (child instanceof JSType) {
-				reportSimpleTypeRef((JSType) child, position);
-			}
+		for (String typeName : collectContainedTypeNames(type)) {
+			requestor.acceptTypeReference(toShortName(typeName), position);
 		}
 	}
 
-	private void reportSimpleTypeRef(JSType type, int position) {
-		final Type t;
+	public static Collection<String> collectContainedTypeNames(JSType type) {
+		Set<String> result = null;
+		{
+			final String typeName = reportSimpleTypeRef(type);
+			if (typeName != null) {
+				if (result == null) {
+					result = new HashSet<String>();
+				}
+				result.add(typeName);
+			}
+		}
+		for (Iterator<EObject> i = type.eAllContents(); i.hasNext();) {
+			final EObject child = i.next();
+			if (child instanceof JSType) {
+				final String typeName = reportSimpleTypeRef((JSType) child);
+				if (typeName != null) {
+					if (result == null) {
+						result = new HashSet<String>();
+					}
+					result.add(typeName);
+				}
+			}
+		}
+		return result != null ? result : Collections.<String> emptyList();
+	}
+
+	private static String reportSimpleTypeRef(JSType type) {
 		if (type instanceof MapType) {
-			t = Types.OBJECT;
+			return ITypeNames.OBJECT;
 		} else if (type instanceof ArrayType) {
-			t = Types.ARRAY;
+			return ITypeNames.ARRAY;
 		} else if (type instanceof FunctionType) {
-			t = Types.FUNCTION;
+			return ITypeNames.FUNCTION;
 		} else if (type instanceof SimpleType) {
-			t = ((SimpleType) type).getTarget();
+			final Type t = ((SimpleType) type).getTarget();
+			return t != null ? t.getName() : null;
 		} else if (type instanceof ClassType) {
-			t = ((ClassType) type).getTarget();
+			final Type t = ((ClassType) type).getTarget();
+			return t != null ? t.getName() : null;
 		} else {
-			return;
+			return null;
 		}
-		if (t != null) {
-			requestor.acceptTypeReference(t.getName(), position);
+	}
+
+	private static String toShortName(String name) {
+		final int slash = name.lastIndexOf('/');
+		if (slash >= 0) {
+			return name.substring(slash + 1);
 		}
+		final int dot = name.lastIndexOf('.');
+		if (dot >= 0) {
+			return name.substring(dot + 1);
+		}
+		return name;
 	}
 
 }

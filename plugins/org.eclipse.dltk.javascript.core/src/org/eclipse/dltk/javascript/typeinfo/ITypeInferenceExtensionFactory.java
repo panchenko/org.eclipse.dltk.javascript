@@ -29,6 +29,10 @@ public interface ITypeInferenceExtensionFactory {
 	 * @param extensionClass
 	 *            e.g.
 	 *            {@link org.eclipse.dltk.javascript.validation.IValidatorExtension}
+	 *            ,
+	 *            {@link org.eclipse.dltk.javascript.structure.IStructureHandler}
+	 *            ,
+	 *            {@link org.eclipse.dltk.javascript.search.IMatchLocatorVisitor}
 	 * @param arg
 	 *            extension specific parameter, can be <code>null</code>
 	 * @return

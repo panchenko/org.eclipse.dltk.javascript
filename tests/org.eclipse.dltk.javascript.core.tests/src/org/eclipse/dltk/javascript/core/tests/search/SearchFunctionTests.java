@@ -11,127 +11,139 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.core.tests.search;
 
-import static org.eclipse.dltk.javascript.core.tests.AllTests.PLUGIN_ID;
-import static org.eclipse.dltk.javascript.core.tests.contentassist.AbstractContentAssistTest.lastPositionInFile;
+import static org.eclipse.dltk.core.index2.search.ISearchEngine.SearchFor.ALL_OCCURRENCES;
+import static org.eclipse.dltk.core.tests.CodeAssistUtil.on;
+import static org.hamcrest.CoreMatchers.instanceOf;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.core.IMethod;
 import org.eclipse.dltk.core.IModelElement;
+import org.eclipse.dltk.core.ISourceModule;
+import org.eclipse.dltk.core.index2.search.ISearchEngine.SearchFor;
+import org.eclipse.dltk.core.search.FieldDeclarationMatch;
+import org.eclipse.dltk.core.search.FieldReferenceMatch;
+import org.eclipse.dltk.core.search.LocalVariableDeclarationMatch;
+import org.eclipse.dltk.core.search.LocalVariableReferenceMatch;
 import org.eclipse.dltk.core.search.MethodDeclarationMatch;
 import org.eclipse.dltk.core.search.MethodReferenceMatch;
-import org.eclipse.dltk.core.tests.Skip;
+import org.eclipse.dltk.core.tests.ProjectSetup;
 import org.eclipse.dltk.core.tests.model.TestSearchResults;
+import org.eclipse.dltk.javascript.core.tests.AllTests;
+import org.junit.Assert;
+import org.junit.ClassRule;
+import org.junit.Ignore;
+import org.junit.Test;
 
-public class SearchFunctionTests extends AbstractSearchTest {
+public class SearchFunctionTests extends Assert {
 
-	public SearchFunctionTests(String testName) {
-		super(PLUGIN_ID, testName, "selection");
-	}
+	@ClassRule
+	public static final ProjectSetup PROJECT = new ProjectSetup(
+			AllTests.WORKSPACE, "selection",
+			ProjectSetup.Option.WAIT_INDEXES_READY);
 
-	public static Suite suite() {
-		return new Suite(SearchFunctionTests.class);
-	}
-
+	@Test
 	public void testFunctionGlobalField() throws CoreException {
-		IModuleSource module = getModule("functions.js");
-		IModelElement[] elements = select(module,
-				lastPositionInFile("fun1", module, false));
+		ISourceModule module = PROJECT.getSourceModule("src", "functions.js");
+		IModelElement[] elements = on(module).beforeLast("fun1").codeSelect();
 		assertEquals(1, elements.length);
 		final IMethod method = (IMethod) elements[0];
-		final TestSearchResults results = search(method, ALL_OCCURRENCES);
+		final TestSearchResults results = PROJECT.search(method,
+				ALL_OCCURRENCES);
 		assertEquals(2, results.size());
-		assertTrue(results.getMatch(0) instanceof MethodDeclarationMatch);
-		assertTrue(results.getMatch(1) instanceof MethodReferenceMatch);
+		assertThat(results.getMatch(0), instanceOf(FieldDeclarationMatch.class));
+		assertThat(results.getMatch(1), instanceOf(FieldReferenceMatch.class));
 	}
 
+	@Test
 	public void testFunctionLocalField() throws CoreException {
-		if (notYetImplemented())
-			return;
-		IModuleSource module = getModule("functions.js");
-		IModelElement[] elements = select(module,
-				lastPositionInFile("fun2", module, false));
+		ISourceModule module = PROJECT.getSourceModule("src", "functions.js");
+		IModelElement[] elements = on(module).beforeLast("fun2").codeSelect();
 		assertEquals(1, elements.length);
 		final IMethod method = (IMethod) elements[0];
-		final TestSearchResults results = search(method, ALL_OCCURRENCES);
+		final TestSearchResults results = PROJECT.search(method,
+				ALL_OCCURRENCES);
 		assertEquals(2, results.size());
-		assertTrue(results.getMatch(0) instanceof MethodDeclarationMatch);
-		assertTrue(results.getMatch(1) instanceof MethodReferenceMatch);
+		assertThat(results.getMatch(0),
+				instanceOf(LocalVariableDeclarationMatch.class));
+		assertThat(results.getMatch(1),
+				instanceOf(LocalVariableReferenceMatch.class));
 	}
 
+	@Test
 	public void testFunctionLocalFieldWithDoubleName() throws CoreException {
-		IModuleSource module = getModule("functions.js");
-		IModelElement[] elements = select(module,
-				lastPositionInFile("fun4", module, false));
+		ISourceModule module = PROJECT.getSourceModule("src", "functions.js");
+		IModelElement[] elements = on(module).beforeLast("fun4").codeSelect();
 		assertEquals(0, elements.length);
 	}
 
-	@Skip
+	@Ignore
+	@Test
 	public void testFunctionThisField() throws CoreException {
-		IModuleSource module = getModule("functions.js");
-		IModelElement[] elements = select(module,
-				lastPositionInFile("fun5", module, false));
+		ISourceModule module = PROJECT.getSourceModule("src", "functions.js");
+		IModelElement[] elements = on(module).beforeLast("fun5").codeSelect();
 		assertEquals(1, elements.length);
 		final IMethod method = (IMethod) elements[0];
-		final TestSearchResults results = search(method, ALL_OCCURRENCES);
+		final TestSearchResults results = PROJECT.search(method,
+				ALL_OCCURRENCES);
 		assertEquals(2, results.size());
-		assertTrue(results.getMatch(0) instanceof MethodDeclarationMatch);
-		assertTrue(results.getMatch(1) instanceof MethodReferenceMatch);
+		assertThat(results.getMatch(0),
+				instanceOf(MethodDeclarationMatch.class));
+		assertThat(results.getMatch(1), instanceOf(MethodReferenceMatch.class));
 	}
 
+	@Test
 	public void testFunctionThisFieldOuterCall() throws CoreException {
-		IModuleSource module = getModule("functions.js");
-		IModelElement[] elements = select(module,
-				lastPositionInFile("fun6", module, false));
+		ISourceModule module = PROJECT.getSourceModule("src", "functions.js");
+		IModelElement[] elements = on(module).beforeLast("fun6").codeSelect();
 		assertEquals(1, elements.length);
 		final IMethod method = (IMethod) elements[0];
-		final TestSearchResults results = search(method, ALL_OCCURRENCES);
+		final TestSearchResults results = PROJECT.search(method,
+				ALL_OCCURRENCES);
 		assertEquals(2, results.size());
-		assertTrue(results.getMatch(0) instanceof MethodDeclarationMatch);
-		assertTrue(results.getMatch(1) instanceof MethodReferenceMatch);
+		assertThat(results.getMatch(0),
+				instanceOf(MethodDeclarationMatch.class));
+		assertThat(results.getMatch(1), instanceOf(MethodReferenceMatch.class));
 	}
 
+	@Test
 	public void testFunctionThisFieldWithInnerFunction() throws CoreException {
-		IModuleSource module = getModule("functions.js");
-		IModelElement[] elements = select(module,
-				lastPositionInFile("fun8", module, false));
+		ISourceModule module = PROJECT.getSourceModule("src", "functions.js");
+		IModelElement[] elements = on(module).beforeLast("fun8").codeSelect();
 		assertEquals(0, elements.length);
 	}
 
+	@Test
 	public void testFunctionThisFieldWithInnerFunctionCall()
 			throws CoreException {
-		IModuleSource module = getModule("functions.js");
-		IModelElement[] elements = select(module,
-				lastPositionInFile("funA", module, false));
+		ISourceModule module = PROJECT.getSourceModule("src", "functions.js");
+		IModelElement[] elements = on(module).beforeLast("funA").codeSelect();
 		assertEquals(0, elements.length);
 	}
 
+	@Test
 	public void testGlobalInitializerFunctionField() throws CoreException {
-		if (notYetImplemented())
-			return;
-		IModuleSource module = getModule("functions.js");
-		IModelElement[] elements = select(module,
-				lastPositionInFile("funB", module, false));
+		ISourceModule module = PROJECT.getSourceModule("src", "functions.js");
+		IModelElement[] elements = on(module).beforeLast("funB").codeSelect();
 		assertEquals(1, elements.length);
 		final IMethod method = (IMethod) elements[0];
-		final TestSearchResults results = search(method, ALL_OCCURRENCES);
+		final TestSearchResults results = PROJECT.search(method,
+				ALL_OCCURRENCES);
 		assertEquals(results.toString(), 2, results.size());
-		assertTrue(results.getMatch(0) instanceof MethodDeclarationMatch);
-		assertTrue(results.getMatch(1) instanceof MethodReferenceMatch);
+		assertThat(results.getMatch(0), instanceOf(FieldDeclarationMatch.class));
+		assertThat(results.getMatch(1), instanceOf(MethodReferenceMatch.class));
 	}
 
+	@Test
 	public void testLocalInitializerFunctionField() throws CoreException {
-		if (notYetImplemented())
-			return;
-		IModuleSource module = getModule("functions.js");
-		IModelElement[] elements = select(module,
-				lastPositionInFile("funC", module, false));
+		ISourceModule module = PROJECT.getSourceModule("src", "functions.js");
+		IModelElement[] elements = on(module).beforeLast("funC").codeSelect();
 		assertEquals(1, elements.length);
 		final IModelElement method = elements[0];
-		final TestSearchResults results = search(method, ALL_OCCURRENCES);
+		final TestSearchResults results = PROJECT.search(method,
+				SearchFor.ALL_OCCURRENCES);
 		assertEquals(2, results.size());
-		assertTrue(results.getMatch(0) instanceof MethodDeclarationMatch);
-		assertTrue(results.getMatch(1) instanceof MethodReferenceMatch);
+		assertThat(results.getMatch(0), instanceOf(FieldDeclarationMatch.class));
+		assertThat(results.getMatch(1), instanceOf(MethodReferenceMatch.class));
 	}
 
 }

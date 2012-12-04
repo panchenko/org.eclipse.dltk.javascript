@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.core.tests.search;
 
-import static org.eclipse.dltk.javascript.core.tests.AllTests.PLUGIN_ID;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
@@ -31,111 +29,114 @@ import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.core.environment.EnvironmentManager;
 import org.eclipse.dltk.core.environment.EnvironmentPathUtils;
+import org.eclipse.dltk.core.search.IDLTKSearchConstants;
 import org.eclipse.dltk.core.search.SearchEngine;
-import org.eclipse.dltk.core.tests.model.AbstractSingleProjectSearchTests;
+import org.eclipse.dltk.core.tests.IDLTKSearchConstantsForTests;
+import org.eclipse.dltk.core.tests.ProjectSetup;
 import org.eclipse.dltk.core.tests.model.TestSearchResults;
 import org.eclipse.dltk.core.tests.util.StringList;
+import org.eclipse.dltk.javascript.core.tests.AllTests;
+import org.junit.Assert;
+import org.junit.ClassRule;
+import org.junit.Test;
+import org.junit.rules.ExternalResource;
+import org.junit.rules.RuleChain;
+import org.junit.rules.TemporaryFolder;
 
-public class SearchExternalLibraryTests extends
-		AbstractSingleProjectSearchTests {
-
-	private static final String MY_EXPORTS_JS = "myExports.js";
-
-	public SearchExternalLibraryTests(String testName) {
-		super(PLUGIN_ID, testName, "searchExtLib");
-	}
-
-	public static Suite suite() {
-		return new Suite(SearchExternalLibraryTests.class);
-	}
+public class SearchExternalLibraryTests extends Assert implements
+		IDLTKSearchConstants, IDLTKSearchConstantsForTests {
 
 	private static final String LIB_NAME = "MyLibrary";
 
-	private File library;
+	private static final String MY_EXPORTS_JS = "myExports.js";
 
-	@Override
-	public void setUpSuite() throws Exception {
-		library = File.createTempFile("dltk", "js");
-		if (library.exists()) {
-			library.delete();
+	private static class LibrarySetup extends TemporaryFolder {
+		protected void before() throws Throwable {
+			super.before();
+			final File f = new File(getRoot(), MY_EXPORTS_JS);
+			final StringList code = new StringList();
+			code.add("function myLibraryExports() {");
+			code.add("}");
+			final FileWriter writer = new FileWriter(f);
+			writer.write(code.toString());
+			writer.close();
 		}
-		assertTrue(library.mkdir());
-		final File f = new File(library, MY_EXPORTS_JS);
-		final StringList code = new StringList();
-		code.add("function myLibraryExports() {");
-		code.add("}");
-		final FileWriter writer = new FileWriter(f);
-		writer.write(code.toString());
-		writer.close();
-		DLTKCore.setBuildpathVariable(LIB_NAME, EnvironmentPathUtils
-				.getFullPath(EnvironmentManager.getLocalEnvironment(),
-						new Path(library.getAbsolutePath())), null);
-		super.setUpSuite();
+
+		public IPath getAbsolutePath() {
+			return new Path(getRoot().getAbsolutePath());
+		}
+
+		public IPath getFullPath() {
+			return EnvironmentPathUtils
+					.getFullPath(EnvironmentManager.getLocalEnvironment(),
+							getAbsolutePath());
+		}
 	}
 
-	private void deleteDir(File file) {
-		if (file.isDirectory()) {
-			File[] children = file.listFiles();
-			if (children != null) {
-				for (File child : children) {
-					deleteDir(child);
+	public static final LibrarySetup LIBRARY = new LibrarySetup();
+
+	public static final ProjectSetup PROJECT = new ProjectSetup(
+			AllTests.WORKSPACE, "searchExtLib",
+			ProjectSetup.Option.WAIT_INDEXES_READY);
+
+	@ClassRule
+	public static final RuleChain CLASS_RULE_CHAIN = RuleChain.emptyRuleChain()
+			.around(LIBRARY).around(new ExternalResource() {
+				protected void before() throws Throwable {
+					DLTKCore.setBuildpathVariable(LIB_NAME,
+							LIBRARY.getFullPath(), null);
 				}
-			}
-		}
-		file.delete();
-	}
 
-	@Override
-	public void tearDownSuite() throws Exception {
-		if (library != null) {
-			deleteDir(library);
-		}
-		super.tearDownSuite();
-		DLTKCore.removeBuildpathVariable(LIB_NAME, null);
-	}
+				protected void after() {
+					DLTKCore.removeBuildpathVariable(LIB_NAME, null);
+				}
+			}).around(PROJECT);
 
+	@Test
 	public void testFindProjectFragment() throws ModelException {
-		final IPath libraryPath = EnvironmentPathUtils.getFullPath(
-				EnvironmentManager.getLocalEnvironment(),
-				new Path(library.getAbsolutePath()));
-		final IProjectFragment fragment = getScriptProject()
+		final IPath libraryPath = LIBRARY.getFullPath();
+		final IProjectFragment fragment = PROJECT.getScriptProject()
 				.findProjectFragment(libraryPath);
 		assertNotNull(fragment);
 		assertTrue(EnvironmentPathUtils.isFull(fragment.getPath()));
 		assertEquals(libraryPath, fragment.getPath());
 	}
 
+	@Test
 	public void testFindProjectFragmentWithoutEnv() throws ModelException {
-		final IPath libraryPath = new Path(library.getAbsolutePath());
-		final IProjectFragment fragment = getScriptProject()
+		final IPath libraryPath = LIBRARY.getAbsolutePath();
+		final IProjectFragment fragment = PROJECT.getScriptProject()
 				.findProjectFragment(libraryPath);
 		assertNull(fragment);
 	}
 
+	@Test
 	public void testFindScriptFolderWithoutEnv() throws ModelException {
-		final IPath libraryPath = new Path(library.getAbsolutePath());
-		final IScriptFolder folder = getScriptProject().findScriptFolder(
-				libraryPath);
+		final IPath libraryPath = LIBRARY.getAbsolutePath();
+		final IScriptFolder folder = PROJECT.getScriptProject()
+				.findScriptFolder(libraryPath);
 		assertNotNull(folder);
 		assertTrue(EnvironmentPathUtils.isFull(folder.getPath()));
 		assertEquals(libraryPath,
 				EnvironmentPathUtils.getLocalPath(folder.getPath()));
 	}
 
+	@Test
 	public void testFindScriptFolderWithEnv() throws ModelException {
 		final IPath libraryPath = EnvironmentPathUtils.getFullPath(
 				EnvironmentManager.getLocalEnvironment(),
-				new Path(library.getAbsolutePath()));
-		final IScriptFolder folder = getScriptProject().findScriptFolder(
-				libraryPath);
+				LIBRARY.getAbsolutePath());
+		final IScriptFolder folder = PROJECT.getScriptProject()
+				.findScriptFolder(libraryPath);
 		assertNotNull(folder);
 		assertTrue(EnvironmentPathUtils.isFull(folder.getPath()));
 		assertEquals(libraryPath, folder.getPath());
 	}
 
+	@Test
 	public void testMyLibraryExports() throws CoreException {
-		final List<org.eclipse.dltk.core.ISourceModule> modules = new ArrayList<org.eclipse.dltk.core.ISourceModule>();
-		getScriptProject().accept(new IModelElementVisitor() {
+		final List<ISourceModule> modules = new ArrayList<ISourceModule>();
+		PROJECT.getScriptProject().accept(new IModelElementVisitor() {
 			public boolean visit(IModelElement element) {
 				if (element.getElementType() == IModelElement.SOURCE_MODULE) {
 					if (MY_EXPORTS_JS.equals(element.getElementName())) {
@@ -147,8 +148,8 @@ public class SearchExternalLibraryTests extends
 			}
 		});
 		assertEquals(1, modules.size());
-		final TestSearchResults results = search("myLibraryExports", METHOD,
-				DECLARATIONS, EXACT_RULE,
+		final TestSearchResults results = PROJECT.search("myLibraryExports",
+				METHOD, DECLARATIONS, EXACT_RULE,
 				SearchEngine.createSearchScope(modules.get(0)));
 		assertEquals(1, results.size());
 		final IModelElement method = results.locate(IMethod.class,

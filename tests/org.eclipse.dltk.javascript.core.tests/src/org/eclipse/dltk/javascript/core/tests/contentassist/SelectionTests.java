@@ -35,10 +35,10 @@ import org.eclipse.dltk.core.search.SearchMatch;
 import org.eclipse.dltk.core.search.SearchParticipant;
 import org.eclipse.dltk.core.search.SearchPattern;
 import org.eclipse.dltk.core.search.SearchRequestor;
-import org.eclipse.dltk.core.tests.Skip;
 import org.eclipse.dltk.core.tests.model.AbstractModelTests;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
 import org.eclipse.dltk.javascript.internal.core.codeassist.JavaScriptSelectionEngine2;
+import org.junit.Ignore;
 
 @SuppressWarnings("restriction")
 public class SelectionTests extends AbstractModelTests {
@@ -221,7 +221,7 @@ public class SelectionTests extends AbstractModelTests {
 		assertEquals(0, elements.length);
 	}
 
-	@Skip
+	@Ignore
 	public void testFunctionThisField() throws ModelException {
 		IModuleSource module = getModule("functions.js");
 		IModelElement[] elements = select(module,
@@ -241,7 +241,9 @@ public class SelectionTests extends AbstractModelTests {
 		final IMethod local = (IMethod) elements[0];
 		final ISourceRange nameRange = local.getNameRange();
 		final String contents = module.getSourceContents();
-		assertEquals(contents.indexOf("fun6"), nameRange.getOffset());
+		assertEquals(
+				contents.indexOf("fun6", contents.indexOf("function test5a()")),
+				nameRange.getOffset());
 	}
 
 	public void testFunctionThisFieldWithLocalFunction() throws ModelException {

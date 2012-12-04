@@ -19,6 +19,10 @@ function test4() {
 	fun5();
 }
 
+function test5a_false_match() {
+	this.fun6 = function(){};
+}
+
 function test5a() {
 	this.fun6 = function(){};
 }

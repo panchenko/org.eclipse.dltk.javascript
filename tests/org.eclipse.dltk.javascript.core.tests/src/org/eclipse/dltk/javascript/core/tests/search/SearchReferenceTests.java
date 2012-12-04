@@ -11,26 +11,29 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.core.tests.search;
 
-import static org.eclipse.dltk.javascript.core.tests.AllTests.PLUGIN_ID;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.dltk.core.IField;
 import org.eclipse.dltk.core.IModelElement;
-import org.eclipse.dltk.core.tests.model.AbstractSingleProjectSearchTests;
+import org.eclipse.dltk.core.search.IDLTKSearchConstants;
+import org.eclipse.dltk.core.tests.ProjectSetup;
 import org.eclipse.dltk.core.tests.model.TestSearchResults;
+import org.eclipse.dltk.javascript.core.tests.AllTests;
+import org.junit.Assert;
+import org.junit.ClassRule;
+import org.junit.Test;
 
-public class SearchReferenceTests extends AbstractSingleProjectSearchTests {
+public class SearchReferenceTests extends Assert implements
+		IDLTKSearchConstants {
 
-	public SearchReferenceTests(String testName) {
-		super(PLUGIN_ID, testName, "search");
-	}
+	@ClassRule
+	public static final ProjectSetup PROJECT = new ProjectSetup(
+			AllTests.WORKSPACE, "search",
+			ProjectSetup.Option.WAIT_INDEXES_READY);
 
-	public static Suite suite() {
-		return new Suite(SearchReferenceTests.class);
-	}
-
+	@Test
 	public void testFunctionHello1() throws CoreException {
-		final TestSearchResults results = search("hello", METHOD, REFERENCES);
+		final TestSearchResults results = PROJECT.search("hello", METHOD,
+				REFERENCES);
 		assertEquals(1, results.size());
 		final IModelElement method = results.locate(IField.class, "a");
 		final IModelElement parent = method.getParent();
@@ -38,8 +41,10 @@ public class SearchReferenceTests extends AbstractSingleProjectSearchTests {
 		assertEquals("a.js", parent.getElementName());
 	}
 
+	@Test
 	public void testVarA() throws CoreException {
-		final TestSearchResults results = search("a", FIELD, REFERENCES);
+		final TestSearchResults results = PROJECT
+				.search("a", FIELD, REFERENCES);
 		assertEquals(1, results.size());
 		final IModelElement module = results.locate(IField.class, "b");
 		final IModelElement parent = module.getParent();
@@ -47,8 +52,10 @@ public class SearchReferenceTests extends AbstractSingleProjectSearchTests {
 		assertEquals("b.js", parent.getElementName());
 	}
 
+	@Test
 	public void testMethodRef() throws CoreException {
-		final TestSearchResults results = search("size", METHOD, REFERENCES);
+		final TestSearchResults results = PROJECT.search("size", METHOD,
+				REFERENCES);
 		assertEquals(1, results.size());
 		final IModelElement element = results.get(0);
 		final IModelElement parent = element
@@ -56,8 +63,10 @@ public class SearchReferenceTests extends AbstractSingleProjectSearchTests {
 		assertEquals("size.js", parent.getElementName());
 	}
 
+	@Test
 	public void testPropertyRef() throws CoreException {
-		final TestSearchResults results = search("length", FIELD, REFERENCES);
+		final TestSearchResults results = PROJECT.search("length", FIELD,
+				REFERENCES);
 		assertEquals(1, results.size());
 		final IModelElement element = results.get(0);
 		final IModelElement parent = element

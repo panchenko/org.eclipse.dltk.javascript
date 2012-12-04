@@ -11,11 +11,13 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.search;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.IMember;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.IModelElementVisitor;
@@ -23,16 +25,8 @@ import org.eclipse.dltk.core.IModelElementVisitorExtension;
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.core.ISourceReference;
-import org.eclipse.dltk.core.search.BasicSearchEngine;
-import org.eclipse.dltk.core.search.FieldDeclarationMatch;
-import org.eclipse.dltk.core.search.FieldReferenceMatch;
 import org.eclipse.dltk.core.search.IDLTKSearchScope;
-import org.eclipse.dltk.core.search.LocalVariableDeclarationMatch;
-import org.eclipse.dltk.core.search.LocalVariableReferenceMatch;
-import org.eclipse.dltk.core.search.MethodDeclarationMatch;
-import org.eclipse.dltk.core.search.MethodReferenceMatch;
 import org.eclipse.dltk.core.search.SearchDocument;
-import org.eclipse.dltk.core.search.SearchMatch;
 import org.eclipse.dltk.core.search.SearchParticipant;
 import org.eclipse.dltk.core.search.SearchPattern;
 import org.eclipse.dltk.core.search.SearchRequestor;
@@ -41,19 +35,18 @@ import org.eclipse.dltk.core.search.matching.ModuleFactory;
 import org.eclipse.dltk.core.search.matching2.IMatchingPredicate;
 import org.eclipse.dltk.core.search.matching2.MatchLevel;
 import org.eclipse.dltk.core.search.matching2.MatchingCollector;
-import org.eclipse.dltk.internal.javascript.parser.structure.StructureContext;
-import org.eclipse.dltk.internal.javascript.parser.structure.StructureReporter3;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.core.JSBindings;
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 import org.eclipse.dltk.javascript.internal.core.TemporaryBindings;
 import org.eclipse.dltk.javascript.parser.JavaScriptParserUtil;
-import org.eclipse.dltk.javascript.structure.IStructureNode;
 import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
 
 public class JavaScriptMatchLocator implements IMatchLocator,
 		IModelElementVisitor, IModelElementVisitorExtension {
+
+	private static final boolean VERBOSE = DLTKCore.VERBOSE_SEARCH;
 
 	private IProgressMonitor progressMonitor;
 	private SearchRequestor requestor;
@@ -82,56 +75,90 @@ public class JavaScriptMatchLocator implements IMatchLocator,
 
 		final MatchingCollector<MatchingNode> matchingCollector = new MatchingCollector<MatchingNode>(
 				predicate, nodeSet);
-		final MatchingCollectorSourceElementRequestor structureRequestor = new MatchingCollectorSourceElementRequestor();
 		for (SearchDocument document : searchDocuments) {
 			// TODO report progress
 			final ISourceModule module = moduleFactory.create(document);
 			if (module == null)
 				continue;
-			structureRequestor.enterModule(module);
-			final StructureReporter3 visitor = new StructureReporter3(
-					new ReferenceSource(module)) {
-				@Override
-				protected boolean isStructure() {
-					return false;
-				}
-			};
+			final JavaScriptMatchLocatorVisitor visitor = new JavaScriptMatchLocatorVisitor(
+					new ReferenceSource(module));
 			nodeSet.clear();
 			final Script script = JavaScriptParserUtil.parse(module);
-			final IStructureNode structureNode = visitor.visitScript(script);
-			structureNode.reportStructure(structureRequestor,
-					new StructureContext());
-			if (structureRequestor.needsTypeInference()) {
-				// TODO (alex) should be in resolvePotentialMatches()
-				final JSBindings bindings = TemporaryBindings.build(
-						inferencer2, module, script);
-				bindings.run(new Runnable() {
-					public void run() {
-						structureRequestor.resolveReferences(bindings);
-					}
-				});
-			}
-			structureRequestor.report(matchingCollector);
+			visitor.visitScript(script);
+			visitor.report(matchingCollector);
 			if (!nodeSet.isEmpty()) {
-				resolvePotentialMatches(nodeSet);
+				if (VERBOSE) {
+					System.out.println(String.format(
+							"- matches in %s: accurate=%d, possible=%d",
+							document, nodeSet.countMatchingNodes(),
+							nodeSet.countPossibleMatchingNodes()));
+				}
+				resolvePotentialMatches(inferencer2, script, module, predicate);
 				participant = document.getParticipant();
+				// report matches according to the module structure
 				module.accept(this);
-			}
-			for (MatchingNode matchingNode : nodeSet.matchingNodes()) {
-				report(matchingNode, module);
+				// report remaining matches - the ones at the module level
+				for (MatchingNode matchingNode : nodeSet.matchingNodes()) {
+					final MatchLevel level = nodeSet
+							.removeTrustedMatch(matchingNode);
+					if (level != null) {
+						requestor.acceptSearchMatch(matchingNode.createMatch(
+								module, participant, level));
+					}
+				}
+			} else {
+				if (VERBOSE) {
+					System.out.println("- no matches in " + document);
+				} else if (DLTKCore.DEBUG) {
+					JavaScriptPlugin.warning("No matches located in "
+							+ document);
+				}
 			}
 		}
 	}
 
-	private void resolvePotentialMatches(JavaScriptMatchingNodeSet nodeSet) {
-		for (MatchingNode node : nodeSet.getPossibleMatchingNodes()) {
-			nodeSet.addMatch(node, MatchLevel.ACCURATE_MATCH);
+	private void resolvePotentialMatches(TypeInferencer2 inferencer2,
+			Script script, ISourceModule module,
+			final IMatchingPredicate<MatchingNode> predicate) {
+		if (needsResolve(nodeSet.getPossibleMatchingNodes())) {
+			if (VERBOSE) {
+				System.out.println("  resolvePotentialMatches "
+						+ module.getPath() + " via type inference");
+			}
+			final JSBindings bindings = TemporaryBindings.build(inferencer2,
+					module, script);
+			bindings.run(new Runnable() {
+				public void run() {
+					for (MatchingNode node : nodeSet.getPossibleMatchingNodes()) {
+						if (node.resolvePotentialMatch(bindings)) {
+							final MatchLevel level = predicate
+									.resolvePotentialMatch(node);
+							if (level != null
+									&& level != MatchLevel.POSSIBLE_MATCH) {
+								nodeSet.addMatch(node, level);
+							}
+						}
+					}
+				}
+			});
+		} else {
+			for (MatchingNode node : nodeSet.getPossibleMatchingNodes()) {
+				final MatchLevel level = predicate.resolvePotentialMatch(node);
+				if (level != null && level != MatchLevel.POSSIBLE_MATCH) {
+					nodeSet.addMatch(node, level);
+				}
+			}
 		}
 		nodeSet.clearPossibleMatchingNodes();
-		if (BasicSearchEngine.VERBOSE) {
-			System.out
-					.print("	- node set: accurate=" + nodeSet.countMatchingNodes() + ", possible=" + nodeSet.countPossibleMatchingNodes()); //$NON-NLS-1$
+	}
+
+	private boolean needsResolve(Collection<MatchingNode> nodes) {
+		for (MatchingNode node : nodes) {
+			if (node.needsResolve()) {
+				return true;
+			}
 		}
+		return false;
 	}
 
 	public boolean visit(IModelElement element) {
@@ -145,55 +172,19 @@ public class JavaScriptMatchLocator implements IMatchLocator,
 		try {
 			final ISourceRange range = ((ISourceReference) element)
 					.getSourceRange();
+			// TODO (alex) also capture nodes covered by member JSDoc
 			List<MatchingNode> matchingNodes = nodeSet.matchingNodes(
 					range.getOffset(), range.getOffset() + range.getLength());
 			for (MatchingNode node : matchingNodes) {
-				nodeSet.removeTrustedMatch(node);
-				report(node, element);
+				final MatchLevel level = nodeSet.removeTrustedMatch(node);
+				if (level != null) {
+					requestor.acceptSearchMatch(node.createMatch(element,
+							participant, level));
+				}
 			}
 		} catch (CoreException e) {
 			JavaScriptPlugin.error(e);
 		}
-	}
-
-	protected void report(MatchingNode node, IModelElement element)
-			throws CoreException {
-		// TODO (alex) make virtual function
-		if (node instanceof FieldDeclarationNode) {
-			requestor.acceptSearchMatch(new FieldDeclarationMatch(element,
-					SearchMatch.A_ACCURATE, node.sourceStart(), length(node),
-					participant, element.getResource()));
-		} else if (node instanceof FieldReferenceNode) {
-			requestor.acceptSearchMatch(new FieldReferenceMatch(element,
-					((FieldReferenceNode) node).node, SearchMatch.A_ACCURATE,
-					node.sourceStart(), length(node), true, true, false,
-					participant, element.getResource()));
-		} else if (node instanceof MethodDeclarationNode) {
-			requestor.acceptSearchMatch(new MethodDeclarationMatch(element,
-					SearchMatch.A_ACCURATE, node.sourceStart(), length(node),
-					participant, element.getResource()));
-		} else if (node instanceof MethodReferenceNode) {
-			requestor.acceptSearchMatch(new MethodReferenceMatch(element,
-					SearchMatch.A_ACCURATE, node.sourceStart(), length(node),
-					false, participant, element.getResource()));
-		} else if (node instanceof LocalVariableDeclarationNode
-				|| node instanceof ArgumentDeclarationNode) {
-			requestor.acceptSearchMatch(new LocalVariableDeclarationMatch(
-					element, SearchMatch.A_ACCURATE, node.sourceStart(),
-					length(node), participant, element.getResource()));
-		} else if (node instanceof LocalVariableReferenceNode) {
-			requestor.acceptSearchMatch(new LocalVariableReferenceMatch(
-					element, SearchMatch.A_ACCURATE, node.sourceStart(),
-					length(node), true, true, false, participant, element
-							.getResource()));
-		} else {
-			throw new IllegalArgumentException(node.getClass().getName()
-					+ " support not implemented");
-		}
-	}
-
-	private static int length(MatchingNode node) {
-		return node.sourceEnd() - node.sourceStart();
 	}
 
 	public void setProgressMonitor(IProgressMonitor progressMonitor) {

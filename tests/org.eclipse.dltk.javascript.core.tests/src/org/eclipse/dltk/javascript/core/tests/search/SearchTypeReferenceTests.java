@@ -11,28 +11,31 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.core.tests.search;
 
-import static org.eclipse.dltk.javascript.core.tests.AllTests.PLUGIN_ID;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.dltk.core.IField;
 import org.eclipse.dltk.core.IMethod;
 import org.eclipse.dltk.core.IModelElement;
-import org.eclipse.dltk.core.tests.model.AbstractSingleProjectSearchTests;
+import org.eclipse.dltk.core.search.IDLTKSearchConstants;
+import org.eclipse.dltk.core.tests.ProjectSetup;
 import org.eclipse.dltk.core.tests.model.TestSearchResults;
+import org.eclipse.dltk.javascript.core.tests.AllTests;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
+import org.junit.Assert;
+import org.junit.ClassRule;
+import org.junit.Test;
 
-public class SearchTypeReferenceTests extends AbstractSingleProjectSearchTests {
+public class SearchTypeReferenceTests extends Assert implements
+		IDLTKSearchConstants {
 
-	public SearchTypeReferenceTests(String testName) {
-		super(PLUGIN_ID, testName, "search");
-	}
+	@ClassRule
+	public static final ProjectSetup PROJECT = new ProjectSetup(
+			AllTests.WORKSPACE, "search",
+			ProjectSetup.Option.WAIT_INDEXES_READY);
 
-	public static Suite suite() {
-		return new Suite(SearchTypeReferenceTests.class);
-	}
-
+	@Test
 	public void testReturnType() throws CoreException {
-		final TestSearchResults results = search("Database", TYPE, REFERENCES);
+		final TestSearchResults results = PROJECT.search("Database", TYPE,
+				REFERENCES);
 		assertEquals(3, results.size());
 		{
 			final IModelElement method = results.locate(IMethod.class,
@@ -56,9 +59,10 @@ public class SearchTypeReferenceTests extends AbstractSingleProjectSearchTests {
 		}
 	}
 
+	@Test
 	public void testFunction() throws CoreException {
-		final TestSearchResults results = search(ITypeNames.FUNCTION, TYPE,
-				REFERENCES);
+		final TestSearchResults results = PROJECT.search(ITypeNames.FUNCTION,
+				TYPE, REFERENCES);
 		assertEquals(1, results.size());
 		final IModelElement method = results.locate(IMethod.class,
 				"getDatabaseFunction");
@@ -67,8 +71,10 @@ public class SearchTypeReferenceTests extends AbstractSingleProjectSearchTests {
 		assertEquals("returnFunctionType.js", parent.getElementName());
 	}
 
+	@Test
 	public void testParamType() throws CoreException {
-		final TestSearchResults results = search("Request", TYPE, REFERENCES);
+		final TestSearchResults results = PROJECT.search("Request", TYPE,
+				REFERENCES);
 		assertEquals(1, results.size());
 		final IModelElement method = results.locate(IMethod.class,
 				"executeRequest");
@@ -77,8 +83,9 @@ public class SearchTypeReferenceTests extends AbstractSingleProjectSearchTests {
 		assertEquals("paramType.js", parent.getElementName());
 	}
 
+	@Test
 	public void testVarType() throws CoreException {
-		final TestSearchResults results = search("MyApplication", TYPE,
+		final TestSearchResults results = PROJECT.search("MyApplication", TYPE,
 				REFERENCES);
 		assertEquals(1, results.size());
 		final IModelElement method = results.locate(IField.class, "app");

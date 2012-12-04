@@ -11,23 +11,19 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.search;
 
-import java.util.Iterator;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.Collection;
 
+import org.eclipse.dltk.compiler.CharOperation;
+import org.eclipse.dltk.core.DLTKLanguageManager;
+import org.eclipse.dltk.core.ISearchPatternProcessor;
 import org.eclipse.dltk.core.search.matching2.AbstractMatchingPredicate;
 import org.eclipse.dltk.core.search.matching2.MatchLevel;
 import org.eclipse.dltk.internal.core.search.matching.TypeReferencePattern;
-import org.eclipse.dltk.javascript.core.Types;
+import org.eclipse.dltk.internal.javascript.parser.structure.StructureRequestor;
+import org.eclipse.dltk.javascript.core.JavaScriptNature;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
-import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
-import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
-import org.eclipse.dltk.javascript.typeinfo.model.FunctionType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
-import org.eclipse.dltk.javascript.typeinfo.model.MapType;
-import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
-import org.eclipse.dltk.javascript.typeinfo.model.Type;
-import org.eclipse.emf.ecore.EObject;
 
 @SuppressWarnings("restriction")
 public class TypeReferencePredicate extends
@@ -41,8 +37,20 @@ public class TypeReferencePredicate extends
 	 */
 	public TypeReferencePredicate(ITypeSystem context,
 			TypeReferencePattern pattern) {
-		super(pattern, pattern.simpleName);
+		super(pattern, concat(pattern.qualification, pattern.simpleName));
 		this.context = context;
+	}
+
+	private static char[] concat(char[] qualification, char[] simpleName) {
+		if (qualification != null) {
+			final ISearchPatternProcessor patternProcessor = DLTKLanguageManager
+					.getSearchPatternProcessor(JavaScriptNature.NATURE_ID);
+			final char[] separator = (patternProcessor != null ? patternProcessor
+					.getDelimiterReplacementString() : "/").toCharArray();
+			return CharOperation.concat(CharOperation.replace(qualification,
+					new char[] { '$' }, separator), separator, simpleName);
+		}
+		return simpleName;
 	}
 
 	public MatchLevel match(MatchingNode node) {
@@ -61,56 +69,34 @@ public class TypeReferencePredicate extends
 		} else if (node instanceof FieldDeclarationNode) {
 			FieldDeclarationNode fNode = (FieldDeclarationNode) node;
 			return matchTypeName(fNode.declaredType);
-		} else if (node instanceof LocalVariableDeclarationNode) {
+		} else if (node instanceof LocalVariableDeclarationNode
+				&& !(node instanceof ArgumentDeclarationNode)) {
 			LocalVariableDeclarationNode vNode = (LocalVariableDeclarationNode) node;
 			return matchTypeName(vNode.declaredType);
+		} else if (node instanceof TypeReferenceNode) {
+			final TypeReferenceNode ref = (TypeReferenceNode) node;
+			return matchTypeNames(ref.typeNames);
 		}
 		return null;
 	}
 
-	private void matchSimpleType(JSType type, AtomicReference<MatchLevel> result) {
-		final Type t;
-		if (type instanceof MapType) {
-			t = Types.OBJECT;
-		} else if (type instanceof ArrayType) {
-			t = Types.ARRAY;
-		} else if (type instanceof FunctionType) {
-			t = Types.FUNCTION;
-		} else if (type instanceof SimpleType) {
-			t = ((SimpleType) type).getTarget();
-		} else if (type instanceof ClassType) {
-			t = ((ClassType) type).getTarget();
-		} else {
-			return;
-		}
-		if (t != null) {
-			final MatchLevel m = matchName(t.getName());
-			if (m != null) {
-				final MatchLevel prev = result.get();
-				if (prev == null || m.compareTo(prev) > 0) {
-					result.set(m);
-				}
+	private MatchLevel matchTypeNames(final Collection<String> typeNames) {
+		MatchLevel result = null;
+		for (String typeName : typeNames) {
+			final MatchLevel level = matchName(typeName,
+					MatchLevel.ACCURATE_MATCH);
+			if (level != null
+					&& (result == null || level.compareTo(result) > 0)) {
+				result = level;
 			}
 		}
+		return result;
 	}
 
-	public MatchLevel matchTypeName(JSType type) {
+	private MatchLevel matchTypeName(JSType type) {
 		if (type == null)
 			return null;
-		final AtomicReference<MatchLevel> result = new AtomicReference<MatchLevel>();
-		matchSimpleType(type, result);
-		if (result.get() == MatchLevel.ACCURATE_MATCH) {
-			return result.get();
-		}
-		for (Iterator<EObject> i = type.eAllContents(); i.hasNext();) {
-			final EObject child = i.next();
-			if (child instanceof JSType) {
-				matchSimpleType((JSType) child, result);
-				if (result.get() == MatchLevel.ACCURATE_MATCH) {
-					break;
-				}
-			}
-		}
-		return result.get();
+		return matchTypeNames(StructureRequestor
+				.collectContainedTypeNames(type));
 	}
 }

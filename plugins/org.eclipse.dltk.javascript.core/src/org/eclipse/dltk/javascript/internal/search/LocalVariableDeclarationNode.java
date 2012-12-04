@@ -11,7 +11,12 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.search;
 
+import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.ISourceModule;
+import org.eclipse.dltk.core.search.LocalVariableDeclarationMatch;
+import org.eclipse.dltk.core.search.SearchMatch;
+import org.eclipse.dltk.core.search.SearchParticipant;
+import org.eclipse.dltk.core.search.matching2.MatchLevel;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
@@ -29,6 +34,13 @@ public class LocalVariableDeclarationNode extends
 		super(node);
 		this.module = module;
 		this.declaredType = declaredType;
+	}
+
+	public SearchMatch createMatch(IModelElement element,
+			SearchParticipant participant, MatchLevel level) {
+		return new LocalVariableDeclarationMatch(element,
+				level.toSearchMatchAccuracy(), node.sourceStart(), length(),
+				participant, element.getResource());
 	}
 
 }

@@ -15,6 +15,7 @@ import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.compiler.util.Util;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.StringLiteral;
+import org.eclipse.dltk.javascript.core.JSBindings;
 
 public abstract class AbstractMatchingNode<E extends ASTNode> implements
 		MatchingNode {
@@ -45,6 +46,18 @@ public abstract class AbstractMatchingNode<E extends ASTNode> implements
 
 	public int sourceEnd() {
 		return node.sourceEnd();
+	}
+
+	public int length() {
+		return sourceEnd() - sourceStart();
+	}
+
+	public boolean needsResolve() {
+		return false;
+	}
+
+	public boolean resolvePotentialMatch(JSBindings bindings) {
+		return true;
 	}
 
 	public String getName() {

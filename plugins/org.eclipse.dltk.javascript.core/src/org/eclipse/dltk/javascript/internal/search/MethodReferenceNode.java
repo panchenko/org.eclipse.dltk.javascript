@@ -11,12 +11,30 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.search;
 
+import org.eclipse.dltk.core.IModelElement;
+import org.eclipse.dltk.core.search.MethodReferenceMatch;
+import org.eclipse.dltk.core.search.SearchMatch;
+import org.eclipse.dltk.core.search.SearchParticipant;
+import org.eclipse.dltk.core.search.matching2.MatchLevel;
 import org.eclipse.dltk.javascript.ast.Identifier;
+import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
+import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 
 public class MethodReferenceNode extends MemberReferenceNode {
 
 	public MethodReferenceNode(Identifier node) {
 		super(node);
+	}
+
+	public MethodReferenceNode(Identifier node, ReferenceLocation location) {
+		super(node, location, ReferenceKind.METHOD);
+	}
+
+	public SearchMatch createMatch(IModelElement element,
+			SearchParticipant participant, MatchLevel level) {
+		return new MethodReferenceMatch(element, level.toSearchMatchAccuracy(),
+				node.sourceStart(), length(), false, participant,
+				element.getResource());
 	}
 
 }
