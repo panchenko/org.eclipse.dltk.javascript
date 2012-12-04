@@ -423,9 +423,6 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 	}
 
 	public void testLazyVariableWithAssignment() {
-		if (notYetImplemented(this))
-			return;
-		// TODO uncomment when correct scopes support is implemented
 		StringList code = new StringList();
 		code.add("function Node1() {");
 		code.add("myVar = 10;");
@@ -1431,8 +1428,6 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 	}
 
 	public void testOuterVariableInInnerFunction() {
-		if (notYetImplemented(this))
-			return;
 		StringList code = new StringList();
 		code.add("function Outer() {");
 		code.add("function inner() {");

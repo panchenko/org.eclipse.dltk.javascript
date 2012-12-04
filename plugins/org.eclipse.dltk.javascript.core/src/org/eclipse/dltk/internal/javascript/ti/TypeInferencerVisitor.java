@@ -109,7 +109,6 @@ import org.eclipse.dltk.javascript.typeinfo.IMemberEvaluator;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
-import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilderExtension;
 import org.eclipse.dltk.javascript.typeinfo.IRArrayType;
 import org.eclipse.dltk.javascript.typeinfo.IRClassType;
@@ -562,10 +561,10 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	public IValueReference visitConstDeclaration(ConstStatement node) {
 		final IValueCollection context = peekContext();
 		for (VariableDeclaration declaration : node.getVariables()) {
-			IValueReference constant = createVariable(context, declaration);
-			if (constant != null)
-				constant.setAttribute(IAssignProtection.ATTRIBUTE,
-						PROTECT_CONST);
+			final IValueReference reference = context.getChild(declaration
+					.getVariableName());
+			assert reference.exists();
+			initializeVariable(reference, declaration);
 		}
 		return null;
 	}
@@ -577,11 +576,9 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		final IValueReference reference = context.createChild(varName);
 		final JSVariable variable = new JSVariable(
 				declaration.getVariableName());
-		if (declaration.getParent() instanceof VariableStatement) {
-			for (IModelBuilder extension : this.context.getModelBuilders()) {
-				extension.processVariable(declaration, variable, reporter,
-						getTypeChecker());
-			}
+		for (IModelBuilder extension : this.context.getModelBuilders()) {
+			extension.processVariable(declaration, variable, reporter,
+					getTypeChecker());
 		}
 		if (reporter != null) {
 			final ISuppressWarningsState state = reporter.getSuppressWarnings();
@@ -596,11 +593,6 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		reference.setLocation(ReferenceLocation.create(getSource(),
 				declaration.sourceStart(), declaration.sourceEnd(),
 				identifier.sourceStart(), identifier.sourceEnd()));
-		initializeVariable(reference, declaration, variable);
-
-		// declared type setting must be done after the initialize else the
-		// IMemberEvaluator.valueOf() call will be reverted for types that do
-		// return a collection
 		final IRVariable rvar = RModelBuilder.create(getContext(), variable);
 		reference.setAttribute(IReferenceAttributes.R_VARIABLE, rvar);
 		if (rvar.getType() != null) {
@@ -613,7 +605,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	}
 
 	protected void initializeVariable(final IValueReference reference,
-			VariableDeclaration declaration, IVariable variable) {
+			VariableDeclaration declaration) {
 		if (declaration.getInitializer() != null) {
 			final IValueReference assignment;
 			reference
@@ -624,7 +616,12 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				reference.setAttribute(IReferenceAttributes.RESOLVING, null);
 			}
 			if (assignment != null) {
-				assign(reference, assignment);
+				final IRVariable variable = (IRVariable) reference
+						.getAttribute(IReferenceAttributes.R_VARIABLE);
+				if (variable.getType() == null) {
+					// assign only if no declared type specified
+					assign(reference, assignment);
+				}
 				if (assignment.getKind() == ReferenceKind.FUNCTION
 						&& reference.getAttribute(IReferenceAttributes.METHOD) != null)
 					reference.setKind(ReferenceKind.FUNCTION);
@@ -1277,11 +1274,17 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	}
 
 	private void handleDeclarations(JSScope scope) {
+		final IValueCollection context = peekContext();
 		for (JSDeclaration declaration : scope.getDeclarations()) {
 			if (declaration instanceof FunctionStatement) {
 
 			} else if (declaration instanceof VariableDeclaration) {
-
+				final VariableDeclaration varDeclaration = (VariableDeclaration) declaration;
+				final IValueReference var = createVariable(context,
+						varDeclaration);
+				if (varDeclaration.getParent() instanceof ConstStatement) {
+					var.setAttribute(IAssignProtection.ATTRIBUTE, PROTECT_CONST);
+				}
 			}
 		}
 	}
@@ -1374,7 +1377,9 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		final IValueCollection collection = peekContext();
 		IValueReference result = null;
 		for (VariableDeclaration declaration : node.getVariables()) {
-			result = createVariable(collection, declaration);
+			result = collection.getChild(declaration.getVariableName());
+			assert result.exists();
+			initializeVariable(result, declaration);
 		}
 		return result;
 	}

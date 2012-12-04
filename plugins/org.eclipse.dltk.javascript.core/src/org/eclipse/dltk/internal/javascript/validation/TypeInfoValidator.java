@@ -63,6 +63,7 @@ import org.eclipse.dltk.javascript.ast.StatementBlock;
 import org.eclipse.dltk.javascript.ast.ThrowStatement;
 import org.eclipse.dltk.javascript.ast.UnaryOperation;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
+import org.eclipse.dltk.javascript.ast.VariableStatement;
 import org.eclipse.dltk.javascript.core.JSBindings;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.internal.core.TemporaryBindings;
@@ -1726,11 +1727,12 @@ public class TypeInfoValidator implements IBuildParticipant,
 
 		@Override
 		protected void initializeVariable(IValueReference reference,
-				VariableDeclaration declaration, IVariable variable) {
-			if (declaration.getInitializer() != null) {
+				VariableDeclaration declaration) {
+			if (declaration.getInitializer() != null
+					&& declaration.getParent() instanceof VariableStatement) {
 				checkAssign(reference, declaration);
 			}
-			super.initializeVariable(reference, declaration, variable);
+			super.initializeVariable(reference, declaration);
 		}
 
 		private void validateHidesByVariable(IValueCollection context,

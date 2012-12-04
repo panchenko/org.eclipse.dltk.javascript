@@ -109,8 +109,8 @@ public class SelectionVisitor extends TypeInferencerVisitor {
 		super.visitFunctionBody(node);
 	}
 
-	protected IValueReference createVariable(IValueCollection context,
-			VariableDeclaration declaration) {
+	protected IValueReference createVariable(
+			IValueCollection context, VariableDeclaration declaration) {
 		return check(declaration.getIdentifier(),
 				super.createVariable(context, declaration));
 	}
