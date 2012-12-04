@@ -944,6 +944,18 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 
 	}
 
+	public void testDifferentReturnTypesFirstNull() {
+		List<String> code = new StringList();
+		code.add("function test(a) {");
+		code.add("  if (a > 0) {");
+		code.add("    return null;");
+		code.add("  }");
+		code.add("  return [{}];");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+
 	public void testStringTypeAsFunctionCall() {
 		StringList code = new StringList();
 		code.add("var b = true");

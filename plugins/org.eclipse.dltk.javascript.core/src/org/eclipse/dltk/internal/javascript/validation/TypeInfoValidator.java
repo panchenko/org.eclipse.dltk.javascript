@@ -298,6 +298,7 @@ public class TypeInfoValidator implements IBuildParticipant,
 		public void call(ValidationVisitor visitor) {
 			final IRType methodType = jsMethod.getType();
 			IRType firstType = null;
+			ReturnNode firstNode = null;
 			for (ReturnNode element : lst) {
 				if (element.returnValueReference == null)
 					continue;
@@ -341,12 +342,15 @@ public class TypeInfoValidator implements IBuildParticipant,
 				}
 				if (firstType == null && type != null) {
 					firstType = type.normalize();
+					firstNode = element;
 				}
 			}
 
 			if (firstType != null) {
-				for (int i = 1; i < lst.size(); i++) {
-					ReturnNode next = lst.get(i);
+				for (ReturnNode next : lst) {
+					if (next == firstNode) {
+						continue;
+					}
 					IRType nextType = JavaScriptValidations
 							.typeOf(next.returnValueReference);
 					if (nextType != null) {
