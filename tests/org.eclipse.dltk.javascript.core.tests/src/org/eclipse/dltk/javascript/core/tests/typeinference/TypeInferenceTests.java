@@ -527,7 +527,8 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IValueReference bool = collection.getChild("bool");
 		assertEquals(getTypes(BOOLEAN), bool.getTypes());
 		IValueReference arr = collection.getChild("arr");
-		assertEquals(getTypes(ARRAY), arr.getTypes());
+		assertEquals(JSTypeSet.singleton(RTypes.arrayOf(ts(), RTypes.any())),
+				arr.getTypes());
 	}
 
 	public void testRecursion1() {

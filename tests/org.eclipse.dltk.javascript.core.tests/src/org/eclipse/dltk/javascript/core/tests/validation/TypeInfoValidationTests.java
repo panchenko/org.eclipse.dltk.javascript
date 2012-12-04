@@ -657,9 +657,9 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("testArray(new Array());");
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
-		assertEquals(problems.toString(), 1, problems.size());
-		assertEquals(JavaScriptProblems.WRONG_PARAMETERS_PARAMETERIZATION,
-				problems.get(0).getID());
+		assertEquals(problems.toString(), 0, problems.size());
+		// assertEquals(JavaScriptProblems.WRONG_PARAMETERS_PARAMETERIZATION,
+		// problems.get(0).getID());
 	}
 
 	public void testGenericAnyWtihNoneGenericCall() {

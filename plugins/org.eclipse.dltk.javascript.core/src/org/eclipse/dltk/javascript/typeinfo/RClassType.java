@@ -92,7 +92,7 @@ public class RClassType extends RType implements IRClassType {
 		if (type == null) {
 			return RTypes.any();
 		} else if (Types.ARRAY == type) {
-			return RTypes.arrayOf(TypeSystems.GLOBAL, RTypes.none());
+			return RTypes.arrayOf(TypeSystems.GLOBAL, RTypes.any());
 		} else {
 			return type.createInstance(typeSystem);
 		}
