@@ -21,13 +21,11 @@ import org.eclipse.dltk.core.tests.ProjectSetup;
 import org.eclipse.dltk.javascript.ast.Keywords;
 import org.eclipse.dltk.javascript.ast.MultiLineComment;
 import org.eclipse.dltk.javascript.ui.tests.AllTests;
-import org.eclipse.dltk.ui.DLTKUIPlugin;
 import org.eclipse.dltk.ui.templates.ScriptTemplateProposal;
 import org.eclipse.dltk.ui.tests.UICompletionUtil;
 import org.eclipse.dltk.ui.tests.UITestUtils;
 import org.eclipse.dltk.ui.text.completion.IScriptCompletionProposal;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
-import org.eclipse.ui.IEditorPart;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -80,8 +78,9 @@ public class JSCodeAssistUITest extends Assert {
 	public void functionKeywordProposal() throws CoreException {
 		final ISourceModule module = checkNotNull(PROJECT.getSourceModule(
 				"src", "file1.js"));
-		final IEditorPart part = checkNotNull(DLTKUIPlugin.openInEditor(module));
-		final UICompletionUtil util = UICompletionUtil.on(part).after("fu");
+
+		final UICompletionUtil util = UICompletionUtil.openEditor(module)
+				.after("fu");
 
 		final List<ICompletionProposal> proposals = util.invokeCompletion();
 		assertFalse(proposals.isEmpty());
@@ -104,8 +103,8 @@ public class JSCodeAssistUITest extends Assert {
 	public void functionWithJSDoc() throws CoreException {
 		final ISourceModule module = checkNotNull(PROJECT.getSourceModule(
 				"src", "file1.js"));
-		final IEditorPart part = checkNotNull(DLTKUIPlugin.openInEditor(module));
-		final UICompletionUtil util = UICompletionUtil.on(part).after("fu");
+		final UICompletionUtil util = UICompletionUtil.openEditor(module)
+				.after("fu");
 
 		final List<ScriptTemplateProposal> templates = filterProposalsWithJSDoc(util
 				.invokeCompletion());
@@ -120,8 +119,8 @@ public class JSCodeAssistUITest extends Assert {
 	public void secondFunctionWithJSDoc() throws CoreException {
 		final ISourceModule module = checkNotNull(PROJECT.getSourceModule(
 				"src", "file2.js"));
-		final IEditorPart part = checkNotNull(DLTKUIPlugin.openInEditor(module));
-		final UICompletionUtil util = UICompletionUtil.on(part).afterLast("fu");
+		final UICompletionUtil util = UICompletionUtil.openEditor(module)
+				.afterLast("fu");
 
 		final List<ScriptTemplateProposal> templates = filterProposalsWithJSDoc(util
 				.invokeCompletion());
@@ -136,8 +135,8 @@ public class JSCodeAssistUITest extends Assert {
 	public void functionWithJSDocIfJSDocAlreadyExists() throws CoreException {
 		final ISourceModule module = checkNotNull(PROJECT.getSourceModule(
 				"src", "file3.js"));
-		final IEditorPart part = checkNotNull(DLTKUIPlugin.openInEditor(module));
-		final UICompletionUtil util = UICompletionUtil.on(part).afterLast("fu");
+		final UICompletionUtil util = UICompletionUtil.openEditor(module)
+				.afterLast("fu");
 
 		final List<ScriptTemplateProposal> templates = filterProposalsWithJSDoc(util
 				.invokeCompletion());
