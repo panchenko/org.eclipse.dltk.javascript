@@ -24,7 +24,7 @@ import org.eclipse.dltk.ast.utils.ASTUtil;
 import org.eclipse.dltk.codeassist.ScriptSelectionEngine;
 import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.core.DLTKCore;
-import org.eclipse.dltk.core.IImportDeclaration;
+import org.eclipse.dltk.core.IMember;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.IModelElementVisitor;
 import org.eclipse.dltk.core.IParent;
@@ -32,7 +32,6 @@ import org.eclipse.dltk.core.IProjectFragment;
 import org.eclipse.dltk.core.IScriptProject;
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.core.ISourceRange;
-import org.eclipse.dltk.core.ISourceReference;
 import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.core.ScriptModelUtil;
 import org.eclipse.dltk.core.model.LocalVariable;
@@ -96,18 +95,13 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 		}
 
 		public boolean visit(IModelElement element) {
-			if (element instanceof ISourceReference) {
-				ISourceReference member = (ISourceReference) element;
+			if (element instanceof IMember) {
+				IMember member = (IMember) element;
 				try {
 					ISourceRange range = member.getNameRange();
-					if (range != null) {
-						if (range.getOffset() == nameStart
-								&& range.getLength() == nameEnd - nameStart
-								|| member instanceof IImportDeclaration
-								&& range.getOffset() <= nameStart
-								&& range.getOffset() + range.getLength() >= nameEnd) {
-							throw new ModelElementFound(element);
-						}
+					if (range.getOffset() == nameStart
+							&& range.getLength() == nameEnd - nameStart) {
+						throw new ModelElementFound(element);
 					}
 				} catch (ModelException e) {
 					//
