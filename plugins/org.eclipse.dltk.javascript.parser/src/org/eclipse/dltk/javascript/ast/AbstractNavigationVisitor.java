@@ -233,8 +233,7 @@ public class AbstractNavigationVisitor<E> extends ASTVisitor<E> {
 
 	@Override
 	public E visitParenthesizedExpression(ParenthesizedExpression node) {
-		visit(node.getExpression());
-		return null;
+		return visit(node.getExpression());
 	}
 
 	@Override
