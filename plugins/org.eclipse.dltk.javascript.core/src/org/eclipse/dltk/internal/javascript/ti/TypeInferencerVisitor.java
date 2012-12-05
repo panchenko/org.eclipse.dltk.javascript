@@ -36,6 +36,7 @@ import org.eclipse.dltk.javascript.ast.CallExpression;
 import org.eclipse.dltk.javascript.ast.CaseClause;
 import org.eclipse.dltk.javascript.ast.CatchClause;
 import org.eclipse.dltk.javascript.ast.CommaExpression;
+import org.eclipse.dltk.javascript.ast.Comment;
 import org.eclipse.dltk.javascript.ast.ConditionalOperator;
 import org.eclipse.dltk.javascript.ast.ConstStatement;
 import org.eclipse.dltk.javascript.ast.ContinueStatement;
@@ -1118,9 +1119,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					visit(pi.getValue());
 					continue;
 				}
-				final JSDocTags tags = pi.getName().getDocumentation() != null ? JSDocSupport
-						.parse(pi.getName().getDocumentation())
-						: JSDocTags.EMPTY;
+				final JSDocTags tags = parseTags(pi.getName()
+						.getDocumentation());
 
 				final IValueReference value = visit(pi.getValue());
 				if (value != null) {
@@ -1156,11 +1156,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					source.setLocation(ReferenceLocation.create(getSource(), pi
 							.getName().sourceStart(), pi.getName().sourceEnd()));
 					if (!tags.isEmpty()) {
-						final IModelBuilder[] modelBuilders = this.context
-								.getModelBuilders();
-						if (modelBuilders.length > 0
-								&& modelBuilders[0] instanceof JSDocSupport) {
-							final JSDocSupport jsdocSupport = (JSDocSupport) modelBuilders[0];
+						final JSDocSupport jsdocSupport = getDocSupport();
+						if (jsdocSupport != null) {
 							jsdocSupport.parseType(source, tags,
 									JSDocSupport.TYPE_TAGS, reporter,
 									typeChecker);
@@ -1185,6 +1182,20 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			}
 		}
 		return ConstantValue.of(RTypes.recordType(members));
+	}
+
+	private JSDocTags parseTags(final Comment documentation) {
+		return documentation != null ? JSDocSupport.parse(documentation)
+				: JSDocTags.EMPTY;
+	}
+
+	private JSDocSupport getDocSupport() {
+		for (IModelBuilder modelBuilder : this.context.getModelBuilders()) {
+			if (modelBuilder instanceof JSDocSupport) {
+				return (JSDocSupport) modelBuilder;
+			}
+		}
+		return null;
 	}
 
 	@Override
@@ -1333,12 +1344,19 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		for (CatchClause catchClause : node.getCatches()) {
 			final NestedValueCollection collection = new NestedValueCollection(
 					peekContext());
-			IValueReference exception = collection.createChild(catchClause
-					.getException().getName());
-			// TODO (alex) check @type declaration
-			// exception.setDeclaredType(JSTypeSet.ref(ITypeNames.ERROR));
+			final Identifier id = catchClause.getException();
+			final IValueReference var = collection.createChild(id.getName());
+			final JSDocTags tags = parseTags(id.getDocumentation());
+			final JSElement variable = new JSElement(id.getName());
+			getDocSupport().parseType(variable, tags, JSDocSupport.TYPE_TAGS,
+					reporter, getTypeChecker());
+			var.setDeclaredType(variable.getType() != null ? RTypes.create(
+					context, variable.getType()) : RTypes.ERROR);
 
 			enterContext(collection);
+			if (catchClause.getFilterExpression() != null) {
+				visit(catchClause.getFilterExpression());
+			}
 			if (catchClause.getStatement() != null) {
 				visit(catchClause.getStatement());
 			}

@@ -1255,4 +1255,29 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		assertEquals(RTypes.STRING, figure.getMember("draw").getType());
 	}
 
+	public void testTryCatchDefaultVariableType() {
+		final StringList code = new StringList();
+		code.add("var o;");
+		code.add("try {");
+		code.add("}");
+		code.add("catch (e) { o = e; }");
+		final IValueCollection collection = inference(code.toString());
+		final IRSimpleType o = (IRSimpleType) JavaScriptValidations
+				.typeOf(collection.getChild("o"));
+		assertEquals(ITypeNames.ERROR, o.getName());
+	}
+
+	public void testTryCatchVariableType() {
+		final StringList code = new StringList();
+		code.add("var o;");
+		code.add("try {");
+		code.add("  throw 1");
+		code.add("}");
+		code.add("catch (/** @type {Number} */ e) { o = e; }");
+		final IValueCollection collection = inference(code.toString());
+		final IRSimpleType o = (IRSimpleType) JavaScriptValidations
+				.typeOf(collection.getChild("o"));
+		assertEquals(ITypeNames.NUMBER, o.getName());
+	}
+
 }

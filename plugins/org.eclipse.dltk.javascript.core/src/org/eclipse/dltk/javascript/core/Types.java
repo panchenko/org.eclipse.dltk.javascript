@@ -38,6 +38,8 @@ public class Types {
 
 	public static final Type REGEXP = initType(ITypeNames.REGEXP);
 
+	public static final Type ERROR = initType(ITypeNames.ERROR);
+
 	private static Type initType(String name) {
 		Type type = TypeInfoModelLoader.getInstance().getType(name);
 		if (type == null) {

@@ -399,6 +399,9 @@ public class RTypes {
 	public static final IRSimpleType REGEXP = (IRSimpleType) simple(
 			TypeSystems.GLOBAL, Types.REGEXP);
 
+	public static final IRSimpleType ERROR = (IRSimpleType) simple(
+			TypeSystems.GLOBAL, Types.ERROR);
+
 	public static List<IRType> convert(ITypeSystem typeSystem, List<JSType> args) {
 		final int size = args.size();
 		final List<IRType> parameters = new ArrayList<IRType>(size);
