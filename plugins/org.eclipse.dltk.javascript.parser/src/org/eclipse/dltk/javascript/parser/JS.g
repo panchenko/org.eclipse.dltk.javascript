@@ -44,6 +44,7 @@ options
 {
 	output = AST ;
 	language = Java ;
+	superClass = JSBaseParser;
 }
 
 tokens
@@ -223,6 +224,8 @@ package org.eclipse.dltk.javascript.parser;
 @parser::header
 {
 package org.eclipse.dltk.javascript.parser;
+
+import org.eclipse.dltk.javascript.parser.JavaScriptParser.JSBaseParser;
 }
 
 @lexer::members
@@ -334,37 +337,6 @@ public Token nextToken()
 
 @parser::members
 {
-protected boolean isXmlEnabled() {
-	return false;
-}
-
-protected void reportFailure(Throwable t) {
-}
-
-protected void reportRuleError(RecognitionException re) {
-	reportError(re);
-	recover(input,re);
-}
-
-private final Stack<JSParserState> states = new Stack<JSParserState>();
-
-protected void pushState(JSParserRule rule) {
-	states.push(new JSParserState(peekState(), rule));
-}
-
-protected void popState() {
-	states.pop();
-}
-
-public JSParserState peekState() {
-	return states.isEmpty() ? null : states.peek();
-}
-
-protected void syncToSet() {
-}
-
-protected void reportReservedKeyword(Token token) {
-}
 
 private final boolean isLeftHandSideAssign(RuleReturnScope lhs, Object[] cached)
 {
@@ -1126,16 +1098,16 @@ newExpressionTail
   ;
 
 rightHandSideExpression
-  : parenExpression 
-  | identifier
+  : identifier
+  | { isXmlEnabled() }?=> parenExpression 
   | { isXmlEnabled() }?=> xmlAttribute
   | { isXmlEnabled() }?=> MUL
 ; 
 
 rightHandSideExpression2
   : identifier
-  | { isXmlEnabled() }?=> xmlAttribute
-  | { isXmlEnabled() }?=> MUL
+  | xmlAttribute
+  | MUL
 ;
 
 // $>

@@ -13,6 +13,7 @@ package org.eclipse.dltk.javascript.parser;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Stack;
 
 import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.runtime.ANTLRStringStream;
@@ -22,6 +23,7 @@ import org.antlr.runtime.IntStream;
 import org.antlr.runtime.MismatchedSetException;
 import org.antlr.runtime.MismatchedTokenException;
 import org.antlr.runtime.NoViableAltException;
+import org.antlr.runtime.Parser;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.TokenStream;
@@ -58,24 +60,19 @@ public class JavaScriptParser extends AbstractSourceParser {
 
 	public static final String PARSER_ID = "org.eclipse.dltk.javascript.NewParser";
 
-	private static class JSInternalParser extends JSParser {
+	static class JSBaseParser extends Parser {
 
-		private final Reporter reporter;
-		private final boolean xmlEnabled;
+		Reporter reporter;
+		boolean xmlEnabled;
 
-		public JSInternalParser(TokenStream input, Reporter reporter,
-				boolean xmlEnabled) {
+		public JSBaseParser(TokenStream input) {
 			super(input);
-			this.reporter = reporter;
-			this.xmlEnabled = xmlEnabled;
 		}
 
-		@Override
 		protected boolean isXmlEnabled() {
 			return xmlEnabled;
 		}
 
-		@Override
 		protected void reportFailure(Throwable t) {
 			if (reporter != null && !peekState().hasErrors()) {
 				reporter.reportProblem(new JSProblem(t));
@@ -219,7 +216,6 @@ public class JavaScriptParser extends AbstractSourceParser {
 			}
 		}
 
-		@Override
 		protected void syncToSet() {
 			final BitSet follow = following[_fsp];
 			int mark = input.mark();
@@ -263,7 +259,6 @@ public class JavaScriptParser extends AbstractSourceParser {
 			}
 		}
 
-		@Override
 		protected void reportReservedKeyword(Token token) {
 			if (reporter == null)
 				return;
@@ -300,6 +295,24 @@ public class JavaScriptParser extends AbstractSourceParser {
 			return followSet;
 		}
 
+		protected void reportRuleError(RecognitionException re) {
+			reportError(re);
+			recover(input, re);
+		}
+
+		private final Stack<JSParserState> states = new Stack<JSParserState>();
+
+		protected void pushState(JSParserRule rule) {
+			states.push(new JSParserState(peekState(), rule));
+		}
+
+		protected void popState() {
+			states.pop();
+		}
+
+		public JSParserState peekState() {
+			return states.isEmpty() ? null : states.peek();
+		}
 	}
 
 	/**
@@ -359,7 +372,10 @@ public class JavaScriptParser extends AbstractSourceParser {
 
 	public JSParser createTreeParser(final JSTokenStream stream,
 			final Reporter reporter) {
-		return new JSInternalParser(stream, reporter, xmlEnabled);
+		final JSParser parser = new JSParser(stream);
+		parser.reporter = reporter;
+		parser.xmlEnabled = xmlEnabled;
+		return parser;
 	}
 
 	protected Script parse(IModelElement element, JSTokenStream stream,

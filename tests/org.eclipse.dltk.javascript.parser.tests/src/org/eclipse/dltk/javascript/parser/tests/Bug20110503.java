@@ -16,7 +16,7 @@ import org.eclipse.dltk.core.tests.util.StringList;
 public class Bug20110503 extends AbstractJSParserTest {
 
 	/**
-	 * @see org.eclipse.dltk.javascript.parser.JavaScriptParser.JSInternalParser#combineFollows(boolean)
+	 * @see org.eclipse.dltk.javascript.parser.JavaScriptParser.JSBaseParser#combineFollows(boolean)
 	 */
 	public void testCombinedFollowsNPE() {
 		final StringList code = new StringList();
