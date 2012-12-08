@@ -28,7 +28,7 @@ import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.TokenStream;
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.dltk.ast.parser.AbstractSourceParser;
+import org.eclipse.dltk.ast.parser.ISourceParser;
 import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.compiler.problem.IProblemReporter;
 import org.eclipse.dltk.compiler.problem.ProblemSeverity;
@@ -46,7 +46,7 @@ import org.eclipse.dltk.javascript.parser.JSParser.program_return;
 import org.eclipse.dltk.javascript.parser.JSParser.standaloneExpression_return;
 import org.eclipse.dltk.utils.TextUtils;
 
-public class JavaScriptParser extends AbstractSourceParser {
+public class JavaScriptParser implements ISourceParser {
 
 	private boolean xmlEnabled = true;
 
