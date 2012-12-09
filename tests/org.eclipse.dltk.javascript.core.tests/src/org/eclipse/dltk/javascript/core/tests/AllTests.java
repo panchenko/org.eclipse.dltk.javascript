@@ -12,6 +12,7 @@ import org.eclipse.dltk.javascript.core.tests.contentassist.StandardTypeMemberTe
 import org.eclipse.dltk.javascript.core.tests.contentassist.XMLCompletionTests;
 import org.eclipse.dltk.javascript.core.tests.rewrite.RewriteTest;
 import org.eclipse.dltk.javascript.core.tests.rewrite.VariableRemoveTest;
+import org.eclipse.dltk.javascript.core.tests.rewrite.XmlQueryRewriteTests;
 import org.eclipse.dltk.javascript.core.tests.search.SearchDeclarationTests;
 import org.eclipse.dltk.javascript.core.tests.search.SearchExternalLibraryTests;
 import org.eclipse.dltk.javascript.core.tests.search.SearchFieldTests;
@@ -83,6 +84,7 @@ public class AllTests {
 		suite.addTestSuite(VariableRemoveTest.class);
 		suite.addTestSuite(RewriteTest.class);
 		suite.addTestSuite(GenericMethodTypeInferenceTest.class);
+		suite.addTestSuite(XmlQueryRewriteTests.class);
 		// $JUnit-END$
 		return suite;
 	}
