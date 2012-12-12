@@ -27,27 +27,17 @@ import org.eclipse.dltk.javascript.ui.tests.AllTests;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.core.refactoring.participants.ProcessorBasedRefactoring;
-import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.BeforeClass;
+import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
 
 public class RenameRefactoringTest extends Assert {
 
+	@ClassRule
 	public static final ProjectSetup PROJECT = new ProjectSetup(
 			AllTests.WORKSPACE, "rename");
-
-	@BeforeClass
-	public static void createProject() throws Throwable {
-		ProjectSetup.create(PROJECT);
-	}
-
-	@AfterClass
-	public static void deleteProject() {
-		ProjectSetup.delete(PROJECT);
-	}
 
 	@Rule
 	public final ErrorCollector errors = new ErrorCollector();

@@ -27,9 +27,8 @@ import org.eclipse.dltk.ui.tests.UITestUtils;
 import org.eclipse.dltk.ui.text.completion.IScriptCompletionProposal;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.BeforeClass;
+import org.junit.ClassRule;
 import org.junit.Test;
 
 import com.google.common.base.Predicate;
@@ -37,19 +36,9 @@ import com.google.common.collect.FluentIterable;
 
 public class JSCodeAssistUITest extends Assert {
 
-	// TODO (alex) use @ClassRule in JUnit 4.9+
+	@ClassRule
 	public static final ProjectSetup PROJECT = new ProjectSetup(
 			AllTests.WORKSPACE, "completion");
-
-	@BeforeClass
-	public static void createProject() throws Throwable {
-		ProjectSetup.create(PROJECT);
-	}
-
-	@AfterClass
-	public static void deleteProject() {
-		ProjectSetup.delete(PROJECT);
-	}
 
 	@After
 	public void closeAllEditors() {
