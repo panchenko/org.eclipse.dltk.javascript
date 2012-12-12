@@ -26,6 +26,8 @@ import org.eclipse.dltk.ui.tests.UICompletionUtil;
 import org.eclipse.dltk.ui.tests.UITestUtils;
 import org.eclipse.dltk.ui.text.completion.IScriptCompletionProposal;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.ClassRule;
@@ -61,6 +63,12 @@ public class JSCodeAssistUITest extends Assert {
 								MultiLineComment.JSDOC_PREFIX);
 					}
 				});
+	}
+
+	@SuppressWarnings("unchecked")
+	private static Matcher<String> stringHasValue() {
+		return CoreMatchers.allOf(CoreMatchers.<String> notNullValue(),
+				CoreMatchers.not(""));
 	}
 
 	@Test
@@ -134,6 +142,44 @@ public class JSCodeAssistUITest extends Assert {
 		util.apply(templates.get(0));
 		assertEquals(PROJECT.getFileContentsAsString("src/file3.txt"),
 				util.getText());
+	}
+
+	@Test
+	public void additionalProposalInfoLengthProperty() throws CoreException {
+		final ISourceModule module = checkNotNull(PROJECT.getSourceModule(
+				"src", "additionalInfo.js"));
+		final UICompletionUtil util = UICompletionUtil.openEditor(module)
+				.afterLast("s.");
+
+		final List<IScriptCompletionProposal> proposals = filter(
+				util.invokeCompletion(), IScriptCompletionProposal.class,
+				new Predicate<IScriptCompletionProposal>() {
+					public boolean apply(IScriptCompletionProposal input) {
+						return input.getDisplayString().startsWith("length");
+					}
+				});
+		assertEquals(1, proposals.size());
+		assertThat(proposals.get(0).getAdditionalProposalInfo(),
+				stringHasValue());
+	}
+
+	@Test
+	public void additionalProposalInfoToStringMethod() throws CoreException {
+		final ISourceModule module = checkNotNull(PROJECT.getSourceModule(
+				"src", "additionalInfo.js"));
+		final UICompletionUtil util = UICompletionUtil.openEditor(module)
+				.afterLast("s.");
+
+		final List<IScriptCompletionProposal> proposals = filter(
+				util.invokeCompletion(), IScriptCompletionProposal.class,
+				new Predicate<IScriptCompletionProposal>() {
+					public boolean apply(IScriptCompletionProposal input) {
+						return input.getDisplayString().startsWith("toString");
+					}
+				});
+		assertEquals(1, proposals.size());
+		assertThat(proposals.get(0).getAdditionalProposalInfo(),
+				stringHasValue());
 	}
 
 }
