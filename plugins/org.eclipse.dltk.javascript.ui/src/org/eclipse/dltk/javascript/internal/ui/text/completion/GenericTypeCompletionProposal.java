@@ -17,9 +17,9 @@ import org.eclipse.dltk.core.CompletionProposal;
 import org.eclipse.dltk.javascript.typeinfo.model.GenericType;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeVariable;
 import org.eclipse.dltk.ui.DLTKUIPlugin;
+import org.eclipse.dltk.ui.text.completion.ICompletionProposalInfo;
 import org.eclipse.dltk.ui.text.completion.IScriptCompletionProposalExtension2;
 import org.eclipse.dltk.ui.text.completion.LinkedModeScriptCompletionProposal;
-import org.eclipse.dltk.ui.text.completion.ProposalInfo;
 import org.eclipse.dltk.ui.text.completion.ReplacementBuffer;
 import org.eclipse.dltk.ui.text.completion.ScriptContentAssistInvocationContext;
 import org.eclipse.jface.text.IDocument;
@@ -88,7 +88,7 @@ public class GenericTypeCompletionProposal extends
 	}
 
 	@Override
-	protected ProposalInfo computeProposalInfo() {
+	protected ICompletionProposalInfo computeProposalInfo() {
 		return new JavaScriptProposalInfo(fProposal.getExtraInfo());
 	}
 
