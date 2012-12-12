@@ -2770,5 +2770,35 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code
 				.toString());
 		assertEquals(problems.toString(), 0, problems.size());
-	}	
+	}
+	
+	public void testGenericReturnCallSort() {
+		StringList code = new StringList();
+		code.add("/**"); 
+		code.add(" * @return {Array<String>}");
+		code.add(" */"); 
+		code.add("function getJSFormHierarchy() {");
+		code.add(" /** @type {Array<String>} */");
+		code.add(" var retval = new Array();");
+		code.add(" return retval.sort(function(){});");
+		code.add("}"); 
+		final List<IProblem> problems = validate(code
+				.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
+	public void testGenericReturnCallReverse() {
+		StringList code = new StringList();
+		code.add("/**"); 
+		code.add(" * @return {Array<String>}");
+		code.add(" */"); 
+		code.add("function getJSFormHierarchy() {");
+		code.add(" /** @type {Array<String>} */");
+		code.add(" var retval = new Array();");
+		code.add(" return retval.reverse();");
+		code.add("}"); 
+		final List<IProblem> problems = validate(code
+				.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
 }
