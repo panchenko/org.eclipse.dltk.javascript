@@ -1232,6 +1232,7 @@ public class JavascriptAutoEditStrategy extends
 	 * org.eclipse.jface.text.IAutoIndentStrategy#customizeDocumentCommand(org
 	 * .eclipse.jface.text.IDocument, org.eclipse.jface.text.DocumentCommand)
 	 */
+	@Override
 	public void customizeDocumentCommand(IDocument d, DocumentCommand c) {
 		if (c.doit == false)
 			return;

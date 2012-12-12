@@ -362,6 +362,7 @@ public class JavascriptSourceViewerConfiguration extends
 		}
 	}
 
+	@Override
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected Map getHyperlinkDetectorTargets(final ISourceViewer sourceViewer) {
 		final Map targets = super.getHyperlinkDetectorTargets(sourceViewer);

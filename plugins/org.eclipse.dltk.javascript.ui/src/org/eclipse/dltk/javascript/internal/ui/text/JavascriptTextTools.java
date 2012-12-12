@@ -24,6 +24,7 @@ public class JavascriptTextTools extends ScriptTextTools {
 				autoDisposeOnDisplayDispose);
 	}
 
+	@Override
 	public ScriptSourceViewerConfiguration createSourceViewerConfiguraton(
 			IPreferenceStore preferenceStore, ITextEditor editor,
 			String partitioning) {
@@ -31,6 +32,7 @@ public class JavascriptTextTools extends ScriptTextTools {
 				preferenceStore, editor, partitioning);
 	}
 
+	@Override
 	public IPartitionTokenScanner getPartitionScanner() {
 		return new JavascriptPartitionScanner();
 	}

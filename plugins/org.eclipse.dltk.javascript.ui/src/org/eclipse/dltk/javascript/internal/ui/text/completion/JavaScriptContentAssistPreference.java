@@ -21,6 +21,7 @@ import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 public class JavaScriptContentAssistPreference extends ContentAssistPreference {
 	static JavaScriptContentAssistPreference sDefault;
 
+	@Override
 	protected ScriptTextTools getTextTools() {
 		return JavaScriptUI.getDefault().getTextTools();
 	}

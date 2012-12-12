@@ -39,6 +39,7 @@ public class JSDocDoubleClickStrategy extends PartitionDoubleClickSelector {
 	 *            the offset around which to return the word
 	 * @return the word's region, or <code>null</code> for no selection
 	 */
+	@Override
 	protected IRegion findExtendedDoubleClickSelection(IDocument document,
 			int position) {
 		try {

@@ -63,6 +63,7 @@ public class JavaScriptXmlHighlighter extends AbstractJavaScriptHighlighter
 			this.requestor = requestor;
 		}
 
+		@Override
 		public boolean visitGeneral(ASTNode node) throws Exception {
 			if (node instanceof XmlLiteral) {
 				handleXML((XmlLiteral) node);

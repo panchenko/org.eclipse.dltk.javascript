@@ -48,6 +48,7 @@ public class JavaScriptCompletionProcessor extends ScriptCompletionProcessor {
 		private IContextInformation info;
 		private ITextViewer viewer;
 
+		@Override
 		public boolean isContextInformationValid(int offset) {
 			if (offset < installOffset)
 				return false;
@@ -73,6 +74,7 @@ public class JavaScriptCompletionProcessor extends ScriptCompletionProcessor {
 			return false;
 		}
 
+		@Override
 		public void install(IContextInformation info, ITextViewer viewer,
 				int offset) {
 			this.info = info;
@@ -80,6 +82,7 @@ public class JavaScriptCompletionProcessor extends ScriptCompletionProcessor {
 			installOffset = offset;
 		}
 
+		@Override
 		public boolean updatePresentation(int documentPosition,
 				TextPresentation presentation) {
 			try {
