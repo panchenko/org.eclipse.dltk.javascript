@@ -13,31 +13,71 @@ package org.eclipse.dltk.javascript.typeinfo;
 
 import java.util.List;
 
+import org.eclipse.dltk.annotations.Nullable;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 
+/**
+ * Resolved type used during type inference. It is created based on the
+ * {@link Type} model declaration by the {@link ITypeSystem}, for generic types
+ * it can be also parameterized.
+ */
 public interface IRTypeDeclaration extends IRElement {
 
 	/**
-	 * Returns the type system this type was created by.
+	 * Returns the type system this instance was created by.
 	 */
 	ITypeSystem getTypeSystem();
 
+	/**
+	 * Returns the super type of this type or <code>null</code>
+	 */
+	@Nullable
 	IRTypeDeclaration getSuperType();
 
+	/**
+	 * Returns list of traits/interfaces implemented by this type
+	 */
 	List<? extends IRTypeDeclaration> getTraits();
 
+	/**
+	 * Returns list of members
+	 * 
+	 * @see IRMethod
+	 * @see IRProperty
+	 */
 	List<IRMember> getMembers();
 
+	/**
+	 * Returns list of constructors callable via <code>new</code> operator
+	 */
 	List<IRConstructor> getConstructors();
 
+	/**
+	 * Returns the constructor which is called when this type is used as
+	 * function, e.g. <code>String(1)</code>
+	 */
+	@Nullable
 	IRConstructor getStaticConstructor();
 
+	/**
+	 * Returns the kind of this type, just delegates to {@link Type#getKind()}
+	 */
 	TypeKind getKind();
 
+	/**
+	 * Answers if static members of this type are accessible in the sub-types or
+	 * not. Typically in JavaScript they are not, i.e. static members of
+	 * <code>Object</code> are not accessible via <code>String</code> type
+	 * reference, but in some libraries it could be different. At the moment
+	 * this method delegates to {@link Type#isInheritStaticMembers()}.
+	 */
 	boolean isInheritStaticMembers();
 
-	// override return type
+	/**
+	 * Returns the original model declaration of this type. This method just
+	 * overrides the return type of the method, declared in the super type.
+	 */
 	Type getSource();
 
 	Object getReadOnlyStatus(IRProperty property);
@@ -58,8 +98,16 @@ public interface IRTypeDeclaration extends IRElement {
 	 */
 	List<IRType> getActualTypeArguments();
 
+	/**
+	 * Checks if type is compatible with the speciifed one.
+	 */
 	TypeCompatibility isAssignableFrom(IRTypeDeclaration declaration);
 
+	/**
+	 * Finds the method with specified name and {@link IRMember#isStatic()}
+	 * attribute.
+	 */
+	@Nullable
 	IRMethod findMethod(String name, boolean isStatic);
 
 }
