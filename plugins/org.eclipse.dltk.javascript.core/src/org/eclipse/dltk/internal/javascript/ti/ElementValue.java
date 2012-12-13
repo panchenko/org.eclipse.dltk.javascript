@@ -323,18 +323,17 @@ public abstract class ElementValue implements IValue {
 		public IValue getChild(String name, boolean resolve) {
 			IValue value = children.get(name);
 			if (value == null) {
-				if (name.equals(IValueReference.ARRAY_OP)) {
-					value = new Value();
-				} else {
-					for (IRType type : types) {
-						value = findMemberA(context, type, name);
-						if (value != null) {
-							if (value instanceof ElementValue) {
-								value = ((ElementValue) value).resolveValue();
-							}
-							break;
+				for (IRType type : types) {
+					value = findMemberA(context, type, name);
+					if (value != null) {
+						if (value instanceof ElementValue) {
+							value = ((ElementValue) value).resolveValue();
 						}
+						break;
 					}
+				}
+				if (value == null && name.equals(IValueReference.ARRAY_OP)) {
+					value = new Value();
 				}
 				if (value != null) {
 					children.put(name, value);

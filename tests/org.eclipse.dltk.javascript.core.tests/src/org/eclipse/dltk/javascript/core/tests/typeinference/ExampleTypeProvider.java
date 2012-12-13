@@ -146,7 +146,21 @@ public class ExampleTypeProvider implements ITypeProvider {
 				prop2.setType(getTypeRef(context, TYPE_SERVICE));
 				type.getMembers().add(prop2);
 				return addType(CACHE_BUCKET, type);
-			} else
+			}  else if ("ArrayTest".equals(typeName)) {
+				
+				Type type = TypeInfoModelFactory.eINSTANCE.createType();
+				type.setName(typeName);
+				type.setKind(TypeKind.JAVA);
+
+				Method method1 = TypeInfoModelFactory.eINSTANCE.createMethod();
+				method1.setName("execute");
+				
+				method1.setType(TypeUtil.arrayOf("ArrayTest"));
+				type.getMembers().add(method1);
+				
+				return addType(CACHE_BUCKET, type);
+			}
+			else
 				return null;
 		}
 	};

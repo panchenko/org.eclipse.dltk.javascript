@@ -124,6 +124,11 @@ public class ExampleElementResolver implements IElementResolver {
 			param.setType(TypeUtil.reference(variable));
 			method.getParameters().add(param);
 			return method;
+		} else if ("arrayTest".equals(name)) {
+			Property property = TypeInfoModelFactory.eINSTANCE.createProperty();
+			property.setType(context.getTypeRef("ArrayTest"));
+			property.setName(name);
+			return property;
 		}
 		return null;
 	}

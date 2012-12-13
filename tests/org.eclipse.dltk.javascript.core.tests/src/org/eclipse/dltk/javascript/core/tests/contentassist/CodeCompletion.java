@@ -703,4 +703,15 @@ public class CodeCompletion extends AbstractCompletionTest {
 		c.complete(module, position, 0);
 		assertEquals(2 + getMembersOfObject().size(), results.size());
 	}
+	
+	public void testArrayInArrayLookup() {
+		final StringList code = new StringList();
+		code.add("function test() {");
+		code.add("	arrayTest.execute()[1].execute()[1].");
+		code.add("}");
+		final IModuleSource module = new TestModule(code.toString());
+		String[] names = new String[] { "execute" };
+		int position = lastPositionInFile(".", module);
+		basicTest(module, position, names);
+	}
 }
