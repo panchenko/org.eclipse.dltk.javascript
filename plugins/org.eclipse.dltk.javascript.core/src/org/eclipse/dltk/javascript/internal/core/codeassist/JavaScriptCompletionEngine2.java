@@ -131,7 +131,10 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 				if (node instanceof Identifier) {
 					setSourceRange(node.start(), node.end());
 				} else {
-					setSourceRange(position - path.lastSegment().length(),
+					String lastSegment = path.lastSegment();
+					if (lastSegment == null)
+						lastSegment = "";
+					setSourceRange(position - lastSegment.length(),
 							position);
 				}
 				final Reporter reporter = new Reporter(inferencer2, path
