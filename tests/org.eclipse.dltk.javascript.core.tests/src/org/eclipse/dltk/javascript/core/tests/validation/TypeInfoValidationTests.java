@@ -2801,4 +2801,17 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 				.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
+	
+	public void testRecordTypeObjectProperty() {
+		StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @param {String} form");
+		code.add(" */");
+		code.add("function forEach(form) {");
+		code.add("var processed = { }");
+		code.add("processed.hasOwnProperty(form);");
+		code.add("}");
+		List<IProblem> validate = validate(code.toString());
+		assertEquals(0, validate.size());
+	}
 }

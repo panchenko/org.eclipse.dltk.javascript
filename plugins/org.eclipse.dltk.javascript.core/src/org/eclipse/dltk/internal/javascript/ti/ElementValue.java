@@ -173,6 +173,7 @@ public abstract class ElementValue implements IValue {
 			if (member != null) {
 				return new RTypeValue(context, member.getType(), member);
 			}
+			return findMember(context, RTypes.OBJECT, name);
 		} else if (type instanceof IRFunctionType) {
 			if (FunctionMethod.apply.test(name)) {
 				return getFunctionMethod(context, (IRFunctionType) type,
