@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.parser.tests;
 
+import junit.framework.JUnit4TestAdapter;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -31,7 +32,7 @@ public class AllTests {
 		suite.addTestSuite(ErrorReportingTests.class);
 		suite.addTestSuite(FunctionDocumentationTests.class);
 		suite.addTestSuite(ParserValidationsTest.class);
-		suite.addTestSuite(SimpleJSDocParserTests.class);
+		suite.addTest(new JUnit4TestAdapter(SimpleJSDocParserTests.class));
 		suite.addTestSuite(Bug20110503.class);
 		suite.addTestSuite(ForTests.class);
 		suite.addTestSuite(StringPoolTest.class);

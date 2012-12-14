@@ -15,10 +15,12 @@ import static org.eclipse.dltk.javascript.core.tests.AllTests.PLUGIN_ID;
 import static org.eclipse.dltk.javascript.core.tests.contentassist.AbstractContentAssistTest.lastPositionInFile;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.dltk.codeassist.ISelectionEngine;
+import org.eclipse.dltk.codeassist.ISelectionRequestor;
 import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.core.DLTKLanguageManager;
 import org.eclipse.dltk.core.ILocalVariable;
@@ -28,7 +30,6 @@ import org.eclipse.dltk.core.IScriptProject;
 import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.core.ISourceReference;
 import org.eclipse.dltk.core.ModelException;
-import org.eclipse.dltk.core.ScriptModelUtil;
 import org.eclipse.dltk.core.search.IDLTKSearchConstants;
 import org.eclipse.dltk.core.search.SearchEngine;
 import org.eclipse.dltk.core.search.SearchMatch;
@@ -37,7 +38,9 @@ import org.eclipse.dltk.core.search.SearchPattern;
 import org.eclipse.dltk.core.search.SearchRequestor;
 import org.eclipse.dltk.core.tests.model.AbstractModelTests;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
+import org.eclipse.dltk.javascript.core.Types;
 import org.eclipse.dltk.javascript.internal.core.codeassist.JavaScriptSelectionEngine2;
+import org.junit.Assert;
 import org.junit.Ignore;
 
 @SuppressWarnings("restriction")
@@ -86,11 +89,60 @@ public class SelectionTests extends AbstractModelTests {
 				JavaScriptSelectionEngine2.class.getName() + " not found");
 	}
 
-	public IModelElement[] select(IModuleSource module, final int position) {
+	private IModelElement[] select(IModuleSource module, final int position) {
 		ISelectionEngine engine = getEngine();
+		final List<IModelElement> elements = new ArrayList<IModelElement>();
+		engine.setRequestor(new ISelectionRequestor() {
+			@Override
+			public void acceptModelElement(IModelElement element) {
+				elements.add(element);
+			}
+
+			@Override
+			public void acceptForeignElement(Object element) {
+				if (element instanceof IModelElement) {
+					acceptModelElement((IModelElement) element);
+				}
+			}
+
+			@Override
+			public void acceptElement(Object element, ISourceRange range) {
+				acceptForeignElement(element);
+			}
+		});
 		final IModelElement[] result = engine
 				.select(module, position, position);
-		return result != null ? result : ScriptModelUtil.NO_ELEMENTS;
+		if (result != null) {
+			Collections.addAll(elements, result);
+		}
+		return elements.toArray(new IModelElement[elements.size()]);
+	}
+
+	private Object[] selectAll(IModuleSource module, final int position) {
+		ISelectionEngine engine = getEngine();
+		final List<Object> elements = new ArrayList<Object>();
+		engine.setRequestor(new ISelectionRequestor() {
+			@Override
+			public void acceptModelElement(IModelElement element) {
+				elements.add(element);
+			}
+
+			@Override
+			public void acceptForeignElement(Object element) {
+				elements.add(element);
+			}
+
+			@Override
+			public void acceptElement(Object element, ISourceRange range) {
+				elements.add(element);
+			}
+		});
+		final IModelElement[] result = engine
+				.select(module, position, position);
+		if (result != null) {
+			Collections.addAll(elements, result);
+		}
+		return elements.toArray();
 	}
 
 	public void test1() throws ModelException {
@@ -303,6 +355,50 @@ public class SelectionTests extends AbstractModelTests {
 					}
 				}, null);
 		assertEquals(3, result.size());
+	}
+
+	public void testJSDocType_param() throws ModelException {
+		if (!JavaScriptSelectionEngine2.isJSDocTypeSelectionEnabled())
+			return;
+		final IModuleSource module = getModule("jsdoc-type-param.js");
+		Assert.assertArrayEquals(new Object[] { Types.STRING },
+				selectAll(module, lastPositionInFile("String", module, false)));
+		Assert.assertArrayEquals(new Object[] { Types.NUMBER },
+				selectAll(module, lastPositionInFile("Number", module, false)));
+		Assert.assertArrayEquals(new Object[] { Types.BOOLEAN },
+				selectAll(module, lastPositionInFile("Boolean", module, false)));
+	}
+
+	public void testJSDocType_return() throws ModelException {
+		if (!JavaScriptSelectionEngine2.isJSDocTypeSelectionEnabled())
+			return;
+		final IModuleSource module = getModule("jsdoc-type-return.js");
+		Assert.assertArrayEquals(new Object[] { Types.STRING },
+				selectAll(module, lastPositionInFile("String", module, false)));
+		Assert.assertArrayEquals(new Object[] { Types.NUMBER },
+				selectAll(module, lastPositionInFile("Number", module, false)));
+		Assert.assertArrayEquals(new Object[] { Types.BOOLEAN },
+				selectAll(module, lastPositionInFile("Boolean", module, false)));
+	}
+
+	public void testJSDocType_type() throws ModelException {
+		if (!JavaScriptSelectionEngine2.isJSDocTypeSelectionEnabled())
+			return;
+		final IModuleSource module = getModule("jsdoc-type-type.js");
+		Assert.assertArrayEquals(new Object[] { Types.STRING },
+				selectAll(module, lastPositionInFile("String", module, false)));
+		Assert.assertArrayEquals(new Object[] { Types.NUMBER },
+				selectAll(module, lastPositionInFile("Number", module, false)));
+		Assert.assertArrayEquals(new Object[] { Types.BOOLEAN },
+				selectAll(module, lastPositionInFile("Boolean", module, false)));
+	}
+
+	public void testJSDocType_type_noBraces() throws ModelException {
+		if (!JavaScriptSelectionEngine2.isJSDocTypeSelectionEnabled())
+			return;
+		final IModuleSource module = getModule("jsdoc-type-type-no-braces.js");
+		Assert.assertArrayEquals(new Object[] { Types.STRING },
+				selectAll(module, lastPositionInFile("String", module, false)));
 	}
 
 }

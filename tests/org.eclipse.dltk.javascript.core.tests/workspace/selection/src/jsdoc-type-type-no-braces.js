@@ -1,0 +1,5 @@
+/**
+ * @type 
+ *          String
+ */
+var test;

@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.ui.text.hyperlink;
 
+import static java.util.Collections.singletonList;
+
 import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.IMember;
 import org.eclipse.dltk.core.IModelElement;
@@ -23,12 +25,13 @@ import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.internal.ui.actions.SelectionConverter;
 import org.eclipse.dltk.internal.ui.editor.EditorUtility;
 import org.eclipse.dltk.internal.ui.editor.ModelElementHyperlink;
+import org.eclipse.dltk.javascript.internal.core.codeassist.JavaScriptSelectionEngine2;
 import org.eclipse.dltk.javascript.internal.ui.JavaScriptUI;
 import org.eclipse.dltk.javascript.internal.ui.text.JSDocTextUtils;
-import org.eclipse.dltk.javascript.internal.ui.text.JSDocTypeUtil;
 import org.eclipse.dltk.javascript.internal.ui.text.TypeNameNode;
 import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTag;
-import org.eclipse.dltk.javascript.typeinfo.IElementConverter;
+import org.eclipse.dltk.javascript.typeinfo.JSDocTypeRegion;
+import org.eclipse.dltk.javascript.typeinfo.JSDocTypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.dltk.javascript.typeinfo.TypeMode;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
@@ -51,7 +54,8 @@ public class JSDocTypeHyperlinkDetector extends AbstractHyperlinkDetector {
 
 	public IHyperlink[] detectHyperlinks(ITextViewer textViewer,
 			IRegion inputRegion, boolean canShowMultipleHyperlinks) {
-		if (inputRegion == null || textViewer == null) {
+		if (inputRegion == null || textViewer == null
+				|| JavaScriptSelectionEngine2.isJSDocTypeSelectionEnabled()) {
 			return null;
 		}
 		try {
@@ -113,18 +117,19 @@ public class JSDocTypeHyperlinkDetector extends AbstractHyperlinkDetector {
 			TypeInferencer2 inferencer2 = new TypeInferencer2();
 			inferencer2.setModelElement(input);
 			final int typeExpressionOffset = lineRegion.getOffset() + start;
-			final TypeNameNode selection = JSDocTypeUtil.findName(inferencer2,
-					line.substring(start, end), offset - typeExpressionOffset);
+			final JSDocTypeRegion selection = JSDocTypeUtil.findTypeAt(
+					inferencer2, line.substring(start, end), offset
+							- typeExpressionOffset);
 			if (selection == null) {
 				return null;
 			}
-			Type type = inferencer2
-					.getKnownType(selection.type, TypeMode.JSDOC);
+			Type type = inferencer2.getKnownType(selection.name(),
+					TypeMode.JSDOC);
 			Object[] elements = null;
 			if (type == null) {
 				try {
 					ScriptModelUtil.reconcile(input);
-					input.accept(new Visitor(selection.type));
+					input.accept(new Visitor(selection.name()));
 				} catch (ModelException e) {
 					if (DLTKCore.DEBUG) {
 						e.printStackTrace();
@@ -133,12 +138,14 @@ public class JSDocTypeHyperlinkDetector extends AbstractHyperlinkDetector {
 					elements = new Object[] { e.element };
 				}
 			} else {
+				final IModelElement me = TypeInfoManager.convertElement(input,
+						type);
 				elements = SelectionConverter
-						.filterElements(new Object[] { convert(input, type) });
+						.filterElements(singletonList(me != null ? me : type));
 			}
 			if (elements != null && elements.length > 0) {
 				final IRegion region = new Region(typeExpressionOffset
-						+ selection.start, selection.end - selection.start);
+						+ selection.start(), selection.length());
 				final IHyperlink link;
 				if (elements.length == 1) {
 					link = new ModelElementHyperlink(region, elements[0],
@@ -153,17 +160,6 @@ public class JSDocTypeHyperlinkDetector extends AbstractHyperlinkDetector {
 			JavaScriptUI.log(e);
 		}
 		return null;
-	}
-
-	public Object convert(final ISourceModule input, Type type) {
-		for (IElementConverter converter : TypeInfoManager
-				.getElementConverters()) {
-			final Object converted = converter.convert(input, type);
-			if (converted != null) {
-				return converted;
-			}
-		}
-		return type;
 	}
 
 	private static class Visitor implements IModelElementVisitor {

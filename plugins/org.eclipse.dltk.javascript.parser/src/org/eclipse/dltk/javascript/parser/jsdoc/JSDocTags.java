@@ -17,7 +17,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.dltk.javascript.internal.jsdoc.ArrayIterator;
+import org.eclipse.dltk.utils.ArrayIterator;
 
 public class JSDocTags implements Iterable<JSDocTag> {
 

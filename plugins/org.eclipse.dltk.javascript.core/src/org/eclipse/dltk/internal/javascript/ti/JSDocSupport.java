@@ -583,6 +583,24 @@ public class JSDocSupport implements IModelBuilder {
 		}
 
 		/**
+		 * Returns the first character of the next token without removing it
+		 * from this tokenizer or <code>\0</code> if there are no more tokens.
+		 */
+		public char peekChar() {
+			if (current == null) {
+				if (position < end) {
+					return content.charAt(position);
+				} else {
+					return '\0';
+				}
+			} else if (current.length() != 0) {
+				return current.charAt(0);
+			} else {
+				return '\0';
+			}
+		}
+
+		/**
 		 * Returns the next token without removing it from this tokenizer or
 		 * <code>null</code> if there are no more tokens.
 		 */
@@ -880,29 +898,120 @@ public class JSDocSupport implements IModelBuilder {
 				categoryId);
 	}
 
-	public static class ParameterNode {
-		public final String name;
-		public final int offset;
+	/**
+	 * Value type for the results of the high-level JSDoc tag parsing.
+	 * 
+	 * @see JSDocSupport#parseParameter(JSDocTag)
+	 * @see JSDocSupport#parseOptionalType(JSDocTag)
+	 * @see JSDocSupport#parseType(JSDocTag)
+	 */
+	public static class TypedElementNode {
+		/**
+		 * Type expression, potentially with surrounding braces or
+		 * <code>null</code>
+		 */
+		@Nullable
+		private final String type;
+		/**
+		 * Offset of the type token or <code>-1</code> if no type
+		 */
+		private final int typeOffset;
 
-		public ParameterNode(String name, int offset) {
-			this.name = name;
-			this.offset = offset;
+		/**
+		 * Answers if type expression is surrounded with braces.
+		 */
+		boolean isBraced() {
+			return true;
+		}
+
+		TypedElementNode(String type, int typeOffset) {
+			this.type = type;
+			this.typeOffset = typeOffset;
+		}
+
+		/**
+		 * Returns type expression without surrounding braces or
+		 * <code>null</code>
+		 */
+		@Nullable
+		public String getTypeExpression() {
+			if (type != null) {
+				return isBraced() ? type.substring(1, type.length() - 1) : type;
+			} else {
+				return null;
+			}
+		}
+
+		/**
+		 * Returns the starting offset of the actual type expression (i.e.
+		 * without surrounding braces) or <code>-1</code> if no type expression.
+		 */
+		public int getTypeExpressionStart() {
+			return typeOffset >= 0 ? typeOffset + (isBraced() ? 1 : 0) : -1;
+		}
+
+		/**
+		 * Checks if specified position is contained in the type declaration.
+		 */
+		public boolean isInType(int position) {
+			return type != null
+					&& (isBraced() ? typeOffset < position
+							&& position < typeOffset + type.length()
+							: typeOffset <= position
+									&& position <= typeOffset + type.length());
 		}
 	}
 
+	public static class ParameterNode extends TypedElementNode {
+		@NonNull
+		public final String name;
+		public final int offset;
+
+		ParameterNode(String type, int typeOffset, String name, int offset) {
+			super(type, typeOffset);
+			this.name = name;
+			this.offset = offset;
+		}
+
+		public boolean isInParameter(int position) {
+			return offset <= position && offset + name.length() >= position;
+		}
+	}
+
+	public static class TypeNode extends TypedElementNode {
+		private final boolean braced;
+
+		@Override
+		boolean isBraced() {
+			return braced;
+		}
+
+		TypeNode(String type, int typeOffset, boolean braced) {
+			super(type, typeOffset);
+			this.braced = braced;
+		}
+	}
+
+	/**
+	 * High level parsing of JSDoc &#64;param tag
+	 */
 	public static ParameterNode parseParameter(JSDocTag tag) {
 		final TagTokenizer tokenizer = new TagTokenizer(tag);
 		if (!tokenizer.hasMoreTokens()) {
 			return null;
 		}
+		int typeOffset = -1;
+		String type = null;
 		String token = tokenizer.nextToken();
 		if (JSDocSupport.isBraced(token)) { // skip type name
 			if (!tokenizer.hasMoreTokens()) {
 				return null;
 			}
+			typeOffset = tokenizer.getTokenStart();
+			type = token;
 			token = tokenizer.nextToken();
 		}
-		int tokenStart = tag.valueStart() + tokenizer.getTokenStart();
+		int tokenStart = tokenizer.getTokenStart();
 		// optional parameter
 		if (token.startsWith("[") && token.endsWith("]")) {
 			token = token.substring(1, token.length() - 1);
@@ -917,7 +1026,34 @@ public class JSDocSupport implements IModelBuilder {
 		if (propertyIndex != -1) {
 			token = token.substring(0, propertyIndex);
 		}
-		return new ParameterNode(token, tokenStart);
+		return new ParameterNode(type, typeOffset, token, tokenStart);
+	}
+
+	/**
+	 * Parses optional type expression (like the one in &#64;return/&#64;returns
+	 * tags) from the specified tag value.
+	 */
+	public static TypedElementNode parseOptionalType(JSDocTag tag) {
+		final TagTokenizer tokenizer = new TagTokenizer(tag);
+		if (tokenizer.peekChar() == '{' && tokenizer.hasMoreTokens()) {
+			final String type = tokenizer.nextToken();
+			return new TypedElementNode(type, tokenizer.getTokenStart());
+		} else {
+			return null;
+		}
+	}
+
+	/**
+	 * Parses the type expression of &#64;type tag.
+	 */
+	public static TypeNode parseType(JSDocTag tag) {
+		final TagTokenizer tokenizer = new TagTokenizer(tag);
+		if (tokenizer.hasMoreTokens()) {
+			final String type = tokenizer.nextToken();
+			return new TypeNode(type, tokenizer.getTokenStart(), isBraced(type));
+		} else {
+			return null;
+		}
 	}
 
 }

@@ -13,20 +13,21 @@ package org.eclipse.dltk.javascript.parser.tests;
 
 import java.util.List;
 
-import junit.framework.TestCase;
-
 import org.eclipse.dltk.core.tests.util.StringList;
 import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTag;
 import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTags;
 import org.eclipse.dltk.javascript.parser.jsdoc.SimpleJSDocParser;
+import org.junit.Assert;
+import org.junit.Test;
 
-public class SimpleJSDocParserTests extends TestCase {
+public class SimpleJSDocParserTests extends Assert {
 
 	private List<JSDocTag> parse(String content) {
 		final JSDocTags tags = new SimpleJSDocParser().parse(content, 0);
 		return tags.list();
 	}
 
+	@Test
 	public void testSimple() {
 		StringList code = new StringList();
 		code.add("/**");
@@ -44,6 +45,7 @@ public class SimpleJSDocParserTests extends TestCase {
 		assertEquals("z", tags.get(2).value());
 	}
 
+	@Test
 	public void testEmptyLines() {
 		StringList code = new StringList();
 		code.add("/**");
@@ -63,6 +65,7 @@ public class SimpleJSDocParserTests extends TestCase {
 		assertEquals("z", tags.get(2).value());
 	}
 
+	@Test
 	public void testNotLineStart() {
 		StringList code = new StringList();
 		code.add("/**");
@@ -76,17 +79,26 @@ public class SimpleJSDocParserTests extends TestCase {
 		assertEquals("y B @param z", tags.get(0).value());
 	}
 
+	@Test
 	public void testSuppressWarnings() {
 		StringList code = new StringList();
 		code.add("/**");
 		code.add(" * " + JSDocTag.SUPPRESS_WARNINGS + "(all)");
 		code.add(" */");
-		List<JSDocTag> tags = parse(code.toString());
+		final String string = code.toString();
+		List<JSDocTag> tags = parse(string);
 		assertEquals(1, tags.size());
-		assertEquals(JSDocTag.SUPPRESS_WARNINGS, tags.get(0).name());
-		assertEquals("(all)", tags.get(0).value());
+		final JSDocTag tag = tags.get(0);
+		assertEquals(JSDocTag.SUPPRESS_WARNINGS, tag.name());
+		assertEquals("(all)", tag.value());
+
+		assertEquals(string.indexOf(")"),
+				tag.fromValueOffset(tag.value().indexOf(")")));
+		assertEquals(tag.value().indexOf(")"),
+				tag.toValueOffset(string.indexOf(")")));
 	}
 
+	@Test
 	public void testTagWithNumbers() {
 		StringList code = new StringList();
 		code.add("/**");
@@ -96,4 +108,77 @@ public class SimpleJSDocParserTests extends TestCase {
 		assertEquals(1, tags.size());
 		assertEquals("@web2.0", tags.get(0).name());
 	}
+
+	@Test
+	public void testMultiLine() {
+		final StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @print Hello,");
+		code.add(" * world");
+		code.add(" * !     ");
+		code.add(" */");
+		final String string = code.toString();
+		final List<JSDocTag> tags = parse(string);
+		assertEquals(1, tags.size());
+		final JSDocTag tag = tags.get(0);
+		assertEquals("@print", tag.name());
+		assertEquals("Hello, world !", tag.value());
+		assertEquals(string.indexOf("@print"), tag.start());
+		assertEquals(string.indexOf("Hello"), tag.valueStart());
+		assertEquals(string.indexOf("!") + 1, tag.end());
+
+		assertEquals(string.indexOf("!"),
+				tag.fromValueOffset(tag.value().indexOf("!")));
+		assertEquals(tag.value().indexOf("!"),
+				tag.toValueOffset(string.indexOf("!")));
+	}
+
+	@Test
+	public void testMultiLineReturn() {
+		final StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @return {");
+		code.add(" *   String");
+		code.add(" *   |Number");
+		code.add(" *   |Date");
+		code.add(" *   }");
+		code.add(" */");
+		final String string = code.toString();
+		final List<JSDocTag> tags = parse(string);
+		assertEquals(1, tags.size());
+		final JSDocTag tag = tags.get(0);
+		assertEquals("@return", tag.name());
+		assertEquals("{   String   |Number   |Date   }", tag.value());
+		assertEquals(string.indexOf("@return"), tag.start());
+		assertEquals(string.indexOf("{"), tag.valueStart());
+		assertEquals(string.indexOf("}") + 1, tag.end());
+
+		assertEquals(string.indexOf("String"),
+				tag.fromValueOffset(tag.value().indexOf("String")));
+		assertEquals(tag.value().indexOf("Number"),
+				tag.toValueOffset(string.indexOf("Number")));
+		assertEquals(tag.value().indexOf("Date"),
+				tag.toValueOffset(string.indexOf("Date")));
+	}
+
+	@Test
+	public void testMultiLineEmpty() {
+		final StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @print ");
+		code.add(" *   ");
+		code.add(" *   ");
+		code.add(" */");
+		final String string = code.toString();
+		final List<JSDocTag> tags = parse(string);
+		assertEquals(1, tags.size());
+		final JSDocTag tag = tags.get(0);
+		assertEquals("@print", tag.name());
+		assertEquals("", tag.value());
+		assertEquals(string.indexOf("@print"), tag.start());
+		assertEquals(string.indexOf("@print") + "@print".length(), tag.end());
+		assertEquals(string.indexOf("@print") + "@print".length(),
+				tag.valueStart());
+	}
+
 }

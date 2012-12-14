@@ -29,7 +29,7 @@ public class SimpleJSDocParser {
 	private int index;
 	private int end;
 	private final StringBuilder value = new StringBuilder();
-	private final IntList ends = new IntList();
+	private final IntList ranges = new IntList();
 
 	public JSDocTags parse(String content, int offset) {
 		List<JSDocTag> tags = null;
@@ -92,9 +92,8 @@ public class SimpleJSDocParser {
 		final String tag = new String(buffer, tagStart, index - tagStart);
 		final int nameEnd = index;
 		value.setLength(0);
-		ends.clear();
+		ranges.clear();
 		skipSpaces();
-		final int valueStart = index;
 		boolean lineStart = false;
 		VALUE_LOOP: while (index < end) {
 			char c = readChar();
@@ -105,7 +104,7 @@ public class SimpleJSDocParser {
 					break VALUE_LOOP;
 				}
 				value.append(c);
-				ends.add(index);
+				addToRanges(index);
 				break;
 			case CR:
 				skipChar(LF);
@@ -129,12 +128,12 @@ public class SimpleJSDocParser {
 			case TAB:
 			case FORM_FEED:
 				value.append(c);
-				ends.add(index);
+				addToRanges(index);
 				break;
 			default:
 				lineStart = false;
 				value.append(c);
-				ends.add(index);
+				addToRanges(index);
 				break;
 			}
 		}
@@ -143,12 +142,62 @@ public class SimpleJSDocParser {
 			--len;
 		}
 		if (len != value.length()) {
+			trimRangesBy(value.length() - len);
 			value.setLength(len);
-			ends.setSize(len);
 		}
-		return new JSDocTag(tag, value.toString(), offset + tagStart, offset
-				+ (ends.isEmpty() ? nameEnd : valueStart), offset
-				+ (ends.isEmpty() ? nameEnd : ends.get(ends.size() - 1)));
+		final int valueStart;
+		final int end;
+		final String value;
+		final int[] ranges;
+		if (this.ranges.isEmpty()) {
+			valueStart = nameEnd;
+			end = nameEnd;
+			value = "";
+			ranges = null;
+		} else {
+			valueStart = this.ranges.first();
+			end = this.ranges.last();
+			value = this.value.toString();
+			if (end - valueStart == value.length()) {
+				ranges = null;
+			} else {
+				ranges = this.ranges.toArray();
+				for (int i = 0; i < ranges.length; ++i) {
+					ranges[i] += offset;
+				}
+			}
+		}
+		return new JSDocTag(tag, value, offset + tagStart, offset + valueStart,
+				offset + end, ranges);
+	}
+
+	private void trimRangesBy(int delta) {
+		if (!ranges.isEmpty()) {
+			int endIndex = ranges.size();
+			while (endIndex > 0) {
+				int rangeLen = ranges.get(endIndex - 1)
+						- ranges.get(endIndex - 2);
+				if (rangeLen <= delta) {
+					delta -= rangeLen;
+					endIndex -= 2;
+				} else {
+					ranges.set(endIndex - 1, ranges.get(endIndex - 1) - delta);
+					break;
+				}
+			}
+			if (endIndex != ranges.size()) {
+				ranges.setSize(endIndex);
+			}
+		}
+	}
+
+	private void addToRanges(int offset) {
+		if (ranges.isEmpty() || ranges.last() != offset - 1) {
+			ranges.add(offset - 1);
+			ranges.add(offset);
+		} else {
+			ranges.set(ranges.size() - 1, offset);
+		}
 	}
 
 	private boolean skipAll(char expected) {

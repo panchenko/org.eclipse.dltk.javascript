@@ -16,9 +16,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import org.eclipse.core.runtime.Path;
+import org.eclipse.dltk.annotations.Nullable;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.utils.ASTUtil;
 import org.eclipse.dltk.codeassist.ScriptSelectionEngine;
@@ -34,11 +34,14 @@ import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.core.ScriptModelUtil;
+import org.eclipse.dltk.core.SourceRange;
 import org.eclipse.dltk.core.model.LocalVariable;
 import org.eclipse.dltk.core.model.UnresolvedElement;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.JSDocSupport;
 import org.eclipse.dltk.internal.javascript.ti.JSDocSupport.ParameterNode;
+import org.eclipse.dltk.internal.javascript.ti.JSDocSupport.TypeNode;
+import org.eclipse.dltk.internal.javascript.ti.JSDocSupport.TypedElementNode;
 import org.eclipse.dltk.internal.javascript.ti.PositionReachedException;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.internal.javascript.validation.JavaScriptValidations;
@@ -49,7 +52,6 @@ import org.eclipse.dltk.javascript.ast.MultiLineComment;
 import org.eclipse.dltk.javascript.ast.PropertyInitializer;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.StringLiteral;
-import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 import org.eclipse.dltk.javascript.core.NodeFinder;
 import org.eclipse.dltk.javascript.parser.JavaScriptParserUtil;
 import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTag;
@@ -57,10 +59,11 @@ import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinference.ValueReferenceUtil;
-import org.eclipse.dltk.javascript.typeinfo.IElementConverter;
 import org.eclipse.dltk.javascript.typeinfo.IRMethod;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
+import org.eclipse.dltk.javascript.typeinfo.JSDocTypeRegion;
+import org.eclipse.dltk.javascript.typeinfo.JSDocTypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
@@ -73,6 +76,10 @@ import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 
 	private static final boolean DEBUG = false;
+
+	public static boolean isJSDocTypeSelectionEnabled() {
+		return true;
+	}
 
 	@SuppressWarnings("serial")
 	private static class ModelElementFound extends RuntimeException {
@@ -165,33 +172,30 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 					}
 					return null;
 				}
-				try {
-					return ITypeSystem.CURRENT.runWith(inferencer2,
-							new Callable<IModelElement[]>() {
-								public IModelElement[] call() throws Exception {
-									return toModelElements(inferencer2,
-											visitor, module, value);
-								}
-							});
-				} catch (Exception e) {
-					// Shouldn't happen, but declared for Callable.call()
-					JavaScriptPlugin.error(e);
-				}
-			} else if (node instanceof MultiLineComment) {
+				ITypeSystem.CURRENT.runWith(inferencer2, new Runnable() {
+					public void run() {
+						toModelElements(inferencer2, visitor, module, value);
+					}
+				});
+				return null;
+			} else if (node instanceof MultiLineComment
+					&& isJSDocTypeSelectionEnabled()) {
 				final MultiLineComment comment = (MultiLineComment) node;
 				if (comment.isDocumentation()) {
 					final JSDocTag tag = JSDocSupport.parse(comment).getTagAt(
 							position);
-					if (tag != null && JSDocTag.PARAM.equals(tag.name())) {
+					if (tag == null || position < tag.valueStart()) {
+						return null;
+					}
+					final int valueOffset = tag.toValueOffset(position);
+					if (JSDocTag.PARAM.equals(tag.name())) {
 						final ParameterNode paramNode = JSDocSupport
 								.parseParameter(tag);
-						if (paramNode != null
-								&& paramNode.offset <= position
-								&& paramNode.offset + paramNode.name.length() >= position) {
-							for (FunctionStatement function : ASTUtil.select(
-									script, FunctionStatement.class, true)) {
-								if (function.getDocumentation() == comment
-										|| JSDocSupport.getComment(function) == comment) {
+						if (paramNode != null) {
+							if (paramNode.isInParameter(valueOffset)) {
+								final FunctionStatement function = findFunctionByDocumentation(
+										script, comment);
+								if (function != null) {
 									final Argument argument = function
 											.getArgument(paramNode.name);
 									if (argument != null) {
@@ -203,9 +207,26 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 												argument.start(),
 												argument.end() - 1, null) };
 									}
-									break;
 								}
+							} else if (paramNode.isInType(valueOffset)) {
+								findTypeInTypeExpression(module, tag,
+										paramNode, valueOffset);
 							}
+						}
+					} else if (JSDocTag.RETURN.equals(tag.name())
+							|| JSDocTag.RETURNS.equals(tag.name())) {
+						final TypedElementNode typedNode = JSDocSupport
+								.parseOptionalType(tag);
+						if (typedNode != null
+								&& typedNode.isInType(valueOffset)) {
+							findTypeInTypeExpression(module, tag, typedNode,
+									valueOffset);
+						}
+					} else if (JSDocTag.TYPE.equals(tag.name())) {
+						final TypeNode typeNode = JSDocSupport.parseType(tag);
+						if (typeNode != null && typeNode.isInType(valueOffset)) {
+							findTypeInTypeExpression(module, tag, typeNode,
+									valueOffset);
 						}
 					}
 				}
@@ -216,7 +237,42 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 		return null;
 	}
 
-	private IModelElement[] toModelElements(TypeInferencer2 inferencer2,
+	private void findTypeInTypeExpression(IModuleSource module, JSDocTag tag,
+			TypedElementNode node, int valueOffset) {
+		final ISourceModule m = (ISourceModule) module.getModelElement();
+		final TypeInferencer2 inferencer2 = new TypeInferencer2();
+		inferencer2.setModelElement(module.getModelElement());
+		final JSDocTypeRegion typeRegion = JSDocTypeUtil.findTypeAt(
+				inferencer2, node.getTypeExpression(),
+				valueOffset - node.getTypeExpressionStart());
+		if (typeRegion != null) {
+			final Type type = inferencer2.getKnownType(typeRegion.name());
+			if (type != null) {
+				final int typeOffsetInFile = tag.fromValueOffset(typeRegion
+						.start() + node.getTypeExpressionStart());
+				convertAndReportElement(m, type, new SourceRange(
+						typeOffsetInFile, typeRegion.length()));
+			}
+		}
+	}
+
+	/**
+	 * Finds the function the specified documentation belongs to.
+	 */
+	@Nullable
+	private static FunctionStatement findFunctionByDocumentation(Script script,
+			MultiLineComment comment) {
+		for (FunctionStatement function : ASTUtil.select(script,
+				FunctionStatement.class, true)) {
+			if (function.getDocumentation() == comment
+					|| JSDocSupport.getComment(function) == comment) {
+				return function;
+			}
+		}
+		return null;
+	}
+
+	private void toModelElements(TypeInferencer2 inferencer2,
 			SelectionVisitor visitor, IModuleSource module,
 			IValueReference value) {
 		final ReferenceKind kind = value.getKind();
@@ -230,38 +286,43 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 		ISourceModule m = (ISourceModule) module.getModelElement();
 		if (kind == ReferenceKind.ARGUMENT || kind == ReferenceKind.LOCAL) {
 			if (location == ReferenceLocation.UNKNOWN) {
-				return null;
+				return;
 			}
 			final IModelElement result = locateModelElement(location);
 			if (result != null
 					&& (result.getElementType() == IModelElement.FIELD || result
 							.getElementType() == IModelElement.METHOD)) {
-				return new IModelElement[] { result };
+				reportElement(result);
+				return;
 			}
 			final IRType type = JavaScriptValidations.typeOf(value);
-			return new IModelElement[] { new LocalVariable(m, value.getName(),
+			reportElement(new LocalVariable(m, value.getName(),
 					location.getDeclarationStart(),
 					location.getDeclarationEnd(), location.getNameStart(),
 					location.getNameEnd() - 1, type == null ? null
-							: type.getName()) };
+							: type.getName()));
+			return;
 		} else if (kind == ReferenceKind.FUNCTION
 				|| kind == ReferenceKind.GLOBAL || kind == ReferenceKind.FIELD) {
 			if (location == ReferenceLocation.UNKNOWN) {
-				return null;
+				return;
 			}
 			final IModelElement result = locateModelElement(location);
 			if (result != null) {
-				return new IModelElement[] { result };
+				reportElement(result);
+				return;
 			}
 		} else if (kind == ReferenceKind.PROPERTY) {
 			final Collection<Property> properties = ValueReferenceUtil
 					.extractElements(value, Property.class);
 			if (properties != null) {
-				return convert(m, properties);
+				convertAndReportElements(m, properties);
+				return;
 			}
 			final IModelElement result = locateModelElement(location);
 			if (result != null) {
-				return new IModelElement[] { result };
+				reportElement(result);
+				return;
 			}
 		} else if (kind == ReferenceKind.METHOD) {
 			final List<IRMethod> methods = ValueReferenceUtil.extractElements(
@@ -274,8 +335,9 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 				final IRMethod method = JavaScriptValidations.selectMethod(
 						methods, arguments, true);
 				if (method.getSource() instanceof Method) {
-					return convert(m, Collections.singletonList((Method) method
-							.getSource()));
+					convertAndReportElement(m, (Method) method.getSource(),
+							null);
+					return;
 				}
 			}
 		} else if (kind == ReferenceKind.TYPE) {
@@ -289,16 +351,18 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 				Collections.addAll(t, types.toArray());
 			}
 			if (!t.isEmpty()) {
-				return convert(m, t);
+				convertAndReportElements(m, t);
+				return;
 			}
 		}
 		if (location != ReferenceLocation.UNKNOWN
 				&& location.getSourceModule() != null) {
-			return new IModelElement[] { new UnresolvedElement(
-					location.getSourceModule(), value.getName(),
-					location.getNameStart(), location.getNameEnd() - 1) };
+			reportElement(new UnresolvedElement(location.getSourceModule(),
+					value.getName(), location.getNameStart(),
+					location.getNameEnd() - 1));
+			return;
 		}
-		return null;
+		return;
 	}
 
 	/**
@@ -306,22 +370,21 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 	 * @param elements
 	 * @return
 	 */
-	private IModelElement[] convert(ISourceModule module,
+	private void convertAndReportElements(ISourceModule module,
 			Collection<? extends Element> elements) {
-		List<IModelElement> result = new ArrayList<IModelElement>();
 		for (Element element : elements) {
-			try {
-				IModelElement me = convert(module, element);
-				if (me != null) {
-					result.add(me);
-				} else {
-					reportForeignElement(element);
-				}
-			} catch (ModelException e) {
-				//
-			}
+			convertAndReportElement(module, element, null);
 		}
-		return result.toArray(new IModelElement[result.size()]);
+	}
+
+	private void convertAndReportElement(ISourceModule module, Element element,
+			ISourceRange range) {
+		try {
+			final IModelElement me = convert(module, element);
+			reportElement(me != null ? me : element, range);
+		} catch (ModelException e) {
+			//
+		}
 	}
 
 	/**
@@ -380,15 +443,7 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 				}
 			}
 		}
-		for (IElementConverter converter : TypeInfoManager
-				.getElementConverters()) {
-			IModelElement result = converter.convert(module, element);
-			if (result != null) {
-				return result;
-			}
-		}
-		// TODO Auto-generated method stub
-		return null;
+		return TypeInfoManager.convertElement(module, element);
 	}
 
 	private IModelElement locateModelElement(final ReferenceLocation location) {

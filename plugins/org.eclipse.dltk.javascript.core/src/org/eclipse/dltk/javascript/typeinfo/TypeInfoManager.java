@@ -24,7 +24,11 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.dltk.annotations.ConfigurationElement;
+import org.eclipse.dltk.annotations.Nullable;
+import org.eclipse.dltk.core.IModelElement;
+import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
+import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.NamedElement;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelResourceSet;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeVariable;
@@ -391,5 +395,23 @@ public class TypeInfoManager {
 			}
 		}
 		return DefaultMetaType.DEFAULT;
+	}
+
+	/**
+	 * Converts the specified JavaScript model element to {@link IModelElement}
+	 * using all the contributed {@link IElementConverter}, returns the
+	 * corresponding {@link IModelElement} or <code>null</code>.
+	 */
+	@Nullable
+	public static IModelElement convertElement(ISourceModule module,
+			Element element) {
+		for (IElementConverter converter : TypeInfoManager
+				.getElementConverters()) {
+			final IModelElement converted = converter.convert(module, element);
+			if (converted != null) {
+				return converted;
+			}
+		}
+		return null;
 	}
 }
