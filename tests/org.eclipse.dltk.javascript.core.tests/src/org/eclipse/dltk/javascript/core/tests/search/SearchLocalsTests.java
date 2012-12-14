@@ -19,8 +19,10 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.dltk.core.ILocalVariable;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.ISourceModule;
+import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.core.search.LocalVariableDeclarationMatch;
 import org.eclipse.dltk.core.search.LocalVariableReferenceMatch;
+import org.eclipse.dltk.core.search.SearchMatch;
 import org.eclipse.dltk.core.tests.ProjectSetup;
 import org.eclipse.dltk.core.tests.model.TestSearchResults;
 import org.eclipse.dltk.javascript.core.tests.AllTests;
@@ -77,12 +79,23 @@ public class SearchLocalsTests extends Assert {
 		results.sortByOffset();
 		assertThat(results.getMatch(0),
 				instanceOf(LocalVariableReferenceMatch.class));
+		assertEquals("foo", getMatchedText(module, results.getMatch(0)));
 		assertTrue(results.getMatch(0).isInsideDocComment());
+
 		assertThat(results.getMatch(1),
 				instanceOf(LocalVariableDeclarationMatch.class));
+		assertEquals("foo", getMatchedText(module, results.getMatch(1)));
+
 		assertThat(results.getMatch(2),
 				instanceOf(LocalVariableReferenceMatch.class));
 		assertFalse(results.getMatch(2).isInsideDocComment());
+		assertEquals("foo", getMatchedText(module, results.getMatch(2)));
+	}
+
+	private static String getMatchedText(ISourceModule module, SearchMatch match)
+			throws ModelException {
+		return module.getSource().substring(match.getOffset(),
+				match.getOffset() + match.getLength());
 	}
 
 }

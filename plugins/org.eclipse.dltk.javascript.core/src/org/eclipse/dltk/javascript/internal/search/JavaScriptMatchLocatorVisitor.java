@@ -177,8 +177,9 @@ public class JavaScriptMatchLocatorVisitor extends
 					if (parameter != null) {
 						final Identifier ref = new Identifier(null);
 						ref.setName(node.name);
-						ref.setStart(node.offset);
-						ref.setEnd(node.offset + node.name.length());
+						final int start = tag.fromValueOffset(node.offset);
+						ref.setStart(start);
+						ref.setEnd(start + node.name.length());
 						nodes.add(new LocalVariableReferenceNode(ref, parameter
 								.getLocation(), true));
 					}
