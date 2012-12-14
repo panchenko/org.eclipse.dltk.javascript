@@ -346,7 +346,7 @@ public class TypeInfoManager {
 
 		@Override
 		public String getURIFragment(final EObject eObject) {
-			if (eObject instanceof TypeVariable) {
+			if (eObject.eContainer() != null) {
 				final List<String> path = new ArrayList<String>();
 				EObject obj = eObject;
 				for (;;) {

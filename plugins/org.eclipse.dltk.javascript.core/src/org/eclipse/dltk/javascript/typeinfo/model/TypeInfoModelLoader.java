@@ -122,6 +122,14 @@ public class TypeInfoModelLoader {
 	}
 
 	/**
+	 * Returns the resource with the specified URI from the globally loaded
+	 * models or <code>null</code> if not found.
+	 */
+	public Resource getResource(URI uri) {
+		return resourceSet.getResource(uri, false);
+	}
+
+	/**
 	 * Initializes the specified {@link ResourceSet} so it can load the same
 	 * resources by their permanent URIs.
 	 * 
