@@ -28,12 +28,10 @@ import org.eclipse.dltk.javascript.typeinfo.model.TypeVariable;
 import org.eclipse.dltk.javascript.typeinfo.model.Visibility;
 import org.eclipse.dltk.javascript.ui.typeinfo.ElementLabelProviderRegistry;
 import org.eclipse.dltk.javascript.ui.typeinfo.IElementLabelProvider.Mode;
-import org.eclipse.dltk.ui.DLTKPluginImages;
+import org.eclipse.dltk.ui.ScriptElementImageDescriptor;
 import org.eclipse.dltk.ui.ScriptElementImageProvider;
 import org.eclipse.dltk.ui.text.completion.CompletionProposalLabelProvider;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.viewers.DecorationOverlayIcon;
-import org.eclipse.jface.viewers.IDecoration;
 
 @SuppressWarnings("restriction")
 public class JavaScriptCompletionProposalLabelProvider extends
@@ -282,11 +280,13 @@ public class JavaScriptCompletionProposalLabelProvider extends
 	protected ImageDescriptor decorateImageDescriptor(
 			ImageDescriptor descriptor, CompletionProposal proposal) {
 		if (isDeprecated(proposal)) {
-			return new DecorationOverlayIcon(descriptor.createImage(),
-					DLTKPluginImages.DESC_OVR_DEPRECATED, IDecoration.UNDERLAY);
+			return new ScriptElementImageDescriptor(descriptor,
+					ScriptElementImageDescriptor.DEPRECATED,
+					ScriptElementImageProvider.SMALL_SIZE);
 		} else if (isStatic(proposal)) {
-			return new DecorationOverlayIcon(descriptor.createImage(),
-					DLTKPluginImages.DESC_OVR_STATIC, IDecoration.TOP_RIGHT);
+			return new ScriptElementImageDescriptor(descriptor,
+					ScriptElementImageDescriptor.STATIC,
+					ScriptElementImageProvider.SMALL_SIZE);
 		}
 		return super.decorateImageDescriptor(descriptor, proposal);
 	}

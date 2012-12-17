@@ -32,7 +32,8 @@ import org.eclipse.swt.graphics.Image;
 public class JSModelLabelProvider extends BaseLabelProvider implements
 		ILabelProvider {
 
-	private final ImageDescriptorRegistry registry = new ImageDescriptorRegistry();
+	private final ImageDescriptorRegistry registry = new ImageDescriptorRegistry(
+			false);
 
 	public Image getImage(Object element) {
 		if (element instanceof IMember) {
@@ -63,8 +64,8 @@ public class JSModelLabelProvider extends BaseLabelProvider implements
 					imageDescriptor = ScriptElementImageProvider
 							.getTypeImageDescriptor(flags, false);
 				}
-				return registry.get(new DecorationOverlayIcon(imageDescriptor
-						.createImage(), overlay));
+				return registry.get(new DecorationOverlayIcon(registry
+						.get(imageDescriptor), overlay));
 			}
 		}
 		return null;

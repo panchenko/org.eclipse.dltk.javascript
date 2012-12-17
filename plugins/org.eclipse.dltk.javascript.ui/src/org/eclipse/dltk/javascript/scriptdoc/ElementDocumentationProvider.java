@@ -25,7 +25,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.ui.typeinfo.ElementLabelProviderRegistry;
 import org.eclipse.dltk.javascript.ui.typeinfo.IElementLabelProvider.Mode;
-import org.eclipse.dltk.ui.DLTKPluginImages;
+import org.eclipse.dltk.ui.ScriptElementImageDescriptor;
 import org.eclipse.dltk.ui.ScriptElementImageProvider;
 import org.eclipse.dltk.ui.documentation.IDocumentationResponse;
 import org.eclipse.dltk.ui.documentation.IScriptDocumentationProvider;
@@ -33,8 +33,6 @@ import org.eclipse.dltk.ui.documentation.IScriptDocumentationProviderExtension2;
 import org.eclipse.dltk.ui.documentation.TextDocumentationResponse;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.viewers.DecorationOverlayIcon;
-import org.eclipse.jface.viewers.IDecoration;
 
 /**
  * @since 3.0
@@ -177,11 +175,13 @@ public class ElementDocumentationProvider implements
 	protected ImageDescriptor decorateImageDescriptor(
 			ImageDescriptor descriptor, Element element) {
 		if (element.isDeprecated()) {
-			return new DecorationOverlayIcon(descriptor.createImage(),
-					DLTKPluginImages.DESC_OVR_DEPRECATED, IDecoration.UNDERLAY);
+			return new ScriptElementImageDescriptor(descriptor,
+					ScriptElementImageDescriptor.DEPRECATED,
+					ScriptElementImageProvider.SMALL_SIZE);
 		} else if (element instanceof Member && ((Member) element).isStatic()) {
-			return new DecorationOverlayIcon(descriptor.createImage(),
-					DLTKPluginImages.DESC_OVR_STATIC, IDecoration.TOP_RIGHT);
+			return new ScriptElementImageDescriptor(descriptor,
+					ScriptElementImageDescriptor.STATIC,
+					ScriptElementImageProvider.SMALL_SIZE);
 		}
 		return descriptor;
 	}
