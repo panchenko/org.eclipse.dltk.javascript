@@ -13,7 +13,6 @@
 package org.eclipse.dltk.javascript.ast;
 
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
 public class YieldOperator extends Expression {
@@ -21,7 +20,7 @@ public class YieldOperator extends Expression {
 	private Keyword yieldKeyword;
 	private Expression expression;
 
-	public YieldOperator(ASTNode parent) {
+	public YieldOperator(JSNode parent) {
 		super(parent);
 	}
 

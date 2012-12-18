@@ -13,12 +13,11 @@
 package org.eclipse.dltk.javascript.ast;
 
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
 public class ThisExpression extends Expression {
 
-	public ThisExpression(ASTNode parent) {
+	public ThisExpression(JSNode parent) {
 		super(parent);
 	}
 

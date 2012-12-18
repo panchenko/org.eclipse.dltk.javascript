@@ -12,14 +12,13 @@
 
 package org.eclipse.dltk.javascript.ast;
 
-import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
 public class GetMethod extends Method {
 
 	private Keyword getKeyword;
 
-	public GetMethod(ASTNode parent) {
+	public GetMethod(JSNode parent) {
 		super(parent);
 	}
 

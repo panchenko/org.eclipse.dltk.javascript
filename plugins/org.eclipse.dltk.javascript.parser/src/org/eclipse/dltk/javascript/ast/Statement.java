@@ -12,11 +12,9 @@
 
 package org.eclipse.dltk.javascript.ast;
 
-import org.eclipse.dltk.ast.ASTNode;
-
 public abstract class Statement extends JSNode implements ISourceable {
 
-	public Statement(ASTNode parent) {
+	public Statement(JSNode parent) {
 		super(parent);
 	}
 

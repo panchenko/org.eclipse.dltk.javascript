@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 import org.eclipse.dltk.javascript.internal.parser.JSLiterals;
 
@@ -27,7 +26,7 @@ public class TryStatement extends Statement {
     private List<CatchClause> catchClauses = new ArrayList<CatchClause>();
     private FinallyClause finallyClause;
 
-    public TryStatement(ASTNode parent) {
+    public TryStatement(JSNode parent) {
         super(parent);
     }
 

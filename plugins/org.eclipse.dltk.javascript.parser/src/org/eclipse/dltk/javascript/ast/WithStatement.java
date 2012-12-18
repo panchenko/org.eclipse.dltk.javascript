@@ -13,7 +13,6 @@
 package org.eclipse.dltk.javascript.ast;
 
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
 public class WithStatement extends Statement implements ISourceableBlock {
@@ -24,7 +23,7 @@ public class WithStatement extends Statement implements ISourceableBlock {
 	private int LP = -1;
 	private int RP = -1;
 
-	public WithStatement(ASTNode parent) {
+	public WithStatement(JSNode parent) {
 		super(parent);
 	}
 

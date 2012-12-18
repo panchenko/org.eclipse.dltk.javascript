@@ -66,6 +66,7 @@ import org.eclipse.dltk.javascript.ast.GetMethod;
 import org.eclipse.dltk.javascript.ast.IVariableStatement;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.IfStatement;
+import org.eclipse.dltk.javascript.ast.JSNode;
 import org.eclipse.dltk.javascript.ast.Keyword;
 import org.eclipse.dltk.javascript.ast.Keywords;
 import org.eclipse.dltk.javascript.ast.Label;
@@ -115,7 +116,7 @@ public class JSTransformer {
 	private final NodeTransformer[] transformers;
 	private final List<Token> tokens;
 	private final int[] tokenOffsets;
-	private Stack<ASTNode> parents = new Stack<ASTNode>();
+	private Stack<JSNode> parents = new Stack<JSNode>();
 	private final boolean ignoreUnknown;
 	private final Map<Integer, Comment> documentationMap = new HashMap<Integer, Comment>();
 	private Reporter reporter;
@@ -425,7 +426,7 @@ public class JSTransformer {
 		return transformExpression(tree, null);
 	}
 
-	private ASTNode getParent() {
+	private JSNode getParent() {
 		if (parents.isEmpty()) {
 			return null;
 		} else {
@@ -433,7 +434,7 @@ public class JSTransformer {
 		}
 	}
 
-	private ASTNode transformNode(Tree node, ASTNode parent) {
+	private ASTNode transformNode(Tree node, JSNode parent) {
 		if (node == null) {
 			if (ignoreUnknown) {
 				return createErrorExpression(node);
@@ -527,7 +528,7 @@ public class JSTransformer {
 			return getTokenOffset(token.getTokenIndex());
 	}
 
-	private final Expression transformExpression(Tree node, ASTNode parent) {
+	private final Expression transformExpression(Tree node, JSNode parent) {
 		final ASTNode transformed = transformNode(node, parent);
 		if (transformed == null || transformed instanceof Expression) {
 			return (Expression) transformed;
@@ -536,7 +537,7 @@ public class JSTransformer {
 		}
 	}
 
-	private Statement transformStatementNode(Tree node, ASTNode parent) {
+	private Statement transformStatementNode(Tree node, JSNode parent) {
 
 		ASTNode expression = transformNode(node, parent);
 
@@ -572,7 +573,7 @@ public class JSTransformer {
 	protected ASTNode visit(Tree tree) {
 		final ASTNode node = internalVisit(tree);
 		if (node != null && transformers.length != 0) {
-			final ASTNode parent = getParent();
+			final JSNode parent = getParent();
 			for (NodeTransformer transformer : transformers) {
 				final ASTNode transformed = transformer.transform(node, parent);
 				if (transformed != null && transformed != node) {
@@ -958,7 +959,7 @@ public class JSTransformer {
 		return statement;
 	}
 
-	private Argument transformArgument(Tree node, ASTNode parent) {
+	private Argument transformArgument(Tree node, JSNode parent) {
 		Assert.isTrue(node.getType() == JSParser.Identifier
 				|| JSLexer.isIdentifierKeyword(node.getType()));
 
@@ -1254,7 +1255,7 @@ public class JSTransformer {
 			Statement statement, Class<?>... classes) {
 		if (reporter == null)
 			return;
-		for (ListIterator<ASTNode> i = parents.listIterator(parents.size()); i
+		for (ListIterator<JSNode> i = parents.listIterator(parents.size()); i
 				.hasPrevious();) {
 			ASTNode parent = i.previous();
 			for (Class<?> clazz : classes) {

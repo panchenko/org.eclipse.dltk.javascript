@@ -12,7 +12,6 @@
 
 package org.eclipse.dltk.javascript.ast;
 
-import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 import org.eclipse.dltk.javascript.internal.parser.JSLiterals;
 
@@ -22,7 +21,7 @@ public class ReturnStatement extends Statement implements ISemicolonStatement {
 	private Expression value;
 	private int semic = -1;
 
-	public ReturnStatement(ASTNode parent) {
+	public ReturnStatement(JSNode parent) {
 		super(parent);
 	}
 

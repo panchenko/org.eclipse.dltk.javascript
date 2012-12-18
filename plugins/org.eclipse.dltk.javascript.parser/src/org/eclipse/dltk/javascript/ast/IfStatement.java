@@ -26,7 +26,7 @@ public class IfStatement extends Statement implements ISourceableBlock {
 	private int LP = -1;
 	private int RP = -1;
 
-	public IfStatement(ASTNode parent) {
+	public IfStatement(JSNode parent) {
 		super(parent);
 	}
 

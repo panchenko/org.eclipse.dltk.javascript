@@ -13,7 +13,6 @@
 package org.eclipse.dltk.javascript.ast;
 
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 import org.eclipse.dltk.javascript.internal.parser.JSLiterals;
 
@@ -23,7 +22,7 @@ public class DoWhileStatement extends WhileStatement implements
 	private Keyword doKeyword;
 	private int semi = -1;
 
-	public DoWhileStatement(ASTNode parent) {
+	public DoWhileStatement(JSNode parent) {
 		super(parent);
 	}
 

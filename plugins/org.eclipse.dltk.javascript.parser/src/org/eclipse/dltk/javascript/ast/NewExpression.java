@@ -12,7 +12,6 @@
 
 package org.eclipse.dltk.javascript.ast;
 
-import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 import org.eclipse.dltk.javascript.internal.parser.JSLiterals;
 
@@ -21,7 +20,7 @@ public class NewExpression extends Expression {
 	private Keyword newKeyword;
 	private Expression objectClass;
 
-	public NewExpression(ASTNode parent) {
+	public NewExpression(JSNode parent) {
 		super(parent);
 	}
 

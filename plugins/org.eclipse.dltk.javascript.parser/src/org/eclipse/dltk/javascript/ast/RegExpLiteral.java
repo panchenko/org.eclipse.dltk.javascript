@@ -13,14 +13,13 @@
 package org.eclipse.dltk.javascript.ast;
 
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
 public class RegExpLiteral extends Literal {
 
 	private String text;
 
-	public RegExpLiteral(ASTNode parent) {
+	public RegExpLiteral(JSNode parent) {
 		super(parent);
 	}
 

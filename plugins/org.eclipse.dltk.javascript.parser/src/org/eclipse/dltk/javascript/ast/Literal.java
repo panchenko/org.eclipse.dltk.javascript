@@ -11,11 +11,9 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.ast;
 
-import org.eclipse.dltk.ast.ASTNode;
-
 public abstract class Literal extends Expression {
 
-	public Literal(ASTNode parent) {
+	public Literal(JSNode parent) {
 		super(parent);
 	}
 

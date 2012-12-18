@@ -26,7 +26,7 @@ public class ArrayInitializer extends Expression {
 	private int LB = -1;
 	private int RB = -1;
 
-	public ArrayInitializer(ASTNode parent, int itemCount) {
+	public ArrayInitializer(JSNode parent, int itemCount) {
 		super(parent);
 		items = new ArrayList<Expression>(itemCount);
 		commas = new IntList(itemCount > 0 ? itemCount - 1 : 0);

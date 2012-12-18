@@ -12,11 +12,9 @@
 
 package org.eclipse.dltk.javascript.ast;
 
-import org.eclipse.dltk.ast.ASTNode;
-
 public abstract class Expression extends JSNode implements ISourceable {
 
-	public Expression(ASTNode parent) {
+	public Expression(JSNode parent) {
 		super(parent);
 	}
 

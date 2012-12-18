@@ -25,7 +25,7 @@ public class ConstStatement extends Statement implements IVariableStatement {
 	private final List<VariableDeclaration> consts = new ArrayList<VariableDeclaration>();
 	private int semic = -1;
 
-	public ConstStatement(ASTNode parent) {
+	public ConstStatement(JSNode parent) {
 		super(parent);
 	}
 

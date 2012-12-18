@@ -12,7 +12,6 @@
 
 package org.eclipse.dltk.javascript.ast;
 
-import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
 public class SetMethod extends Method {
@@ -20,7 +19,7 @@ public class SetMethod extends Method {
 	private Keyword setKeyword;
 	private Identifier argument;
 
-	public SetMethod(ASTNode parent) {
+	public SetMethod(JSNode parent) {
 		super(parent);
 	}
 

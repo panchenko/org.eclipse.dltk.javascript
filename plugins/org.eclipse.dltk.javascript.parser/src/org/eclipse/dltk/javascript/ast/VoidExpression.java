@@ -13,7 +13,6 @@
 package org.eclipse.dltk.javascript.ast;
 
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
 public class VoidExpression extends Statement implements ISemicolonStatement {
@@ -21,7 +20,7 @@ public class VoidExpression extends Statement implements ISemicolonStatement {
 	private Expression expression;
 	private int semic = -1;
 
-	public VoidExpression(ASTNode parent) {
+	public VoidExpression(JSNode parent) {
 		super(parent);
 	}
 

@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.ast;
 
-import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
 public class Argument extends JSNode implements ISourceable {
@@ -19,7 +18,7 @@ public class Argument extends JSNode implements ISourceable {
 	private Identifier identifier;
 	private int commaPosition = -1;
 
-	public Argument(ASTNode parent) {
+	public Argument(JSNode parent) {
 		super(parent);
 	}
 

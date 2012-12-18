@@ -28,7 +28,7 @@ public class CallExpression extends Expression {
 	private int LP = -1;
 	private int RP = -1;
 
-	public CallExpression(ASTNode parent) {
+	public CallExpression(JSNode parent) {
 		super(parent);
 	}
 

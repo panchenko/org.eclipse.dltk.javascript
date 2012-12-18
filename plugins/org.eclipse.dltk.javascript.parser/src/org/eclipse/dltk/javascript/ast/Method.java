@@ -12,8 +12,6 @@
 
 package org.eclipse.dltk.javascript.ast;
 
-import org.eclipse.dltk.ast.ASTNode;
-
 public abstract class Method extends ObjectInitializerPart implements
 		ISourceable, ISourceableBlock {
 
@@ -22,7 +20,7 @@ public abstract class Method extends ObjectInitializerPart implements
 	private int LP = -1;
 	private int RP = -1;
 
-	public Method(ASTNode parent) {
+	public Method(JSNode parent) {
 		super(parent);
 	}
 

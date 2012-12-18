@@ -20,7 +20,7 @@ public class Identifier extends Expression implements Documentable {
 	private String name;
 	private Comment documentation;
 
-	public Identifier(ASTNode parent) {
+	public Identifier(JSNode parent) {
 		super(parent);
 	}
 
@@ -79,7 +79,7 @@ public class Identifier extends Expression implements Documentable {
 	 */
 	public JSDeclaration findDeclaration() {
 		if (isSymbolReference()) {
-			ASTNode parent = getParent();
+			JSNode parent = getParent();
 			while (parent != null) {
 				if (parent instanceof JSScope) {
 					for (JSDeclaration declaration : ((JSScope) parent)
@@ -90,11 +90,7 @@ public class Identifier extends Expression implements Documentable {
 						}
 					}
 				}
-				if (parent instanceof JSNode) {
-					parent = ((JSNode) parent).getParent();
-				} else {
-					break;
-				}
+				parent = parent.getParent();
 			}
 		}
 		return null;

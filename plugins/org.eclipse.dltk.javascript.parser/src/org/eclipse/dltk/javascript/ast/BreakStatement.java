@@ -13,7 +13,6 @@
 package org.eclipse.dltk.javascript.ast;
 
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
 public class BreakStatement extends Statement implements ISemicolonStatement {
@@ -22,7 +21,7 @@ public class BreakStatement extends Statement implements ISemicolonStatement {
 	private Label label;
 	private int semic = -1;
 
-	public BreakStatement(ASTNode parent) {
+	public BreakStatement(JSNode parent) {
 		super(parent);
 	}
 

@@ -15,7 +15,6 @@ package org.eclipse.dltk.javascript.ast;
 import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 import org.eclipse.dltk.javascript.internal.parser.JSLiterals;
 
@@ -24,7 +23,7 @@ public class CaseClause extends SwitchComponent {
 	private Keyword caseKeyword;
 	private Expression condition;
 
-	public CaseClause(ASTNode parent) {
+	public CaseClause(JSNode parent) {
 		super(parent);
 	}
 

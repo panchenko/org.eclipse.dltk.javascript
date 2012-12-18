@@ -13,7 +13,6 @@
 package org.eclipse.dltk.javascript.ast;
 
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
 public class ForInStatement extends LoopStatement {
@@ -25,7 +24,7 @@ public class ForInStatement extends LoopStatement {
 	private int LP = -1;
 	private int RP = -1;
 
-	public ForInStatement(ASTNode parent) {
+	public ForInStatement(JSNode parent) {
 		super(parent);
 	}
 

@@ -13,7 +13,6 @@
 package org.eclipse.dltk.javascript.ast;
 
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 import org.eclipse.dltk.javascript.internal.parser.JSLiterals;
 
@@ -27,7 +26,7 @@ public class DefaultXmlNamespaceStatement extends Statement {
 	private Expression value;
 	private int semic = -1;
 
-	public DefaultXmlNamespaceStatement(ASTNode parent) {
+	public DefaultXmlNamespaceStatement(JSNode parent) {
 		super(parent);
 	}
 

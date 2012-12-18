@@ -12,7 +12,6 @@
 
 package org.eclipse.dltk.javascript.ast;
 
-import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
 public class ParenthesizedExpression extends Expression {
@@ -21,7 +20,7 @@ public class ParenthesizedExpression extends Expression {
 	private int LP = -1;
 	private int RP = -1;
 
-	public ParenthesizedExpression(ASTNode parent) {
+	public ParenthesizedExpression(JSNode parent) {
 		super(parent);
 	}
 

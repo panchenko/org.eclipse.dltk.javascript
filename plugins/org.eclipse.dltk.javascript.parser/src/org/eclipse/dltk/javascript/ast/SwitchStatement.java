@@ -15,7 +15,6 @@ package org.eclipse.dltk.javascript.ast;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
 public class SwitchStatement extends Statement {
@@ -28,7 +27,7 @@ public class SwitchStatement extends Statement {
 	private int LC = -1;
 	private int RC = -1;
 
-	public SwitchStatement(ASTNode parent) {
+	public SwitchStatement(JSNode parent) {
 		super(parent);
 	}
 

@@ -13,6 +13,7 @@ package org.eclipse.dltk.javascript.parser;
 
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.core.IModelElement;
+import org.eclipse.dltk.javascript.ast.JSNode;
 
 public interface NodeTransformer {
 
@@ -22,6 +23,6 @@ public interface NodeTransformer {
 
 	}
 
-	ASTNode transform(ASTNode node, ASTNode parent);
+	ASTNode transform(ASTNode node, JSNode parent);
 
 }

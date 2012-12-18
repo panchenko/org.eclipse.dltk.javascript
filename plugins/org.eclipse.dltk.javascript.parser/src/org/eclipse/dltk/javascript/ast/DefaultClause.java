@@ -15,14 +15,13 @@ package org.eclipse.dltk.javascript.ast;
 import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
 public class DefaultClause extends SwitchComponent {
 
 	private Keyword defaultKeyword;
 
-	public DefaultClause(ASTNode parent) {
+	public DefaultClause(JSNode parent) {
 		super(parent);
 	}
 

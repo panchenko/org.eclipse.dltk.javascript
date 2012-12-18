@@ -24,7 +24,7 @@ public class CommaExpression extends Expression {
 	private List<ASTNode> items;
 	private IntList commas;
 
-	public CommaExpression(ASTNode parent) {
+	public CommaExpression(JSNode parent) {
 		super(parent);
 	}
 

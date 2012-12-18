@@ -31,7 +31,7 @@ public class VariableStatement extends Expression implements
 	private final List<VariableDeclaration> variables = new ArrayList<VariableDeclaration>();
 	private Comment documentation;
 
-	public VariableStatement(ASTNode parent) {
+	public VariableStatement(JSNode parent) {
 		super(parent);
 	}
 

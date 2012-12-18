@@ -13,7 +13,6 @@
 package org.eclipse.dltk.javascript.ast;
 
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
 public class GetArrayItemExpression extends Expression {
@@ -23,7 +22,7 @@ public class GetArrayItemExpression extends Expression {
 	private int LB = -1;
 	private int RB = -1;
 
-	public GetArrayItemExpression(ASTNode parent) {
+	public GetArrayItemExpression(JSNode parent) {
 		super(parent);
 	}
 

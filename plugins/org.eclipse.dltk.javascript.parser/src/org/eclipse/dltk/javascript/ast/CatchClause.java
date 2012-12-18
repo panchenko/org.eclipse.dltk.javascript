@@ -13,7 +13,6 @@
 package org.eclipse.dltk.javascript.ast;
 
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
 public class CatchClause extends JSNode implements ISourceable {
@@ -26,7 +25,7 @@ public class CatchClause extends JSNode implements ISourceable {
     private int LP = -1;
     private int RP = -1;
 
-    public CatchClause(ASTNode parent) {
+    public CatchClause(JSNode parent) {
         super(parent);
     }
 

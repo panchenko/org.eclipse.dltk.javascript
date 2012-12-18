@@ -35,7 +35,7 @@ public class FunctionStatement extends Expression implements ISourceableBlock,
 	private final boolean declaration;
 	private List<JSDeclaration> declarations;
 
-	public FunctionStatement(ASTNode parent, boolean declaration) {
+	public FunctionStatement(JSNode parent, boolean declaration) {
 		super(parent);
 		this.declaration = declaration;
 	}

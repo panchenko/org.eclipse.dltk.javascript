@@ -14,8 +14,6 @@ package org.eclipse.dltk.javascript.ast;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.dltk.ast.ASTNode;
-
 public abstract class SwitchComponent extends JSNode implements ISourceable {
 
 	private int colon = -1;
@@ -24,7 +22,7 @@ public abstract class SwitchComponent extends JSNode implements ISourceable {
 	/**
 	 * @param parent
 	 */
-	public SwitchComponent(ASTNode parent) {
+	public SwitchComponent(JSNode parent) {
 		super(parent);
 	}
 

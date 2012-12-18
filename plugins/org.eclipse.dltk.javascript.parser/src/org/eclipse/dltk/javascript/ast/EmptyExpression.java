@@ -12,7 +12,6 @@
 
 package org.eclipse.dltk.javascript.ast;
 
-import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 import org.eclipse.dltk.javascript.internal.parser.JSLiterals;
 
@@ -22,7 +21,7 @@ import org.eclipse.dltk.javascript.internal.parser.JSLiterals;
  */
 public class EmptyExpression extends Expression {
 
-	public EmptyExpression(ASTNode parent) {
+	public EmptyExpression(JSNode parent) {
 		super(parent);
 
 		setStart(-1);

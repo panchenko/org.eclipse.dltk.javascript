@@ -12,7 +12,6 @@
 
 package org.eclipse.dltk.javascript.ast;
 
-import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
 public class LabelledStatement extends Statement implements ISourceableBlock {
@@ -21,7 +20,7 @@ public class LabelledStatement extends Statement implements ISourceableBlock {
 	private int colon = -1;
 	private Statement statement;
 
-	public LabelledStatement(ASTNode parent) {
+	public LabelledStatement(JSNode parent) {
 		super(parent);
 	}
 

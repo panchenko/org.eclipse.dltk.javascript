@@ -13,14 +13,13 @@
 package org.eclipse.dltk.javascript.ast;
 
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
 public class ForEachInStatement extends ForInStatement {
 
 	private Keyword eachKeyword;
 
-	public ForEachInStatement(ASTNode parent) {
+	public ForEachInStatement(JSNode parent) {
 		super(parent);
 	}
 

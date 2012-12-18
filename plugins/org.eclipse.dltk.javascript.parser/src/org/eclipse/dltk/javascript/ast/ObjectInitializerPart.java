@@ -11,11 +11,9 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.ast;
 
-import org.eclipse.dltk.ast.ASTNode;
-
 public abstract class ObjectInitializerPart extends JSNode {
 
-	public ObjectInitializerPart(ASTNode parent) {
+	public ObjectInitializerPart(JSNode parent) {
 		super(parent);
 	}
 

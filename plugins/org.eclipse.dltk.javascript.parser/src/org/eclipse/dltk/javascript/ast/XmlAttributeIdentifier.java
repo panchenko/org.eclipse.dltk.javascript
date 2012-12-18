@@ -12,7 +12,6 @@
 
 package org.eclipse.dltk.javascript.ast;
 
-import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
 public class XmlAttributeIdentifier extends Expression implements
@@ -23,7 +22,7 @@ public class XmlAttributeIdentifier extends Expression implements
 	 */
 	private Expression expression;
 
-	public XmlAttributeIdentifier(ASTNode parent) {
+	public XmlAttributeIdentifier(JSNode parent) {
 		super(parent);
 	}
 

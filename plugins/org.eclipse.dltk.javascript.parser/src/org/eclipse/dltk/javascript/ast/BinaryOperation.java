@@ -12,7 +12,6 @@
 package org.eclipse.dltk.javascript.ast;
 
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 import org.eclipse.dltk.javascript.parser.JSParser;
 
@@ -23,7 +22,7 @@ public class BinaryOperation extends Expression {
 	private Expression right;
 	private int operationPos = -1;
 
-	public BinaryOperation(ASTNode parent) {
+	public BinaryOperation(JSNode parent) {
 		super(parent);
 	}
 

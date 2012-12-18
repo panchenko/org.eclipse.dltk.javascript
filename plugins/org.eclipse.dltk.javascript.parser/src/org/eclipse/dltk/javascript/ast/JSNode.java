@@ -38,15 +38,15 @@ public abstract class JSNode extends ASTNode {
 		return node != null ? node.toSourceString(indentationString) : "?";
 	}
 
-	private final ASTNode parent;
+	private final JSNode parent;
 
-	public JSNode(ASTNode parent) {
+	public JSNode(JSNode parent) {
 		this.parent = parent;
 		setStart(0);
 		setEnd(0);
 	}
 
-	public ASTNode getParent() {
+	public JSNode getParent() {
 		return this.parent;
 	}
 
@@ -55,28 +55,24 @@ public abstract class JSNode extends ASTNode {
 	 * <code>null</code> if this node is not contained in any Script.
 	 */
 	public Script getScript() {
-		ASTNode current = parent;
+		JSNode current = parent;
 		for (;;) {
 			if (current instanceof Script) {
 				return (Script) current;
-			} else if (current instanceof JSNode) {
-				current = ((JSNode) current).parent;
 			} else {
-				return null;
+				current = current.parent;
 			}
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	public <T extends JSNode> T getAncestor(Class<T> clazz) {
-		ASTNode current = this;
+		JSNode current = this;
 		for (;;) {
 			if (clazz.isInstance(current)) {
 				return (T) current;
-			} else if (current instanceof JSNode) {
-				current = ((JSNode) current).parent;
 			} else {
-				return null;
+				current = current.parent;
 			}
 		}
 	}

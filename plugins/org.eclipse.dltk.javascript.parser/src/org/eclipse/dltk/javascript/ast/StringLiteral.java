@@ -12,14 +12,13 @@
 
 package org.eclipse.dltk.javascript.ast;
 
-import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
 public class StringLiteral extends Literal implements Documentable {
 
 	private String text;
 
-	public StringLiteral(ASTNode parent) {
+	public StringLiteral(JSNode parent) {
 		super(parent);
 	}
 

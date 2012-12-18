@@ -13,7 +13,6 @@
 package org.eclipse.dltk.javascript.ast;
 
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
 public class GetAllChildrenExpression extends Expression implements
@@ -23,7 +22,7 @@ public class GetAllChildrenExpression extends Expression implements
 	private Expression property;
 	private int dotdot = -1;
 
-	public GetAllChildrenExpression(ASTNode parent) {
+	public GetAllChildrenExpression(JSNode parent) {
 		super(parent);
 	}
 

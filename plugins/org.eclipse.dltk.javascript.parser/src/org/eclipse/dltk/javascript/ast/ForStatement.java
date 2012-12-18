@@ -12,7 +12,6 @@
 
 package org.eclipse.dltk.javascript.ast;
 
-import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
 public class ForStatement extends LoopStatement {
@@ -26,7 +25,7 @@ public class ForStatement extends LoopStatement {
 	private int initialSemic = -1;
 	private int conditionSemic = -1;
 
-	public ForStatement(ASTNode parent) {
+	public ForStatement(JSNode parent) {
 		super(parent);
 	}
 

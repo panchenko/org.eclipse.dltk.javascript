@@ -11,14 +11,13 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.ast;
 
-import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
 public class BooleanLiteral extends Literal {
 
 	private final boolean value;
 
-	public BooleanLiteral(ASTNode parent, boolean value) {
+	public BooleanLiteral(JSNode parent, boolean value) {
 		super(parent);
 		this.value = value;
 	}

@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
 public class StatementBlock extends Statement implements ISourceableBlock {
@@ -25,7 +24,7 @@ public class StatementBlock extends Statement implements ISourceableBlock {
 	private int LC = -1;
 	private int RC = -1;
 
-	public StatementBlock(ASTNode parent) {
+	public StatementBlock(JSNode parent) {
 		super(parent);
 	}
 

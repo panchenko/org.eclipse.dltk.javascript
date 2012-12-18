@@ -11,14 +11,13 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.ast;
 
-import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
 public class ErrorExpression extends Expression {
 
 	private final String text;
 
-	public ErrorExpression(ASTNode parent, String text) {
+	public ErrorExpression(JSNode parent, String text) {
 		super(parent);
 		this.text = text;
 	}

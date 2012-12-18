@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.ast;
 
-import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 import org.eclipse.dltk.javascript.internal.parser.JSLiterals;
 
@@ -20,7 +19,7 @@ import org.eclipse.dltk.javascript.internal.parser.JSLiterals;
  */
 public abstract class UserExpression extends Expression implements JSUserNode {
 
-	public UserExpression(ASTNode parent) {
+	public UserExpression(JSNode parent) {
 		super(parent);
 	}
 

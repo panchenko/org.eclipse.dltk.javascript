@@ -13,7 +13,6 @@
 package org.eclipse.dltk.javascript.ast;
 
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 import org.eclipse.dltk.javascript.parser.JSParser;
 
@@ -23,7 +22,7 @@ public class UnaryOperation extends Expression {
 	private int operation = -1;
 	private int operationPos = -1;
 
-	public UnaryOperation(ASTNode parent) {
+	public UnaryOperation(JSNode parent) {
 		super(parent);
 	}
 

@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 import org.eclipse.dltk.javascript.internal.parser.JSLiterals;
 
@@ -23,7 +22,7 @@ public class XmlLiteral extends Expression implements IXMLExpression {
 
 	private List<XmlFragment> fragments = null;
 
-	public XmlLiteral(ASTNode parent) {
+	public XmlLiteral(JSNode parent) {
 		super(parent);
 	}
 

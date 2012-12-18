@@ -13,7 +13,6 @@
 package org.eclipse.dltk.javascript.ast;
 
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
 public class ConditionalOperator extends Expression {
@@ -24,7 +23,7 @@ public class ConditionalOperator extends Expression {
 	private int questionPos = -1;
 	private int colonPos = -1;
 
-	public ConditionalOperator(ASTNode parent) {
+	public ConditionalOperator(JSNode parent) {
 		super(parent);
 	}
 

@@ -13,7 +13,6 @@
 package org.eclipse.dltk.javascript.ast;
 
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 import org.eclipse.dltk.javascript.internal.parser.JSLiterals;
 
@@ -22,7 +21,7 @@ public class FinallyClause extends JSNode {
 	private Keyword finallyKeyword;
 	private Statement statement;
 
-	public FinallyClause(ASTNode parent) {
+	public FinallyClause(JSNode parent) {
 		super(parent);
 	}
 

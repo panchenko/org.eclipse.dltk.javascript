@@ -15,7 +15,6 @@ package org.eclipse.dltk.javascript.ast;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
 public class PropertyExpression extends Expression implements Documentable {
@@ -25,7 +24,7 @@ public class PropertyExpression extends Expression implements Documentable {
 	private int dot = -1;
 	private Comment documentation;
 
-	public PropertyExpression(ASTNode parent) {
+	public PropertyExpression(JSNode parent) {
 		super(parent);
 	}
 

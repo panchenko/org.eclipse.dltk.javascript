@@ -27,7 +27,7 @@ public class ObjectInitializer extends Expression {
 	private IntList commas;
 	private boolean multiline;
 
-	public ObjectInitializer(ASTNode parent) {
+	public ObjectInitializer(JSNode parent) {
 		super(parent);
 	}
 

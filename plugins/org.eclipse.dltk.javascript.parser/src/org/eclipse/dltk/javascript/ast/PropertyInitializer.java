@@ -12,7 +12,6 @@
 
 package org.eclipse.dltk.javascript.ast;
 
-import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
 public class PropertyInitializer extends ObjectInitializerPart implements
@@ -22,7 +21,7 @@ public class PropertyInitializer extends ObjectInitializerPart implements
 	private Expression value;
 	private int colon = -1;
 
-	public PropertyInitializer(ASTNode parent) {
+	public PropertyInitializer(JSNode parent) {
 		super(parent);
 	}
 

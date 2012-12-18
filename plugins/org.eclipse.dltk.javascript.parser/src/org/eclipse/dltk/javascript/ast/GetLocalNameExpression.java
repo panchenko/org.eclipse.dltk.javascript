@@ -12,7 +12,6 @@
 
 package org.eclipse.dltk.javascript.ast;
 
-import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
 public class GetLocalNameExpression extends Expression implements
@@ -22,7 +21,7 @@ public class GetLocalNameExpression extends Expression implements
 	private Expression localName;
 	private int coloncolon = -1;
 
-	public GetLocalNameExpression(ASTNode parent) {
+	public GetLocalNameExpression(JSNode parent) {
 		super(parent);
 	}
 
