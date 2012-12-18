@@ -56,4 +56,48 @@ public class Identifier extends Expression implements Documentable {
 		return name;
 	}
 
+	/**
+	 * Checks if this identifier is a direct symbol reference.
+	 */
+	public boolean isSymbolReference() {
+		final ASTNode parent = getParent();
+		if (parent instanceof PropertyInitializer) {
+			return ((PropertyInitializer) parent).getName() != this;
+		} else if (parent instanceof PropertyExpression) {
+			return ((PropertyExpression) parent).getProperty() != this;
+		} else if (parent instanceof XmlAttributeIdentifier) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	/**
+	 * Finds the closest declaration of this identifier. Returns the declaration
+	 * found or <code>null</code> if no such declaration exists or identifier is
+	 * used not as symbol reference.
+	 */
+	public JSDeclaration findDeclaration() {
+		if (isSymbolReference()) {
+			ASTNode parent = getParent();
+			while (parent != null) {
+				if (parent instanceof JSScope) {
+					for (JSDeclaration declaration : ((JSScope) parent)
+							.getDeclarations()) {
+						final Identifier id = declaration.getIdentifier();
+						if (id != null && name.equals(id.getName())) {
+							return declaration;
+						}
+					}
+				}
+				if (parent instanceof JSNode) {
+					parent = ((JSNode) parent).getParent();
+				} else {
+					break;
+				}
+			}
+		}
+		return null;
+	}
+
 }
