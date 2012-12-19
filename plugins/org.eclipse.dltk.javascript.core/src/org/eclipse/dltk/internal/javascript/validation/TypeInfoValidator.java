@@ -340,7 +340,10 @@ public class TypeInfoValidator implements IBuildParticipant,
 													TypeUtil.getName(type) }),
 									node.sourceStart(), node.sourceEnd());
 				}
-				if (firstType == null && type != null) {
+				if (methodType == null && firstType == null && type != null) {
+					// remember first type only if return type is not declared.
+					// consistency check makes sense only if no return type
+					// declaration.
 					firstType = type.normalize();
 					firstNode = element;
 				}

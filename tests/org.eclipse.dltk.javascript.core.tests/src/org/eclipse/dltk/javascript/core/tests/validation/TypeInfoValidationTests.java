@@ -815,7 +815,10 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("return '';");
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
-		assertEquals(problems.toString(), 2, problems.size());
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(
+				JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE,
+				problems.get(0).getID());
 	}
 
 	public void testDifferentReturnTypesThenDeclaredWithUndefined() {
