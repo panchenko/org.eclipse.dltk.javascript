@@ -90,4 +90,18 @@ public interface ITypeInfoContext extends ITypeSystem {
 	 * evaluated code.
 	 */
 	IValueCollection currentCollection();
+
+	/**
+	 * Returns the references to the registered local type with the specified
+	 * name, if no such types registered then empty array is returned.
+	 */
+	ILocalTypeReference[] getLocalTypes(String name);
+
+	/**
+	 * Registers the specified local type as "local" (if multiple types with the
+	 * same name are registered then the first one which is enabled will be
+	 * used). Returns the type reference, which can be used to disable it
+	 * temporary.
+	 */
+	ILocalTypeReference registerLocalType(Type type);
 }

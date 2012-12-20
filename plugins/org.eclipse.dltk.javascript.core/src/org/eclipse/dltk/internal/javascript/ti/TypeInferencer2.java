@@ -12,13 +12,12 @@
 package org.eclipse.dltk.internal.javascript.ti;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.annotations.Internal;
@@ -34,6 +33,7 @@ import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinfo.AttributeKey;
 import org.eclipse.dltk.javascript.typeinfo.IElementResolver;
+import org.eclipse.dltk.javascript.typeinfo.ILocalTypeReference;
 import org.eclipse.dltk.javascript.typeinfo.IMemberEvaluator;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.IRMember;
@@ -140,7 +140,97 @@ public class TypeInferencer2 extends TypeSystemImpl implements
 		return visitor.peekContext();
 	}
 
-	private final ConcurrentMap<String, Type> types = new ConcurrentHashMap<String, Type>();
+	/**
+	 * Implementation of the {@link ILocalTypeReference}
+	 */
+	private static class LocalType implements ILocalTypeReference {
+		final Type type;
+		private boolean enabled;
+
+		public LocalType(Type type) {
+			this.type = type;
+			this.enabled = true;
+		}
+
+		public Type getType() {
+			return type;
+		}
+
+		public boolean isEnabled() {
+			return enabled;
+		}
+
+		public void setEnabled(boolean value) {
+			this.enabled = value;
+		}
+
+		@Override
+		public String toString() {
+			return "(" + type + ", enabled=" + enabled + ")";
+		}
+	}
+
+	/**
+	 * Container for potentially multiple local types with the same name.
+	 */
+	@SuppressWarnings("serial")
+	private static class LocalTypeBucket extends ArrayList<LocalType> {
+		public LocalTypeBucket() {
+			super(1);
+		}
+
+		Type unknownType;
+	}
+
+	/**
+	 * Local (i.e. per-module) types, which are manually registered using
+	 * {@link ITypeInfoContext#registerLocalType(Type, Object)}.
+	 */
+	private final Map<String, LocalTypeBucket> localTypes = new HashMap<String, LocalTypeBucket>();
+
+	/*
+	 * @see ITypeInfoContext#registerLocalType(Type)
+	 */
+	public ILocalTypeReference registerLocalType(Type type) {
+		assert type != null;
+		final String name = type.getName();
+		assert name != null;
+		assert type.eResource() == null;
+		final LocalType result;
+		synchronized (localTypes) {
+			LocalTypeBucket locals = localTypes.get(name);
+			if (locals == null) {
+				locals = new LocalTypeBucket();
+				localTypes.put(name, locals);
+			} else {
+				for (LocalType localType : locals) {
+					if (type.equals(localType.type)) {
+						return localType;
+					}
+				}
+			}
+			result = new LocalType(type);
+			typeRS.addToResource(type);
+			locals.add(result);
+		}
+		return result;
+	}
+
+	/*
+	 * @see ITypeInfoContext#getLocalTypes(String)
+	 */
+	public ILocalTypeReference[] getLocalTypes(String name) {
+		synchronized (localTypes) {
+			LocalTypeBucket locals = localTypes.get(name);
+			if (locals != null) {
+				return locals.toArray(new ILocalTypeReference[locals.size()]);
+			} else {
+				return new ILocalTypeReference[0];
+			}
+		}
+	}
+
+	private final Map<String, Type> types = new HashMap<String, Type>();
 
 	public Type getType(String typeName) {
 		if (typeName == null || typeName.length() == 0) {
@@ -239,17 +329,32 @@ public class TypeInferencer2 extends TypeSystemImpl implements
 	@Internal
 	Type getType(String typeName, TypeMode mode, boolean queryProviders,
 			boolean queryPredefined, boolean allowProxy, boolean allowUnknown) {
-		Type type = types.get(typeName);
-		if (type != null) {
-			if (!allowUnknown && type.getKind() == TypeKind.UNKNOWN) {
-				return null;
+		synchronized (localTypes) {
+			final LocalTypeBucket locals = localTypes.get(typeName);
+			if (locals != null) {
+				for (LocalType localType : locals) {
+					if (localType.isEnabled()) {
+						return localType.type;
+					}
+				}
+				if (locals.unknownType != null) {
+					return allowUnknown ? locals.unknownType : null;
+				}
 			}
+		}
+		Type type;
+		synchronized (types) {
+			type = types.get(typeName);
+		}
+		if (type != null) {
 			return type;
 		}
 		type = loadType(typeName, mode, queryProviders, queryPredefined);
 		if (type != null) {
 			validateTypeInfo(type);
-			types.put(typeName, type);
+			synchronized (types) {
+				types.put(typeName, type);
+			}
 			typeRS.addToResource(type);
 			return type;
 		}
@@ -281,13 +386,25 @@ public class TypeInferencer2 extends TypeSystemImpl implements
 		final Type type = TypeInfoModelFactory.eINSTANCE.createType();
 		type.setName(typeName);
 		type.setKind(TypeKind.UNKNOWN);
-		final Type previous = types.putIfAbsent(typeName, type);
-		if (previous != null) {
-			return previous;
-		} else {
-			typeRS.addToResource(type);
-			return type;
+		synchronized (localTypes) {
+			LocalTypeBucket locals = localTypes.get(typeName);
+			if (locals != null) {
+				for (LocalType localType : locals) {
+					if (localType.isEnabled()) {
+						return localType.type;
+					}
+				}
+				if (locals.unknownType != null) {
+					return locals.unknownType;
+				}
+			} else {
+				locals = new LocalTypeBucket();
+				localTypes.put(typeName, locals);
+			}
+			locals.unknownType = type;
 		}
+		typeRS.add(type);
+		return type;
 	}
 
 	private final Map<String, Boolean> activeTypeRequests = new HashMap<String, Boolean>();
@@ -384,6 +501,10 @@ public class TypeInferencer2 extends TypeSystemImpl implements
 
 		protected synchronized void add(Type type) {
 			getResource().getContents().add(type);
+		}
+
+		protected synchronized void removeAll(Collection<Type> types) {
+			getResource().getContents().removeAll(types);
 		}
 
 	}
@@ -533,6 +654,30 @@ public class TypeInferencer2 extends TypeSystemImpl implements
 			return getSource();
 		} else {
 			return null;
+		}
+	}
+
+	/**
+	 * Removes all registered local types, this method is called by the
+	 * {@link org.eclipse.dltk.internal.javascript.validation.TypeInfoValidator}
+	 * after each module is processed.
+	 */
+	public void resetLocalState() {
+		final List<Type> copy;
+		synchronized (localTypes) {
+			copy = new ArrayList<Type>();
+			for (LocalTypeBucket locals : localTypes.values()) {
+				for (LocalType localType : locals) {
+					copy.add(localType.type);
+				}
+				if (locals.unknownType != null) {
+					copy.add(locals.unknownType);
+				}
+			}
+			localTypes.clear();
+		}
+		if (!copy.isEmpty()) {
+			typeRS.removeAll(copy);
 		}
 	}
 

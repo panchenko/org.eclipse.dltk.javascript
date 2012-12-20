@@ -158,6 +158,7 @@ public class TypeInfoValidator implements IBuildParticipant,
 		inferencer.setVisitor(visitor);
 		inferencer.doInferencing(script);
 		if (hasDependents) {
+			inferencer.resetLocalState();
 			context.set(TypeInfoValidator.ATTR_BINDINGS, visitor.bindings);
 			saveCachedBindings(script, new TemporaryBindings(inferencer,
 					visitor.bindings));
