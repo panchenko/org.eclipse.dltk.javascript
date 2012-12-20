@@ -12,6 +12,7 @@
 package org.eclipse.dltk.javascript.typeinfo;
 
 import org.eclipse.dltk.core.IModelElement;
+import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
@@ -83,4 +84,10 @@ public interface ITypeInfoContext extends ITypeSystem {
 	 */
 	@Deprecated
 	<T> T popAttribute(AttributeKey<T> key);
+
+	/**
+	 * Returns the collection representing the current local scope of the
+	 * evaluated code.
+	 */
+	IValueCollection currentCollection();
 }

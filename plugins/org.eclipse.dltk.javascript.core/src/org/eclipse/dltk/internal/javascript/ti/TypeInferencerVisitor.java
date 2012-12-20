@@ -1160,7 +1160,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 						if (jsdocSupport != null) {
 							jsdocSupport.parseType(source, tags,
 									JSDocSupport.TYPE_TAGS, reporter,
-									typeChecker);
+									getTypeChecker());
 							jsdocSupport.parseDeprecation(source, tags,
 									reporter);
 						}

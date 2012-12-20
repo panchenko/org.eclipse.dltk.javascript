@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Stack;
 
+import org.eclipse.dltk.annotations.Nullable;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.javascript.ast.ASTVisitor;
@@ -160,12 +161,13 @@ public abstract class TypeInferencerVisitorBase extends
 
 	protected ITypeChecker typeChecker;
 
+	/**
+	 * Returns the type checker which can be used for type validation. Non-null
+	 * during validation.
+	 */
+	@Nullable
 	public ITypeChecker getTypeChecker() {
 		return typeChecker;
-	}
-
-	public void setTypeChecker(ITypeChecker typeChecker) {
-		this.typeChecker = typeChecker;
 	}
 
 }

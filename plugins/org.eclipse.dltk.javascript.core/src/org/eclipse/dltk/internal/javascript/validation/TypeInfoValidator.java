@@ -29,6 +29,7 @@ import java.util.WeakHashMap;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.dltk.annotations.NonNull;
 import org.eclipse.dltk.annotations.Nullable;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
@@ -98,6 +99,7 @@ import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.IRTypeDeclaration;
 import org.eclipse.dltk.javascript.typeinfo.IRTypeExtension;
 import org.eclipse.dltk.javascript.typeinfo.IRVariable;
+import org.eclipse.dltk.javascript.typeinfo.ITypeChecker;
 import org.eclipse.dltk.javascript.typeinfo.ITypeCheckerExtension;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
@@ -154,10 +156,7 @@ public class TypeInfoValidator implements IBuildParticipant,
 		final ValidationVisitor visitor = new ValidationVisitor(inferencer,
 				reporter, inconsistentReturns, hasDependents);
 		inferencer.setVisitor(visitor);
-		final TypeChecker typeChecker = new TypeChecker(inferencer, reporter);
-		visitor.setTypeChecker(typeChecker);
 		inferencer.doInferencing(script);
-		typeChecker.validate();
 		if (hasDependents) {
 			context.set(TypeInfoValidator.ATTR_BINDINGS, visitor.bindings);
 			saveCachedBindings(script, new TemporaryBindings(inferencer,
@@ -538,14 +537,27 @@ public class TypeInfoValidator implements IBuildParticipant,
 			} else {
 				this.extensions = null;
 			}
-			if (typeChecker != null
-					&& typeChecker instanceof ITypeCheckerExtension) {
-				((ITypeCheckerExtension) typeChecker)
+			if (getTypeChecker() instanceof ITypeCheckerExtension) {
+				((ITypeCheckerExtension) getTypeChecker())
 						.setExtensions(this.extensions);
 			}
 		}
 
 		private IValidatorExtension[] extensions;
+
+		/**
+		 * Returns {@link ITypeChecker} which can be used for type validations.
+		 */
+		@NonNull
+		@Override
+		public ITypeChecker getTypeChecker() {
+			ITypeChecker result = super.getTypeChecker();
+			if (result == null) {
+				result = new TypeChecker(context, reporter);
+				typeChecker = result;
+			}
+			return result;
+		}
 
 		@Override
 		public void done() {
@@ -585,6 +597,7 @@ public class TypeInfoValidator implements IBuildParticipant,
 							location.getNameStart(), location.getNameEnd());
 				}
 			}
+			((TypeChecker) typeChecker).validate();
 		}
 
 		private VisitorMode currentMode() {

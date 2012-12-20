@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.dltk.annotations.Internal;
 import org.eclipse.dltk.annotations.Nullable;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.compiler.problem.IValidationStatus;
@@ -14,7 +15,6 @@ import org.eclipse.dltk.compiler.problem.ValidationMultiStatus;
 import org.eclipse.dltk.compiler.problem.ValidationStatus;
 import org.eclipse.dltk.core.ISourceNode;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
-import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.internal.javascript.validation.ValidationMessages;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.parser.JSProblemReporter;
@@ -179,10 +179,10 @@ public class JSDocValidatorFactory {
 			ITypeCheckerExtension {
 
 		private final List<QueueItem> queue = new ArrayList<QueueItem>();
-		private final TypeInferencer2 context;
+		private final ITypeInfoContext context;
 		private final JSProblemReporter reporter;
 
-		public TypeChecker(TypeInferencer2 context, JSProblemReporter reporter) {
+		public TypeChecker(ITypeInfoContext context, JSProblemReporter reporter) {
 			this.context = context;
 			this.reporter = reporter;
 		}
@@ -210,10 +210,21 @@ public class JSDocValidatorFactory {
 		@Override
 		public void checkType(Type type, ISourceNode tag, int flags,
 				@Nullable ITypeCheck[] checks) {
-			if (type.getKind() == TypeKind.UNKNOWN
-					|| type.getKind() == TypeKind.UNRESOLVED) {
+			final TypeKind kind = type.getKind();
+			if (kind == TypeKind.UNKNOWN) {
 				queue.add(new QueueItem(type, tag, context.currentCollection(),
 						flags, checks));
+			} else if (kind == TypeKind.UNRESOLVED) {
+				final Type resolved = context.resolveType(type);
+				if (resolved != type && resolved.getKind() != TypeKind.UNKNOWN) {
+					checkDeprecatedType(resolved, tag);
+					if (checks != null) {
+						doChecks(resolved, tag, checks);
+					}
+				} else {
+					queue.add(new QueueItem(type, tag, context
+							.currentCollection(), flags, checks));
+				}
 			} else {
 				checkDeprecatedType(type, tag);
 				if (checks != null) {
@@ -368,6 +379,31 @@ public class JSDocValidatorFactory {
 			this.checks = checks;
 		}
 
+	}
+
+	@Internal
+	static class NopTypeChecker implements ITypeChecker {
+
+		public int getDefaults() {
+			return DEFAULT;
+		}
+
+		public void setDefaults(int flags) {
+		}
+
+		public void checkType(JSType type, ISourceNode node) {
+		}
+
+		public void checkType(JSType type, ISourceNode node, int flags) {
+		}
+
+		public void checkType(Type type, ISourceNode node, int flags,
+				ITypeCheck[] checks) {
+		}
+	}
+
+	public static ITypeChecker createNopTypeChecker() {
+		return new NopTypeChecker();
 	}
 
 }
