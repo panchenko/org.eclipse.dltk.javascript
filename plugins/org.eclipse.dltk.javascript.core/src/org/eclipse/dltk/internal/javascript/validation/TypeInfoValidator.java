@@ -570,18 +570,7 @@ public class TypeInfoValidator implements IBuildParticipant,
 					FlowValidation.reportInconsistentReturn(r, statement);
 				}
 			}
-			final ISuppressWarningsState suppressWarnings = reporter
-					.getSuppressWarnings();
-			try {
-				for (ExpressionValidator call : expressionValidators
-						.toArray(new ExpressionValidator[expressionValidators
-								.size()])) {
-					reporter.restoreSuppressWarnings(call.getSuppressed());
-					call.call(this);
-				}
-			} finally {
-				reporter.restoreSuppressWarnings(suppressWarnings);
-			}
+			runDelayedValidations();
 			for (IValueReference variable : variables) {
 				if (variable.getAttribute(IReferenceAttributes.ACCESS) == null) {
 					final IRVariable jsVariable = (IRVariable) variable
@@ -599,6 +588,26 @@ public class TypeInfoValidator implements IBuildParticipant,
 				}
 			}
 			((TypeChecker) typeChecker).validate();
+		}
+
+		/**
+		 * Executes all the delayed validations collected so far.
+		 */
+		public void runDelayedValidations() {
+			final ISuppressWarningsState suppressWarnings = reporter
+					.getSuppressWarnings();
+			try {
+				final ExpressionValidator[] copy = expressionValidators
+						.toArray(new ExpressionValidator[expressionValidators
+								.size()]);
+				expressionValidators.clear();
+				for (ExpressionValidator call : copy) {
+					reporter.restoreSuppressWarnings(call.getSuppressed());
+					call.call(this);
+				}
+			} finally {
+				reporter.restoreSuppressWarnings(suppressWarnings);
+			}
 		}
 
 		private VisitorMode currentMode() {
