@@ -319,17 +319,6 @@ public class TypeUtil {
 		return Collections.emptyList();
 	}
 
-	public static boolean isUndefined(IRType type) {
-		if (type == RTypes.undefined()) {
-			return true;
-		} else if (type instanceof IRUnionType) {
-			return ((IRUnionType) type).getTargets().contains(
-					RTypes.undefined());
-		} else {
-			return false;
-		}
-	}
-
 	/**
 	 * Creates EMF-based type expression, equivalent to the specified
 	 * {@link IRType}.

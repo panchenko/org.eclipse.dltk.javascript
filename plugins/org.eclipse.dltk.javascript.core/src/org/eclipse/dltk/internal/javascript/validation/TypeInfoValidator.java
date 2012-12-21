@@ -658,7 +658,7 @@ public class TypeInfoValidator implements IBuildParticipant,
 			final FunctionScope scope = functionScopes.pop();
 			if (method != null) {
 				if (inconsistentReturns != null && method.getType() != null
-						&& TypeUtil.isUndefined(method.getType())) {
+						&& RTypes.isUndefined(method.getType())) {
 					inconsistentReturns.remove(function);
 				}
 				if (!scope.returnNodes.isEmpty()) {
@@ -666,7 +666,7 @@ public class TypeInfoValidator implements IBuildParticipant,
 					pushExpressionValidator(new TestReturnStatement(method,
 							scope.returnNodes));
 				} else if (!scope.throwsException && method.getType() != null
-						&& !TypeUtil.isUndefined(method.getType())) {
+						&& !RTypes.isUndefined(method.getType())) {
 					final ReferenceLocation location = locationOf(method);
 					if (location == null) {
 						return;

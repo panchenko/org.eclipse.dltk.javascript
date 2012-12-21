@@ -411,4 +411,18 @@ public class RTypes {
 		return parameters;
 	}
 
+	/**
+	 * Checks if the specified type is {@link #undefined()} or is an union
+	 * containing {@link #undefined()}.
+	 */
+	public static boolean isUndefined(IRType type) {
+		if (type == undefined()) {
+			return true;
+		} else if (type instanceof IRUnionType) {
+			return ((IRUnionType) type).getTargets().contains(undefined());
+		} else {
+			return false;
+		}
+	}
+
 }
