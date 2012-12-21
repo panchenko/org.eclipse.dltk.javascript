@@ -166,7 +166,7 @@ public class LazyTypeReference extends AbstractReference {
 		return className;
 	}
 
-	public void delete() {
+	public void delete(boolean force) {
 	}
 
 	public boolean isReference() {

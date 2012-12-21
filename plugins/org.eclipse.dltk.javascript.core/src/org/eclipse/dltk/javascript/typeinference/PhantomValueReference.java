@@ -66,7 +66,7 @@ public enum PhantomValueReference implements IValueReference, IValueProvider {
 	public void addValue(IValueReference value, boolean copy) {
 	}
 
-	public void delete() {
+	public void delete(boolean force) {
 	}
 
 	public ReferenceKind getKind() {

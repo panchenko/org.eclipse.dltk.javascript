@@ -31,7 +31,7 @@ public class AnonymousValue extends AbstractReference {
 		return getValue();
 	}
 
-	public void delete() {
+	public void delete(boolean force) {
 	}
 
 	public String getName() {

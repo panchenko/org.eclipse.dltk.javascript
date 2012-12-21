@@ -82,10 +82,10 @@ public class ChildReference extends AbstractReference {
 		}
 	}
 
-	public void delete() {
+	public void delete(boolean force) {
 		final IValue value = parent.getValue();
 		if (value != null) {
-			value.deleteChild(name);
+			value.deleteChild(name, force);
 		}
 	}
 

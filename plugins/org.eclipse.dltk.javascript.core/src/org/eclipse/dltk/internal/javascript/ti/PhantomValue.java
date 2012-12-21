@@ -103,7 +103,7 @@ public enum PhantomValue implements IValue {
 		return Collections.emptySet();
 	}
 
-	public void deleteChild(String name) {
+	public void deleteChild(String name, boolean force) {
 	}
 
 	@Override

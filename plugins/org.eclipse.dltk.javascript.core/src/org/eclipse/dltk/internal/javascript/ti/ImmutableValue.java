@@ -349,6 +349,9 @@ public class ImmutableValue implements IValue, IValue2 {
 		if (elementValues != null) {
 			elementValues.remove(name);
 		}
+		if (deletedChildren != null) {
+			deletedChildren.remove(name);
+		}
 	}
 
 	protected ITypeSystem getTypeSystem() {
@@ -385,7 +388,7 @@ public class ImmutableValue implements IValue, IValue2 {
 	public void putChild(String name, IValue value) {
 	}
 
-	public void deleteChild(String name) {
+	public void deleteChild(String name, boolean force) {
 	}
 
 }

@@ -31,7 +31,7 @@ public interface IValueReference extends IValueParent, ILocationProvider {
 
 	void addValue(IValueReference value, boolean copy);
 
-	void delete();
+	void delete(boolean force);
 
 	ReferenceKind getKind();
 

@@ -67,6 +67,6 @@ public interface IValue {
 
 	Set<String> getDeletedChildren();
 
-	void deleteChild(String name);
+	void deleteChild(String name, boolean force);
 
 }

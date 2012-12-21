@@ -41,6 +41,7 @@ public class Value extends ImmutableValue {
 		return DELEGATING_TYPE_SYSTEM;
 	}
 
+	@Override
 	public void setDeclaredType(IRType declaredType) {
 		this.declaredType = declaredType;
 	}
@@ -52,14 +53,17 @@ public class Value extends ImmutableValue {
 		}
 	}
 
+	@Override
 	public void setKind(ReferenceKind kind) {
 		this.kind = kind;
 	}
 
+	@Override
 	public void setLocation(ReferenceLocation location) {
 		this.location = location;
 	}
 
+	@Override
 	public void setAttribute(String key, Object value) {
 		if (value != null) {
 			if (attributes == null) {
@@ -73,13 +77,20 @@ public class Value extends ImmutableValue {
 		}
 	}
 
-	public void deleteChild(String name) {
-		if (deletedChildren == null) {
-			deletedChildren = new HashSet<String>();
+	@Override
+	public void deleteChild(String name, boolean force) {
+		if (force) {
+			children.remove(name);
+			inherited.remove(name);
+		} else {
+			if (deletedChildren == null) {
+				deletedChildren = new HashSet<String>();
+			}
+			deletedChildren.add(name);
 		}
-		deletedChildren.add(name);
 	}
 
+	@Override
 	public void putChild(String name, IValue value) {
 		inherited.put(name, value);
 	}
@@ -131,6 +142,7 @@ public class Value extends ImmutableValue {
 		return child;
 	}
 
+	@Override
 	public void clear() {
 		references.clear();
 		children.clear();
@@ -143,11 +155,13 @@ public class Value extends ImmutableValue {
 	}
 
 	private static final ThreadLocal<AtomicBoolean> recursionErrorReported = new ThreadLocal<AtomicBoolean>() {
+		@Override
 		protected AtomicBoolean initialValue() {
 			return new AtomicBoolean();
 		}
 	};
 
+	@Override
 	public void addValue(IValue src) {
 		if (src instanceof ImmutableValue) {
 			final IdentityHashMap<ImmutableValue, ImmutableValue> processing = new IdentityHashMap<ImmutableValue, ImmutableValue>();
@@ -225,6 +239,7 @@ public class Value extends ImmutableValue {
 		}
 	}
 
+	@Override
 	public void addReference(IValue src) {
 		assert src != null;
 		if (src == this)

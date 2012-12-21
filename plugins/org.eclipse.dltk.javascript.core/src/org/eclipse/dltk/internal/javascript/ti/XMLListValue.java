@@ -36,7 +36,7 @@ public class XMLListValue extends AbstractReference {
 		return "";
 	}
 
-	public void delete() {
+	public void delete(boolean force) {
 	}
 
 	public boolean isReference() {

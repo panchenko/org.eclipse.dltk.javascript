@@ -923,7 +923,7 @@ public abstract class ElementValue implements IValue {
 		return Collections.emptySet();
 	}
 
-	public void deleteChild(String name) {
+	public void deleteChild(String name, boolean force) {
 	}
 
 	public final boolean hasChild(String name) {

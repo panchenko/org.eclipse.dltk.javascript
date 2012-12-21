@@ -1376,7 +1376,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		} else if (node.getOperation() == JSParser.DELETE) {
 			final IValueReference value = visit(node.getExpression());
 			if (value != null) {
-				value.delete();
+				value.delete(false);
 			}
 			return ConstantValue.of(RTypes.BOOLEAN);
 		} else if (node.getOperation() == JSParser.TYPEOF) {

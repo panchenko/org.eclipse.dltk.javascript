@@ -35,7 +35,7 @@ public interface ITypeInferenceHandler {
 			return "CONTINUE";
 		}
 
-		public void delete() {
+		public void delete(boolean force) {
 		}
 
 		@Override
