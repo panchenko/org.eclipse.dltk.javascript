@@ -19,6 +19,7 @@ import java.util.List;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.dltk.annotations.Internal;
 import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.IMethod;
 import org.eclipse.dltk.core.IModelElement;
@@ -50,7 +51,9 @@ public class SearchExternalLibraryTests extends Assert implements
 
 	private static final String MY_EXPORTS_JS = "myExports.js";
 
-	private static class LibrarySetup extends TemporaryFolder {
+	@Internal
+	static class LibrarySetup extends TemporaryFolder {
+		@Override
 		protected void before() throws Throwable {
 			super.before();
 			final File f = new File(getRoot(), MY_EXPORTS_JS);
@@ -73,15 +76,15 @@ public class SearchExternalLibraryTests extends Assert implements
 		}
 	}
 
-	public static final LibrarySetup LIBRARY = new LibrarySetup();
+	protected static final LibrarySetup LIBRARY = new LibrarySetup();
 
-	public static final ProjectSetup PROJECT = new ProjectSetup(
+	protected static final ProjectSetup PROJECT = new ProjectSetup(
 			AllTests.WORKSPACE, "searchExtLib",
 			ProjectSetup.Option.WAIT_INDEXES_READY);
 
 	@ClassRule
-	public static final RuleChain CLASS_RULE_CHAIN = RuleChain.emptyRuleChain()
-			.around(LIBRARY).around(new ExternalResource() {
+	public static final RuleChain CLASS_RULE_CHAIN = ProjectSetup.chainOf(
+			LIBRARY, new ExternalResource() {
 				protected void before() throws Throwable {
 					DLTKCore.setBuildpathVariable(LIB_NAME,
 							LIBRARY.getFullPath(), null);
@@ -90,7 +93,7 @@ public class SearchExternalLibraryTests extends Assert implements
 				protected void after() {
 					DLTKCore.removeBuildpathVariable(LIB_NAME, null);
 				}
-			}).around(PROJECT);
+			}, PROJECT);
 
 	@Test
 	public void testFindProjectFragment() throws ModelException {
