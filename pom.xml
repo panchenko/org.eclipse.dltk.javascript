@@ -14,7 +14,6 @@
 	</parent>
 	<packaging>pom</packaging>
 	<modules>
-		<module>releng/org.eclipse.dltk.javascript.targetplatform</module>
 		<module>features/org.eclipse.dltk.javascript-feature</module>
 		<module>features/org.eclipse.dltk.javascript.sdk</module>
 		<module>plugins/org.eclipse.dltk.javascript.core</module>
