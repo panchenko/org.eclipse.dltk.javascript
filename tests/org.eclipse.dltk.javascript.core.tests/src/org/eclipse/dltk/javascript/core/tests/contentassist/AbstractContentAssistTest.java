@@ -15,12 +15,17 @@ import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
 
 import org.eclipse.dltk.compiler.env.IModuleSource;
+import org.eclipse.dltk.core.tests.CodeAssistUtil;
 import org.eclipse.osgi.util.NLS;
 
 public abstract class AbstractContentAssistTest extends TestCase {
 
 	protected IModuleSource createModule(String moduleName) {
 		return new TestModule(getClass().getResource(moduleName));
+	}
+
+	protected CodeAssistUtil getModule(String moduleName) {
+		return CodeAssistUtil.on(createModule(moduleName));
 	}
 
 	public static int lastPositionInFile(String string, IModuleSource source) {

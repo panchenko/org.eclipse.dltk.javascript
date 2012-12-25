@@ -28,6 +28,7 @@ import org.eclipse.dltk.codeassist.ICompletionEngine;
 import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.core.CompletionProposal;
 import org.eclipse.dltk.core.DLTKLanguageManager;
+import org.eclipse.dltk.core.tests.TestCompletionRequestor;
 import org.eclipse.dltk.core.tests.util.StringList;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
 import org.eclipse.dltk.javascript.internal.core.codeassist.JSCompletionEngine;
@@ -89,6 +90,11 @@ public abstract class AbstractCompletionTest extends AbstractContentAssistTest {
 		return engine;
 	}
 
+	protected ICompletionEngine createEngine() {
+		return createEngine(Collections.<CompletionProposal> emptyList(),
+				JSCompletionEngine.OPTION_NONE);
+	}
+
 	private boolean isAllowed(ICompletionEngine engine,
 			Collection<Class<? extends ICompletionEngine>> allowedEngines) {
 		if (allowedEngines.isEmpty()) {
@@ -123,6 +129,7 @@ public abstract class AbstractCompletionTest extends AbstractContentAssistTest {
 		}
 		Collections.sort(proposals, new Comparator<CompletionProposal>() {
 
+			@Override
 			public int compare(CompletionProposal pr, CompletionProposal pr1) {
 				return pr.getName().compareTo(pr1.getName());
 			}
