@@ -123,6 +123,7 @@ public class RTypeMemberQuery implements Iterable<IRMember> {
 			return visited.add(item);
 		}
 
+		@Override
 		protected boolean fetchNext() {
 			if (!queue.isEmpty()) {
 				final QueueItem[] copy = queue.toArray(new QueueItem[queue

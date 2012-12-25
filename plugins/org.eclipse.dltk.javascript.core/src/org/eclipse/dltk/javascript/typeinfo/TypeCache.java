@@ -80,6 +80,7 @@ public abstract class TypeCache {
 	}
 
 	private final ThreadLocal<ThreadState> threads = new ThreadLocal<ThreadState>() {
+		@Override
 		protected ThreadState initialValue() {
 			return new ThreadState();
 		}

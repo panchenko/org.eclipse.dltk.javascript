@@ -7,6 +7,7 @@ import org.eclipse.dltk.javascript.typeinfo.E4XTypes;
 public class XMLListValue extends AbstractReference {
 
 	private final Value value = new Value() {
+		@Override
 		public IValue getChild(String name, boolean resolve) {
 			IValue value = super.getChild(name, resolve);
 			if (value == null) {

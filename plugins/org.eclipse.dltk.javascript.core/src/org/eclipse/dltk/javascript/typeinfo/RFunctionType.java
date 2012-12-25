@@ -51,6 +51,7 @@ class RFunctionType extends RType implements IRFunctionType {
 		return sb.toString();
 	}
 
+	@Override
 	public TypeCompatibility isAssignableFrom(IRType type) {
 		if (super.isAssignableFrom(type).ok()) {
 			return TypeCompatibility.TRUE;

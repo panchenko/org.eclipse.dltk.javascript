@@ -78,6 +78,7 @@ public class FlowValidation extends AbstractNavigationVisitor<FlowStatus>
 		return status;
 	}
 
+	@Override
 	public FlowStatus visitThrowStatement(ThrowStatement node) {
 		if (node.getException() != null) {
 			visit(node.getException());

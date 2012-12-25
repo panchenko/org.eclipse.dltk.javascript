@@ -67,6 +67,7 @@ public class PropertyDeclaration extends ParentNode implements IDeclaration {
 		return initializer.getName();
 	}
 
+	@Override
 	public List<IStructureNode> getChildren() {
 		return value != null ? Collections.singletonList(value) : Collections
 				.<IStructureNode> emptyList();

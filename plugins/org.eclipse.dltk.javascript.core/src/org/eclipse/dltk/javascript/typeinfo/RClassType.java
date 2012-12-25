@@ -113,6 +113,7 @@ public class RClassType extends RType implements IRClassType {
 		return false;
 	}
 
+	@Override
 	public TypeCompatibility isAssignableFrom(IRType type) {
 		if (super.isAssignableFrom(type).ok()) {
 			return TypeCompatibility.TRUE;

@@ -183,8 +183,10 @@ public class TypeInferencer2 extends TypeSystemImpl implements
 	}
 
 	/**
-	 * Local (i.e. per-module) types, which are manually registered using
-	 * {@link ITypeInfoContext#registerLocalType(Type, Object)}.
+	 * Local (i.e. temporary and transient) types, which are manually registered
+	 * using {@link ITypeInfoContext#registerLocalType(Type, Object)}. The
+	 * registration is valid only within the same module, and this field is
+	 * cleared before processing the next module.
 	 */
 	private final Map<String, LocalTypeBucket> localTypes = new HashMap<String, LocalTypeBucket>();
 

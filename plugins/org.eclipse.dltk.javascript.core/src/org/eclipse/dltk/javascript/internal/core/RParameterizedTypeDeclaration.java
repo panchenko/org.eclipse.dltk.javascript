@@ -51,6 +51,7 @@ public class RParameterizedTypeDeclaration extends RTypeDeclaration implements
 		return true;
 	}
 
+	@Override
 	public List<IRType> getActualTypeArguments() {
 		return typeArguments;
 	}

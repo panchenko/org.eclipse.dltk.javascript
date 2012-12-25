@@ -152,6 +152,7 @@ public class LazyTypeReference extends AbstractReference {
 
 	}
 
+	@Override
 	public IValueReference getChild(String name) {
 		if (name.equals(IValueReference.FUNCTION_OP))
 			return this;

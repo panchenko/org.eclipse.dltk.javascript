@@ -89,6 +89,7 @@ public class RTypeQuery {
 			return visited.add(type);
 		}
 
+		@Override
 		protected boolean fetchNext() {
 			for (;;) {
 				if (!skipQueue.isEmpty()) {

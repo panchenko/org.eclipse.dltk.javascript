@@ -44,6 +44,7 @@ class RMapType extends RType implements IRMapType {
 		return valueType.hashCode();
 	}
 
+	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof RMapType) {
 			final RMapType other = (RMapType) obj;
@@ -57,6 +58,7 @@ class RMapType extends RType implements IRMapType {
 		return true;
 	}
 
+	@Override
 	public TypeCompatibility isAssignableFrom(IRType type) {
 		if (super.isAssignableFrom(type).ok()) {
 			return TypeCompatibility.TRUE;

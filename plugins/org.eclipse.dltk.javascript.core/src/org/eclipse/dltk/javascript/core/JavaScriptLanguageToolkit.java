@@ -22,6 +22,7 @@ public class JavaScriptLanguageToolkit extends AbstractLanguageToolkit {
 	public JavaScriptLanguageToolkit() {
 	}
 
+	@Override
 	public boolean languageSupportZIPBuildpath() {
 		return false;
 	}
@@ -42,18 +43,22 @@ public class JavaScriptLanguageToolkit extends AbstractLanguageToolkit {
 		return "org.eclipse.dltk.javascriptContentType";
 	}
 
+	@Override
 	public boolean canValidateContent(IResource resource) {
 		return false;
 	}
 
+	@Override
 	public boolean canValidateContent(File file) {
 		return false;
 	}
 
+	@Override
 	public boolean canValidateContent(IFileHandle file) {
 		return false;
 	}
 
+	@Override
 	public String getPreferenceQualifier() {
 		return JavaScriptPlugin.PLUGIN_ID;
 	}

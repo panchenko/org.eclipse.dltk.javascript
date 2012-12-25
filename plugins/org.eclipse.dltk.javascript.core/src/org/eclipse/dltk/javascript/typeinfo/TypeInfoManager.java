@@ -111,16 +111,19 @@ public class TypeInfoManager {
 				super(manager, configurationElement);
 			}
 
+			@Override
 			public ITypeProvider get() {
 				return create();
 			}
 
 		}
 
+		@Override
 		protected boolean isValidElement(IConfigurationElement element) {
 			return PROVIDER_ELEMENT.equals(element.getName());
 		}
 
+		@Override
 		protected LazyExtensionManager.Descriptor<ITypeProvider> createDescriptor(
 				IConfigurationElement element) {
 			return new TypeProviderDescriptor(this, element);

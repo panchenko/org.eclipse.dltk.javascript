@@ -27,18 +27,22 @@ public class TopValueThis extends ThisValue {
 		this.owner = collection;
 	}
 
+	@Override
 	public Set<String> getDirectChildren() {
 		return owner.getDirectChildren();
 	}
 
+	@Override
 	public Set<String> getDeletedChildren() {
 		return owner.getDeletedChildren();
 	}
 
+	@Override
 	public boolean hasChild(String name) {
 		return owner.hasChild(name);
 	}
 
+	@Override
 	public IValueReference getChild(String name) {
 		return owner.getChild(name);
 	}

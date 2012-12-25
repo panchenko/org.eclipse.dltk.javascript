@@ -262,6 +262,7 @@ public class TypeInfoValidator implements IBuildParticipant,
 			this.methods = methods;
 		}
 
+		@Override
 		public void call(ValidationVisitor visitor) {
 			visitor.validateCallExpression(scope, node, reference, arguments,
 					methods);
@@ -295,6 +296,7 @@ public class TypeInfoValidator implements IBuildParticipant,
 			this.lst = lst;
 		}
 
+		@Override
 		public void call(ValidationVisitor visitor) {
 			final IRType methodType = jsMethod.getType();
 			IRType firstType = null;
@@ -390,6 +392,7 @@ public class TypeInfoValidator implements IBuildParticipant,
 			this.reference = reference;
 		}
 
+		@Override
 		public void call(ValidationVisitor visitor) {
 			visitor.validate(scope, identifer, reference);
 		}
@@ -414,6 +417,7 @@ public class TypeInfoValidator implements IBuildParticipant,
 			this.collection = collection;
 		}
 
+		@Override
 		public void call(ValidationVisitor visitor) {
 			visitor.validateNewExpression(scope, collection,
 					node.getObjectClass(), reference, typeReference, arguments);
@@ -436,6 +440,7 @@ public class TypeInfoValidator implements IBuildParticipant,
 			this.exists = exists;
 		}
 
+		@Override
 		public void call(ValidationVisitor visitor) {
 			visitor.validateProperty(scope, node, reference, exists);
 		}

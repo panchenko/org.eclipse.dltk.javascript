@@ -35,6 +35,7 @@ class RUnionType extends RType implements IRUnionType {
 		return sb.toString();
 	}
 
+	@Override
 	public TypeCompatibility isAssignableFrom(IRType type) {
 		for (IRType target : targets) {
 			if (target.isAssignableFrom(type).ok()) {

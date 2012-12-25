@@ -68,6 +68,7 @@ public class RTypes {
 			return ITypeNames.UNDEFINED;
 		}
 
+		@Override
 		public TypeCompatibility isAssignableFrom(IRType type) {
 			return TypeCompatibility.valueOf(type == this);
 		}

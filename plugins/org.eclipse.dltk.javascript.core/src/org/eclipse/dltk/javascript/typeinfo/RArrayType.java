@@ -37,6 +37,7 @@ class RArrayType extends RType implements IRArrayType {
 		return itemType.hashCode();
 	}
 
+	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof RArrayType) {
 			final RArrayType other = (RArrayType) obj;
@@ -45,6 +46,7 @@ class RArrayType extends RType implements IRArrayType {
 		return false;
 	}
 
+	@Override
 	public TypeCompatibility isAssignableFrom(IRType type) {
 		if (super.isAssignableFrom(type).ok()) {
 			return TypeCompatibility.TRUE;

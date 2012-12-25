@@ -48,6 +48,7 @@ public interface ITypeInferenceHandler {
 			return null;
 		}
 
+		@Override
 		public String toString() {
 			return ITypeInferenceHandler.class.getSimpleName() + ".CONTINUE";
 		}

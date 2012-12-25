@@ -10,11 +10,13 @@ import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 public class JavaScriptTodoParserType extends
 		AbstractTodoTaskBuildParticipantType {
 
+	@Override
 	protected ITodoTaskPreferences getPreferences(IScriptProject project) {
 		return new TodoTaskPreferencesOnPreferenceLookupDelegate(
 				JavaScriptPlugin.PLUGIN_ID, project);
 	}
 
+	@Override
 	protected IBuildParticipant getBuildParticipant(
 			ITodoTaskPreferences preferences) {
 		return new JavaScriptTodoParser(preferences);

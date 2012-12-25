@@ -485,6 +485,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			return Boolean.TRUE;
 		}
 
+		@Override
 		public Boolean caseTypeVariableClassType(TypeVariableClassType object) {
 			return Boolean.TRUE;
 		}

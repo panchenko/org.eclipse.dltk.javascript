@@ -68,6 +68,7 @@ public class WeakTypeSystem extends TypeSystemImpl {
 		}
 	}
 
+	@Override
 	public String toString() {
 		return getClass().getSimpleName();
 	}
