@@ -31,7 +31,6 @@ import org.eclipse.dltk.javascript.internal.core.RParameter;
 import org.eclipse.dltk.javascript.internal.core.RParameterizedTypeDeclaration;
 import org.eclipse.dltk.javascript.internal.core.RProperty;
 import org.eclipse.dltk.javascript.internal.core.RTypeDeclaration;
-import org.eclipse.dltk.javascript.typeinfo.AttributeKey;
 import org.eclipse.dltk.javascript.typeinfo.IRArrayType;
 import org.eclipse.dltk.javascript.typeinfo.IRConstructor;
 import org.eclipse.dltk.javascript.typeinfo.IRContextualizableType;
@@ -493,7 +492,8 @@ public class TypeSystemImpl implements ITypeSystem {
 		}
 	}
 
-	public IRTypeTransformer newTypeContextualizer(IRTypeDeclaration declaration) {
+	protected IRTypeTransformer newTypeContextualizer(
+			IRTypeDeclaration declaration) {
 		return new TypeContextualizer(declaration);
 	}
 
@@ -563,13 +563,6 @@ public class TypeSystemImpl implements ITypeSystem {
 		}
 	}
 
-	/*
-	 * @see ITypeSystem#getAttribute(AttributeKey)
-	 */
-	public <T> T getAttribute(AttributeKey<T> key) {
-		return null;
-	}
-
 	private Map<Object, Object> values;
 
 	/*
@@ -591,7 +584,7 @@ public class TypeSystemImpl implements ITypeSystem {
 		values.put(key, value);
 	}
 
-	public static boolean isContextualizable(IRMember member) {
+	protected boolean isContextualizable(IRMember member) {
 		if (isContextualizable(member.getType())) {
 			return true;
 		}
@@ -626,14 +619,6 @@ public class TypeSystemImpl implements ITypeSystem {
 		return false;
 	}
 
-	public IRType contextualize(IRType type, IRTypeDeclaration declaration) {
-		if (isContextualizable(type)) {
-			final IRTypeTransformer transformer = newTypeContextualizer(declaration);
-			return transformer.transform(type);
-		} else {
-			return type;
-		}
-	}
 
 	public ITypeSystem getPrimary() {
 		return this;

@@ -17,7 +17,6 @@ import java.util.List;
 
 import org.eclipse.dltk.internal.javascript.ti.IValue;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
-import org.eclipse.dltk.javascript.typeinfo.AttributeKey;
 import org.eclipse.dltk.javascript.typeinfo.IRMember;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.IRTypeDeclaration;
@@ -87,11 +86,6 @@ class DelegatingTypeSystem implements ITypeSystem {
 				member, type);
 	}
 
-	public <T> T getAttribute(AttributeKey<T> key) {
-		final ITypeSystem current = current();
-		return current != null ? current.getAttribute(key) : null;
-	}
-
 	public Object getValue(Object key) {
 		final ITypeSystem current = current();
 		return current != null ? current.getValue(key) : null;
@@ -102,12 +96,6 @@ class DelegatingTypeSystem implements ITypeSystem {
 		if (current != null) {
 			current.setValue(key, value);
 		}
-	}
-
-	public IRType contextualize(IRType type, IRTypeDeclaration contextType) {
-		final ITypeSystem current = current();
-		return (current != null ? current : WEAK_TYPE_SYSTEM).contextualize(
-				type, contextType);
 	}
 
 	public IRType getTypeVariable(TypeVariable variable) {

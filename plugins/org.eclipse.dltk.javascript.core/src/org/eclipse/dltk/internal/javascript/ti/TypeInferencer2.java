@@ -37,13 +37,18 @@ import org.eclipse.dltk.javascript.typeinfo.ILocalTypeReference;
 import org.eclipse.dltk.javascript.typeinfo.IMemberEvaluator;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.IRMember;
+import org.eclipse.dltk.javascript.typeinfo.IRType;
+import org.eclipse.dltk.javascript.typeinfo.IRTypeDeclaration;
+import org.eclipse.dltk.javascript.typeinfo.IRTypeTransformer;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 import org.eclipse.dltk.javascript.typeinfo.ITypeProvider;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
+import org.eclipse.dltk.javascript.typeinfo.RTypes;
 import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.dltk.javascript.typeinfo.TypeMode;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
+import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
@@ -681,6 +686,23 @@ public class TypeInferencer2 extends TypeSystemImpl implements
 		if (!copy.isEmpty()) {
 			typeRS.removeAll(copy);
 		}
+		attributes.clear();
 	}
 
+	/*
+	 * @see ITypeInfoContext#contextualize(JSType)
+	 */
+	public IRType contextualize(JSType type) {
+		if (type != null) {
+			final IRType rt = RTypes.create(this, type);
+			final IRTypeDeclaration contextTypeDeclaration = getAttribute(CONTEXTUALIZE_WITH);
+			if (contextTypeDeclaration != null && isContextualizable(rt)) {
+				final IRTypeTransformer transformer = newTypeContextualizer(contextTypeDeclaration);
+				return transformer.transform(rt);
+			}
+			return rt;
+		} else {
+			return null;
+		}
+	}
 }

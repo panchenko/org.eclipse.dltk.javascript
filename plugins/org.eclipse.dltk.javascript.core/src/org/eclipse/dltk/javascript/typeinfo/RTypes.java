@@ -366,6 +366,9 @@ public class RTypes {
 		return create(current, type);
 	}
 
+	/**
+	 * Converts the specified type expression to the "resolved" type expression.
+	 */
 	public static IRType create(ITypeSystem typeSystem, JSType type) {
 		if (type == null) {
 			return null;

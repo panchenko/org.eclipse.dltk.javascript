@@ -734,8 +734,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	public IValueReference visitFunctionStatement(FunctionStatement node) {
 		final JSMethod method = generateJSMethod(node);
 		final ThisValue thisValue = new ThisValue();
-		thisValue.setDeclaredType(RTypes.create(this.getContext(),
-				method.getThisType()));
+		thisValue.setDeclaredType(this.context.contextualize(method
+				.getThisType()));
 		final IValueCollection function = new FunctionValueCollection(
 				peekContext(), method.getName(), thisValue,
 				node.isInlineBlock());
@@ -830,7 +830,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		if (type == null) {
 			return;
 		}
-		final IRType rt = RTypes.create(getContext(), type);
+		final IRType rt = context.contextualize(type);
 		setIRType(value, rt, lazyEnabled);
 	}
 
@@ -1351,8 +1351,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			final JSElement variable = new JSElement(id.getName());
 			getDocSupport().parseType(variable, tags, JSDocSupport.TYPE_TAGS,
 					reporter, getTypeChecker());
-			var.setDeclaredType(variable.getType() != null ? RTypes.create(
-					context, variable.getType()) : RTypes.ERROR);
+			var.setDeclaredType(variable.getType() != null ? context
+					.contextualize(variable.getType()) : RTypes.ERROR);
 
 			enterContext(collection);
 			if (catchClause.getFilterExpression() != null) {

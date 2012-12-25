@@ -13,6 +13,7 @@ package org.eclipse.dltk.javascript.typeinfo;
 
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
+import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
@@ -65,6 +66,14 @@ public interface ITypeInfoContext extends ITypeSystem {
 	ReferenceSource getSource();
 
 	/**
+	 * Returns current value for the specified attribute.
+	 * 
+	 * @param key
+	 * @return
+	 */
+	<T> T getAttribute(AttributeKey<T> key);
+
+	/**
 	 * Adds value for the specified attribute.
 	 * 
 	 * Current value of the attribute can be retrieved with
@@ -73,7 +82,6 @@ public interface ITypeInfoContext extends ITypeSystem {
 	 * @param key
 	 * @param value
 	 */
-	@Deprecated
 	<T> void pushAttribute(AttributeKey<T> key, T value);
 
 	/**
@@ -82,7 +90,6 @@ public interface ITypeInfoContext extends ITypeSystem {
 	 * @param key
 	 * @return
 	 */
-	@Deprecated
 	<T> T popAttribute(AttributeKey<T> key);
 
 	/**
@@ -104,4 +111,16 @@ public interface ITypeInfoContext extends ITypeSystem {
 	 * temporary.
 	 */
 	ILocalTypeReference registerLocalType(Type type);
+
+	/**
+	 * Attribute used by {@link #contextualize(IRType)}.
+	 */
+	static final AttributeKey<IRTypeDeclaration> CONTEXTUALIZE_WITH = new AttributeKey<IRTypeDeclaration>();
+
+	/**
+	 * Converts the specified type expression to the resolved type expression
+	 * and contextualizes it by replacing contextualizable type expressions with
+	 * the value of {@link #CONTEXTUALIZE_WITH} attribute.
+	 */
+	IRType contextualize(JSType type);
 }

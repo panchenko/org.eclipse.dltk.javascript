@@ -102,12 +102,6 @@ public interface ITypeSystem {
 	<E extends IRMember> E contextualize(E member, IRTypeDeclaration type);
 
 	/**
-	 * Contextualizes the specified type by replacing contextualizable type
-	 * expressions with the specified contextType.
-	 */
-	IRType contextualize(IRType type, IRTypeDeclaration contextType);
-
-	/**
 	 * Parameterizes the specified generic type with the specified parameters.
 	 */
 	IRTypeDeclaration parameterize(Type target, List<IRType> parameters);
@@ -118,14 +112,7 @@ public interface ITypeSystem {
 	 */
 	IRType getTypeVariable(TypeVariable variable);
 
-	/**
-	 * Returns current value for the specified attribute.
-	 * 
-	 * @param key
-	 * @return
-	 */
-	@Deprecated
-	<T> T getAttribute(AttributeKey<T> key);
+
 
 	/**
 	 * Returns the value for the specified key or <code>null</code>.

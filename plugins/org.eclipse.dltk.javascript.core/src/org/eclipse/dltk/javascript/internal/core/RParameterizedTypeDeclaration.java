@@ -14,7 +14,6 @@ package org.eclipse.dltk.javascript.internal.core;
 import java.util.List;
 
 import org.eclipse.dltk.internal.javascript.ti.IValue;
-import org.eclipse.dltk.javascript.typeinfo.AttributeKey;
 import org.eclipse.dltk.javascript.typeinfo.IRMember;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.IRTypeDeclaration;
@@ -146,10 +145,6 @@ public class RParameterizedTypeDeclaration extends RTypeDeclaration implements
 		return typeSystem.contextualize(member, type);
 	}
 
-	public IRType contextualize(IRType type, IRTypeDeclaration contextType) {
-		return typeSystem.contextualize(type, contextType);
-	}
-
 	public IRTypeDeclaration parameterize(Type target, List<IRType> parameters) {
 		return typeSystem.parameterize(target, parameters);
 	}
@@ -163,10 +158,6 @@ public class RParameterizedTypeDeclaration extends RTypeDeclaration implements
 			}
 		}
 		return null;
-	}
-
-	public <T> T getAttribute(AttributeKey<T> key) {
-		return typeSystem.getAttribute(key);
 	}
 
 	public Object getValue(Object key) {

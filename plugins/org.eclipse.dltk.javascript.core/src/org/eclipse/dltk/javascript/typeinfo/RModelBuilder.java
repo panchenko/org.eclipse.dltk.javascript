@@ -18,7 +18,6 @@ import java.util.Set;
 
 import org.eclipse.dltk.compiler.problem.IProblemCategory;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
-import org.eclipse.dltk.internal.javascript.ti.TypeSystemImpl;
 import org.eclipse.dltk.javascript.internal.core.RParameter;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMember;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
@@ -201,23 +200,23 @@ public class RModelBuilder {
 
 	}
 
-	public static IRMethod create(ITypeSystem context, IMethod method) {
+	public static IRMethod create(ITypeInfoContext context, IMethod method) {
 		if (method.isConstructor()) {
-			return new RConstructor(method.getName(), RTypes.create(context,
-					method.getType()), method.getSuppressedWarnings(),
-					method.getVisibility(), convertParams0(context,
-							method.getParameters()), method);
+			return new RConstructor(method.getName(),
+					context.contextualize(method.getType()),
+					method.getSuppressedWarnings(), method.getVisibility(),
+					convertParams0(context, method.getParameters()), method);
 		} else {
-			return new RMethod(method.getName(), RTypes.create(context,
-					method.getType()), method.getSuppressedWarnings(),
+			return new RMethod(method.getName(), context.contextualize(method
+					.getType()), method.getSuppressedWarnings(),
 					method.getVisibility(), convertParams0(context,
 							method.getParameters()), method);
 		}
 	}
 
-	public static IRVariable create(ITypeSystem context, IVariable variable) {
-		return new RVariable(variable.getName(), RTypes.create(context,
-				variable.getType()), variable.getSuppressedWarnings(),
+	public static IRVariable create(ITypeInfoContext context, IVariable variable) {
+		return new RVariable(variable.getName(), context.contextualize(variable
+				.getType()), variable.getSuppressedWarnings(),
 				variable.getVisibility(), variable);
 	}
 
@@ -243,7 +242,7 @@ public class RModelBuilder {
 		return new RParameter(name, type, kind);
 	}
 
-	private static List<IRParameter> convertParams0(ITypeSystem context,
+	private static List<IRParameter> convertParams0(ITypeInfoContext context,
 			List<IParameter> parameters) {
 		if (parameters.isEmpty()) {
 			return Collections.emptyList();
@@ -251,27 +250,12 @@ public class RModelBuilder {
 			final List<IRParameter> params = new ArrayList<IRParameter>(
 					parameters.size());
 			for (IParameter parameter : parameters) {
-				final IRType paramType = parameter.getType() != null ? RTypes
-						.create(context, parameter.getType()) : RTypes.any();
+				final IRType paramType = parameter.getType() != null ? context
+						.contextualize(parameter.getType()) : RTypes.any();
 				params.add(new RParameter(parameter.getName(), paramType,
 						parameter.getKind()));
 			}
 			return params;
-		}
-	}
-
-	public static IRMethod contextualize(ITypeSystem typeSystem,
-			IRMethod method, IRTypeDeclaration contextType) {
-		if (TypeSystemImpl.isContextualizable(method)) {
-			final IRTypeTransformer transformer = ((TypeSystemImpl) typeSystem)
-					.newTypeContextualizer(contextType);
-			final List<IRParameter> parameters = TypeSystemImpl
-					.transformParameters(method, transformer);
-			return new RMethod(method.getName(), transformer.transform(method
-					.getType()), method.getSuppressedWarnings(),
-					method.getVisibility(), parameters, method.getSource());
-		} else {
-			return method;
 		}
 	}
 
