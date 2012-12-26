@@ -147,10 +147,9 @@ public class JSDocValidatorFactory {
 					if (variable.getBound() != null) {
 						final IRType bound = RTypes.create(context,
 								variable.getBound());
-						final IRType actual = RTypes.create(
-								context,
-								parameterizedType.getActualTypeArguments().get(
-										i));
+						final IRType actual = context
+								.contextualize(parameterizedType
+										.getActualTypeArguments().get(i));
 						if (!bound.isAssignableFrom(actual).ok()) {
 							if (statuses == null) {
 								statuses = new ArrayList<ValidationStatus>();
