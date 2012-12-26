@@ -15,12 +15,10 @@ import static org.eclipse.dltk.javascript.core.tests.AllTests.PLUGIN_ID;
 import static org.eclipse.dltk.javascript.core.tests.contentassist.AbstractContentAssistTest.lastPositionInFile;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.dltk.codeassist.ISelectionEngine;
-import org.eclipse.dltk.codeassist.ISelectionRequestor;
 import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.core.DLTKLanguageManager;
 import org.eclipse.dltk.core.ILocalVariable;
@@ -36,6 +34,7 @@ import org.eclipse.dltk.core.search.SearchMatch;
 import org.eclipse.dltk.core.search.SearchParticipant;
 import org.eclipse.dltk.core.search.SearchPattern;
 import org.eclipse.dltk.core.search.SearchRequestor;
+import org.eclipse.dltk.core.tests.CodeAssistUtil;
 import org.eclipse.dltk.core.tests.model.AbstractModelTests;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
 import org.eclipse.dltk.javascript.core.Types;
@@ -90,59 +89,13 @@ public class SelectionTests extends AbstractModelTests {
 	}
 
 	private IModelElement[] select(IModuleSource module, final int position) {
-		ISelectionEngine engine = getEngine();
-		final List<IModelElement> elements = new ArrayList<IModelElement>();
-		engine.setRequestor(new ISelectionRequestor() {
-			@Override
-			public void acceptModelElement(IModelElement element) {
-				elements.add(element);
-			}
-
-			@Override
-			public void acceptForeignElement(Object element) {
-				if (element instanceof IModelElement) {
-					acceptModelElement((IModelElement) element);
-				}
-			}
-
-			@Override
-			public void acceptElement(Object element, ISourceRange range) {
-				acceptForeignElement(element);
-			}
-		});
-		final IModelElement[] result = engine
-				.select(module, position, position);
-		if (result != null) {
-			Collections.addAll(elements, result);
-		}
-		return elements.toArray(new IModelElement[elements.size()]);
+		return CodeAssistUtil.on(module).offset(position)
+				.codeSelect(getEngine());
 	}
 
 	private Object[] selectAll(IModuleSource module, final int position) {
-		ISelectionEngine engine = getEngine();
-		final List<Object> elements = new ArrayList<Object>();
-		engine.setRequestor(new ISelectionRequestor() {
-			@Override
-			public void acceptModelElement(IModelElement element) {
-				elements.add(element);
-			}
-
-			@Override
-			public void acceptForeignElement(Object element) {
-				elements.add(element);
-			}
-
-			@Override
-			public void acceptElement(Object element, ISourceRange range) {
-				elements.add(element);
-			}
-		});
-		final IModelElement[] result = engine
-				.select(module, position, position);
-		if (result != null) {
-			Collections.addAll(elements, result);
-		}
-		return elements.toArray();
+		return CodeAssistUtil.on(module).offset(position)
+				.codeSelectAll(getEngine());
 	}
 
 	public void test1() throws ModelException {
