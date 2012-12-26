@@ -40,7 +40,7 @@ public class Types {
 
 	public static final Type ERROR = initType(ITypeNames.ERROR);
 
-	private static Type initType(String name) {
+	protected static Type initType(String name) {
 		Type type = TypeInfoModelLoader.getInstance().getType(name);
 		if (type == null) {
 			JavaScriptPlugin.error("Created empty " + name
