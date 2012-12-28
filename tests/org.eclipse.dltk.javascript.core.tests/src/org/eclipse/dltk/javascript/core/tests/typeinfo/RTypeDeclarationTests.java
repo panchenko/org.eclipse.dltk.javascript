@@ -25,6 +25,7 @@ import org.eclipse.dltk.javascript.typeinfo.IRTypeDeclaration;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.TypeCompatibility;
 import org.eclipse.dltk.javascript.typeinfo.model.GenericType;
+import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeVariable;
 
@@ -113,6 +114,20 @@ public class RTypeDeclarationTests extends TestCase {
 				list.isAssignableFrom(listOfString));
 		assertEquals(TypeCompatibility.TRUE,
 				listOfString.isAssignableFrom(list));
+	}
+
+	public void testCycles() {
+		final Type aType = TypeInfoModelFactory.eINSTANCE.createType();
+		aType.setName("A");
+		final Type bType = TypeInfoModelFactory.eINSTANCE.createType();
+		bType.setName("B");
+		aType.setSuperType(bType);
+		bType.setSuperType(aType);
+
+		final IRTypeDeclaration a = typeSystem.convert(aType);
+		final IRTypeDeclaration b = typeSystem.convert(bType);
+		assertSame(b, a.getSuperType());
+		assertSame(a, b.getSuperType());
 	}
 
 }
