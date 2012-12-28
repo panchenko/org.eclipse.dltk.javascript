@@ -26,12 +26,9 @@ import org.eclipse.dltk.javascript.core.dom.BinaryOperator;
 import org.eclipse.dltk.javascript.core.dom.CatchClause;
 import org.eclipse.dltk.javascript.core.dom.DomPackage;
 import org.eclipse.dltk.javascript.core.dom.FunctionExpression;
-import org.eclipse.dltk.javascript.core.dom.Identifier;
-import org.eclipse.dltk.javascript.core.dom.Label;
 import org.eclipse.dltk.javascript.core.dom.Node;
 import org.eclipse.dltk.javascript.core.dom.Source;
 import org.eclipse.dltk.javascript.core.dom.Statement;
-import org.eclipse.dltk.javascript.core.dom.StringLiteral;
 import org.eclipse.dltk.javascript.core.dom.TryStatement;
 import org.eclipse.dltk.javascript.core.dom.UnaryExpression;
 import org.eclipse.dltk.javascript.core.dom.UnaryOperator;
@@ -43,6 +40,7 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.change.ChangeDescription;
 import org.eclipse.emf.ecore.change.ChangeKind;
 import org.eclipse.emf.ecore.change.FeatureChange;
@@ -98,8 +96,16 @@ public class RewriteAnalyzer extends DomSwitch<Boolean> {
 
 	// Processes EReference only
 	private void processFeature(Node node, FeatureChange fc) {
-		if (fc.getFeature() instanceof EAttribute)
+		if (fc.getFeature() instanceof EAttribute) {
+			final EAttribute attribute = (EAttribute) fc.getFeature();
+			if (!attribute.isMany()
+					&& attribute.getEAttributeType() == EcorePackage.Literals.ESTRING
+					&& EcoreUtil.getAnnotation(attribute, null, "value") != null) {
+				addEdit(new ReplaceEdit(node.getBegin(), node.getEnd()
+						- node.getBegin(), (String) node.eGet(attribute)), node);
+			}
 			return;
+		}
 		if (!fc.getFeature().isMany()) {
 			Node n = (Node) node.eGet(fc.getFeature());
 			Node o = (Node) fc.getReferenceValue();
@@ -263,36 +269,6 @@ public class RewriteAnalyzer extends DomSwitch<Boolean> {
 	static boolean isTextUnary(Object op) {
 		return op == UnaryOperator.DELETE || op == UnaryOperator.VOID
 				|| op == UnaryOperator.TYPEOF || op == UnaryOperator.YIELD;
-	}
-
-	@Override
-	public Boolean caseIdentifier(Identifier node) {
-		if (cd.getObjectChanges().get(node) != null)
-			for (FeatureChange fc : cd.getObjectChanges().get(node))
-				if (fc.getFeature() == DomPackage.Literals.IDENTIFIER__NAME)
-					addEdit(new ReplaceEdit(node.getBegin(), node.getEnd()
-							- node.getBegin(), node.getName()), node);
-		return true;
-	}
-
-	@Override
-	public Boolean caseStringLiteral(StringLiteral node) {
-		if (cd.getObjectChanges().get(node) != null)
-			for (FeatureChange fc : cd.getObjectChanges().get(node))
-				if (fc.getFeature() == DomPackage.Literals.STRING_LITERAL__TEXT)
-					addEdit(new ReplaceEdit(node.getBegin(), node.getEnd()
-							- node.getBegin(), node.getText()), node);
-		return true;
-	}
-
-	@Override
-	public Boolean caseLabel(Label node) {
-		if (cd.getObjectChanges().get(node) != null)
-			for (FeatureChange fc : cd.getObjectChanges().get(node))
-				if (fc.getFeature() == DomPackage.Literals.LABEL__NAME)
-					addEdit(new ReplaceEdit(node.getBegin(), node.getEnd()
-							- node.getBegin(), node.getName()), node);
-		return true;
 	}
 
 	@Override

@@ -2940,6 +2940,56 @@ public class DomPackageImpl extends EPackageImpl implements DomPackage {
 
 		// Create resource
 		createResource(eNS_URI);
+
+		// Create annotations
+		// null
+		createNullAnnotations();
+	}
+
+    /**
+	 * Initializes the annotations for <b>null</b>.
+	 * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+	 * @generated
+	 */
+    protected void createNullAnnotations() {
+		String source = null;		
+		addAnnotation
+		  (getIdentifier_Name(), 
+		   source, 
+		   new String[] {
+			 "value", "1"
+		   });		
+		addAnnotation
+		  (getLabel_Name(), 
+		   source, 
+		   new String[] {
+			 "value", "1"
+		   });		
+		addAnnotation
+		  (getBooleanLiteral_Text(), 
+		   source, 
+		   new String[] {
+			 "value", "1"
+		   });		
+		addAnnotation
+		  (getNumericLiteral_Text(), 
+		   source, 
+		   new String[] {
+			 "value", "1"
+		   });		
+		addAnnotation
+		  (getStringLiteral_Text(), 
+		   source, 
+		   new String[] {
+			 "value", "1"
+		   });		
+		addAnnotation
+		  (getRegularExpressionLiteral_Text(), 
+		   source, 
+		   new String[] {
+			 "value", "1"
+		   });
 	}
 
 } //DomPackageImpl
