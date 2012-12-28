@@ -497,7 +497,7 @@ public class TypeSystemImpl implements ITypeSystem {
 		return new TypeContextualizer(declaration);
 	}
 
-	public static List<IRParameter> transformParameters(final IRMethod method,
+	private static List<IRParameter> transformParameters(final IRMethod method,
 			final IRTypeTransformer transformer) {
 		if (method.getParameterCount() == 0) {
 			return Collections.emptyList();
@@ -618,7 +618,6 @@ public class TypeSystemImpl implements ITypeSystem {
 		}
 		return false;
 	}
-
 
 	public ITypeSystem getPrimary() {
 		return this;
