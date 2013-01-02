@@ -412,19 +412,18 @@
   	<members xsi:type="ref:Property" name="NEGATIVE_INFINITY" directType="Number" static="true" description="Special value representing negative infinity; returned on overflow."/>
   	<members xsi:type="ref:Property" name="POSITIVE_INFINITY" directType="Number" static="true" description="Special value representing infinity; returned on overflow."/>
     <members xsi:type="ref:Method" name="toExponential" directType="String" description="Converts the value of the object into an exponential notation.">
-      <parameters name="numberOfDecimals"/>
+      <parameters name="numberOfDecimals" directType="Number" kind="OPTIONAL"/>
     </members>
     <members xsi:type="ref:Method" name="toFixed" directType="String" description="Formats a number to the specified number of decimals.">
-      <parameters name="numberOfDecimals"/>
+      <parameters name="numberOfDecimals" directType="Number" kind="OPTIONAL"/>
     </members>
     <members xsi:type="ref:Method" name="toPrecision" directType="String" description="Converts a number into an exponential notation if it has more digits than specified.">
-      <parameters name="numberOfDigits"/>
+      <parameters name="numberOfDigits" directType="Number" kind="OPTIONAL"/>
     </members>
     <members xsi:type="ref:Method" name="valueOf" directType="Number" description="Returns the primitive value of a Number object."/>
     <members xsi:type="ref:Method" name="toString" directType="String" description="Returns a String value for this object.The toString method parses its first argument, and attempts to return a string representation in the specified radix (base)">
-      <parameters name="radix"  kind="OPTIONAL"/>
+      <parameters name="radix" directType="Number" kind="OPTIONAL"/>
     </members>
-    
   </ref:Type>
   <ref:TypeAlias source="number" target="Number"/>
   <ref:Type name="String" kind="PREDEFINED" description="String is a global object that may be used to construct String  instances." superType="Object">
