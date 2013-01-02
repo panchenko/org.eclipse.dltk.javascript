@@ -175,23 +175,32 @@ public class JSDocContentAccess {
 		ISourceRange range = member.getSourceRange();
 		if (range == null)
 			return null;
-		IBuffer buf = null;
-		// if (this.isBinary()) {
-		// buf = this.getClassFile().getBuffer();
-		// } else
-		{
-			ISourceModule compilationUnit = member.getSourceModule();
-			if (!compilationUnit.isConsistent()) {
-				return null;
-			}
-			buf = compilationUnit.getBuffer();
-			if (buf == null) {
-				buf = new SimpleBuffer(compilationUnit.getSource());
-			}
-		}
+
+		ISourceModule compilationUnit = member.getSourceModule();
 		final int possibleDocEnd = range.getOffset();
 		final int possibleDocStart = PreviousMemberDetector.execute(
 				possibleDocEnd, possibleDocEnd + range.getLength(), member);
+
+		return getDocRange(compilationUnit, possibleDocStart, possibleDocEnd);
+	}
+
+	/**
+	 * @param compilationUnit
+	 * @param possibleDocEnd
+	 * @param possibleDocStart
+	 * @return
+	 * @throws ModelException
+	 */
+	public static ISourceRange getDocRange(ISourceModule compilationUnit,
+			final int possibleDocStart, final int possibleDocEnd)
+			throws ModelException {
+		if (!compilationUnit.isConsistent()) {
+			return null;
+		}
+		IBuffer buf = compilationUnit.getBuffer();
+		if (buf == null) {
+			buf = new SimpleBuffer(compilationUnit.getSource());
+		}
 		final String sm = buf.getText(possibleDocStart, possibleDocEnd
 				- possibleDocStart);
 		int start = sm.lastIndexOf(JAVADOC_BEGIN);

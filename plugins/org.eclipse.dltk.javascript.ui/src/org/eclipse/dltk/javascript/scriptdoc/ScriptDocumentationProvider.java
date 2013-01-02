@@ -11,13 +11,20 @@ package org.eclipse.dltk.javascript.scriptdoc;
 
 import java.io.Reader;
 
+import org.eclipse.dltk.core.ILocalVariable;
 import org.eclipse.dltk.core.IMember;
+import org.eclipse.dltk.core.IModelElement;
+import org.eclipse.dltk.core.ISourceModule;
+import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.javascript.internal.ui.JavaScriptUI;
+import org.eclipse.dltk.ui.documentation.DocumentationUtils;
+import org.eclipse.dltk.ui.documentation.IDocumentationResponse;
 import org.eclipse.dltk.ui.documentation.IScriptDocumentationProvider;
+import org.eclipse.dltk.ui.documentation.IScriptDocumentationProviderExtension2;
 
 public class ScriptDocumentationProvider implements
-		IScriptDocumentationProvider {
+		IScriptDocumentationProvider, IScriptDocumentationProviderExtension2 {
 
 	public Reader getInfo(IMember element, boolean lookIntoParents,
 			boolean lookIntoExternal) {
@@ -34,4 +41,31 @@ public class ScriptDocumentationProvider implements
 		return null;
 	}
 
+	public IDocumentationResponse getDocumentationFor(Object element) {
+		if (element instanceof IMember) {
+			Reader reader = getInfo((IMember) element, true, true);
+			return DocumentationUtils
+					.wrap(element, ((IMember) element), reader);
+		} else if (element instanceof ILocalVariable) {
+			ILocalVariable unresolvedElement = (ILocalVariable) element;
+			try {
+				ISourceRange sourceRange = unresolvedElement.getSourceRange();
+				int possibleDocStart = 0;
+				int possibleDocEnd = sourceRange.getOffset();
+				ISourceRange docRange = JSDocContentAccess.getDocRange(
+						(ISourceModule) unresolvedElement.getOpenable(),
+						possibleDocStart,
+						possibleDocEnd);
+				JavaDocCommentReader reader = ScriptdocContentAccess.getReader(
+						((IModelElement) element).getOpenable(), docRange);
+
+				return DocumentationUtils.wrap(element,
+						((ILocalVariable) element), new JavaDoc2HTMLTextReader(
+								reader));
+			} catch (ModelException e) {
+				return null;
+			}
+		}
+		return null;
+	}
 }

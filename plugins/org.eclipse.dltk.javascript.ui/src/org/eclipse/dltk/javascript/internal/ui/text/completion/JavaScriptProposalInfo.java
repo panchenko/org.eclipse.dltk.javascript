@@ -15,15 +15,24 @@ import java.io.IOException;
 import java.io.Reader;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.core.IMember;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.IModelElementVisitor;
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.core.ModelException;
+import org.eclipse.dltk.internal.javascript.ti.JSDocSupport;
+import org.eclipse.dltk.javascript.ast.Comment;
+import org.eclipse.dltk.javascript.ast.JSNode;
+import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
+import org.eclipse.dltk.javascript.core.NodeFinder;
 import org.eclipse.dltk.javascript.internal.ui.JavaScriptUI;
+import org.eclipse.dltk.javascript.parser.JavaScriptParserUtil;
+import org.eclipse.dltk.javascript.scriptdoc.JavaDoc2HTMLTextReader;
 import org.eclipse.dltk.javascript.scriptdoc.ScriptDocumentationProvider;
+import org.eclipse.dltk.javascript.scriptdoc.StringJavaDocCommentReader;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
@@ -103,6 +112,20 @@ public class JavaScriptProposalInfo extends ProposalInfo {
 					(IMember) found.element, true, true);
 			if (contentReader != null) {
 				return getString(contentReader);
+			}
+		}
+		final Script script = JavaScriptParserUtil.parse(m, null);
+		final NodeFinder nodeFinder = new NodeFinder(location.getNameStart(),
+				location.getNameEnd());
+		nodeFinder.locate(script);
+		ASTNode node = nodeFinder.getNode();
+		if (node instanceof JSNode) {
+			Comment comment = JSDocSupport.getComment((JSNode) node);
+
+			if (comment != null && comment.getText().length() > 0) {
+				return getString(new JavaDoc2HTMLTextReader(
+						new StringJavaDocCommentReader(
+						comment.getText())));
 			}
 		}
 		return null;
