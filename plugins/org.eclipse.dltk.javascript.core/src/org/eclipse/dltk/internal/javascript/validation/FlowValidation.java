@@ -25,6 +25,7 @@ import org.eclipse.dltk.javascript.ast.CatchClause;
 import org.eclipse.dltk.javascript.ast.ContinueStatement;
 import org.eclipse.dltk.javascript.ast.DefaultClause;
 import org.eclipse.dltk.javascript.ast.DoWhileStatement;
+import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.ast.ForEachInStatement;
 import org.eclipse.dltk.javascript.ast.ForInStatement;
 import org.eclipse.dltk.javascript.ast.ForStatement;
@@ -38,6 +39,7 @@ import org.eclipse.dltk.javascript.ast.SwitchComponent;
 import org.eclipse.dltk.javascript.ast.SwitchStatement;
 import org.eclipse.dltk.javascript.ast.ThrowStatement;
 import org.eclipse.dltk.javascript.ast.TryStatement;
+import org.eclipse.dltk.javascript.ast.VoidExpression;
 import org.eclipse.dltk.javascript.ast.WhileStatement;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.parser.Reporter;
@@ -101,7 +103,9 @@ public class FlowValidation extends AbstractNavigationVisitor<FlowStatus>
 		int endRange = -1;
 		boolean firstBreak = true;
 		for (Statement statement : statements) {
-			if (status.isTerminated()) {
+			if (isFunctionDeclaration(statement)) {
+				visit(statement);
+			} else if (status.isTerminated()) {
 				if (isSwitch && statement instanceof BreakStatement
 						&& firstBreak && status.isReturned()) {
 					firstBreak = false;
@@ -123,6 +127,17 @@ public class FlowValidation extends AbstractNavigationVisitor<FlowStatus>
 			reporter.report();
 		}
 		return status;
+	}
+
+	private boolean isFunctionDeclaration(Statement statement) {
+		if (statement instanceof VoidExpression) {
+			final Expression expression = ((VoidExpression) statement)
+					.getExpression();
+			return expression instanceof FunctionStatement
+					&& ((FunctionStatement) expression).isDeclaration();
+		} else {
+			return false;
+		}
 	}
 
 	@Override

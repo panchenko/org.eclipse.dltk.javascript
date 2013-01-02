@@ -362,7 +362,7 @@ public class FlowValidationTests extends AbstractValidationTest {
 				Collections.singleton(JavaScriptProblems.UNREACHABLE_CODE),
 				problemIds);
 	}
-	
+
 	public void testIfAndSwitchWithNoReturns() throws Exception {
 		StringList code = new StringList();
 		code.add("function criteria_tree_node_text() {");
@@ -388,4 +388,56 @@ public class FlowValidationTests extends AbstractValidationTest {
 				.toString()));
 		assertEquals(problemIds.toString(), 0, problemIds.size());
 	}
+
+	public void testNestedFunctionDeclaration() {
+		final StringList code = new StringList();
+		code.add("function test() {");
+		code.add("  return 1");
+		code.add("  function nested() {");
+		code.add("    return 1;");
+		code.add("  }");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
 	}
+
+	public void testNestedFunctionDeclaration_nestedError() {
+		final StringList code = new StringList();
+		code.add("function test() {");
+		code.add("  return 1");
+		code.add("  function nested(x) {");
+		code.add("    if (a > 0) { return 1; }");
+		code.add("    else { return -1; }");
+		code.add("    return false;");
+		code.add("  }");
+		code.add("}");
+		final String sCode = code.toString();
+		final List<IProblem> problems = validate(sCode);
+		assertEquals(problems.toString(), 1, problems.size());
+		final IProblem problem = problems.get(0);
+		assertEquals(JavaScriptProblems.UNREACHABLE_CODE, problem.getID());
+		assertEquals(
+				"return false;",
+				sCode.substring(problem.getSourceStart(),
+						problem.getSourceEnd()));
+	}
+
+	public void testNestedFunctionDeclaration_outerError() {
+		final StringList code = new StringList();
+		code.add("function test() {");
+		code.add("  return 1");
+		code.add("  function nested() {");
+		code.add("  }");
+		code.add("  return false;");
+		code.add("}");
+		final String sCode = code.toString();
+		final List<IProblem> problems = validate(sCode);
+		assertEquals(problems.toString(), 1, problems.size());
+		final IProblem problem = problems.get(0);
+		assertEquals(JavaScriptProblems.UNREACHABLE_CODE, problem.getID());
+		assertEquals(
+				"return false;",
+				sCode.substring(problem.getSourceStart(),
+						problem.getSourceEnd()));
+	}
+}
