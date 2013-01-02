@@ -17,6 +17,8 @@ import static org.eclipse.dltk.javascript.core.Types.NUMBER;
 import static org.eclipse.dltk.javascript.core.Types.OBJECT;
 import static org.eclipse.dltk.javascript.core.Types.STRING;
 import static org.eclipse.dltk.javascript.typeinfo.RTypes.simple;
+import static org.junit.Assert.assertThat;
+import static org.junit.matchers.JUnitMatchers.hasItem;
 import junit.framework.TestCase;
 
 import org.eclipse.dltk.internal.javascript.ti.TypeSystemImpl;
@@ -128,6 +130,27 @@ public class RTypeDeclarationTests extends TestCase {
 		final IRTypeDeclaration b = typeSystem.convert(bType);
 		assertSame(b, a.getSuperType());
 		assertSame(a, b.getSuperType());
+	}
+
+	public void testTraits() {
+		final Type aType = TypeInfoModelFactory.eINSTANCE.createType();
+		aType.setName("A");
+		final Type bType = TypeInfoModelFactory.eINSTANCE.createType();
+		bType.setName("B");
+		final Type cType = TypeInfoModelFactory.eINSTANCE.createType();
+		cType.setName("C");
+		aType.setSuperType(bType);
+		aType.getTraits().add(cType);
+		bType.getTraits().add(cType);
+
+		final IRTypeDeclaration a = typeSystem.convert(aType);
+		final IRTypeDeclaration b = typeSystem.convert(bType);
+		final IRTypeDeclaration c = typeSystem.convert(cType);
+		assertSame(b, a.getSuperType());
+		assertNull(b.getSuperType());
+		assertNull(c.getSuperType());
+		assertThat(a.getTraits(), hasItem(c));
+		assertThat(b.getTraits(), hasItem(c));
 	}
 
 }

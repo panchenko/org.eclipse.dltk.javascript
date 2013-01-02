@@ -80,8 +80,9 @@ public class RTypeDeclaration implements IRTypeDeclaration {
 		return superType;
 	}
 
-	public List<? extends IRTypeDeclaration> getTraits() {
-		return traits;
+	@SuppressWarnings("unchecked")
+	public List<IRTypeDeclaration> getTraits() {
+		return (List<IRTypeDeclaration>) (List<?>) traits;
 	}
 
 	public List<IRMember> getMembers() {

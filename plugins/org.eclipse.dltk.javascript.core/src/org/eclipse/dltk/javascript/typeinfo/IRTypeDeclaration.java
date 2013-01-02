@@ -38,7 +38,7 @@ public interface IRTypeDeclaration extends IRElement {
 	/**
 	 * Returns list of traits/interfaces implemented by this type
 	 */
-	List<? extends IRTypeDeclaration> getTraits();
+	List<IRTypeDeclaration> getTraits();
 
 	/**
 	 * Returns list of members
@@ -104,7 +104,7 @@ public interface IRTypeDeclaration extends IRElement {
 	TypeCompatibility isAssignableFrom(IRTypeDeclaration declaration);
 
 	/**
-	 * Finds the method with specified name and {@link IRMember#isStatic()}
+	 * Finds the method with the specified name and {@link IRMember#isStatic()}
 	 * attribute.
 	 */
 	@Nullable
