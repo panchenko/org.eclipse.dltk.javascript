@@ -63,14 +63,6 @@ public enum JavaScriptProblems implements IProblemIdentifier,
 	 * @since 3.0
 	 */
 	DEPRECATED_FUNCTION,
-	/**
-	 * @since 3.0
-	 */
-	INSTANCE_METHOD,
-	/**
-	 * @since 3.0
-	 */
-	STATIC_METHOD,
 
 	/**
 	 * @since 4.0
@@ -122,18 +114,6 @@ public enum JavaScriptProblems implements IProblemIdentifier,
 	 * @since 3.0
 	 */
 	HIDDEN_PROPERTY,
-	/**
-	 * TODO (alex) UNUSED
-	 * 
-	 * @since 3.0
-	 */
-	INSTANCE_PROPERTY,
-	/**
-	 * TODO (alex) UNUSED
-	 * 
-	 * @since 3.0
-	 */
-	STATIC_PROPERTY,
 	/**
 	 * @since 3.0
 	 */

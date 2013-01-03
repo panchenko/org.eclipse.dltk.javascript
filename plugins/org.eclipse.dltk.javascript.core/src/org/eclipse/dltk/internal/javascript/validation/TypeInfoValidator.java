@@ -1042,16 +1042,6 @@ public class TypeInfoValidator implements IBuildParticipant,
 										reference.getName(), type.getName()),
 								methodNode.sourceStart(), methodNode
 										.sourceEnd());
-					} else if (JavaScriptValidations.isStatic(reference
-							.getParent())
-							&& hasInstanceMethod(type, reference.getName())) {
-						reporter.reportProblem(
-								JavaScriptProblems.INSTANCE_METHOD,
-								NLS.bind(
-										ValidationMessages.StaticReferenceToNoneStaticMethod,
-										reference.getName(), type.getName()),
-								methodNode.sourceStart(), methodNode
-										.sourceEnd());
 					} else if (!reference.exists()) {
 						reporter.reportProblem(
 								JavaScriptProblems.UNDEFINED_METHOD,
@@ -1173,26 +1163,6 @@ public class TypeInfoValidator implements IBuildParticipant,
 					.getArguments().size())) {
 				reportMethodParameterError(methodNode, arguments, method);
 				return;
-			}
-			if (JavaScriptValidations.isStatic(reference.getParent())
-					&& !method.isStatic()) {
-				IRType type = JavaScriptValidations.typeOf(reference
-						.getParent());
-				reporter.reportProblem(
-						JavaScriptProblems.INSTANCE_METHOD,
-						NLS.bind(
-								ValidationMessages.StaticReferenceToNoneStaticMethod,
-								reference.getName(), TypeUtil.getName(type)),
-						methodNode.sourceStart(), methodNode.sourceEnd());
-			} else if (reference.getParent() != null
-					&& !JavaScriptValidations.isStatic(reference.getParent())
-					&& method.isStatic()) {
-				IRType type = JavaScriptValidations.typeOf(reference
-						.getParent());
-				reporter.reportProblem(JavaScriptProblems.STATIC_METHOD, NLS
-						.bind(ValidationMessages.ReferenceToStaticMethod,
-								reference.getName(), type.getName()),
-						methodNode.sourceStart(), methodNode.sourceEnd());
 			}
 			final List<IRParameter> parameters = method.getParameters();
 			final TypeCompatibility compatibility = validateParameters(
