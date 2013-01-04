@@ -24,9 +24,11 @@ import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.core.Types;
 import org.eclipse.dltk.javascript.typeinference.IAssignProtection;
 import org.eclipse.dltk.javascript.typeinference.ILocationProvider;
+import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
+import org.eclipse.dltk.javascript.typeinfo.IMemberEvaluator;
 import org.eclipse.dltk.javascript.typeinfo.IRArrayType;
 import org.eclipse.dltk.javascript.typeinfo.IRClassType;
 import org.eclipse.dltk.javascript.typeinfo.IRElement;
@@ -41,6 +43,7 @@ import org.eclipse.dltk.javascript.typeinfo.IRSimpleType;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.IRTypeDeclaration;
 import org.eclipse.dltk.javascript.typeinfo.IRUnionType;
+import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.MemberPredicate;
@@ -48,6 +51,7 @@ import org.eclipse.dltk.javascript.typeinfo.MemberPredicates;
 import org.eclipse.dltk.javascript.typeinfo.RSimpleType;
 import org.eclipse.dltk.javascript.typeinfo.RTypeMemberQuery;
 import org.eclipse.dltk.javascript.typeinfo.RTypes;
+import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
@@ -55,7 +59,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 
 public abstract class ElementValue implements IValue {
 
-	public static ElementValue findMember(ITypeSystem context, IRType type,
+	public static IValue findMember(ITypeSystem context, IRType type,
 			String name) {
 		return findMember(context, type, name, MemberPredicates.ALWAYS_TRUE);
 	}
@@ -81,8 +85,9 @@ public abstract class ElementValue implements IValue {
 		}
 	}
 
-	static ElementValue findMemberA(ITypeSystem context, IRType type,
-			String name) {
+	static IValue findMemberA(ITypeSystem context, IRType type,
+ String name,
+			boolean resolve) {
 		final MemberPredicate predicate;
 		if (type instanceof IRClassType) {
 			final Type target = ((IRClassType) type).getTarget();
@@ -98,11 +103,16 @@ public abstract class ElementValue implements IValue {
 		} else {
 			predicate = MemberPredicates.NON_STATIC;
 		}
-		return findMember(context, type, name, predicate);
+		return findMember(context, type, name, predicate, resolve);
 	}
 
-	public static ElementValue findMember(ITypeSystem context, IRType type,
+	public static IValue findMember(ITypeSystem context, IRType type,
 			String name, MemberPredicate predicate) {
+		return findMember(context, type, name, predicate, true);
+	}
+
+	public static IValue findMember(ITypeSystem context, IRType type,
+			String name, MemberPredicate predicate, boolean resolve) {
 		if (type != null) {
 			final ITypeSystem saved = type.activeTypeSystem();
 			if (saved != null) {
@@ -163,7 +173,7 @@ public abstract class ElementValue implements IValue {
 			}
 		} else if (type instanceof IRUnionType) {
 			for (IRType unionTarget : ((IRUnionType) type).getTargets()) {
-				ElementValue member = findMember(context, unionTarget, name,
+				IValue member = findMember(context, unionTarget, name,
 						predicate);
 				if (member != null)
 					return member;
@@ -205,6 +215,23 @@ public abstract class ElementValue implements IValue {
 					}
 					return new MemberValue(context,
 							selection.toArray(new IRMember[selection.size()]));
+				} else if (resolve && type instanceof IRSimpleType
+						&& context instanceof ITypeInfoContext) {
+					Type target = ((IRSimpleType) type).getTarget();
+					for (IMemberEvaluator evaluator : TypeInfoManager
+							.getMemberEvaluators()) {
+						final IValueCollection collection = evaluator.valueOf(
+								(ITypeInfoContext) context, target);
+						if (collection != null) {
+							if (collection instanceof IValueProvider) {
+								IValueReference child = collection
+										.getChild(name);
+								if (child instanceof IValueProvider) {
+									return ((IValueProvider) child).getValue();
+								}
+							}
+						}
+					}
 				}
 			}
 		}
@@ -325,7 +352,7 @@ public abstract class ElementValue implements IValue {
 			IValue value = children.get(name);
 			if (value == null) {
 				for (IRType type : types) {
-					value = findMemberA(context, type, name);
+					value = findMemberA(context, type, name, resolve);
 					if (value != null) {
 						if (value instanceof ElementValue) {
 							value = ((ElementValue) value).resolveValue();
@@ -472,8 +499,8 @@ public abstract class ElementValue implements IValue {
 					return functionOperator;
 				}
 			}
-			final ElementValue child = ElementValue.findMemberA(context,
-					getDeclaredType(), name);
+			final IValue child = ElementValue.findMemberA(context,
+					getDeclaredType(), name, resolve);
 			if (child != null) {
 				return child;
 			}
@@ -585,10 +612,10 @@ public abstract class ElementValue implements IValue {
 					}
 				}
 				final IRType propType = getDeclaredType();
-				final ElementValue eValue = ElementValue.findMemberA(context,
-						propType, name);
-				if (eValue != null) {
-					child = eValue.resolveValue();
+				final IValue eValue = ElementValue.findMemberA(context,
+						propType, name, resolve);
+				if (eValue instanceof ElementValue) {
+					child = ((ElementValue) eValue).resolveValue();
 					children.put(name, child);
 				}
 			}
@@ -696,10 +723,10 @@ public abstract class ElementValue implements IValue {
 						return child;
 					}
 				}
-				ElementValue eValue = ElementValue.findMemberA(context, type,
-						name);
-				if (eValue != null) {
-					child = eValue.resolveValue();
+				IValue eValue = ElementValue.findMemberA(context, type, name,
+						resolve);
+				if (eValue instanceof ElementValue) {
+					child = ((ElementValue) eValue).resolveValue();
 					children.put(name, child);
 				}
 			}
@@ -795,8 +822,8 @@ public abstract class ElementValue implements IValue {
 
 			IRType type = getDeclaredType();
 			if (type != null) {
-				final ElementValue child = ElementValue.findMemberA(context,
-						type, name);
+				final IValue child = ElementValue.findMemberA(context, type,
+						name, resolve);
 				if (child != null) {
 					return child;
 				}

@@ -613,6 +613,21 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		assertTrue(name.getChild("service").exists());
 		assertTrue(name.getChild("test").exists());
 	}
+	
+	public void testExampleTypeWithCollectionInArray() {
+		List<String> lines = new StringList();
+		lines.add("/** @type Array<" + ExampleTypeProvider.TYPE_WITH_COLLECTION + ">"
+				+ " */");
+		lines.add("var b = new Array()");
+		IValueCollection collection = inference(lines.toString());
+		IValueReference name = collection.getChild("b");
+		assertTrue(name.exists());
+		assertEquals("Array<" + ExampleTypeProvider.TYPE_WITH_COLLECTION + ">", name
+				.getDeclaredType().getName());
+		IValueReference array = name.getChild("[]");
+		assertTrue(array.getChild("service").exists());
+		assertTrue(array.getChild("test").exists());
+	}
 
 	public void testGenericArrayTypeMethod() {
 		List<String> lines = new StringList();

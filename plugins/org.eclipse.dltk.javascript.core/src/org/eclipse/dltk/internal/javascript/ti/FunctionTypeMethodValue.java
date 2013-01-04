@@ -58,8 +58,8 @@ class FunctionTypeMethodValue extends ElementValue implements IValue {
 				return null;
 			}
 		}
-		final ElementValue child = ElementValue.findMemberA(context,
-				getDeclaredType(), name);
+		final IValue child = ElementValue.findMemberA(context,
+				getDeclaredType(), name, resolve);
 		if (child != null) {
 			return child;
 		}

@@ -210,7 +210,7 @@ public class ImmutableValue implements IValue, IValue2 {
 			} else {
 				final ITypeSystem typeSystem = value.getTypeSystem();
 				IValue member = ElementValue.findMemberA(typeSystem,
-						value.declaredType, childName);
+						value.declaredType, childName, true);
 				if (member != null) {
 					result.add(member);
 				}
@@ -222,7 +222,7 @@ public class ImmutableValue implements IValue, IValue2 {
 				}
 				for (IRType type : valueTypes) {
 					member = ElementValue.findMemberA(typeSystem, type,
-							childName);
+							childName, true);
 					if (member != null) {
 						result.add(member);
 					}
@@ -269,8 +269,8 @@ public class ImmutableValue implements IValue, IValue2 {
 		if (value == null && (declaredType != null || !types.isEmpty())) {
 			final ITypeSystem typeSystem = getTypeSystem();
 			if (declaredType != null) {
-				value = ElementValue
-						.findMemberA(typeSystem, declaredType, name);
+				value = ElementValue.findMemberA(typeSystem, declaredType,
+						name, resolve);
 				if (value != null) {
 					if (elementValues == null)
 						elementValues = new HashMap<String, IValue>(4, 0.9f);
@@ -279,7 +279,8 @@ public class ImmutableValue implements IValue, IValue2 {
 				}
 			}
 			for (IRType type : types) {
-				value = ElementValue.findMemberA(typeSystem, type, name);
+				value = ElementValue.findMemberA(typeSystem, type, name,
+						resolve);
 				if (value != null) {
 					if (elementValues == null)
 						elementValues = new HashMap<String, IValue>(4, 0.9f);
