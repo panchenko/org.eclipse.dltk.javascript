@@ -14,7 +14,9 @@ package org.eclipse.dltk.internal.javascript.ti;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
@@ -156,6 +158,24 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	public TypeInferencerVisitor(ITypeInferenceContext context) {
 		super(context);
+	}
+
+	private static class ForwardDeclaration {
+		final JSMethod method;
+		final IValueReference reference;
+
+		public ForwardDeclaration(JSMethod method, IValueReference reference) {
+			this.method = method;
+			this.reference = reference;
+		}
+	}
+
+	private final Map<FunctionStatement, ForwardDeclaration> forwardDeclarations = new IdentityHashMap<FunctionStatement, ForwardDeclaration>();
+
+	@Override
+	public void initialize() {
+		super.initialize();
+		forwardDeclarations.clear();
 	}
 
 	private final Stack<Branching> branchings = new Stack<Branching>();
@@ -741,9 +761,30 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		return null;
 	}
 
+	private void initializeFunction(JSMethod method, IValueReference function) {
+		function.setLocation(method.getLocation());
+		function.setKind(ReferenceKind.FUNCTION);
+		function.setDeclaredType(RTypes.FUNCTION);
+		function.setAttribute(IReferenceAttributes.METHOD, method);
+		function.setAttribute(IReferenceAttributes.R_METHOD,
+				RModelBuilder.create(getContext(), method));
+		function.setAttribute(IReferenceAttributes.RESOLVING, Boolean.TRUE);
+	}
+
 	@Override
 	public IValueReference visitFunctionStatement(FunctionStatement node) {
-		final JSMethod method = generateJSMethod(node);
+		final JSMethod method;
+		final IValueReference result;
+		final ForwardDeclaration forward = forwardDeclarations.remove(node);
+		if (forward != null) {
+			method = forward.method;
+			result = forward.reference;
+		} else {
+			assert !node.isDeclaration();
+			method = createMethod(node);
+			result = new AnonymousValue();
+			initializeFunction(method, result);
+		}
 		final ThisValue thisValue = new ThisValue();
 		thisValue.setDeclaredType(this.context.contextualize(method
 				.getThisType()));
@@ -758,21 +799,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			setTypeImpl(refArg, parameter.getType());
 			refArg.setLocation(parameter.getLocation());
 		}
-		final Identifier methodName = node.getName();
-		final IValueReference result;
-		if (isChildFunction(node)) {
-			result = peekContext().createChild(method.getName());
-		} else {
-			result = new AnonymousValue();
-		}
-		result.setLocation(method.getLocation());
-		result.setKind(ReferenceKind.FUNCTION);
-		result.setDeclaredType(RTypes.FUNCTION);
-		result.setAttribute(IReferenceAttributes.METHOD, method);
-		result.setAttribute(IReferenceAttributes.R_METHOD,
-				RModelBuilder.create(getContext(), method));
 		result.setAttribute(IReferenceAttributes.FUNCTION_SCOPE, function);
-		result.setAttribute(IReferenceAttributes.RESOLVING, Boolean.TRUE);
 		enterContext(function);
 		Set<IProblemIdentifier> suppressed = null;
 		try {
@@ -799,23 +826,13 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	}
 
 	/**
-	 * @param node
-	 * @param methodName
-	 * @return
-	 */
-	protected static boolean isChildFunction(FunctionStatement node) {
-		return node.getName() != null
-				&& !(node.getParent() instanceof BinaryOperation)
-				&& !(node.getParent() instanceof VariableDeclaration)
-				&& !(node.getParent() instanceof PropertyInitializer)
-				&& !(node.getParent() instanceof NewExpression);
-	}
-
-	/**
+	 * Creates "declaration" model for the specified function AST node. Is
+	 * called once before processing this function.
+	 * 
 	 * @param node
 	 * @return
 	 */
-	protected JSMethod generateJSMethod(FunctionStatement node) {
+	protected JSMethod createMethod(FunctionStatement node) {
 		final JSMethod method = new JSMethod(node, getSource());
 		for (IModelBuilder extension : context.getModelBuilders()) {
 			extension.processMethod(node, method, reporter, getTypeChecker());
@@ -1300,7 +1317,14 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		final IValueCollection context = peekContext();
 		for (JSDeclaration declaration : scope.getDeclarations()) {
 			if (declaration instanceof FunctionStatement) {
-
+				final FunctionStatement funcNode = (FunctionStatement) declaration;
+				assert funcNode.isDeclaration();
+				final JSMethod method = createMethod(funcNode);
+				final IValueReference function = context.createChild(method
+						.getName());
+				initializeFunction(method, function);
+				forwardDeclarations.put(funcNode, new ForwardDeclaration(
+						method, function));
 			} else if (declaration instanceof VariableDeclaration) {
 				final VariableDeclaration varDeclaration = (VariableDeclaration) declaration;
 				final IValueReference var = createVariable(context,

@@ -46,6 +46,7 @@ import org.eclipse.dltk.internal.javascript.ti.ConstantValue;
 import org.eclipse.dltk.internal.javascript.ti.ElementValue;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
+import org.eclipse.dltk.internal.javascript.ti.JSMethod;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencerVisitor;
 import org.eclipse.dltk.javascript.ast.Argument;
@@ -698,14 +699,18 @@ public class TypeInfoValidator implements IBuildParticipant,
 
 		@Override
 		public IValueReference visitFunctionStatement(FunctionStatement node) {
-			validateHidesByFunction(node);
-
 			enterFunctionScope();
 			IValueReference reference = super.visitFunctionStatement(node);
 			final IRMethod method = (IRMethod) reference.getAttribute(R_METHOD);
 			leaveFunctionScope(method, node);
 
 			return reference;
+		}
+
+		@Override
+		protected JSMethod createMethod(FunctionStatement node) {
+			validateHidesByFunction(node);
+			return super.createMethod(node);
 		}
 
 		private void validateHidesByFunction(FunctionStatement node) {

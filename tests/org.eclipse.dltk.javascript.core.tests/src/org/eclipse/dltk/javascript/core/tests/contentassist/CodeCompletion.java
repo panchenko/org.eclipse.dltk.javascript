@@ -38,11 +38,8 @@ public class CodeCompletion extends AbstractCompletionTest {
 	 * dumb completion on function
 	 */
 	public void test1() {
-		LinkedList<CompletionProposal> results = new LinkedList<CompletionProposal>();
-		ICompletionEngine c = createEngine(results,
-				JSCompletionEngine.OPTION_NONE);
-		c.complete(createModule("test1.js"), 0, 0);
-		assertEquals(0, results.size());
+		final IModuleSource module = createModule("test1.js");
+		basicTest(module, 0, new String[] { "main" });
 	}
 
 	/**
@@ -703,7 +700,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 		c.complete(module, position, 0);
 		assertEquals(2 + getMembersOfObject().size(), results.size());
 	}
-	
+
 	public void testArrayInArrayLookup() {
 		final StringList code = new StringList();
 		code.add("function test() {");
