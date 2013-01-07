@@ -335,8 +335,19 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 						&& !left.exists()) {
 					if (isFunctionDeclaration(property))
 						left.setKind(ReferenceKind.FUNCTION);
-					else
+					else {
 						left.setKind(ReferenceKind.FIELD);
+						final Comment comment = JSDocSupport.getComment(node);
+						final JSDocTags tags = parseTags(comment);
+						final JSDocTag typeTag = tags.get(JSDocTag.TYPE);
+						if (typeTag != null) {
+							final JSType type = getDocSupport().parseType(
+									typeTag, false, getProblemReporter());
+							if (type != null) {
+								setIRType(left, type.toRType(context), true);
+							}
+						}
+					}
 					left.setLocation(ReferenceLocation.create(getSource(),
 							property.sourceStart(), property.sourceEnd(),
 							property.getProperty().sourceStart(), property
