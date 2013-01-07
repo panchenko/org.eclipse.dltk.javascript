@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.compiler.problem.IProblem;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
 import org.eclipse.dltk.core.tests.util.StringList;
@@ -2816,5 +2817,53 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("}");
 		List<IProblem> validate = validate(code.toString());
 		assertEquals(0, validate.size());
+	}
+	
+	public void testVariableTypedAsCustomTypeReferecingItselfArrayThroughDoc() {
+//		if (notYetImplemented(this))
+//			return;
+		 // this works now because the Type Array<MyObject> is mapped to Array<Any> and then everything is allowed
+		// but it shouldn't it should be allowed because there is really a myfunc method with a number function..
+		final StringList code = new StringList();
+		code.add("function MyObject() {");
+		code.add(" this.num = 10;");
+		code.add(" /**");
+		code.add("  * @param {Number} x");
+		code.add("  * @return {MyObject}");
+		code.add("  */");
+		code.add(" this.myfunc = function(x) {");
+		code.add(" 	return null;");
+		code.add(" }");
+		code.add("}");
+		code.add("function test() {");
+		code.add("	/** @type {Array<MyObject>} */");
+		code.add("	this.scopeOneItems = new Array();");
+		code.add("	this.scopeOneItems[1].myfunc(1)");
+		code.add("}");
+		List<IProblem> validate = validate(code.toString());
+		assertEquals(0, validate.size());
+	}
+	
+	public void testVariableTypedAsCustomTypeReferecingItselfArrayThroughDocWrongCall() {
+		if (notYetImplemented(this))
+			return;
+		final StringList code = new StringList();
+		code.add("function MyObject() {");
+		code.add(" this.num = 10;");
+		code.add(" /**");
+		code.add("  * @param {Number} x");
+		code.add("  * @return {MyObject}");
+		code.add("  */");
+		code.add(" this.myfunc = function(x) {");
+		code.add(" 	return null;");
+		code.add(" }");
+		code.add("}");
+		code.add("function test() {");
+		code.add("	/** @type {Array<MyObject>} */");
+		code.add("	this.scopeOneItems = new Array();");
+		code.add("	this.scopeOneItems[1].myfunc('1')");
+		code.add("}");
+		List<IProblem> validate = validate(code.toString());
+		assertEquals(1, validate.size());
 	}
 }
