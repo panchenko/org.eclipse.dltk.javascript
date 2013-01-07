@@ -727,4 +727,22 @@ public class CodeCompletion extends AbstractCompletionTest {
 		int position = lastPositionInFile(".", module);
 		basicTest(module, position, names);
 	}
+	
+	public void testVariableTypedAsCustomTypeArrayThroughDoc() {
+		if (notYetImplemented(this))
+			return;
+		final StringList code = new StringList();
+		code.add("function MyObject() {");
+		code.add(" this.num = 10;");
+		code.add("}");
+		code.add("function test() {");
+		code.add("	/** @type {Array<MyObject>} */");
+		code.add("	this.scopeOneItems = new Array();");
+		code.add("	this.scopeOneItems[1].");
+		code.add("}");
+		final IModuleSource module = new TestModule(code.toString());
+		String[] names = concat(getMembersOfObject(), "num");
+		int position = lastPositionInFile(".", module);
+		basicTest(module, position, names);
+	}
 }
