@@ -91,10 +91,6 @@ public abstract class TypeInferencerVisitorBase extends
 		}
 	}
 
-	@Deprecated
-	protected final void initialize0() {
-	}
-
 	protected List<ITypeInferenceHandler> createHandlers() {
 		final List<ITypeInferenceHandler> handlers = new ArrayList<ITypeInferenceHandler>();
 		for (ITypeInferenceHandlerFactory factory : TypeInfoManager
