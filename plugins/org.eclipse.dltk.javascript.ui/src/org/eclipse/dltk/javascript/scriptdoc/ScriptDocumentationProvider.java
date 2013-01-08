@@ -54,14 +54,24 @@ public class ScriptDocumentationProvider implements
 				int possibleDocEnd = sourceRange.getOffset();
 				ISourceRange docRange = JSDocContentAccess.getDocRange(
 						(ISourceModule) unresolvedElement.getOpenable(),
-						possibleDocStart,
-						possibleDocEnd);
-				JavaDocCommentReader reader = ScriptdocContentAccess.getReader(
-						((IModelElement) element).getOpenable(), docRange);
+						possibleDocStart, possibleDocEnd);
+				if (docRange != null) {
+					String text = unresolvedElement.getOpenable().getBuffer()
+							.getText(0, possibleDocEnd);
+					int indexOfLastLine = text.lastIndexOf('\n');
+					indexOfLastLine = text.lastIndexOf('\n',
+							indexOfLastLine - 1);
+					if ((docRange.getOffset() + docRange.getLength()) > indexOfLastLine) {
+						JavaDocCommentReader reader = ScriptdocContentAccess
+								.getReader(
+										((IModelElement) element).getOpenable(),
+										docRange);
 
-				return DocumentationUtils.wrap(element,
-						((ILocalVariable) element), new JavaDoc2HTMLTextReader(
-								reader));
+						return DocumentationUtils.wrap(element,
+								((ILocalVariable) element),
+								new JavaDoc2HTMLTextReader(reader));
+					}
+				}
 			} catch (ModelException e) {
 				return null;
 			}
