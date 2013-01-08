@@ -21,6 +21,9 @@ import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
  * Resolved type used during type inference. It is created based on the
  * {@link Type} model declaration by the {@link ITypeSystem}, for generic types
  * it can be also parameterized.
+ * 
+ * @see Type
+ * @see ITypeSystem
  */
 public interface IRTypeDeclaration extends IRElement {
 

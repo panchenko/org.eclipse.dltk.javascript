@@ -15,10 +15,34 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import org.eclipse.dltk.internal.javascript.ti.IValue;
+import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
+import org.eclipse.dltk.internal.javascript.ti.TypeSystemImpl;
+import org.eclipse.dltk.javascript.internal.core.RParameterizedTypeDeclaration;
 import org.eclipse.dltk.javascript.internal.core.ThreadTypeSystemImpl;
+import org.eclipse.dltk.javascript.internal.core.TypeSystems;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeVariable;
 
+/**
+ * Type System is responsible for converting model {@link Type} to the
+ * "resolved" {@link IRTypeDeclaration} representation.
+ * 
+ * <p>
+ * There are a few implementations of this interface provided:
+ * <ul>
+ * <li>{@link TypeSystemImpl} is a standalone implementation, which is used
+ * mostly for {@link TypeSystems#GLOBAL}
+ * <li>{@link TypeInferencer2} is the entry point to invoke type
+ * inference/validations.
+ * <li>Also there are some delegating implementations, e.g.
+ * {@link RParameterizedTypeDeclaration} implements it, but delegates most of
+ * the calls to the parent
+ * </ul>
+ * 
+ * @see IRTypeDeclaration
+ * @see Type
+ * @noimplement This interface is not intended to be implemented by clients.
+ */
 public interface ITypeSystem {
 
 	/**
@@ -111,8 +135,6 @@ public interface ITypeSystem {
 	 * being parameterized at the moment) or <code>null</code>.
 	 */
 	IRType getTypeVariable(TypeVariable variable);
-
-
 
 	/**
 	 * Returns the value for the specified key or <code>null</code>.
