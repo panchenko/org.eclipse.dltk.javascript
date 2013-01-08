@@ -1270,7 +1270,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("* @param {Object} anchor");
 		code.add("*/");
 		code.add("function test(anchor) {");
-		code.add("if(anchor.xxx && anchor.yyyy){}");
+		code.add("  if(anchor.xxx && anchor.yyyy){}");
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
@@ -1319,19 +1319,20 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 	public void testNestedAnonymousReturnType() {
 		List<String> code = new StringList();
 		code.add("function Test() {");
-		code.add(" function Node() {");
-		code.add(" this.fun = function() {");
-		code.add("  return new Node();");
-		code.add("}}");
-		code.add("this.getNode = function() {");
-		code.add(" return new Node();");
-		code.add(" }");
+		code.add("  function Node() {");
+		code.add("    this.fun = function() {");
+		code.add("      return new Node();");
+		code.add("    }");
+		code.add("  }");
+		code.add("  this.getNode = function() {");
+		code.add("    return new Node();");
+		code.add("  }");
 		code.add("}");
 		code.add("function caller(){");
-		code.add(" var x = new Test();");
-		code.add(" var node = x.getNode();");
-		code.add(" var node2 = node.fun();");
-		code.add(" var node3 = node2.fun();");
+		code.add("  var x = new Test();");
+		code.add("  var node = x.getNode();");
+		code.add("  var node2 = node.fun();");
+		code.add("  var node3 = node2.fun();");
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
@@ -1340,20 +1341,21 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 	public void testMoreDeeplyNestedCallsToAnonymousReturnType() {
 		List<String> code = new StringList();
 		code.add("function Test() {");
-		code.add(" function Node() {");
-		code.add(" this.fun = function() {");
-		code.add("  return new Node();");
-		code.add("}}");
-		code.add("this.getNode = function() {");
-		code.add(" return new Node();");
-		code.add(" }");
+		code.add("  function Node() {");
+		code.add("    this.fun = function() {");
+		code.add("      return new Node();");
+		code.add("    }");
+		code.add("  }");
+		code.add("  this.getNode = function() {");
+		code.add("    return new Node();");
+		code.add("  }");
 		code.add("}");
 		code.add("function caller(){");
-		code.add(" var x = new Test();");
-		code.add(" var node = x.getNode();");
-		code.add(" var node2 = node.fun();");
-		code.add(" var node3 = node2.fun();");
-		code.add(" var node4 = node3.fun();");
+		code.add("  var x = new Test();");
+		code.add("  var node = x.getNode();");
+		code.add("  var node2 = node.fun();");
+		code.add("  var node3 = node2.fun();");
+		code.add("  var node4 = node3.fun();");
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
@@ -1364,20 +1366,20 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 			return;
 		List<String> code = new StringList();
 		code.add("function Test() {");
-		code.add(" function Node() {");
-		code.add(" this.fun = function() {");
-		code.add("  return new Node();");
-		code.add("}}");
-		code.add("this.getNode = function() {");
-		code.add(" return new Node();");
-		code.add(" }");
-		code.add("this.Node = Node;");
+		code.add("  function Node() {");
+		code.add("    this.fun = function() {");
+		code.add("      return new Node();");
+		code.add("    }");
+		code.add("  }");
+		code.add("  this.getNode = function() {");
+		code.add("    return new Node();");
+		code.add("  }");
+		code.add("  this.Node = Node;");
 		code.add("}");
-		code.add("/**");
-		code.add(" * @return {Test.Node} */");
+		code.add("/** @return {Test.Node} */");
 		code.add("function caller(){");
-		code.add(" var x = new Test();");
-		code.add(" return x.getNode();");
+		code.add("  var x = new Test();");
+		code.add("  return x.getNode();");
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
@@ -1386,19 +1388,20 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 	public void testNestedFunctionTypeNewConstruct() {
 		List<String> code = new StringList();
 		code.add("function Test() {");
-		code.add(" function Node() {");
-		code.add(" this.fun = function() {");
-		code.add("  return new Node();");
-		code.add("}}");
-		code.add("this.getNode = function() {");
-		code.add(" return new Node();");
-		code.add(" }");
-		code.add("this.Node = Node;");
+		code.add("  function Node() {");
+		code.add("    this.fun = function() {");
+		code.add("      return new Node();");
+		code.add("    }");
+		code.add("  }");
+		code.add("  this.getNode = function() {");
+		code.add("    return new Node();");
+		code.add("  }");
+		code.add("  this.Node = Node;");
 		code.add("}");
-		code.add("function caller(){");
-		code.add(" var x = new Test();");
-		code.add(" var node =  new x.Node();");
-		code.add(" node.fun();");
+		code.add("function caller() {");
+		code.add("  var x = new Test();");
+		code.add("  var node =  new x.Node();");
+		code.add("  node.fun();");
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
@@ -2671,7 +2674,6 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(JavaScriptProblems.WRONG_PARAMETERS, problems.get(0)
 				.getID());
 	}
-	
 
 	public void testReturnWith2NewInstances() throws Exception {
 		if (notYetImplemented(this)) {
@@ -2683,11 +2685,9 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add(" if (!myParam) { return new myObject(); }");
 		code.add(" return new myObject();");
 		code.add("}");
-		final List<IProblem> problems = validate(code
-				.toString());
+		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
 
 	public void testReturnWith1NewInstanceAnd1CallInstance() throws Exception {
 		if (notYetImplemented(this)) {
@@ -2702,11 +2702,10 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add(" if (!myParam) { return new myObject(); }");
 		code.add(" return getMyObject();");
 		code.add("}");
-		final List<IProblem> problems = validate(code
-				.toString());
+		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
+
 	public void testReturnWith2CallInstance() throws Exception {
 		if (notYetImplemented(this)) {
 			return;
@@ -2723,20 +2722,20 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add(" if (!myParam) { return getMyObject2(); }");
 		code.add(" return getMyObject();");
 		code.add("}");
-		final List<IProblem> problems = validate(code
-				.toString());
+		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
-	public void testReturnWith1CallJSDocInstanceAnd1NewInstance() throws Exception {
+
+	public void testReturnWith1CallJSDocInstanceAnd1NewInstance()
+			throws Exception {
 		if (notYetImplemented(this)) {
 			return;
 		}
 		StringList code = new StringList();
 		code.add("function myObject() { this.me = 'myself'; }");
-		code.add("/**"); 
+		code.add("/**");
 		code.add(" * @return {myObject}");
-		code.add(" */"); 
+		code.add(" */");
 		code.add("function getMyObject() {");
 		code.add(" return null;");
 		code.add("}");
@@ -2744,26 +2743,25 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add(" if (!myParam) { return new myObject(); }");
 		code.add(" return getMyObject();");
 		code.add("}");
-		final List<IProblem> problems = validate(code
-				.toString());
+		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
+
 	public void testReturnWith2CallJSDocInstance() throws Exception {
 		if (notYetImplemented(this)) {
 			return;
 		}
 		StringList code = new StringList();
 		code.add("function myObject() { this.me = 'myself'; }");
-		code.add("/**"); 
+		code.add("/**");
 		code.add(" * @return {myObject}");
-		code.add(" */"); 
+		code.add(" */");
 		code.add("function getMyObject() {");
 		code.add(" return null;");
 		code.add("}");
-		code.add("/**"); 
+		code.add("/**");
 		code.add(" * @return {myObject}");
-		code.add(" */"); 
+		code.add(" */");
 		code.add("function getMyObject2() {");
 		code.add(" return null;");
 		code.add("}");
@@ -2771,41 +2769,38 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add(" if (!myParam) { return getMyObject2(); }");
 		code.add(" return getMyObject();");
 		code.add("}");
-		final List<IProblem> problems = validate(code
-				.toString());
+		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
+
 	public void testGenericReturnCallSort() {
 		StringList code = new StringList();
-		code.add("/**"); 
+		code.add("/**");
 		code.add(" * @return {Array<String>}");
-		code.add(" */"); 
+		code.add(" */");
 		code.add("function getJSFormHierarchy() {");
 		code.add(" /** @type {Array<String>} */");
 		code.add(" var retval = new Array();");
 		code.add(" return retval.sort(function(){});");
-		code.add("}"); 
-		final List<IProblem> problems = validate(code
-				.toString());
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
+
 	public void testGenericReturnCallReverse() {
 		StringList code = new StringList();
-		code.add("/**"); 
+		code.add("/**");
 		code.add(" * @return {Array<String>}");
-		code.add(" */"); 
+		code.add(" */");
 		code.add("function getJSFormHierarchy() {");
 		code.add(" /** @type {Array<String>} */");
 		code.add(" var retval = new Array();");
 		code.add(" return retval.reverse();");
-		code.add("}"); 
-		final List<IProblem> problems = validate(code
-				.toString());
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
+
 	public void testRecordTypeObjectProperty() {
 		StringList code = new StringList();
 		code.add("/**");
@@ -2818,7 +2813,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		List<IProblem> validate = validate(code.toString());
 		assertEquals(0, validate.size());
 	}
-	
+
 	public void testVariableTypedAsCustomTypeReferecingItselfArrayThroughDoc() {
 //		if (notYetImplemented(this))
 //			return;
@@ -2843,7 +2838,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		List<IProblem> validate = validate(code.toString());
 		assertEquals(0, validate.size());
 	}
-	
+
 	public void testVariableTypedAsCustomTypeReferecingItselfArrayThroughDocWrongCall() {
 		if (notYetImplemented(this))
 			return;
