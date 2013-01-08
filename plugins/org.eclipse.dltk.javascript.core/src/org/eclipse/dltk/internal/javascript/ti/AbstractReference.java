@@ -234,7 +234,7 @@ public abstract class AbstractReference implements IValueReference,
 					} else {
 						addValue(value);
 					}
-				} else {
+				} else if (!reference.getName().equals(FUNCTION_OP)) {
 					boolean resolvedToType = false;
 					// if not already in the final resolve, try to look if it
 					// did already resolve up the chain
@@ -255,6 +255,8 @@ public abstract class AbstractReference implements IValueReference,
 						}
 					}
 					resolved = finalResolve || resolvedToType;
+				} else {
+					resolved = false;
 				}
 			}
 		}

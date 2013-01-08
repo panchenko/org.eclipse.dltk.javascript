@@ -2861,4 +2861,22 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		List<IProblem> validate = validate(code.toString());
 		assertEquals(1, validate.size());
 	}
+	
+	public void testLazyFunctionCallWithJSDocArrayReturnType() {
+		final StringList code = new StringList();
+		code.add("function test() {");
+		code.add(" var x = getChildFormsInEditMode();");
+		code.add(" x.length;");
+		code.add("}");
+		code.add("/**");
+		code.add("   * @return {Array<String>}");
+		code.add(" */");
+		code.add("function getChildFormsInEditMode() {");
+		code.add(" /** @type {Array<String>} */");
+		code.add(" var _formAr = [];");
+		code.add(" return _formAr;");
+		code.add("}");
+		List<IProblem> validate = validate(code.toString());
+		assertEquals(0, validate.size());
+	}
 }
