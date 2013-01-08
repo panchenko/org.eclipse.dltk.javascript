@@ -114,8 +114,22 @@ public class RTypeMemberQuery implements Iterable<IRMember> {
 		private final Set<QueueItem> visited = new HashSet<QueueItem>();
 		private final List<QueueItem> queue = new ArrayList<QueueItem>();
 
-		public TypeIterator() {
-			queue.addAll(types);
+		public TypeIterator(int mode) {
+			if (mode == ALL) {
+				queue.addAll(types);
+			} else {
+				assert mode == SUPERTYPES;
+				for (QueueItem qi : types) {
+					final IRTypeDeclaration type = qi.type;
+					final IRTypeDeclaration superType = type.getSuperType();
+					if (superType != null) {
+						queue.add(new QueueItem(superType, qi.predicate));
+					}
+					for (IRTypeDeclaration trait : type.getTraits()) {
+						queue.add(new QueueItem(trait, qi.predicate));
+					}
+				}
+			}
 			current = queue.iterator();
 		}
 
@@ -154,16 +168,19 @@ public class RTypeMemberQuery implements Iterable<IRMember> {
 		}
 	}
 
+	static final int ALL = 0;
+	static final int SUPERTYPES = 1;
+
 	private class MemberIterator extends CompoundIterator<IRMember> {
 
 		private final TypeIterator typeIterator;
 		private final Set<IRTypeDeclaration> entrypoints = new HashSet<IRTypeDeclaration>();
 
-		public MemberIterator() {
+		public MemberIterator(int mode) {
 			for (QueueItem item : types) {
 				entrypoints.add(item.type);
 			}
-			typeIterator = new TypeIterator();
+			typeIterator = new TypeIterator(mode);
 			current = Collections.<IRMember> emptyList().iterator();
 		}
 
@@ -215,7 +232,7 @@ public class RTypeMemberQuery implements Iterable<IRMember> {
 	}
 
 	public Iterator<IRMember> iterator() {
-		return new MemberIterator();
+		return new MemberIterator(ALL);
 	}
 
 	/**
@@ -237,6 +254,7 @@ public class RTypeMemberQuery implements Iterable<IRMember> {
 		private List<Object> abstractMethods = new ArrayList<Object>();
 
 		public IgnoreDuplicateMemberIterator(Collection<String> ignoreMembers) {
+			super(ALL);
 			this.ignored = ignoreMembers != null ? ignoreMembers : Collections
 					.<String> emptySet();
 		}
@@ -435,6 +453,20 @@ public class RTypeMemberQuery implements Iterable<IRMember> {
 	@Override
 	public String toString() {
 		return getClass().getSimpleName() + types;
+	}
+
+	/**
+	 * Finds the super method with the specified name.
+	 */
+	public IRMethod findSuperMethod(String methodName) {
+		for (Iterator<IRMember> i = new MemberIterator(SUPERTYPES); i.hasNext();) {
+			final IRMember member = i.next();
+			if (member instanceof IRMethod
+					&& methodName.equals(member.getName())) {
+				return (IRMethod) member;
+			}
+		}
+		return null;
 	}
 
 }

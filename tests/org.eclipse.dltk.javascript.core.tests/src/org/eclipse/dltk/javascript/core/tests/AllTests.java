@@ -23,6 +23,7 @@ import org.eclipse.dltk.javascript.core.tests.typeinfo.GenericMethodTypeInferenc
 import org.eclipse.dltk.javascript.core.tests.typeinfo.JSDocSupportTests;
 import org.eclipse.dltk.javascript.core.tests.typeinfo.JSDocTypeParserTests;
 import org.eclipse.dltk.javascript.core.tests.typeinfo.RTypeDeclarationTests;
+import org.eclipse.dltk.javascript.core.tests.typeinfo.RTypeMemberQueryTest;
 import org.eclipse.dltk.javascript.core.tests.typeinfo.RTypeTests;
 import org.eclipse.dltk.javascript.core.tests.typeinfo.TypeInfoModelTests;
 import org.eclipse.dltk.javascript.core.tests.typeinfo.TypeMemberQueryTest;
@@ -46,6 +47,7 @@ public class AllTests {
 				"Test for org.eclipse.dltk.javascript.core");
 		// $JUnit-BEGIN$
 		suite.addTestSuite(TypeMemberQueryTest.class);
+		suite.addTest(new JUnit4TestAdapter(RTypeMemberQueryTest.class));
 		suite.addTestSuite(BuildChangeTests.class);
 		suite.addTestSuite(TypeInfoModelTests.class);
 		suite.addTestSuite(TypeQueryTests.class);
