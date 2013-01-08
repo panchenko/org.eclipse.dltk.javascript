@@ -391,6 +391,36 @@ public class RTypeMemberQuery implements Iterable<IRMember> {
 	}
 
 	/**
+	 * Finds the member of the specified type with the specified name. Returns
+	 * the member found or <code>null</code> otherwise.
+	 */
+	@SuppressWarnings("unchecked")
+	protected <T extends IRMember> T findMember(String memberName,
+			Class<T> memberType) {
+		for (IRMember member : this) {
+			if (memberType.isInstance(member)
+					&& memberName.equals(member.getName())) {
+				return (T) member;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Finds the method with the specified name.
+	 */
+	public IRMethod findMethod(String methodName) {
+		return findMember(methodName, IRMethod.class);
+	}
+
+	/**
+	 * Finds the property with the specified name.
+	 */
+	public IRProperty findProperty(String propertyName) {
+		return findMember(propertyName, IRProperty.class);
+	}
+
+	/**
 	 * Checks if this query contains the specified type.
 	 */
 	public boolean contains(IRTypeDeclaration type) {
