@@ -259,4 +259,11 @@ public class RModelBuilder {
 		}
 	}
 
+	/**
+	 * Creates IRMethod instance from the specified values.
+	 */
+	public static IRMethod method(String name, IRType type,
+			List<IRParameter> parameters, Visibility visibility, Object source) {
+		return new RMethod(name, type, null, visibility, parameters, source);
+	}
 }
