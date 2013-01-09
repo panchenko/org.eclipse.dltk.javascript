@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.dltk.annotations.Internal;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
@@ -72,7 +73,8 @@ public class TypeMemberQuery implements Iterable<Member> {
 
 	}
 
-	private final List<QueueItem> types = new ArrayList<QueueItem>();
+	@Internal
+	final List<QueueItem> types = new ArrayList<QueueItem>();
 
 	/**
 	 * Creates empty query
@@ -120,8 +122,22 @@ public class TypeMemberQuery implements Iterable<Member> {
 		private final Set<QueueItem> visited = new HashSet<QueueItem>();
 		private final List<QueueItem> queue = new ArrayList<QueueItem>();
 
-		public TypeIterator() {
-			queue.addAll(types);
+		public TypeIterator(int mode) {
+			if (mode == ALL) {
+				queue.addAll(types);
+			} else {
+				assert mode == SUPERTYPES;
+				for (QueueItem qi : types) {
+					final Type type = qi.type;
+					final Type superType = type.getSuperType();
+					if (superType != null) {
+						queue.add(new QueueItem(superType, qi.predicate));
+					}
+					for (Type trait : type.getTraits()) {
+						queue.add(new QueueItem(trait, qi.predicate));
+					}
+				}
+			}
 			current = queue.iterator();
 		}
 
@@ -160,16 +176,19 @@ public class TypeMemberQuery implements Iterable<Member> {
 		}
 	}
 
+	static final int ALL = 0;
+	static final int SUPERTYPES = 1;
+
 	private class MemberIterator extends CompoundIterator<Member> {
 
 		private final TypeIterator typeIterator;
 		private final Set<Type> entrypoints = new HashSet<Type>();
 
-		public MemberIterator() {
+		public MemberIterator(int mode) {
 			for (QueueItem item : types) {
 				entrypoints.add(item.type);
 			}
-			typeIterator = new TypeIterator();
+			typeIterator = new TypeIterator(mode);
 			current = Collections.<Member> emptyList().iterator();
 		}
 
@@ -240,7 +259,7 @@ public class TypeMemberQuery implements Iterable<Member> {
 	}
 
 	public Iterator<Member> iterator() {
-		return new MemberIterator();
+		return new MemberIterator(ALL);
 	}
 
 	/**
@@ -262,6 +281,7 @@ public class TypeMemberQuery implements Iterable<Member> {
 		private List<Object> abstractMethods = new ArrayList<Object>();
 
 		public IgnoreDuplicateMemberIterator(Collection<String> ignoreMembers) {
+			super(ALL);
 			this.ignored = ignoreMembers != null ? ignoreMembers : Collections
 					.<String> emptySet();
 		}
@@ -429,6 +449,60 @@ public class TypeMemberQuery implements Iterable<Member> {
 	@Override
 	public String toString() {
 		return getClass().getSimpleName() + types;
+	}
+
+	/**
+	 * Finds the member with the specified name and type. Returns the member
+	 * found or <code>null</code> otherwise.
+	 */
+	@SuppressWarnings("unchecked")
+	protected <T extends Member> T findMember(String memberName,
+			Class<T> memberType) {
+		for (Member member : this) {
+			if (memberName.equals(member.getName())) {
+				return (T) member;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Finds the method with the specified name. Returns the method found or
+	 * <code>null</code> otherwise.
+	 */
+	public Method findMethod(String methodName) {
+		return findMember(methodName, Method.class);
+	}
+
+	/**
+	 * Finds the super method with the specified name.
+	 */
+	public Method findSuperMethod(String methodName) {
+		for (Iterator<Member> i = new MemberIterator(SUPERTYPES); i.hasNext();) {
+			final Member member = i.next();
+			if (member instanceof Method && methodName.equals(member.getName())) {
+				return (Method) member;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Finds all the super methods with the specified name. If no super methods
+	 * with the specified name were found then empty list is returned.
+	 */
+	public List<Method> findSuperMethods(String methodName) {
+		List<Method> result = null;
+		for (Iterator<Member> i = new MemberIterator(SUPERTYPES); i.hasNext();) {
+			final Member member = i.next();
+			if (member instanceof Method && methodName.equals(member.getName())) {
+				if (result == null) {
+					result = new ArrayList<Method>();
+				}
+				result.add((Method) member);
+			}
+		}
+		return result != null ? result : Collections.<Method> emptyList();
 	}
 
 }

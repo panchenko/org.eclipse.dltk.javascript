@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.core.tests.typeinfo;
 
+import static org.eclipse.dltk.javascript.core.tests.typeinfo.TypeInfoModelFactoryUtil.newMethod;
+import static org.eclipse.dltk.javascript.core.tests.typeinfo.TypeInfoModelFactoryUtil.newType;
 import static org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory.eINSTANCE;
 
 import java.util.ArrayList;
@@ -19,6 +21,7 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
+import org.eclipse.dltk.javascript.typeinfo.MemberPredicates;
 import org.eclipse.dltk.javascript.typeinfo.TypeMemberQuery;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
@@ -88,4 +91,48 @@ public class TypeMemberQueryTest extends TestCase {
 		assertFalse(it.hasNext());
 		assertSame(normalMethod, member);
 	}
+
+	public void testFindSuperMethod() {
+		final Type base = newType("Base");
+		final Method baseRun = newMethod("run", base);
+		baseRun.setAbstract(true);
+
+		final Type child = newType("Child");
+		child.setSuperType(base);
+		final Method childRun = newMethod("run", child);
+
+		final TypeMemberQuery memberQuery = new TypeMemberQuery(child,
+				MemberPredicates.NON_STATIC);
+		final Method method = memberQuery.findMethod("run");
+		assertNotNull(method);
+		assertSame(childRun, method);
+
+		final Method superMethod = memberQuery.findSuperMethod("run");
+		assertNotNull(superMethod);
+		assertSame(baseRun, superMethod);
+	}
+
+	public void testFindSuperMethods() {
+		final Type typeA = newType("A");
+		final Method methodA = newMethod("run", typeA);
+		methodA.setAbstract(true);
+
+		final Type typeB = newType("B");
+		typeB.setSuperType(typeA);
+		final Method methodB = newMethod("run", typeB);
+
+		final Type typeC = newType("C");
+		typeC.setSuperType(typeB);
+		@SuppressWarnings("unused")
+		final Method methodC = newMethod("run", typeC);
+
+		final TypeMemberQuery memberQuery = new TypeMemberQuery(typeC,
+				MemberPredicates.NON_STATIC);
+
+		final List<Method> superMethods = memberQuery.findSuperMethods("run");
+		assertEquals(2, superMethods.size());
+		assertSame(methodB, superMethods.get(0));
+		assertSame(methodA, superMethods.get(1));
+	}
+
 }
