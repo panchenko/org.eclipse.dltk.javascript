@@ -65,7 +65,7 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 
 	public JSType parse(String input) throws ParseException {
 		final ANTLRStringStream stream = new ANTLRStringStream(input);
-		final JSType type = parse(stream);
+		final JSType type = parse(stream, true);
 		if (stream.LT(1) != CharStream.EOF) {
 			throw new ParseException("Unexpected "
 					+ stream.substring(stream.index(), stream.size() - 1),
@@ -74,7 +74,19 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 		return type;
 	}
 
-	protected JSType parse(CharStream input) throws ParseException {
+	/**
+	 * Parses the next type expression. {@link UnionType}s are handled at this
+	 * level, parsing of parts is delegated to {@link #parseType(CharStream)}.
+	 * 
+	 * @param input
+	 * @param autoUnion
+	 *            if <code>true</code> then it is allowed to parse all parts of
+	 *            the union type, but if <code>false</code> then unit type
+	 *            declaration should be enclosed in parenthesis -
+	 *            <code>'('</code> and <code>')'</code>.
+	 */
+	protected JSType parse(CharStream input, boolean autoUnion)
+			throws ParseException {
 		skipSpaces(input);
 		final List<JSType> types = new ArrayList<JSType>();
 		final boolean inParenthese = input.LT(1) == '(';
@@ -87,7 +99,7 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 			if (type != null) {
 				types.add(type);
 				skipSpaces(input);
-				if (input.LT(1) == '|') {
+				if ((inParenthese || autoUnion) && input.LT(1) == '|') {
 					input.consume();
 					skipSpaces(input);
 					continue;
@@ -154,7 +166,7 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 				final int baseEnd = input.index();
 				final String baseType = input.substring(start, baseEnd - 1);
 				input.consume();
-				final List<JSType> typeParams = parseParams(input);
+				final List<JSType> typeParams = parseTypeParams(input);
 				match(input, '>');
 				JSType type = createGenericType(baseType, typeParams);
 				if (extension != null) {
@@ -166,7 +178,7 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 				final String baseType = input.substring(start, baseEnd - 1);
 				input.consume();
 				input.consume();
-				final List<JSType> typeParams = parseParams(input);
+				final List<JSType> typeParams = parseTypeParams(input);
 				match(input, '>');
 				JSType type = createGenericType(baseType, typeParams);
 				if (extension != null) {
@@ -185,7 +197,7 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 				if (input.LT(1) == ':') {
 					input.consume();
 					skipSpaces(input);
-					functionType.setReturnType(parseType(input));
+					functionType.setReturnType(parse(input, false));
 				}
 				return checkIfArray(input, functionType);
 			} else if (ch == '[') {
@@ -326,10 +338,11 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 		return TypeUtil.ref(baseType);
 	}
 
-	protected List<JSType> parseParams(CharStream input) throws ParseException {
+	protected List<JSType> parseTypeParams(CharStream input)
+			throws ParseException {
 		final List<JSType> types = new ArrayList<JSType>();
 		for (;;) {
-			final JSType type = parse(input);
+			final JSType type = parse(input, true);
 			if (type != null) {
 				types.add(type);
 				skipSpaces(input);
@@ -360,7 +373,7 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 					squareBracket = true;
 				}
 			}
-			final JSType type = parse(input);
+			final JSType type = parse(input, true);
 			if (type != null) {
 				final Parameter parameter = TypeInfoModelFactory.eINSTANCE
 						.createParameter();
@@ -435,7 +448,7 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 
 				if (input.LT(1) == ':') {
 					input.consume();
-					final JSType memberType = parse(input);
+					final JSType memberType = parse(input, true);
 					ch = input.LT(1);
 					if (ch == '=') {
 						input.consume();

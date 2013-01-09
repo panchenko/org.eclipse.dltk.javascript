@@ -28,6 +28,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.RecordMember;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
 import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
+import org.eclipse.emf.common.util.EList;
 
 @SuppressWarnings("restriction")
 public class JSDocTypeParserTests extends TestCase {
@@ -194,6 +195,36 @@ public class JSDocTypeParserTests extends TestCase {
 		assertEquals(ParameterKind.VARARGS, type.getParameters().get(1)
 				.getKind());
 		assertRef("Number", type.getReturnType());
+	}
+
+	public void testUnitonWithFunction1() {
+		final UnionType type = (UnionType) parse("String|function(Number):Number|String");
+		final EList<JSType> parts = type.getTargets();
+		assertEquals(3, parts.size());
+
+		final SimpleType part0 = (SimpleType) parts.get(0);
+		assertEquals("String", part0.getName());
+
+		final FunctionType part1 = (FunctionType) parts.get(1);
+		assertEquals("Number", part1.getReturnType().getName());
+
+		final SimpleType part2 = (SimpleType) parts.get(2);
+		assertEquals("String", part2.getName());
+	}
+
+	public void testUnitonWithFunction2() {
+		final UnionType type = (UnionType) parse("String|function(Number):(Number|String)");
+		final EList<JSType> parts = type.getTargets();
+		assertEquals(2, parts.size());
+
+		final SimpleType part0 = (SimpleType) parts.get(0);
+		assertEquals("String", part0.getName());
+
+		final FunctionType part1 = (FunctionType) parts.get(1);
+		final UnionType resultType = (UnionType) part1.getReturnType();
+		assertEquals(2, resultType.getTargets().size());
+		assertEquals("Number", resultType.getTargets().get(0).getName());
+		assertEquals("String", resultType.getTargets().get(1).getName());
 	}
 
 }
