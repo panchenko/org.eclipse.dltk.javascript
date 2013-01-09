@@ -1399,8 +1399,8 @@ statementTail
 // $<Block (12.1)
 
 block
-	: lb=LBRACE statement* RBRACE
-	-> ^( BLOCK[$lb, "BLOCK"] statement* )
+	: lb=LBRACE sourceElement* RBRACE
+	-> ^( BLOCK[$lb, "BLOCK"] sourceElement* )
 	;
 
 // $>
