@@ -43,7 +43,6 @@ import org.eclipse.dltk.core.builder.IBuildParticipantExtension;
 import org.eclipse.dltk.core.builder.IBuildParticipantExtension4;
 import org.eclipse.dltk.internal.javascript.parser.JSDocValidatorFactory.TypeChecker;
 import org.eclipse.dltk.internal.javascript.ti.ConstantValue;
-import org.eclipse.dltk.internal.javascript.ti.ElementValue;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
 import org.eclipse.dltk.internal.javascript.ti.JSMethod;
@@ -105,7 +104,6 @@ import org.eclipse.dltk.javascript.typeinfo.ITypeCheckerExtension;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
-import org.eclipse.dltk.javascript.typeinfo.MemberPredicates;
 import org.eclipse.dltk.javascript.typeinfo.RTypes;
 import org.eclipse.dltk.javascript.typeinfo.TypeCompatibility;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
@@ -1222,11 +1220,6 @@ public class TypeInfoValidator implements IBuildParticipant,
 				reference = reference.getParent();
 			}
 			return false;
-		}
-
-		private boolean hasInstanceMethod(IRType type, String name) {
-			return ElementValue.findMember(getContext(), type, name,
-					MemberPredicates.NON_STATIC) != null;
 		}
 
 		/**
