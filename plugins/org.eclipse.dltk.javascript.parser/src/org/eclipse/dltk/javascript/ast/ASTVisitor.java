@@ -293,6 +293,9 @@ public abstract class ASTVisitor<E> implements INodeVisitor<E> {
 	}
 
 	public E visit(ASTNode node) {
+		if (node == null) {
+			return null;
+		}
 		Handler handler = HANDLERS.get(node.getClass());
 		if (handler != null) {
 			return handler.handle(this, node);
