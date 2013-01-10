@@ -1655,8 +1655,8 @@ defaultClause
 // $<Labelled statements (12.12)
 
 labelledStatement
-	: identifier COLON statement
-	-> ^( LABELLED identifier statement )
+	: identifier COLON sourceElement
+	-> ^( LABELLED identifier sourceElement )
 	;
 
 // $>

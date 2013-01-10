@@ -1,4 +1,4 @@
-// $ANTLR 3.0.1 JS.g 2013-01-09 19:56:02
+// $ANTLR 3.0.1 JS.g 2013-01-10 21:56:48
 
 package org.eclipse.dltk.javascript.parser;
 
@@ -1302,7 +1302,7 @@ public class JSParser extends JSBaseParser {
 
 
                     // AST REWRITE
-                    // elements: AT, MUL
+                    // elements: MUL, AT
                     // token labels: 
                     // rule labels: retval
                     // token list labels: 
@@ -1783,7 +1783,7 @@ public class JSParser extends JSBaseParser {
 
 
             // AST REWRITE
-            // elements: XMLFragment, XMLFragmentEnd, expression
+            // elements: XMLFragmentEnd, expression, XMLFragment
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -2175,7 +2175,7 @@ public class JSParser extends JSBaseParser {
 
 
             // AST REWRITE
-            // elements: RPAREN, expression
+            // elements: expression, RPAREN
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -2669,7 +2669,7 @@ public class JSParser extends JSBaseParser {
 
 
             // AST REWRITE
-            // elements: COMMA, objectPropertyInitializer
+            // elements: objectPropertyInitializer, COMMA
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -2941,7 +2941,7 @@ public class JSParser extends JSBaseParser {
             stream_assignmentExpression.add(assignmentExpression66.getTree());
 
             // AST REWRITE
-            // elements: propertyName, assignmentExpression
+            // elements: assignmentExpression, propertyName
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -3692,7 +3692,7 @@ public class JSParser extends JSBaseParser {
             	    stream_rightHandSideExpression.add(r.getTree());
 
             	    // AST REWRITE
-            	    // elements: leftHandSideExpression, r, DOT
+            	    // elements: r, DOT, leftHandSideExpression
             	    // token labels: 
             	    // rule labels: retval, r
             	    // token list labels: 
@@ -3744,7 +3744,7 @@ public class JSParser extends JSBaseParser {
             	    stream_rightHandSideExpression2.add(r2.getTree());
 
             	    // AST REWRITE
-            	    // elements: leftHandSideExpression, r2
+            	    // elements: r2, leftHandSideExpression
             	    // token labels: 
             	    // rule labels: retval, r2
             	    // token list labels: 
@@ -3798,7 +3798,7 @@ public class JSParser extends JSBaseParser {
 
 
             	    // AST REWRITE
-            	    // elements: leftHandSideExpression, expression
+            	    // elements: expression, leftHandSideExpression
             	    // token labels: 
             	    // rule labels: retval
             	    // token list labels: 
@@ -4089,7 +4089,7 @@ public class JSParser extends JSBaseParser {
             	    stream_rightHandSideExpression.add(r.getTree());
 
             	    // AST REWRITE
-            	    // elements: DOT, r, newExpressionTail
+            	    // elements: newExpressionTail, r, DOT
             	    // token labels: 
             	    // rule labels: retval, r
             	    // token list labels: 
@@ -4141,7 +4141,7 @@ public class JSParser extends JSBaseParser {
             	    stream_rightHandSideExpression2.add(r2.getTree());
 
             	    // AST REWRITE
-            	    // elements: r2, newExpressionTail
+            	    // elements: newExpressionTail, r2
             	    // token labels: 
             	    // rule labels: retval, r2
             	    // token list labels: 
@@ -4240,7 +4240,7 @@ public class JSParser extends JSBaseParser {
             	    stream_propertySelector.add(ps.getTree());
 
             	    // AST REWRITE
-            	    // elements: ps, newExpressionTail
+            	    // elements: newExpressionTail, ps
             	    // token labels: 
             	    // rule labels: retval, ps
             	    // token list labels: 
@@ -4298,7 +4298,7 @@ public class JSParser extends JSBaseParser {
                     stream_arguments.add(arguments102.getTree());
 
                     // AST REWRITE
-                    // elements: newExpressionTail, arguments
+                    // elements: arguments, newExpressionTail
                     // token labels: 
                     // rule labels: retval
                     // token list labels: 
@@ -5194,7 +5194,7 @@ public class JSParser extends JSBaseParser {
             stream_semic.add(semic128.getTree());
 
             // AST REWRITE
-            // elements: WXML, DEFAULT, ASSIGN, expression
+            // elements: expression, DEFAULT, WXML, ASSIGN
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -8369,7 +8369,7 @@ public class JSParser extends JSBaseParser {
             stream_semic.add(semic225.getTree());
 
             // AST REWRITE
-            // elements: variableDeclaration, VAR
+            // elements: VAR, variableDeclaration
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -8935,7 +8935,7 @@ public class JSParser extends JSBaseParser {
 
 
             // AST REWRITE
-            // elements: statement, IF, expression
+            // elements: expression, IF, statement
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -9197,7 +9197,7 @@ public class JSParser extends JSBaseParser {
             stream_semic.add(semic257.getTree());
 
             // AST REWRITE
-            // elements: statement, expression, DO
+            // elements: DO, expression, statement
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -9380,7 +9380,7 @@ public class JSParser extends JSBaseParser {
             stream_statement.add(statement267.getTree());
 
             // AST REWRITE
-            // elements: forEachControl, statement
+            // elements: statement, forEachControl
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -9784,7 +9784,7 @@ public class JSParser extends JSBaseParser {
                     stream_expression.add(expression281.getTree());
 
                     // AST REWRITE
-                    // elements: VAR, expression, variableDeclarationNoIn
+                    // elements: expression, variableDeclarationNoIn, VAR
                     // token labels: 
                     // rule labels: retval
                     // token list labels: 
@@ -9936,7 +9936,7 @@ public class JSParser extends JSBaseParser {
 
 
                     // AST REWRITE
-                    // elements: semi2, ex1, semi1, variableDeclarationNoIn, ex2, VAR
+                    // elements: ex1, semi1, variableDeclarationNoIn, ex2, VAR, semi2
                     // token labels: semi2, semi1
                     // rule labels: retval, ex2, ex1
                     // token list labels: 
@@ -10131,7 +10131,7 @@ public class JSParser extends JSBaseParser {
                     stream_expression.add(ex2.getTree());
 
                     // AST REWRITE
-                    // elements: ex1, ex2
+                    // elements: ex2, ex1
                     // token labels: 
                     // rule labels: retval, ex2, ex1
                     // token list labels: 
@@ -10252,7 +10252,7 @@ public class JSParser extends JSBaseParser {
 
 
                     // AST REWRITE
-                    // elements: ex2, semi1, ex3, semi2, ex1
+                    // elements: semi1, ex1, ex3, semi2, ex2
                     // token labels: semi2, semi1
                     // rule labels: retval, ex3, ex2, ex1
                     // token list labels: 
@@ -10456,7 +10456,7 @@ public class JSParser extends JSBaseParser {
 
 
             // AST REWRITE
-            // elements: ex1, semi1, ex2, semi2
+            // elements: semi1, ex2, semi2, ex1
             // token labels: semi2, semi1
             // rule labels: retval, ex2, ex1
             // token list labels: 
@@ -10987,7 +10987,7 @@ public class JSParser extends JSBaseParser {
 
 
             // AST REWRITE
-            // elements: SWITCH, expression, defaultClause, caseClause
+            // elements: SWITCH, caseClause, expression, defaultClause
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -11258,7 +11258,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start labelledStatement
-    // JS.g:1657:1: labelledStatement : identifier COLON statement -> ^( LABELLED identifier statement ) ;
+    // JS.g:1657:1: labelledStatement : identifier COLON sourceElement -> ^( LABELLED identifier sourceElement ) ;
     public final labelledStatement_return labelledStatement() throws RecognitionException {
         labelledStatement_return retval = new labelledStatement_return();
         retval.start = input.LT(1);
@@ -11268,16 +11268,16 @@ public class JSParser extends JSBaseParser {
         Token COLON315=null;
         identifier_return identifier314 = null;
 
-        statement_return statement316 = null;
+        sourceElement_return sourceElement316 = null;
 
 
         Object COLON315_tree=null;
         RewriteRuleTokenStream stream_COLON=new RewriteRuleTokenStream(adaptor,"token COLON");
-        RewriteRuleSubtreeStream stream_statement=new RewriteRuleSubtreeStream(adaptor,"rule statement");
+        RewriteRuleSubtreeStream stream_sourceElement=new RewriteRuleSubtreeStream(adaptor,"rule sourceElement");
         RewriteRuleSubtreeStream stream_identifier=new RewriteRuleSubtreeStream(adaptor,"rule identifier");
         try {
-            // JS.g:1658:2: ( identifier COLON statement -> ^( LABELLED identifier statement ) )
-            // JS.g:1658:4: identifier COLON statement
+            // JS.g:1658:2: ( identifier COLON sourceElement -> ^( LABELLED identifier sourceElement ) )
+            // JS.g:1658:4: identifier COLON sourceElement
             {
             pushFollow(FOLLOW_identifier_in_labelledStatement6823);
             identifier314=identifier();
@@ -11288,14 +11288,14 @@ public class JSParser extends JSBaseParser {
             match(input,COLON,FOLLOW_COLON_in_labelledStatement6825); 
             stream_COLON.add(COLON315);
 
-            pushFollow(FOLLOW_statement_in_labelledStatement6827);
-            statement316=statement();
+            pushFollow(FOLLOW_sourceElement_in_labelledStatement6827);
+            sourceElement316=sourceElement();
             _fsp--;
 
-            stream_statement.add(statement316.getTree());
+            stream_sourceElement.add(sourceElement316.getTree());
 
             // AST REWRITE
-            // elements: statement, identifier
+            // elements: identifier, sourceElement
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -11304,15 +11304,15 @@ public class JSParser extends JSBaseParser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 1659:2: -> ^( LABELLED identifier statement )
+            // 1659:2: -> ^( LABELLED identifier sourceElement )
             {
-                // JS.g:1659:5: ^( LABELLED identifier statement )
+                // JS.g:1659:5: ^( LABELLED identifier sourceElement )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(adaptor.create(LABELLED, "LABELLED"), root_1);
 
                 adaptor.addChild(root_1, stream_identifier.next());
-                adaptor.addChild(root_1, stream_statement.next());
+                adaptor.addChild(root_1, stream_sourceElement.next());
 
                 adaptor.addChild(root_0, root_1);
                 }
@@ -11823,7 +11823,7 @@ public class JSParser extends JSBaseParser {
             stream_functionBody.add(functionBody336.getTree());
 
             // AST REWRITE
-            // elements: functionBody, name, formalParameterList
+            // elements: formalParameterList, functionBody, name
             // token labels: 
             // rule labels: retval, name
             // token list labels: 
@@ -11940,7 +11940,7 @@ public class JSParser extends JSBaseParser {
             stream_functionBody.add(functionBody339.getTree());
 
             // AST REWRITE
-            // elements: functionBody, formalParameterList, FUNCTION, name
+            // elements: formalParameterList, name, functionBody, FUNCTION
             // token labels: 
             // rule labels: retval, name
             // token list labels: 
@@ -12377,7 +12377,7 @@ public class JSParser extends JSBaseParser {
             stream_functionBody.add(functionBody350.getTree());
 
             // AST REWRITE
-            // elements: functionBody, identifier
+            // elements: identifier, functionBody
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -12488,7 +12488,7 @@ public class JSParser extends JSBaseParser {
             stream_functionBody.add(functionBody353.getTree());
 
             // AST REWRITE
-            // elements: name, functionBody, param
+            // elements: param, functionBody, name
             // token labels: 
             // rule labels: retval, param, name
             // token list labels: 
@@ -13198,7 +13198,7 @@ public class JSParser extends JSBaseParser {
     public static final BitSet FOLLOW_statement_in_defaultClause6806 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF2L,0x0320000C0CC012BFL,0x0718200000000000L});
     public static final BitSet FOLLOW_identifier_in_labelledStatement6823 = new BitSet(new long[]{0x0000000000000000L,0x0000008000000000L});
     public static final BitSet FOLLOW_COLON_in_labelledStatement6825 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF0L,0x0320000C0CC012BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_statement_in_labelledStatement6827 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_sourceElement_in_labelledStatement6827 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_THROW_in_throwStatement6858 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
     public static final BitSet FOLLOW_expression_in_throwStatement6863 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001040L,0x00000C0000000000L});
     public static final BitSet FOLLOW_semic_in_throwStatement6865 = new BitSet(new long[]{0x0000000000000002L});

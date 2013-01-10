@@ -103,4 +103,10 @@ public class ErrorReportingTests extends AbstractJSParserTest {
 		assertEquals(JavaScriptParserProblems.SYNTAX_ERROR, getProblemId());
 	}
 
+	public void testLabelledFunctionExpression() {
+		parse("L: function() {}");
+		assertEquals(1, reporter.getProblems().size());
+		assertEquals(JavaScriptParserProblems.SYNTAX_ERROR, getProblemId());
+	}
+
 }

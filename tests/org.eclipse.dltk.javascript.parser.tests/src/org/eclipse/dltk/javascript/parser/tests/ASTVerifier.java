@@ -129,9 +129,11 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 
 	@Override
 	public Boolean visit(ASTNode node) {
-		Assert.assertTrue(node.getClass().getSimpleName()
-				+ " sourceEnd >= sourceStart",
-				node.sourceEnd() >= node.sourceStart());
+		if (node != null) {
+			Assert.assertTrue(node.getClass().getSimpleName()
+					+ " sourceEnd >= sourceStart",
+					node.sourceEnd() >= node.sourceStart());
+		}
 		return super.visit(node);
 	}
 
