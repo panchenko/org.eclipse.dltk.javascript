@@ -20,6 +20,7 @@ public class ConstantValue extends AbstractReference {
 	private final Value value = new Value();
 
 	public ConstantValue(IRType type) {
+		assert type != null;
 		value.getTypes().add(type);
 	}
 

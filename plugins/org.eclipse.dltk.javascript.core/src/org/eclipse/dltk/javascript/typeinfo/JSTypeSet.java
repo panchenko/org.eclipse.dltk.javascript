@@ -144,6 +144,7 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 		private final IRType type;
 
 		public JSSingletonTypeSet(IRType type) {
+			assert type != null;
 			this.type = type;
 		}
 
@@ -273,6 +274,7 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 
 		@Override
 		public void add(IRType type) {
+			assert type != null;
 			if (type instanceof IRUnionType) {
 				for (IRType t : ((IRUnionType) type).getTargets()) {
 					add(t);
