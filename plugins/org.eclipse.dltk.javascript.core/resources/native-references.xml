@@ -3,7 +3,7 @@
   <ref:Type name="Error" kind="PREDEFINED" superType="Object">
   	<members xsi:type="ref:Property" name="name" directType="String" description="Error name."/>
   	<members xsi:type="ref:Property" name="message" directType="String" description="Error message."/>
-    <staticConstructor name="Error">
+    <staticConstructor name="Error" directType="Error">
       <parameters name="message" kind="OPTIONAL" directType="Object"/>
     </staticConstructor>
   </ref:Type>
@@ -14,7 +14,7 @@
   <ref:Type name="ReferenceError" kind="PREDEFINED" superType="Error">
   </ref:Type>
   <ref:Type name="SyntaxError" kind="PREDEFINED" superType="Error">
-    <staticConstructor name="SyntaxError">
+    <staticConstructor name="SyntaxError" directType="SyntaxError">
       <parameters name="message" kind="OPTIONAL" directType="Object"/>
     </staticConstructor>
   </ref:Type>
@@ -186,7 +186,7 @@
   </ref:Type>
   <ref:GenericType name="Array" kind="PREDEFINED" superType="Object" description="Arrays are list-like objects that come with a several built-in methods to perform traversal and mutation operations.">
   	<typeParameters name="E"/>
-    <staticConstructor name="Array">
+    <staticConstructor name="Array" directType="Array">
       <parameters name="item" kind="VARARGS" directType="Object"/>
     </staticConstructor>
     <members xsi:type="ref:Method" name="concat" description="Joins two or more arrays and returns the result.">

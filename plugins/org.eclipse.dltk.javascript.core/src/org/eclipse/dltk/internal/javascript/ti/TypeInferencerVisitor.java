@@ -447,7 +447,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 						if (target != null) {
 							final IRConstructor constructor = target
 									.getStaticConstructor();
-							if (constructor != null) {
+							if (constructor != null
+									&& constructor.getType() != null) {
 								return new ConstantValue(constructor.getType());
 							}
 						}
