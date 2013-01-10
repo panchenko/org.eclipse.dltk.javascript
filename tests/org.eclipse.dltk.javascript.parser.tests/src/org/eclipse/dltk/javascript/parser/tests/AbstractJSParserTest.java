@@ -30,6 +30,8 @@ import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.parser.JSProblem;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
 
+import com.google.common.base.Throwables;
+
 public abstract class AbstractJSParserTest extends TestCase {
 
 	protected final ProblemCollector reporter = new ProblemCollector();
@@ -55,7 +57,7 @@ public abstract class AbstractJSParserTest extends TestCase {
 		assertNotNull(script);
 		for (IProblem problem : reporter.getProblems()) {
 			if (problem instanceof JSProblem) {
-				rethrow(((JSProblem) problem).getCause());
+				Throwables.propagate(((JSProblem) problem).getCause());
 			}
 		}
 		return script;
@@ -67,16 +69,6 @@ public abstract class AbstractJSParserTest extends TestCase {
 		} else {
 			throw new AssertionFailedError(elements.isEmpty() ? "No elements"
 					: "Single element expected");
-		}
-	}
-
-	protected static void rethrow(final Throwable cause) {
-		if (cause instanceof RuntimeException) {
-			throw (RuntimeException) cause;
-		} else if (cause instanceof Error) {
-			throw (Error) cause;
-		} else {
-			throw new RuntimeException(cause);
 		}
 	}
 
