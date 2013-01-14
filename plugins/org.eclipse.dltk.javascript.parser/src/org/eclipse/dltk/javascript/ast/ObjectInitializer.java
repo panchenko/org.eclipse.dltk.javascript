@@ -84,6 +84,10 @@ public class ObjectInitializer extends Expression {
 		return null;
 	}
 
+	/**
+	 * Returns the offset of the opening left curly brace. It should be the same
+	 * as {@link #sourceStart()}.
+	 */
 	public int getLC() {
 		return this.LC;
 	}
@@ -92,6 +96,10 @@ public class ObjectInitializer extends Expression {
 		this.LC = LC;
 	}
 
+	/**
+	 * Returns the offset of the closing right curly brace. It should be 1 less
+	 * than {@link #sourceEnd()}.
+	 */
 	public int getRC() {
 		return this.RC;
 	}
