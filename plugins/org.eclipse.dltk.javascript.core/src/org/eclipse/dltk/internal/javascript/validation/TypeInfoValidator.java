@@ -56,6 +56,7 @@ import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.GetArrayItemExpression;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.IfStatement;
+import org.eclipse.dltk.javascript.ast.JSNode;
 import org.eclipse.dltk.javascript.ast.NewExpression;
 import org.eclipse.dltk.javascript.ast.PropertyExpression;
 import org.eclipse.dltk.javascript.ast.ReturnStatement;
@@ -1631,9 +1632,7 @@ public class TypeInfoValidator implements IBuildParticipant,
 			if (property != null && property.isDeprecated()) {
 				reportDeprecatedProperty(property, null, node);
 			} else {
-				if (!result.exists()
-						&& !(node.getParent() instanceof CallExpression && ((CallExpression) node
-								.getParent()).getExpression() == node)) {
+				if (!result.exists() && !isParentCallOrNew(node)) {
 					pushExpressionValidator(new NotExistingIdentiferValidator(
 							peekFunctionScope(), node, result));
 				} else {
@@ -1651,6 +1650,17 @@ public class TypeInfoValidator implements IBuildParticipant,
 				}
 			}
 			return result;
+		}
+
+		private boolean isParentCallOrNew(Identifier node) {
+			final JSNode parent = node.getParent();
+			if (parent instanceof CallExpression) {
+				return ((CallExpression) parent).getExpression() == node;
+			} else if (parent instanceof NewExpression) {
+				return ((NewExpression) parent).getObjectClass() == node;
+			} else {
+				return false;
+			}
 		}
 
 		private static IValueCollection getParentScope(

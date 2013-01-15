@@ -2879,4 +2879,9 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		List<IProblem> validate = validate(code.toString());
 		assertEquals(0, validate.size());
 	}
+
+	public void testNewWithoutCallExpression() {
+		final List<IProblem> problems = validate("var test = new Test");
+		assertEquals(problems.toString(), 1, problems.size());
+	}
 }
