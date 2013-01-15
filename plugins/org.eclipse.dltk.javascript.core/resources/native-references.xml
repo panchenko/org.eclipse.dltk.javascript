@@ -319,8 +319,8 @@
     <members xsi:type="ref:Method" name="getTime" directType="Number" description="Returns the number of milliseconds since midnight Jan 1, 1970"/>
     <members xsi:type="ref:Method" name="valueOf" directType="Number" description="Returns the primitive value of a Date object as a number data type, the number of milliseconds since midnight 01 January, 1970 UTC. This method is functionally equivalent to the getTime method."/>
     <members xsi:type="ref:Method" name="getTimezoneOffset" directType="Number" description="Returns the difference in minutes between local time and Greenwich Mean Time (GMT)."/>
-    <members xsi:type="ref:Method" name="getUTCDate" directType="Number" description="Returns the day of the month from a date according to universal time (from 0-6)."/>
-    <members xsi:type="ref:Method" name="getUTCDay" directType="Number" description="Returns the day of the week from a date according to universal time (from 1-31)"/>
+    <members xsi:type="ref:Method" name="getUTCDate" directType="Number" description="Returns the day of the month from a date according to universal time (from 1-31)."/>
+    <members xsi:type="ref:Method" name="getUTCDay" directType="Number" description="Returns the day of the week from a date according to universal time (from 0-6)"/>
     <members xsi:type="ref:Method" name="getUTCFullYear" directType="Number" description="Returns the four-digit year from a date according to universal time "/>
     <members xsi:type="ref:Method" name="getUTCHours" directType="Number" description="Returns the hour of a date according to universal time (from 0-23)"/>
     <members xsi:type="ref:Method" name="getUTCMilliseconds" directType="Number" description="Returns the milliseconds of a date according to universal time (from 0-999)"/>
