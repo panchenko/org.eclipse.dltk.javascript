@@ -119,15 +119,15 @@ public abstract class TypeInferencerVisitorBase extends
 		} catch (PositionReachedException e) {
 			throw e;
 		} catch (RuntimeException e) {
-			JavaScriptPlugin.error(buildErrorMessage(node), e);
+			JavaScriptPlugin.error(buildNodeErrorMessage(node), e);
 			throw e;
 		} catch (AssertionError e) {
-			JavaScriptPlugin.error(buildErrorMessage(node), e);
+			JavaScriptPlugin.error(buildNodeErrorMessage(node), e);
 			throw e;
 		}
 	}
 
-	private String buildErrorMessage(ASTNode node) {
+	protected String buildNodeErrorMessage(ASTNode node) {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("Error processing ");
 		sb.append(node.getClass().getName());

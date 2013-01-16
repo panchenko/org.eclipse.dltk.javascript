@@ -90,6 +90,7 @@ import org.eclipse.dltk.javascript.ast.XmlFragment;
 import org.eclipse.dltk.javascript.ast.XmlLiteral;
 import org.eclipse.dltk.javascript.ast.XmlTextFragment;
 import org.eclipse.dltk.javascript.ast.YieldOperator;
+import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.core.Types;
 import org.eclipse.dltk.javascript.internal.core.RRecordMember;
@@ -237,6 +238,11 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				final IValueReference child = visit(astNode);
 				if (child != null && child.exists()) {
 					for (IRType type : JavaScriptValidations.getTypes(child)) {
+						if (type == null) {
+							JavaScriptPlugin.error(buildNodeErrorMessage(node)
+									+ " - item type is null");
+							continue;
+						}
 						types.add(type.normalize());
 					}
 				}
