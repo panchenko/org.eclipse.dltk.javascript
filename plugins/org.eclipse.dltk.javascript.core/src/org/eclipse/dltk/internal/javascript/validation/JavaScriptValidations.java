@@ -86,9 +86,10 @@ public class JavaScriptValidations {
 
 	public static Set<IRType> getTypes(IValueReference reference) {
 		if (reference != null) {
-			Set<IRType> set = new HashSet<IRType>(4);
-			if (reference.getDeclaredType() != null) {
-				set.add(reference.getDeclaredType());
+			final Set<IRType> set = new HashSet<IRType>(4);
+			final IRType declaredType = reference.getDeclaredType();
+			if (declaredType != null) {
+				set.add(declaredType);
 			}
 			for (IRType type : reference.getDeclaredTypes()) {
 				set.add(type);
@@ -96,7 +97,9 @@ public class JavaScriptValidations {
 			for (IRType type : reference.getTypes()) {
 				set.add(type);
 			}
-			return set;
+			if (!set.isEmpty()) {
+				return set;
+			}
 		}
 		return Collections.emptySet();
 	}
