@@ -20,6 +20,7 @@ import org.eclipse.dltk.annotations.Nullable;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.javascript.ast.ASTVisitor;
+import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 import org.eclipse.dltk.javascript.parser.JSProblemReporter;
 import org.eclipse.dltk.javascript.parser.Reporter;
 import org.eclipse.dltk.javascript.typeinference.IFunctionValueCollection;
@@ -113,7 +114,29 @@ public abstract class TypeInferencerVisitorBase extends
 				}
 			}
 		}
-		return super.visit(node);
+		try {
+			return super.visit(node);
+		} catch (RuntimeException e) {
+			JavaScriptPlugin.error(buildErrorMessage(node), e);
+			throw e;
+		} catch (AssertionError e) {
+			JavaScriptPlugin.error(buildErrorMessage(node), e);
+			throw e;
+		}
+	}
+
+	private String buildErrorMessage(ASTNode node) {
+		final StringBuilder sb = new StringBuilder();
+		sb.append("Error processing ");
+		sb.append(node.getClass().getName());
+		try {
+			final String message = node.toString();
+			sb.append(" \"").append(message).append("\"");
+		} catch (Throwable t) {
+			// ignore potential errors in .toString()
+		}
+		sb.append(" in ").append(context.getSource());
+		return sb.toString();
 	}
 
 	public void done() {
