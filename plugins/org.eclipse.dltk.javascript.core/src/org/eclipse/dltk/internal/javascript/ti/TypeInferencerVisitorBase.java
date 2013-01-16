@@ -116,6 +116,8 @@ public abstract class TypeInferencerVisitorBase extends
 		}
 		try {
 			return super.visit(node);
+		} catch (PositionReachedException e) {
+			throw e;
 		} catch (RuntimeException e) {
 			JavaScriptPlugin.error(buildErrorMessage(node), e);
 			throw e;
