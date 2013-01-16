@@ -21,6 +21,7 @@ class RArrayType extends RType implements IRArrayType {
 	}
 
 	public RArrayType(IRType itemType) {
+		assert itemType != null;
 		this.itemType = itemType;
 	}
 

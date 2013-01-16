@@ -21,6 +21,7 @@ class RUnionType extends RType implements IRUnionType {
 	final Set<IRType> targets = new LinkedHashSet<IRType>();
 
 	public RUnionType(Collection<IRType> targets) {
+		assert !targets.contains(null);
 		this.targets.addAll(targets);
 	}
 
