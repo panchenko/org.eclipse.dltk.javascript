@@ -31,7 +31,6 @@ import org.eclipse.dltk.javascript.parser.JSProblemReporter;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
 import org.eclipse.dltk.javascript.parser.Reporter;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
-import org.eclipse.dltk.javascript.typeinfo.IRClassType;
 import org.eclipse.dltk.javascript.typeinfo.IRMethod;
 import org.eclipse.dltk.javascript.typeinfo.IRParameter;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
@@ -147,24 +146,6 @@ public class JavaScriptValidations {
 			}
 		}
 		return fallback ? methods.get(0) : null;
-	}
-
-	@Deprecated
-	public static boolean isStatic(IValueReference valueRef) {
-		if (valueRef == null) {
-			return false;
-		}
-		for (IRType type : valueRef.getDeclaredTypes()) {
-			if (type != null && type instanceof IRClassType) {
-				return true;
-			}
-		}
-		for (IRType type : valueRef.getTypes()) {
-			if (type != null && type instanceof IRClassType) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	/**
