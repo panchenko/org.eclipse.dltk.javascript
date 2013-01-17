@@ -661,6 +661,10 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				if (variable.getType() == null) {
 					// assign only if no declared type specified
 					assign(reference, assignment);
+				} else {
+					// else just add it as a value on top of what we already
+					// have. So that we don't clear the current one.
+					reference.addValue(assignment, false);
 				}
 				if (assignment.getKind() == ReferenceKind.FUNCTION
 						&& reference.getAttribute(IReferenceAttributes.METHOD) != null)

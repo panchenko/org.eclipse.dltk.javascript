@@ -767,4 +767,20 @@ public class CodeCompletion extends AbstractCompletionTest {
 		int position = lastPositionInFile(".", module);
 		basicTest(module, position, names);
 	}
+	
+	
+	public void testRecordTypeWithDeclaration() {
+		final StringList code = new StringList();
+		code.add("function test() {");
+		code.add("/** @type {Object<Number>} */");
+		code.add("var y = {");
+		code.add("	KEY:1");
+		code.add("}");
+		code.add("y.");
+		code.add("}");
+		final IModuleSource module = new TestModule(code.toString());
+		String[] names = concat(getMembersOfObject(), "KEY");
+		int position = lastPositionInFile(".", module);
+		basicTest(module, position, names);
+	}
 }
