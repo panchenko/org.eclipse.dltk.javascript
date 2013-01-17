@@ -11,6 +11,7 @@ package org.eclipse.dltk.javascript.internal.ui.templates;
 
 import org.eclipse.dltk.internal.javascript.typeinference.CompletionString;
 import org.eclipse.dltk.javascript.internal.core.codeassist.JavaScriptCompletionUtil;
+import org.eclipse.dltk.javascript.internal.core.codeassist.JavaScriptCompletionUtil.ExpressionType;
 import org.eclipse.dltk.ui.templates.ScriptTemplateAccess;
 import org.eclipse.dltk.ui.templates.ScriptTemplateCompletionProcessor;
 import org.eclipse.dltk.ui.text.DocumentUtils;
@@ -85,15 +86,20 @@ public class JavaScriptTemplateCompletionProcessor extends
 	@Override
 	protected TemplateContextType getContextType(ITextViewer viewer,
 			IRegion region) {
-		if (isValidLocation(viewer, region)
-				&& JavaScriptCompletionUtil.evaluateExpressionType(getContext()
-						.getSourceModule(), DocumentUtils.asCharSequence(viewer
-						.getDocument()),
-						region.getOffset() + region.getLength()) != null) {
-			return getTemplateAccess()
-					.getContextTypeRegistry()
-					.getContextType(
-							JavaScriptExpressionTemplateContextType.EXPRESSION_CONTEXT_TYPE_ID);
+		if (isValidLocation(viewer, region)) {
+			final ExpressionType type = JavaScriptCompletionUtil
+					.evaluateExpressionType(getContext().getSourceModule(),
+							DocumentUtils.asCharSequence(viewer.getDocument()),
+							region.getOffset() + region.getLength());
+			if (type == ExpressionType.OBJECT_INITIALIZER) {
+				return null;
+			}
+			if (type == ExpressionType.PROPERTY_INITIALIZER_VALUE) {
+				return getTemplateAccess()
+						.getContextTypeRegistry()
+						.getContextType(
+								JavaScriptExpressionTemplateContextType.EXPRESSION_CONTEXT_TYPE_ID);
+			}
 		}
 		return super.getContextType(viewer, region);
 	}

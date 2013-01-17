@@ -20,6 +20,7 @@ import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.core.tests.ProjectSetup;
 import org.eclipse.dltk.javascript.ast.Keywords;
 import org.eclipse.dltk.javascript.ast.MultiLineComment;
+import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.ui.tests.AllTests;
 import org.eclipse.dltk.ui.templates.ScriptTemplateProposal;
 import org.eclipse.dltk.ui.tests.UICompletionUtil;
@@ -34,7 +35,9 @@ import org.junit.ClassRule;
 import org.junit.Test;
 
 import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 import com.google.common.collect.FluentIterable;
+import com.google.common.collect.Lists;
 
 public class JSCodeAssistUITest extends Assert {
 
@@ -69,6 +72,42 @@ public class JSCodeAssistUITest extends Assert {
 	private static Matcher<String> stringHasValue() {
 		return CoreMatchers.allOf(CoreMatchers.<String> notNullValue(),
 				CoreMatchers.not(""));
+	}
+
+	@Test
+	public void functionDeclaration() throws CoreException {
+		final ISourceModule module = checkNotNull(PROJECT.getSourceModule(
+				"src", "function-declaration.js"));
+
+		final UICompletionUtil util = UICompletionUtil.openEditor(module)
+				.after("fu");
+
+		final List<ICompletionProposal> proposals = util.invokeCompletion();
+		assertEquals(4, proposals.size());
+
+		// function keyword
+		final List<IScriptCompletionProposal> keywords = filter(proposals,
+				IScriptCompletionProposal.class,
+				new Predicate<IScriptCompletionProposal>() {
+					public boolean apply(IScriptCompletionProposal input) {
+						return Keywords.FUNCTION.equals(input
+								.getDisplayString());
+					}
+				});
+		assertEquals(1, keywords.size());
+
+		// 2 function declaration templates (with jsdoc and without it)
+		final List<ScriptTemplateProposal> templates = filter(proposals,
+				ScriptTemplateProposal.class,
+				Predicates.<ScriptTemplateProposal> alwaysTrue());
+		assertEquals(2, templates.size());
+
+		// Function global
+		final List<ICompletionProposal> globals = Lists.newArrayList(proposals);
+		globals.removeAll(keywords);
+		globals.removeAll(templates);
+		assertEquals(1, globals.size());
+		assertEquals(ITypeNames.FUNCTION, globals.get(0).getDisplayString());
 	}
 
 	@Test

@@ -682,6 +682,10 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 	 */
 	private void doGlobalCompletion(IValueCollection collection,
 			Reporter reporter, ExpressionContext expressionContext) {
+		if (expressionContext != null
+				&& expressionContext.expressionType == ExpressionType.OBJECT_INITIALIZER) {
+			return;
+		}
 		reportItems(reporter, collection);
 		if ((globalOptions & OPTION_GLOBALS) != 0) {
 			if (!requestor.isIgnored(CompletionProposal.TYPE_REF)) {

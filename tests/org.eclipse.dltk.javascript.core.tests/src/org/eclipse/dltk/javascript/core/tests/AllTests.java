@@ -8,6 +8,7 @@ import org.eclipse.dltk.core.tests.WorkspaceSetup;
 import org.eclipse.dltk.javascript.core.tests.builder.BuildChangeTests;
 import org.eclipse.dltk.javascript.core.tests.contentassist.CodeCompletion;
 import org.eclipse.dltk.javascript.core.tests.contentassist.CompletionStringParsing;
+import org.eclipse.dltk.javascript.core.tests.contentassist.JavaScriptCompletionUtilTest;
 import org.eclipse.dltk.javascript.core.tests.contentassist.SelectionTests;
 import org.eclipse.dltk.javascript.core.tests.contentassist.StandardTypeMemberTests;
 import org.eclipse.dltk.javascript.core.tests.contentassist.XMLCompletionTests;
@@ -66,6 +67,7 @@ public class AllTests {
 		suite.addTestSuite(JSDocValidationTest.class);
 		suite.addTestSuite(StandardTypeMemberTests.class);
 		suite.addTestSuite(CodeCompletion.class);
+		suite.addTest(new JUnit4TestAdapter(JavaScriptCompletionUtilTest.class));
 		suite.addTestSuite(XMLCompletionTests.class);
 		suite.addTestSuite(CompletionStringParsing.class);
 		suite.addTestSuite(TypeParameterizerTests.class);
