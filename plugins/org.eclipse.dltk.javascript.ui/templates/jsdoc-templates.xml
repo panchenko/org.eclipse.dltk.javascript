@@ -31,6 +31,14 @@
 	deleted="false" 
 	autoinsert="true">@return {${type}}</template>
 <template 
+	id="org.eclipse.dltk.javascript.ui.templates.jsdoc.this" 
+	name="@this" 
+	description="%this.description" 
+	context="JSDocTemplateContextType" 
+	enabled="true" 
+	deleted="false" 
+	autoinsert="true">@this {${type}}</template>
+<template 
 	id="org.eclipse.dltk.javascript.ui.templates.jsdoc.author" 
 	name="@author" 
 	description="%author.description" 
