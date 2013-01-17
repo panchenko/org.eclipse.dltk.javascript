@@ -29,6 +29,7 @@ import org.eclipse.dltk.javascript.internal.core.ThreadTypeSystemImpl;
 import org.eclipse.dltk.javascript.parser.JSProblem;
 import org.eclipse.dltk.javascript.parser.JSProblemReporter;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
+import org.eclipse.dltk.javascript.typeinference.IValueParent;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinfo.AttributeKey;
@@ -36,6 +37,7 @@ import org.eclipse.dltk.javascript.typeinfo.IElementResolver;
 import org.eclipse.dltk.javascript.typeinfo.ILocalTypeReference;
 import org.eclipse.dltk.javascript.typeinfo.IMemberEvaluator;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
+import org.eclipse.dltk.javascript.typeinfo.IRLocalType;
 import org.eclipse.dltk.javascript.typeinfo.IRMember;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.IRTypeDeclaration;
@@ -704,5 +706,35 @@ public class TypeInferencer2 extends TypeSystemImpl implements
 		} else {
 			return null;
 		}
+	}
+
+	public IRLocalType resolveLocalType(String name) {
+		if (visitor == null)
+			return null;
+		IValueReference result = null;
+		IValueCollection currentCollection = currentCollection();
+		if (name.indexOf('.') != -1) {
+			String[] scopes = name.split("\\.");
+			IValueParent child = currentCollection;
+			for (String scope : scopes) {
+				child = child.getChild(scope);
+			}
+			result = (IValueReference) child;
+		} else {
+			while (currentCollection != null) {
+				IValueReference child = currentCollection.getChild(name);
+				if (child.exists()) {
+					result = child;
+					break;
+				} else {
+					currentCollection = currentCollection.getParent();
+				}
+
+			}
+		}
+		if (result != null && result.getKind() == ReferenceKind.FUNCTION) {
+			return RTypes.create(this, name, result);
+		}
+		return null;
 	}
 }

@@ -357,6 +357,11 @@ public class RTypes {
 		return new RArrayType(typeSystem, itemType);
 	}
 
+	public static IRLocalType create(ITypeSystem typeSystem, String name,
+			IValueReference value) {
+		return new RLocalType(typeSystem, name, value);
+	}
+
 	@Deprecated
 	public static IRType create(JSType type) {
 		ITypeSystem current = ITypeSystem.CURRENT.get();

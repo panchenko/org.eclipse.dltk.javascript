@@ -11,13 +11,16 @@
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
+import org.eclipse.dltk.javascript.typeinfo.IRLocalType;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
+import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.RTypes;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -130,6 +133,12 @@ public class SimpleTypeImpl extends MinimalEObjectImpl implements SimpleType {
 		}
 		if (t.isProxy() && typeSystem != null) {
 			t = typeSystem.resolveType(t);
+		}
+		if (typeSystem instanceof ITypeInfoContext
+				&& t.getKind() == TypeKind.UNKNOWN) {
+			IRLocalType valueType = ((ITypeInfoContext) typeSystem).resolveLocalType(t.getName());
+			if (valueType != null)
+				return valueType;
 		}
 		return RTypes.simple(typeSystem, t);
     }

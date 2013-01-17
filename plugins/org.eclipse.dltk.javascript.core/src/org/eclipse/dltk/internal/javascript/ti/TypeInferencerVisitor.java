@@ -92,7 +92,6 @@ import org.eclipse.dltk.javascript.ast.XmlTextFragment;
 import org.eclipse.dltk.javascript.ast.YieldOperator;
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
-import org.eclipse.dltk.javascript.core.Types;
 import org.eclipse.dltk.javascript.internal.core.RRecordMember;
 import org.eclipse.dltk.javascript.parser.ISuppressWarningsState;
 import org.eclipse.dltk.javascript.parser.JSParser;
@@ -113,6 +112,7 @@ import org.eclipse.dltk.javascript.typeinfo.IMemberEvaluator;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
+import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilderExtension;
 import org.eclipse.dltk.javascript.typeinfo.IRArrayType;
 import org.eclipse.dltk.javascript.typeinfo.IRClassType;
@@ -142,7 +142,6 @@ import org.eclipse.dltk.javascript.typeinfo.model.MapType;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterizedType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeVariableClassType;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeVariableReference;
@@ -633,13 +632,6 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		reference.setLocation(ReferenceLocation.create(getSource(),
 				declaration.sourceStart(), declaration.sourceEnd(),
 				identifier.sourceStart(), identifier.sourceEnd()));
-		final IRVariable rvar = RModelBuilder.create(getContext(), variable);
-		reference.setAttribute(IReferenceAttributes.R_VARIABLE, rvar);
-		if (rvar.getType() != null) {
-			setIRType(reference, rvar.getType(), true);
-			// typed - make sure it wasn't initialized with the phantom value.
-			reference.removeReference(PhantomValueReference.REFERENCE);
-		}
 
 		return reference;
 	}
@@ -777,8 +769,6 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		function.setKind(ReferenceKind.FUNCTION);
 		function.setDeclaredType(RTypes.FUNCTION);
 		function.setAttribute(IReferenceAttributes.METHOD, method);
-		function.setAttribute(IReferenceAttributes.R_METHOD,
-				RModelBuilder.create(getContext(), method));
 		function.setAttribute(IReferenceAttributes.RESOLVING, Boolean.TRUE);
 	}
 
@@ -795,6 +785,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			method = createMethod(node);
 			result = new AnonymousValue();
 			initializeFunction(method, result);
+			result.setAttribute(IReferenceAttributes.R_METHOD,
+					RModelBuilder.create(getContext(), method));
 		}
 		final ThisValue thisValue = new ThisValue();
 		thisValue.setDeclaredType(this.context.contextualize(method
@@ -1082,12 +1074,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					String className = PropertyExpressionUtils
 							.getPath(objectClass);
 					if (className != null) {
-						Type type = TypeInfoModelFactory.eINSTANCE.createType();
-						type.setSuperType(Types.OBJECT);
-						type.setKind(TypeKind.JAVASCRIPT);
-						type.setName(className);
-						result.value.setDeclaredType(RTypes.simple(context,
-								type));
+						result.value.setDeclaredType(RTypes.create(context,
+								className, result.typeValue));
 					} else {
 						result.value.setDeclaredType(RTypes.OBJECT);
 					}
@@ -1325,6 +1313,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	}
 
 	private void handleDeclarations(JSScope scope) {
+		ArrayList<IValueReference> variables = new ArrayList<IValueReference>();
 		final IValueCollection context = peekContext();
 		for (JSDeclaration declaration : scope.getDeclarations()) {
 			if (declaration instanceof FunctionStatement) {
@@ -1343,8 +1332,28 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				if (varDeclaration.getParent() instanceof ConstStatement) {
 					var.setAttribute(IAssignProtection.ATTRIBUTE, PROTECT_CONST);
 				}
+				variables.add(var);
 			}
 		}
+		for (ForwardDeclaration decl : forwardDeclarations.values()) {
+			decl.reference.setAttribute(IReferenceAttributes.R_METHOD,
+					RModelBuilder.create(getContext(), decl.method));
+		}
+
+		for (IValueReference reference : variables) {
+			final IRVariable rvar = RModelBuilder.create(getContext(),
+					(IVariable) reference
+							.getAttribute(IReferenceAttributes.VARIABLE));
+			reference.setAttribute(IReferenceAttributes.R_VARIABLE, rvar);
+			if (rvar.getType() != null) {
+				setIRType(reference, rvar.getType(), true);
+				// typed - make sure it wasn't initialized with the phantom
+				// value.
+				reference.removeReference(PhantomValueReference.REFERENCE);
+			}
+
+		}
+
 	}
 
 	@Override
