@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2009 xored software, Inc.  
+ * Copyright (c) 2009-2013 xored software, Inc and NumberFour AG.  
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  *
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Vladimir Belov)
+ *     NumberFour AG - multiple API improvements (Alex Panchenko)
  *******************************************************************************/
 package org.eclipse.dltk.javascript.ast;
 
@@ -33,279 +34,177 @@ public abstract class ASTVisitor<E> implements INodeVisitor<E> {
 		}
 	}
 
-	private static interface Handler {
-		<E> E handle(ASTVisitor<E> visitor, ASTNode node);
+	private static final Map<Class<? extends ASTNode>, Integer> HANDLERS = new HashMap<Class<? extends ASTNode>, Integer>();
+
+	// generated block
+	static {
+		HANDLERS.put(ArrayInitializer.class, 0);
+		HANDLERS.put(BinaryOperation.class, 1);
+		HANDLERS.put(BooleanLiteral.class, 2);
+		HANDLERS.put(BreakStatement.class, 3);
+		HANDLERS.put(CallExpression.class, 4);
+		HANDLERS.put(CommaExpression.class, 5);
+		HANDLERS.put(ConditionalOperator.class, 6);
+		HANDLERS.put(ConstStatement.class, 7);
+		HANDLERS.put(ContinueStatement.class, 8);
+		HANDLERS.put(DecimalLiteral.class, 9);
+		HANDLERS.put(DoWhileStatement.class, 10);
+		HANDLERS.put(EmptyExpression.class, 11);
+		HANDLERS.put(ForStatement.class, 12);
+		HANDLERS.put(ForInStatement.class, 13);
+		HANDLERS.put(ForEachInStatement.class, 14);
+		HANDLERS.put(FunctionStatement.class, 15);
+		HANDLERS.put(GetArrayItemExpression.class, 16);
+		HANDLERS.put(Identifier.class, 17);
+		HANDLERS.put(IfStatement.class, 18);
+		HANDLERS.put(LabelledStatement.class, 19);
+		HANDLERS.put(NewExpression.class, 20);
+		HANDLERS.put(NullExpression.class, 21);
+		HANDLERS.put(ObjectInitializer.class, 22);
+		HANDLERS.put(ParenthesizedExpression.class, 23);
+		HANDLERS.put(PropertyExpression.class, 24);
+		HANDLERS.put(RegExpLiteral.class, 25);
+		HANDLERS.put(ReturnStatement.class, 26);
+		HANDLERS.put(Script.class, 27);
+		HANDLERS.put(StatementBlock.class, 28);
+		HANDLERS.put(StringLiteral.class, 29);
+		HANDLERS.put(SwitchStatement.class, 30);
+		HANDLERS.put(ThisExpression.class, 31);
+		HANDLERS.put(ThrowStatement.class, 32);
+		HANDLERS.put(TryStatement.class, 33);
+		HANDLERS.put(UnaryOperation.class, 34);
+		HANDLERS.put(VariableStatement.class, 35);
+		HANDLERS.put(VoidExpression.class, 36);
+		HANDLERS.put(YieldOperator.class, 37);
+		HANDLERS.put(WhileStatement.class, 38);
+		HANDLERS.put(WithStatement.class, 39);
+		HANDLERS.put(XmlLiteral.class, 40);
+		HANDLERS.put(DefaultXmlNamespaceStatement.class, 41);
+		HANDLERS.put(XmlAttributeIdentifier.class, 42);
+		HANDLERS.put(AsteriskExpression.class, 43);
+		HANDLERS.put(GetAllChildrenExpression.class, 44);
+		HANDLERS.put(GetLocalNameExpression.class, 45);
+		HANDLERS.put(ErrorExpression.class, 46);
+		HANDLERS.put(EmptyStatement.class, 47);
 	}
 
-	private static final Map<Class<? extends ASTNode>, Handler> HANDLERS = new HashMap<Class<? extends ASTNode>, Handler>();
-
-	static {
-		HANDLERS.put(ArrayInitializer.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor.visitArrayInitializer((ArrayInitializer) node);
-			}
-		});
-		HANDLERS.put(BinaryOperation.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor.visitBinaryOperation((BinaryOperation) node);
-			}
-		});
-		HANDLERS.put(BooleanLiteral.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor.visitBooleanLiteral((BooleanLiteral) node);
-			}
-		});
-		HANDLERS.put(BreakStatement.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor.visitBreakStatement((BreakStatement) node);
-			}
-		});
-		HANDLERS.put(CallExpression.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor.visitCallExpression((CallExpression) node);
-			}
-		});
-		HANDLERS.put(CommaExpression.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor.visitCommaExpression((CommaExpression) node);
-			}
-		});
-		HANDLERS.put(ConditionalOperator.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor
-						.visitConditionalOperator((ConditionalOperator) node);
-			}
-		});
-		HANDLERS.put(ConstStatement.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor.visitConstDeclaration((ConstStatement) node);
-			}
-		});
-		HANDLERS.put(ContinueStatement.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor.visitContinueStatement((ContinueStatement) node);
-			}
-		});
-		HANDLERS.put(DecimalLiteral.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor.visitDecimalLiteral((DecimalLiteral) node);
-			}
-		});
-		HANDLERS.put(DoWhileStatement.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor.visitDoWhileStatement((DoWhileStatement) node);
-			}
-		});
-		HANDLERS.put(EmptyExpression.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor.visitEmptyExpression((EmptyExpression) node);
-			}
-		});
-		HANDLERS.put(ForStatement.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor.visitForStatement((ForStatement) node);
-			}
-		});
-		HANDLERS.put(Script.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor.visitScript((Script) node);
-			}
-		});
-		HANDLERS.put(ForInStatement.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor.visitForInStatement((ForInStatement) node);
-			}
-		});
-		HANDLERS.put(ForEachInStatement.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor
-						.visitForEachInStatement((ForEachInStatement) node);
-			}
-		});
-		HANDLERS.put(FunctionStatement.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor.visitFunctionStatement((FunctionStatement) node);
-			}
-		});
-		HANDLERS.put(Identifier.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor.visitIdentifier((Identifier) node);
-			}
-		});
-		HANDLERS.put(IfStatement.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor.visitIfStatement((IfStatement) node);
-			}
-		});
-		HANDLERS.put(NewExpression.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor.visitNewExpression((NewExpression) node);
-			}
-		});
-		HANDLERS.put(NullExpression.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor.visitNullExpression((NullExpression) node);
-			}
-		});
-		HANDLERS.put(ObjectInitializer.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor.visitObjectInitializer((ObjectInitializer) node);
-			}
-		});
-		HANDLERS.put(ParenthesizedExpression.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor
-						.visitParenthesizedExpression((ParenthesizedExpression) node);
-			}
-		});
-		HANDLERS.put(RegExpLiteral.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor.visitRegExpLiteral((RegExpLiteral) node);
-			}
-		});
-		HANDLERS.put(ReturnStatement.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor.visitReturnStatement((ReturnStatement) node);
-			}
-		});
-		HANDLERS.put(StringLiteral.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor.visitStringLiteral((StringLiteral) node);
-			}
-		});
-		HANDLERS.put(SwitchStatement.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor.visitSwitchStatement((SwitchStatement) node);
-			}
-		});
-		HANDLERS.put(ThrowStatement.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor.visitThrowStatement((ThrowStatement) node);
-			}
-		});
-		HANDLERS.put(GetArrayItemExpression.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor
-						.visitGetArrayItemExpression((GetArrayItemExpression) node);
-			}
-		});
-		HANDLERS.put(LabelledStatement.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor.visitLabelledStatement((LabelledStatement) node);
-			}
-		});
-		HANDLERS.put(PropertyExpression.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor
-						.visitPropertyExpression((PropertyExpression) node);
-			}
-		});
-		HANDLERS.put(StatementBlock.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor.visitStatementBlock((StatementBlock) node);
-			}
-		});
-		HANDLERS.put(ThisExpression.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor.visitThisExpression((ThisExpression) node);
-			}
-		});
-		HANDLERS.put(TryStatement.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor.visitTryStatement((TryStatement) node);
-			}
-		});
-		HANDLERS.put(UnaryOperation.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor.visitUnaryOperation((UnaryOperation) node);
-			}
-		});
-		HANDLERS.put(VariableStatement.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor.visitVariableStatement((VariableStatement) node);
-			}
-		});
-		HANDLERS.put(VoidExpression.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor.visitVoidExpression((VoidExpression) node);
-			}
-		});
-		HANDLERS.put(WhileStatement.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor.visitWhileStatement((WhileStatement) node);
-			}
-		});
-		HANDLERS.put(WithStatement.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor.visitWithStatement((WithStatement) node);
-			}
-		});
-		HANDLERS.put(XmlLiteral.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor.visitXmlLiteral((XmlLiteral) node);
-			}
-		});
-		HANDLERS.put(DefaultXmlNamespaceStatement.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor
-						.visitDefaultXmlNamespace((DefaultXmlNamespaceStatement) node);
-			}
-		});
-		HANDLERS.put(XmlAttributeIdentifier.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor
-						.visitXmlPropertyIdentifier((XmlAttributeIdentifier) node);
-			}
-		});
-		HANDLERS.put(AsteriskExpression.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor
-						.visitAsteriskExpression((AsteriskExpression) node);
-			}
-		});
-		HANDLERS.put(GetAllChildrenExpression.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor
-						.visitGetAllChildrenExpression((GetAllChildrenExpression) node);
-			}
-		});
-		HANDLERS.put(GetLocalNameExpression.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor
-						.visitGetLocalNameExpression((GetLocalNameExpression) node);
-			}
-		});
-		HANDLERS.put(YieldOperator.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor.visitYieldOperator((YieldOperator) node);
-			}
-		});
-		HANDLERS.put(ErrorExpression.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor.visitErrorExpression((ErrorExpression) node);
-			}
-		});
-		HANDLERS.put(EmptyStatement.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor.visitEmptyStatement((EmptyStatement) node);
-			}
-		});
+	// generated function
+	private final E handle(ASTNode node, int handlerIndex) {
+		switch (handlerIndex) {
+		case 0:
+			return visitArrayInitializer((ArrayInitializer) node);
+		case 1:
+			return visitBinaryOperation((BinaryOperation) node);
+		case 2:
+			return visitBooleanLiteral((BooleanLiteral) node);
+		case 3:
+			return visitBreakStatement((BreakStatement) node);
+		case 4:
+			return visitCallExpression((CallExpression) node);
+		case 5:
+			return visitCommaExpression((CommaExpression) node);
+		case 6:
+			return visitConditionalOperator((ConditionalOperator) node);
+		case 7:
+			return visitConstDeclaration((ConstStatement) node);
+		case 8:
+			return visitContinueStatement((ContinueStatement) node);
+		case 9:
+			return visitDecimalLiteral((DecimalLiteral) node);
+		case 10:
+			return visitDoWhileStatement((DoWhileStatement) node);
+		case 11:
+			return visitEmptyExpression((EmptyExpression) node);
+		case 12:
+			return visitForStatement((ForStatement) node);
+		case 13:
+			return visitForInStatement((ForInStatement) node);
+		case 14:
+			return visitForEachInStatement((ForEachInStatement) node);
+		case 15:
+			return visitFunctionStatement((FunctionStatement) node);
+		case 16:
+			return visitGetArrayItemExpression((GetArrayItemExpression) node);
+		case 17:
+			return visitIdentifier((Identifier) node);
+		case 18:
+			return visitIfStatement((IfStatement) node);
+		case 19:
+			return visitLabelledStatement((LabelledStatement) node);
+		case 20:
+			return visitNewExpression((NewExpression) node);
+		case 21:
+			return visitNullExpression((NullExpression) node);
+		case 22:
+			return visitObjectInitializer((ObjectInitializer) node);
+		case 23:
+			return visitParenthesizedExpression((ParenthesizedExpression) node);
+		case 24:
+			return visitPropertyExpression((PropertyExpression) node);
+		case 25:
+			return visitRegExpLiteral((RegExpLiteral) node);
+		case 26:
+			return visitReturnStatement((ReturnStatement) node);
+		case 27:
+			return visitScript((Script) node);
+		case 28:
+			return visitStatementBlock((StatementBlock) node);
+		case 29:
+			return visitStringLiteral((StringLiteral) node);
+		case 30:
+			return visitSwitchStatement((SwitchStatement) node);
+		case 31:
+			return visitThisExpression((ThisExpression) node);
+		case 32:
+			return visitThrowStatement((ThrowStatement) node);
+		case 33:
+			return visitTryStatement((TryStatement) node);
+		case 34:
+			return visitUnaryOperation((UnaryOperation) node);
+		case 35:
+			return visitVariableStatement((VariableStatement) node);
+		case 36:
+			return visitVoidExpression((VoidExpression) node);
+		case 37:
+			return visitYieldOperator((YieldOperator) node);
+		case 38:
+			return visitWhileStatement((WhileStatement) node);
+		case 39:
+			return visitWithStatement((WithStatement) node);
+		case 40:
+			return visitXmlLiteral((XmlLiteral) node);
+		case 41:
+			return visitDefaultXmlNamespace((DefaultXmlNamespaceStatement) node);
+		case 42:
+			return visitXmlPropertyIdentifier((XmlAttributeIdentifier) node);
+		case 43:
+			return visitAsteriskExpression((AsteriskExpression) node);
+		case 44:
+			return visitGetAllChildrenExpression((GetAllChildrenExpression) node);
+		case 45:
+			return visitGetLocalNameExpression((GetLocalNameExpression) node);
+		case 46:
+			return visitErrorExpression((ErrorExpression) node);
+		case 47:
+			return visitEmptyStatement((EmptyStatement) node);
+		}
+		return visitUnknownNode(node);
 	}
 
 	public E visit(ASTNode node) {
 		if (node == null) {
 			return null;
 		}
-		Handler handler = HANDLERS.get(node.getClass());
+		Integer handler = HANDLERS.get(node.getClass());
 		if (handler != null) {
-			return handler.handle(this, node);
+			return handle(node, handler.intValue());
 		} else {
 			if (node instanceof JSUserNode) {
 				final ASTNode original = ((JSUserNode) node).getOriginal();
 				if (original != null) {
 					handler = HANDLERS.get(original.getClass());
 					if (handler != null) {
-						return handler.handle(this, original);
+						return handle(original, handler.intValue());
 					}
 				}
 			}
