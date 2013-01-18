@@ -116,6 +116,8 @@ public class TypeInferencer2 extends TypeSystemImpl implements
 		} catch (PositionReachedException e) {
 			// visitor = null;
 			throw e;
+		} catch (TypeInferencerVisitorBase.TIWrappedException e) {
+			log(e.getCause());
 		} catch (RuntimeException e) {
 			log(e);
 		} catch (AssertionError e) {

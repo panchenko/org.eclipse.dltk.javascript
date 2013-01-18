@@ -118,12 +118,21 @@ public abstract class TypeInferencerVisitorBase extends
 			return super.visit(node);
 		} catch (PositionReachedException e) {
 			throw e;
+		} catch (TIWrappedException e) {
+			throw e;
 		} catch (RuntimeException e) {
 			JavaScriptPlugin.error(buildNodeErrorMessage(node), e);
-			throw e;
+			throw new TIWrappedException(e);
 		} catch (AssertionError e) {
 			JavaScriptPlugin.error(buildNodeErrorMessage(node), e);
-			throw e;
+			throw new TIWrappedException(e);
+		}
+	}
+
+	@SuppressWarnings("serial")
+	static class TIWrappedException extends RuntimeException {
+		public TIWrappedException(Throwable cause) {
+			super(cause);
 		}
 	}
 
