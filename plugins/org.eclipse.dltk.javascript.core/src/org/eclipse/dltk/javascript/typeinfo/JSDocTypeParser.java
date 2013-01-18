@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo;
 
+import static org.eclipse.dltk.javascript.parser.util.CharStreamUtil.match;
+import static org.eclipse.dltk.javascript.parser.util.CharStreamUtil.skipSpaces;
+
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +37,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.osgi.util.NLS;
 
-public class JSDocTypeParser extends JSDocTypeParserBase {
+public class JSDocTypeParser {
 
 	public static final String FUNCTION = "function";
 	public static final String CLASS = "Class";
@@ -85,7 +88,7 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 	 *            declaration should be enclosed in parenthesis -
 	 *            <code>'('</code> and <code>')'</code>.
 	 */
-	protected JSType parse(CharStream input, boolean autoUnion)
+	public JSType parse(CharStream input, boolean autoUnion)
 			throws ParseException {
 		skipSpaces(input);
 		final List<JSType> types = new ArrayList<JSType>();

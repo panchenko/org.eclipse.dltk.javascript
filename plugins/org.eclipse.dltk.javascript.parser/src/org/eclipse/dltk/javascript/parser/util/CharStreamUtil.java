@@ -9,15 +9,16 @@
  * Contributors:
  *     NumberFour AG - initial API and Implementation (Alex Panchenko)
  *******************************************************************************/
-package org.eclipse.dltk.javascript.typeinfo;
+package org.eclipse.dltk.javascript.parser.util;
 
 import java.text.ParseException;
 
 import org.antlr.runtime.CharStream;
 
-public class JSDocTypeParserBase {
+public class CharStreamUtil {
 
-	public void match(CharStream input, char expected) throws ParseException {
+	public static void match(CharStream input, char expected)
+			throws ParseException {
 		if (input.LT(1) == expected) {
 			input.consume();
 		} else {
@@ -25,9 +26,10 @@ public class JSDocTypeParserBase {
 		}
 	}
 
-	protected void skipSpaces(CharStream input) {
-		while (input.LT(1) != CharStream.EOF
-				&& Character.isWhitespace(input.LT(1))) {
+	public static void skipSpaces(CharStream input) {
+		int ch;
+		while ((ch = input.LT(1)) != CharStream.EOF
+				&& Character.isWhitespace(ch)) {
 			input.consume();
 		}
 	}
