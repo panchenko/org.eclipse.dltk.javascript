@@ -64,9 +64,8 @@ public class ImmutableValueCollection implements IValueCollection,
 		this.reference = reference;
 		this.parent = parent;
 		this.value = value;
-		this.thisValue = new ValueWrapper(thisValue);
-		this.returnValue = new ValueWrapper(returnValue);
-
+		this.thisValue = new AnonymousValue(thisValue);
+		this.returnValue = new AnonymousValue(returnValue);
 	}
 
 	public boolean isReference() {
@@ -117,49 +116,4 @@ public class ImmutableValueCollection implements IValueCollection,
 	public IValueReference getThis() {
 		return thisValue;
 	}
-
-	public static class ValueWrapper extends AbstractReference {
-
-		private final IValue value;
-
-		ValueWrapper(IValue value) {
-			this.value = value;
-		}
-
-		public boolean isReference() {
-			return false;
-		}
-
-		@Override
-		public IValue getValue() {
-			return value;
-		}
-
-		@Override
-		public IValue createValue() {
-			return getValue();
-		}
-
-		public void delete(boolean force) {
-		}
-
-		public String getName() {
-			return "";
-		}
-
-		public IValueReference getParent() {
-			return null;
-		}
-
-		protected String getToStringPrefix() {
-			return "AnonymousValue";
-		}
-
-		@Override
-		public String toString() {
-			return getToStringPrefix() + "@" + System.identityHashCode(value);
-		}
-
-	}
-
 }

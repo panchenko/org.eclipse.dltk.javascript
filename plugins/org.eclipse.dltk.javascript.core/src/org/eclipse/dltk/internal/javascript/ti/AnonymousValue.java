@@ -15,19 +15,27 @@ import org.eclipse.dltk.javascript.typeinference.IValueReference;
 
 public class AnonymousValue extends AbstractReference {
 
-	private final Value value = new Value();
+	private final IValue value;
+
+	protected AnonymousValue(IValue value) {
+		this.value = value;
+	}
+
+	public AnonymousValue() {
+		this(new Value());
+	}
 
 	public boolean isReference() {
 		return false;
 	}
 
 	@Override
-	public Value getValue() {
+	public IValue getValue() {
 		return value;
 	}
 
 	@Override
-	public Value createValue() {
+	public IValue createValue() {
 		return getValue();
 	}
 
