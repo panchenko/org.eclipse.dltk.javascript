@@ -275,7 +275,15 @@ public class RTypes {
 	public static IRRecordType recordType(@Nullable IValueReference argument) {
 		if (argument != null) {
 			final Set<String> directChildren = argument.getDirectChildren();
-			final IRType type = JavaScriptValidations.typeOf(argument);
+			IRType type = JavaScriptValidations.typeOf(argument);
+			if (type instanceof IRUnionType) {
+				for (IRType unionTarget : ((IRUnionType) type).getTargets()) {
+					if (unionTarget instanceof IRRecordType) {
+						type = unionTarget;
+						break;
+					}
+				}
+			}
 			if (type instanceof IRRecordType) {
 				if (directChildren.isEmpty()) {
 					return (IRRecordType) type;

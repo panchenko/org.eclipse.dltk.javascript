@@ -2915,4 +2915,34 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		List<IProblem> validate = validate(code.toString());
 		assertEquals(1, validate.size());
 	}	
+	
+	public void testRecordTypeWrappedInUnion() {
+		final StringList code = new StringList();
+	
+		code.add("/**");
+		code.add("* @return {{test:String,test2:Number}}");
+		code.add("*/");
+		code.add("function test() {");
+		code.add("	/** @type {{test:String,test2:Number}} */");
+		code.add("	var x = new Object();");
+		code.add("	x.test = '';");
+		code.add("	x.test2 = 2;");
+		code.add("	return x;");
+		code.add("}");
+
+		code.add("function caller() {");
+		code.add("	var x = test();");
+		code.add("	reciever(x);");
+		code.add("}");
+
+		code.add("/**");
+		code.add("* @param {{test:String,test2:Number}} y");
+		code.add("*/");
+		code.add("function reciever(y) {");
+		code.add("}");
+		List<IProblem> validate = validate(code.toString());
+		assertEquals(0, validate.size());
+	
+	}
+
 }
