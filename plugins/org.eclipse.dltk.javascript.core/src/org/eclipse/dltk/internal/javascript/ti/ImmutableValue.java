@@ -9,6 +9,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.dltk.annotations.Internal;
+import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.IRLocalType;
@@ -72,18 +74,54 @@ public class ImmutableValue implements IValue, IValue2 {
 		return references;
 	}
 
+	@Internal
+	static class Counter {
+		int depth;
+		boolean errorReported;
+
+		public int increment() {
+			++depth;
+			return depth;
+		}
+
+		public void decrement() {
+			--depth;
+		}
+	}
+
+	private static final ThreadLocal<Counter> DEPTHS = new ThreadLocal<Counter>() {
+		@Override
+		protected Counter initialValue() {
+			return new Counter();
+		}
+	};
+
 	protected static <R> void execute(ImmutableValue value, Handler<R> handler,
 			R result, Set<IValue> visited) {
 		if (visited.add(value)) {
-			if (value instanceof ILazyValue)
-				((ILazyValue) value).resolve();
-			handler.process(value, result);
-			for (IValue child : value.references) {
-				if (child instanceof ImmutableValue)
-					execute((ImmutableValue) child, handler, result, visited);
-				else if (handler instanceof Handler2) {
-					((Handler2<R>) handler).processOther(child, result);
+			final Counter depth = DEPTHS.get();
+			if (depth.increment() > 16) {
+				if (!depth.errorReported) {
+					depth.errorReported = true;
+					JavaScriptPlugin.error(new Exception(
+							"Deep recursion while processing references"));
 				}
+				return;
+			}
+			try {
+				if (value instanceof ILazyValue)
+					((ILazyValue) value).resolve();
+				handler.process(value, result);
+				for (IValue child : value.references) {
+					if (child instanceof ImmutableValue)
+						execute((ImmutableValue) child, handler, result,
+								visited);
+					else if (handler instanceof Handler2) {
+						((Handler2<R>) handler).processOther(child, result);
+					}
+				}
+			} finally {
+				depth.decrement();
 			}
 		}
 	}
