@@ -15,6 +15,7 @@ import static org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes.PHANT
 import static org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes.R_METHOD;
 import static org.eclipse.dltk.internal.javascript.validation.JavaScriptValidations.typeOf;
 import static org.eclipse.dltk.javascript.typeinfo.RUtils.locationOf;
+import static org.eclipse.osgi.util.NLS.bind;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -2129,10 +2130,10 @@ public class TypeInfoValidator implements IBuildParticipant,
 					final String lazyName = ValueReferenceUtil
 							.getLazyName(reference);
 					if (lazyName != null) {
-						reportUnknownType(
+						reportProblem(
 								JavaScriptProblems.WRONG_TYPE_EXPRESSION,
-								ValidationMessages.UndefinedJavascriptType,
-								node, lazyName);
+								bind(ValidationMessages.UndefinedJavascriptType,
+										lazyName), node);
 					}
 				}
 			}
@@ -2278,16 +2279,22 @@ public class TypeInfoValidator implements IBuildParticipant,
 			}
 		}
 
+		@Deprecated
 		public void reportUnknownType(IProblemIdentifier identifier,
 				String message, ASTNode node, String name) {
-			reporter.reportProblem(identifier, NLS.bind(message, name),
-					node.sourceStart(), node.sourceEnd());
+			reportProblem(identifier, NLS.bind(message, name), node);
 		}
 
 		public void reportUnknownType(IProblemIdentifier identifier,
 				ASTNode node, String name) {
-			reportUnknownType(identifier, ValidationMessages.UnknownType, node,
-					name);
+			reportProblem(identifier,
+					bind(ValidationMessages.UnknownType, name), node);
+		}
+
+		public void reportProblem(IProblemIdentifier identifier,
+				String message, ISourceNode node) {
+			reporter.reportProblem(identifier, message, node.start(),
+					node.end());
 		}
 
 		private static boolean stronglyTyped(IValueReference reference) {
