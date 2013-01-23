@@ -28,8 +28,8 @@ public class TopValueThis extends ThisValue {
 	}
 
 	@Override
-	public Set<String> getDirectChildren() {
-		return owner.getDirectChildren();
+	public Set<String> getDirectChildren(int flags) {
+		return owner.getDirectChildren(flags);
 	}
 
 	@Override

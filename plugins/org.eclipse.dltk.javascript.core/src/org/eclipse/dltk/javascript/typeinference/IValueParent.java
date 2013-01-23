@@ -17,6 +17,8 @@ public interface IValueParent {
 
 	Set<String> getDirectChildren();
 
+	Set<String> getDirectChildren(int flags);
+
 	Set<String> getDeletedChildren();
 
 	boolean hasChild(String name);

@@ -14,12 +14,12 @@ package org.eclipse.dltk.javascript.typeinfo;
 import java.util.Set;
 
 import org.eclipse.dltk.compiler.problem.IValidationStatus;
-import org.eclipse.dltk.internal.javascript.ti.ChildReference;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
-import org.eclipse.dltk.internal.javascript.ti.IValueProvider;
+import org.eclipse.dltk.internal.javascript.ti.IValue;
 import org.eclipse.dltk.internal.javascript.validation.JavaScriptValidations;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
+import org.eclipse.dltk.javascript.typeinference.PhantomValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 
 /**
@@ -43,8 +43,18 @@ class RLocalType extends RType implements IRLocalType {
 		if (value != null) {
 			return value.getThis();
 		}
-		// back up shouldn't happen
-		return new ChildReference((IValueProvider) functionValue, name);
+		// backup value, target is not known to be a function.
+		return PhantomValueReference.REFERENCE;
+	}
+
+	public IValueReference getDirectChild(String name) {
+		final IValueReference value = getValue();
+		return value.getDirectChildren(IValue.NO_LOCAL_TYPES).contains(name) ? value
+				.getChild(name) : null;
+	}
+
+	public Set<String> getDirectChildren() {
+		return getValue().getDirectChildren(IValue.NO_LOCAL_TYPES);
 	}
 
 	public ReferenceLocation getReferenceLocation() {
@@ -67,8 +77,7 @@ class RLocalType extends RType implements IRLocalType {
 		for (IRType irType : types) {
 			if (irType instanceof IRLocalType) {
 				if (getReferenceLocation().equals(
-						((IRLocalType) irType)
-						.getReferenceLocation())) {
+						((IRLocalType) irType).getReferenceLocation())) {
 					return TypeCompatibility.TRUE;
 				}
 			}

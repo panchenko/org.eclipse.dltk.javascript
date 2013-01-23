@@ -186,9 +186,13 @@ public abstract class AbstractReference implements IValueReference,
 		return value != null && value.getChild(name, true) != null;
 	}
 
-	public Set<String> getDirectChildren() {
+	public final Set<String> getDirectChildren() {
+		return getDirectChildren(IValue.DEFAULT);
+	}
+
+	public Set<String> getDirectChildren(int flags) {
 		final IValue value = getValue();
-		return value != null ? value.getDirectChildren() : Collections
+		return value != null ? value.getDirectChildren(flags) : Collections
 				.<String> emptySet();
 	}
 

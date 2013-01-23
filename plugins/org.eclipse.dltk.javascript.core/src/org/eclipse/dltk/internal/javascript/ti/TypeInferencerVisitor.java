@@ -1074,7 +1074,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					String className = PropertyExpressionUtils
 							.getPath(objectClass);
 					if (className != null) {
-						result.value.setDeclaredType(RTypes.create(context,
+						result.value.setDeclaredType(RTypes.localType(context,
 								className, result.typeValue));
 					} else {
 						result.value.setDeclaredType(RTypes.OBJECT);

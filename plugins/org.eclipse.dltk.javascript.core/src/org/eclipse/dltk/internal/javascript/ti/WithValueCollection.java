@@ -43,6 +43,10 @@ public class WithValueCollection implements IValueCollection {
 		return with.getDirectChildren();
 	}
 
+	public Set<String> getDirectChildren(int flags) {
+		return with.getDirectChildren(flags);
+	}
+
 	public Set<String> getDeletedChildren() {
 		return with.getDeletedChildren();
 	}

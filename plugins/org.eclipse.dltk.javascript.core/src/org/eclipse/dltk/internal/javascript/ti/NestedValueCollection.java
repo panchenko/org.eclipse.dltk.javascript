@@ -52,11 +52,13 @@ public class NestedValueCollection extends ValueCollection {
 	public int hashCode() {
 		return getParent().hashCode();
 	}
+
 	protected static void mergeTo(IValueCollection parent,
 			final List<NestedValueCollection> collections) {
 		final Set<String> names = new HashSet<String>();
 		for (NestedValueCollection collection : collections) {
-			names.addAll(collection.getValue().getDirectChildren());
+			names.addAll(collection.getValue()
+					.getDirectChildren(IValue.DEFAULT));
 		}
 		List<IValueReference> childValues = new ArrayList<IValueReference>();
 		for (String childName : names) {

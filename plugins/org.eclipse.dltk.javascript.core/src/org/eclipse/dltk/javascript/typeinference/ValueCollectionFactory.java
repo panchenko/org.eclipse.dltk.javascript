@@ -124,7 +124,8 @@ public class ValueCollectionFactory {
 			IValue sourceValue = ((IValueProvider) source).getValue();
 			if (targetValue instanceof Value
 					&& sourceValue instanceof ImmutableValue) {
-				Set<String> children = sourceValue.getDirectChildren();
+				Set<String> children = sourceValue
+						.getDirectChildren(IValue.DEFAULT);
 				for (String childName : children) {
 					((Value) targetValue).putDirectChild(childName,
 							(ImmutableValue) sourceValue.getChild(childName,

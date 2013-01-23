@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo;
 
+import java.util.Set;
+
+import org.eclipse.dltk.annotations.Nullable;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 
@@ -20,5 +23,11 @@ import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 public interface IRLocalType extends IRType, IRTypeExtension {
 	public IValueReference getValue();
 
+	@Nullable
+	public IValueReference getDirectChild(String name);
+
 	public ReferenceLocation getReferenceLocation();
+
+	public Set<String> getDirectChildren();
+
 }

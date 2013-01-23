@@ -29,6 +29,10 @@ public enum PhantomValueReference implements IValueReference, IValueProvider {
 		return Collections.emptySet();
 	}
 
+	public Set<String> getDirectChildren(int options) {
+		return Collections.emptySet();
+	}
+
 	public Set<String> getDeletedChildren() {
 		return Collections.emptySet();
 	}

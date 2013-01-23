@@ -9,8 +9,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.dltk.annotations.Internal;
-import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.IRLocalType;
@@ -74,54 +72,18 @@ public class ImmutableValue implements IValue, IValue2 {
 		return references;
 	}
 
-	@Internal
-	static class Counter {
-		int depth;
-		boolean errorReported;
-
-		public int increment() {
-			++depth;
-			return depth;
-		}
-
-		public void decrement() {
-			--depth;
-		}
-	}
-
-	private static final ThreadLocal<Counter> DEPTHS = new ThreadLocal<Counter>() {
-		@Override
-		protected Counter initialValue() {
-			return new Counter();
-		}
-	};
-
 	protected static <R> void execute(ImmutableValue value, Handler<R> handler,
 			R result, Set<IValue> visited) {
 		if (visited.add(value)) {
-			final Counter depth = DEPTHS.get();
-			if (depth.increment() > 16) {
-				if (!depth.errorReported) {
-					depth.errorReported = true;
-					JavaScriptPlugin.error(new Exception(
-							"Deep recursion while processing references"));
+			if (value instanceof ILazyValue)
+				((ILazyValue) value).resolve();
+			handler.process(value, result);
+			for (IValue child : value.references) {
+				if (child instanceof ImmutableValue)
+					execute((ImmutableValue) child, handler, result, visited);
+				else if (handler instanceof Handler2) {
+					((Handler2<R>) handler).processOther(child, result);
 				}
-				return;
-			}
-			try {
-				if (value instanceof ILazyValue)
-					((ILazyValue) value).resolve();
-				handler.process(value, result);
-				for (IValue child : value.references) {
-					if (child instanceof ImmutableValue)
-						execute((ImmutableValue) child, handler, result,
-								visited);
-					else if (handler instanceof Handler2) {
-						((Handler2<R>) handler).processOther(child, result);
-					}
-				}
-			} finally {
-				depth.decrement();
 			}
 		}
 	}
@@ -280,22 +242,22 @@ public class ImmutableValue implements IValue, IValue2 {
 		}
 	}
 
-	public Set<String> getDirectChildren() {
+	public Set<String> getDirectChildren(int flags) {
 		final Set<String> result = new HashSet<String>();
 		if (hasReferences()) {
 			execute(this, GET_DIRECT_CHILDREN, result, new HashSet<IValue>());
 		} else {
 			result.addAll(children.keySet());
 		}
-		if (getDeclaredType() instanceof IRLocalType) {
-			result.addAll(((IRLocalType) getDeclaredType()).getValue()
-					.getDirectChildren());
-		}
-		JSTypeSet typeSet = getTypes();
-		for (IRType irType : typeSet) {
-			if (irType instanceof IRLocalType) {
-				result.addAll(((IRLocalType) irType).getValue()
+		if ((flags & NO_LOCAL_TYPES) == 0) {
+			if (getDeclaredType() instanceof IRLocalType) {
+				result.addAll(((IRLocalType) getDeclaredType())
 						.getDirectChildren());
+			}
+			for (IRType irType : getTypes()) {
+				if (irType instanceof IRLocalType) {
+					result.addAll(((IRLocalType) irType).getDirectChildren());
+				}
 			}
 		}
 		return result;

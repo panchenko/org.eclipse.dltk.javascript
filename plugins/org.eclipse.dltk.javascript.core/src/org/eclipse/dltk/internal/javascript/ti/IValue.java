@@ -15,19 +15,32 @@ import java.util.Set;
 
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
+import org.eclipse.dltk.javascript.typeinfo.IRLocalType;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 
 public interface IValue {
 
+	int DEFAULT = 0;
 	int CREATE = 1;
+	int NO_LOCAL_TYPES = 2;
 
 	boolean hasChild(String name);
 
-	Set<String> getDirectChildren();
+	/**
+	 * @param flags
+	 *            {@link #DEFAULT} or {@link #NO_LOCAL_TYPES} to skip delegation
+	 *            to children of {@link IRLocalType}.
+	 */
+	Set<String> getDirectChildren(int flags);
 
 	IValue getChild(String name, boolean resolve);
 
+	/**
+	 * @param flags
+	 *            {@link #DEFAULT} or {@link #CREATE} if child should be created
+	 *            without any attempts to find already existing type member.
+	 */
 	IValue createChild(String name, int flags);
 
 	IRType getDeclaredType();

@@ -87,8 +87,7 @@ public abstract class ElementValue implements IValue {
 		}
 	}
 
-	static IValue findMemberA(ITypeSystem context, IRType type,
- String name,
+	static IValue findMemberA(ITypeSystem context, IRType type, String name,
 			boolean resolve) {
 		final MemberPredicate predicate;
 		if (type instanceof IRClassType) {
@@ -208,10 +207,13 @@ public abstract class ElementValue implements IValue {
 				}
 			}
 		} else if (type instanceof IRLocalType) {
-			IValue value = ((IValueProvider) ((IRLocalType) type).getValue().getChild(
-					name)).getValue();
-			if (value != null)
-				return value;
+			final IValueReference child = ((IRLocalType) type)
+					.getDirectChild(name);
+			if (child != null) {
+				final IValue value = ((IValueProvider) child).getValue();
+				if (value != null)
+					return value;
+			}
 			return findMember(context, RTypes.OBJECT, name);
 		} else {
 			final IRTypeDeclaration t = TypeUtil.extractType(context, type);
@@ -352,16 +354,18 @@ public abstract class ElementValue implements IValue {
 		}
 
 		@Override
-		public final Set<String> getDirectChildren() {
-			Set<String> set = new HashSet<String>();
-			JSTypeSet typeSet = getTypes();
-			for (IRType irType : typeSet) {
-				if (irType instanceof IRLocalType) {
-					set.addAll(((IRLocalType) irType).getValue()
-							.getDirectChildren());
+		public final Set<String> getDirectChildren(int flags) {
+			if ((flags & NO_LOCAL_TYPES) == 0) {
+				final Set<String> set = new HashSet<String>();
+				for (IRType irType : getTypes()) {
+					if (irType instanceof IRLocalType) {
+						set.addAll(((IRLocalType) irType).getDirectChildren());
+					}
 				}
+				return set;
+			} else {
+				return Collections.emptySet();
 			}
-			return set;
 		}
 
 		@Override
@@ -963,7 +967,11 @@ public abstract class ElementValue implements IValue {
 	public final void setAttribute(String key, Object value) {
 	}
 
-	public Set<String> getDirectChildren() {
+	public final Set<String> getDirectChildren() {
+		return getDirectChildren(IValue.DEFAULT);
+	}
+
+	public Set<String> getDirectChildren(int flags) {
 		return Collections.emptySet();
 	}
 

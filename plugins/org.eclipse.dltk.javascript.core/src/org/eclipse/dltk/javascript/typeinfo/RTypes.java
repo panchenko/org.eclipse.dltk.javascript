@@ -365,7 +365,7 @@ public class RTypes {
 		return new RArrayType(typeSystem, itemType);
 	}
 
-	public static IRLocalType create(ITypeSystem typeSystem, String name,
+	public static IRLocalType localType(ITypeSystem typeSystem, String name,
 			IValueReference value) {
 		return new RLocalType(typeSystem, name, value);
 	}

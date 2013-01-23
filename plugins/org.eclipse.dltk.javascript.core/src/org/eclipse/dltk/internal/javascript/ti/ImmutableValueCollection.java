@@ -80,8 +80,12 @@ public class ImmutableValueCollection implements IValueCollection,
 		return getValue();
 	}
 
-	public Set<String> getDirectChildren() {
-		return value.getDirectChildren();
+	public final Set<String> getDirectChildren() {
+		return getDirectChildren(IValue.DEFAULT);
+	}
+
+	public Set<String> getDirectChildren(int flags) {
+		return value.getDirectChildren(flags);
 	}
 
 	public Set<String> getDeletedChildren() {

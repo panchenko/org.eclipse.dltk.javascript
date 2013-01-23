@@ -26,7 +26,7 @@ public enum PhantomValue implements IValue {
 		return false;
 	}
 
-	public Set<String> getDirectChildren() {
+	public Set<String> getDirectChildren(int flags) {
 		return Collections.emptySet();
 	}
 

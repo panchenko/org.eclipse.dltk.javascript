@@ -56,8 +56,12 @@ public abstract class ValueCollection implements IValueCollection,
 		return getValue();
 	}
 
-	public Set<String> getDirectChildren() {
-		return value.getDirectChildren();
+	public final Set<String> getDirectChildren() {
+		return getDirectChildren(IValue.DEFAULT);
+	}
+
+	public Set<String> getDirectChildren(int options) {
+		return value.getDirectChildren(options);
 	}
 
 	public Set<String> getDeletedChildren() {
