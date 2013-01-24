@@ -380,25 +380,6 @@ public class TypeInfoValidator implements IBuildParticipant,
 		}
 	}
 
-	private static class NotExistingIdentiferValidator extends
-			ExpressionValidator {
-		private final FunctionScope scope;
-		private final Expression identifer;
-		private final IValueReference reference;
-
-		public NotExistingIdentiferValidator(FunctionScope scope,
-				Expression identifer, IValueReference reference) {
-			this.scope = scope;
-			this.identifer = identifer;
-			this.reference = reference;
-		}
-
-		@Override
-		public void call(ValidationVisitor visitor) {
-			visitor.validate(scope, identifer, reference);
-		}
-	}
-
 	private static class NewExpressionValidator extends ExpressionValidator {
 		private final FunctionScope scope;
 		private final NewExpression node;
@@ -991,8 +972,8 @@ public class TypeInfoValidator implements IBuildParticipant,
 			}
 			final Object attrRMethod = reference.getAttribute(R_METHOD, true);
 			if (attrRMethod instanceof IRMethod) {
-				validateCallExpressionRMethod(reference, arguments,
-						methodNode, (IRMethod) attrRMethod);
+				validateCallExpressionRMethod(reference, arguments, methodNode,
+						(IRMethod) attrRMethod);
 				return;
 			}
 			final IRType expressionType = JavaScriptValidations
@@ -1558,17 +1539,6 @@ public class TypeInfoValidator implements IBuildParticipant,
 			final IValueReference parent = reference.getParent();
 			if (parent == null) {
 				// top level
-				if (expr instanceof Identifier && !reference.exists()) {
-					scope.add(path(expr, reference));
-					reporter.reportProblem(
-							JavaScriptProblems.UNDECLARED_VARIABLE, NLS.bind(
-									ValidationMessages.UndeclaredVariable,
-									reference.getName()), expr.sourceStart(),
-							expr.sourceEnd());
-					return false;
-				} else
-					validateAccessibility(expr, reference, null);
-
 			} else if (expr instanceof PropertyExpression
 					&& validate(scope, ((PropertyExpression) expr).getObject(),
 							parent)) {
@@ -1632,8 +1602,12 @@ public class TypeInfoValidator implements IBuildParticipant,
 				reportDeprecatedProperty(property, null, node);
 			} else {
 				if (!result.exists() && !isParentCallOrNew(node)) {
-					pushExpressionValidator(new NotExistingIdentiferValidator(
-							peekFunctionScope(), node, result));
+					peekFunctionScope().add(path(node, result));
+					reporter.reportProblem(
+							JavaScriptProblems.UNDECLARED_VARIABLE, NLS.bind(
+									ValidationMessages.UndeclaredVariable,
+									node.getName()), node.sourceStart(), node
+									.sourceEnd());
 				} else {
 					validateAccessibility(node, result, null);
 					if (result.exists()
@@ -2119,8 +2093,7 @@ public class TypeInfoValidator implements IBuildParticipant,
 			} else {
 				if (typeReference.getKind() == ReferenceKind.FUNCTION) {
 					final Object attrRMethod = typeReference.getAttribute(
-							R_METHOD,
-							true);
+							R_METHOD, true);
 					if (attrRMethod instanceof IRMethod) {
 						validateCallExpressionRMethod(reference, arguments,
 								problemNode, (IRMethod) attrRMethod);
