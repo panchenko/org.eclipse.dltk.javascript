@@ -729,7 +729,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 						|| isEmptyBody(node.getBody());
 				IBracesConfiguration bodyConfiguration;
 
-				if (node.getName() != null)
+				if (node.isDeclaration())
 					bodyConfiguration = new FunctionBodyBracesConfiguration(
 							document, emptyBody);
 				else
