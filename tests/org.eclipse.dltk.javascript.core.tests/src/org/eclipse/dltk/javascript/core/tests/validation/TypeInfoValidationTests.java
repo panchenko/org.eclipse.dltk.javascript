@@ -2942,7 +2942,17 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("}");
 		List<IProblem> validate = validate(code.toString());
 		assertEquals(0, validate.size());
-	
+	}
+
+	public void testForInVariableDeclared() {
+		final StringList code = new StringList();
+		code.add("var obj = {a:1,b:2}");
+		code.add("for (k in obj) {");
+		code.add("}");
+		List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JavaScriptProblems.UNDECLARED_VARIABLE, problems.get(0)
+				.getID());
 	}
 
 }
