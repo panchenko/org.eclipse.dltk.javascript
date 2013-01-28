@@ -18,10 +18,12 @@ import static org.eclipse.dltk.javascript.typeinfo.RUtils.locationOf;
 import static org.eclipse.osgi.util.NLS.bind;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.IdentityHashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -244,6 +246,10 @@ public class TypeInfoValidator implements IBuildParticipant,
 		public void setSuppressed(ISuppressWarningsState suppressed) {
 			this.suppressed = suppressed;
 		}
+
+		public boolean isRelatedTo(IValueReference reference) {
+			return false;
+		}
 	}
 
 	private static class CallExpressionValidator extends ExpressionValidator {
@@ -267,6 +273,16 @@ public class TypeInfoValidator implements IBuildParticipant,
 		public void call(ValidationVisitor visitor) {
 			visitor.validateCallExpression(scope, node, reference, arguments,
 					methods);
+		}
+
+		@Override
+		public boolean isRelatedTo(IValueReference reference) {
+			return reference.isParentOf(this.reference);
+		}
+
+		@Override
+		public String toString() {
+			return getClass().getSimpleName() + " - " + reference + "()";
 		}
 	}
 
@@ -378,6 +394,11 @@ public class TypeInfoValidator implements IBuildParticipant,
 				}
 			}
 		}
+
+		@Override
+		public String toString() {
+			return getClass().getSimpleName() + " - " + jsMethod.getName();
+		}
 	}
 
 	private static class NewExpressionValidator extends ExpressionValidator {
@@ -405,6 +426,10 @@ public class TypeInfoValidator implements IBuildParticipant,
 					node.getObjectClass(), reference, typeReference, arguments);
 		}
 
+		@Override
+		public String toString() {
+			return getClass().getSimpleName() + " - " + reference;
+		}
 	}
 
 	private static class PropertyExpressionHolder extends ExpressionValidator {
@@ -425,6 +450,11 @@ public class TypeInfoValidator implements IBuildParticipant,
 		@Override
 		public void call(ValidationVisitor visitor) {
 			visitor.validateProperty(scope, node, reference, exists);
+		}
+
+		@Override
+		public String toString() {
+			return getClass().getSimpleName() + " - " + reference;
 		}
 	}
 
@@ -581,16 +611,48 @@ public class TypeInfoValidator implements IBuildParticipant,
 		 * Executes all the delayed validations collected so far.
 		 */
 		public void runDelayedValidations() {
+			if (expressionValidators.isEmpty()) {
+				return;
+			}
+			final ExpressionValidator[] copy = expressionValidators
+					.toArray(new ExpressionValidator[expressionValidators
+							.size()]);
+			expressionValidators.clear();
+			runExpressionValidations(Arrays.asList(copy));
+		}
+
+		/**
+		 * Executes the delayed validations for the specified references.
+		 */
+		public void runDelayedValidationsFor(IValueReference... references) {
+			if (expressionValidators.isEmpty() || references.length == 0) {
+				return;
+			}
+			final List<ExpressionValidator> selected = new ArrayList<ExpressionValidator>();
+			for (Iterator<ExpressionValidator> i = expressionValidators
+					.iterator(); i.hasNext();) {
+				final ExpressionValidator validator = i.next();
+				for (IValueReference reference : references) {
+					if (validator.isRelatedTo(reference)) {
+						selected.add(validator);
+						i.remove();
+						break;
+					}
+				}
+			}
+			if (!selected.isEmpty()) {
+				runExpressionValidations(selected);
+			}
+		}
+
+		private void runExpressionValidations(
+				Iterable<ExpressionValidator> validators) {
 			final ISuppressWarningsState suppressWarnings = reporter
 					.getSuppressWarnings();
 			try {
-				final ExpressionValidator[] copy = expressionValidators
-						.toArray(new ExpressionValidator[expressionValidators
-								.size()]);
-				expressionValidators.clear();
-				for (ExpressionValidator call : copy) {
-					reporter.restoreSuppressWarnings(call.getSuppressed());
-					call.call(this);
+				for (ExpressionValidator validator : validators) {
+					reporter.restoreSuppressWarnings(validator.getSuppressed());
+					validator.call(this);
 				}
 			} finally {
 				reporter.restoreSuppressWarnings(suppressWarnings);
