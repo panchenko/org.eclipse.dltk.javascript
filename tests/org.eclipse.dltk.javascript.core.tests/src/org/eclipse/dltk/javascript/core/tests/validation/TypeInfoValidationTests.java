@@ -2994,4 +2994,33 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(1, validate.size());
 	}
 
+	public void testRecordTypeParamWithNullArgument() {
+		final StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @param {{x:Number}} obj");
+		code.add(" */");
+		code.add("function showForm(obj){ }");
+		code.add("function caller() {");
+		code.add("	showForm(null);");
+		code.add("}");
+		List<IProblem> validate = validate(code.toString());
+		assertEquals(0, validate.size());
+	}
+	
+	public void testLocalTypeParamWithNullArgument() {
+		final StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @constructor"); 
+		code.add(" */");
+		code.add("function someCustType() {}");
+		code.add("/**");
+		code.add(" * @param {someCustType} obj");
+		code.add(" */");
+		code.add("function showForm(obj){ }");
+		code.add("function caller() {");
+		code.add("	showForm(null);");
+		code.add("}");
+		List<IProblem> validate = validate(code.toString());
+		assertEquals(0, validate.size());
+	}
 }

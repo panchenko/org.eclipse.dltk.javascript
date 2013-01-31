@@ -73,6 +73,8 @@ class RLocalType extends RType implements IRLocalType {
 	}
 
 	public IValidationStatus isAssignableFrom(IValueReference argument) {
+		if (argument == null)
+			return TypeCompatibility.TRUE;
 		Set<IRType> types = JavaScriptValidations.getTypes(argument);
 		for (IRType irType : types) {
 			if (irType instanceof IRLocalType) {

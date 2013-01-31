@@ -106,6 +106,8 @@ class RRecordType extends RType implements IRRecordType, IRTypeExtension {
 	}
 
 	public IValidationStatus isAssignableFrom(IValueReference argument) {
+		if (argument == null)
+			return TypeCompatibility.TRUE;
 		final IRRecordType other = RTypes.recordType(argument);
 		return other != RTypes.recordType() ? assignableFromRecordType((RRecordType) other)
 				: TypeCompatibility.FALSE;
