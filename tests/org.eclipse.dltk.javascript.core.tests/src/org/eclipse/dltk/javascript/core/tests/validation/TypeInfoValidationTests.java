@@ -2955,4 +2955,43 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 				.getID());
 	}
 
+	public void testLocalTypesInArrayInitializer() {
+		final StringList code = new StringList();
+	
+		code.add("/**");
+		code.add(" * @constructor"); 
+		code.add(" */");
+		code.add("function someCustType() {}");
+		code.add("/**");
+		code.add("* @param {Array<someCustType>} arg");
+		code.add(" */");
+		code.add("function someFunc(arg) {}");
+		code.add("function caller() {");
+		code.add("	someFunc([new someCustType(), new someCustType()]);");
+		code.add("}");
+		List<IProblem> validate = validate(code.toString());
+		assertEquals(0, validate.size());
+	}
+	
+	public void testMixedLocalTypesInArrayInitializer() {
+		final StringList code = new StringList();
+	
+		code.add("/**");
+		code.add(" * @constructor"); 
+		code.add(" */");
+		code.add("function someCustType2() {}");
+		code.add("/**");
+		code.add(" * @constructor"); 
+		code.add(" */");
+		code.add("function someCustType() {}");		code.add("/**");
+		code.add("* @param {Array<someCustType>} arg");
+		code.add(" */");
+		code.add("function someFunc(arg) {}");
+		code.add("function caller() {");
+		code.add("	someFunc([new someCustType(), new someCustType2()]);");
+		code.add("}");
+		List<IProblem> validate = validate(code.toString());
+		assertEquals(1, validate.size());
+	}
+
 }

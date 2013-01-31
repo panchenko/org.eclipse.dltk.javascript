@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.dltk.annotations.Nullable;
+import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 
 /**
  * Finds the least common supertype among the specified type expressions or
@@ -38,6 +39,7 @@ public class CommonSuperTypeFinder {
 		final Set<IRClassType> classTypes = new HashSet<IRClassType>();
 		final Set<IRArrayType> arrayTypes = new HashSet<IRArrayType>();
 		final Set<IRMapType> mapTypes = new HashSet<IRMapType>();
+		final Set<IRLocalType> localTypes = new HashSet<IRLocalType>();
 		final Set<IRType> others = new HashSet<IRType>();
 
 		void addAll(Collection<? extends IRType> types) {
@@ -61,6 +63,8 @@ public class CommonSuperTypeFinder {
 				arrayTypes.add((IRArrayType) type);
 			} else if (type instanceof IRMapType) {
 				mapTypes.add((IRMapType) type);
+			} else if (type instanceof IRLocalType) {
+				localTypes.add((IRLocalType) type);
 			} else {
 				others.add(type);
 			}
@@ -75,6 +79,8 @@ public class CommonSuperTypeFinder {
 			if (!arrayTypes.isEmpty())
 				++result;
 			if (!mapTypes.isEmpty())
+				++result;
+			if (!localTypes.isEmpty())
 				++result;
 			if (!others.isEmpty())
 				++result;
@@ -145,6 +151,17 @@ public class CommonSuperTypeFinder {
 					itemTypes.add(type.getValueType());
 				}
 				return RTypes.mapOf(RTypes.STRING, evaluate(itemTypes));
+			}else if (!localTypes.isEmpty()) {
+				if (localTypes.size() == 1) {
+					return getSingleItem(localTypes);
+				}
+				final Set<ReferenceLocation> locations = new HashSet<ReferenceLocation>();
+				for (IRLocalType type : localTypes) {
+					locations.add(type.getReferenceLocation());
+				}
+				// TODO super type check?
+				return locations.size() == 1 ? localTypes.iterator().next()
+						: RTypes.OBJECT;
 			} else {
 				assert !others.isEmpty();
 				if (others.size() == 1) {
