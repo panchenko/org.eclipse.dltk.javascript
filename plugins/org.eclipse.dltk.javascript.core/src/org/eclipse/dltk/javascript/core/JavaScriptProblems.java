@@ -155,6 +155,11 @@ public enum JavaScriptProblems implements IProblemIdentifier,
 	 */
 	VAR_HIDES_FUNCTION(JSParserProblemGroup.DECLARATION_HIDES_OTHER),
 
+	/**
+	 * @since 5.0
+	 */
+	VAR_HIDES_PREDEFINED,
+
 	EQUAL_AS_ASSIGN, INVALID_ASSIGN_LEFT,
 
 	UNREACHABLE_CODE, RETURN_INCONSISTENT, FUNCTION_NOT_ALWAYS_RETURN_VALUE,
@@ -178,7 +183,12 @@ public enum JavaScriptProblems implements IProblemIdentifier,
 	 */
 	FUNCTION_HIDES_VARIABLE(JSParserProblemGroup.DECLARATION_HIDES_OTHER),
 
-	FUNCTION_HIDES_FUNCTION(JSParserProblemGroup.DECLARATION_HIDES_OTHER);
+	FUNCTION_HIDES_FUNCTION(JSParserProblemGroup.DECLARATION_HIDES_OTHER),
+
+	/**
+	 * @since 5.0
+	 */
+	FUNCTION_HIDES_PREDEFINED;
 
 	private JavaScriptProblems() {
 		this(null);

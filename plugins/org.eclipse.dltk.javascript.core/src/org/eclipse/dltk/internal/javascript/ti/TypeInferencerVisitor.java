@@ -650,13 +650,14 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			if (assignment != null) {
 				final IRVariable variable = (IRVariable) reference
 						.getAttribute(IReferenceAttributes.R_VARIABLE);
-				if (variable.getType() == null) {
+				if (variable != null && variable.getType() != null) {
+					// if declared type specified then just add it as a value on
+					// top of what we already have. So that we don't clear the
+					// current one.
+					reference.addValue(assignment, false);
+				} else {
 					// assign only if no declared type specified
 					assign(reference, assignment);
-				} else {
-					// else just add it as a value on top of what we already
-					// have. So that we don't clear the current one.
-					reference.addValue(assignment, false);
 				}
 				if (assignment.getKind() == ReferenceKind.FUNCTION
 						&& reference.getAttribute(IReferenceAttributes.METHOD) != null)
@@ -1341,9 +1342,14 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		}
 
 		for (IValueReference reference : variables) {
-			final IRVariable rvar = RModelBuilder.create(getContext(),
-					(IVariable) reference
-							.getAttribute(IReferenceAttributes.VARIABLE));
+			final IVariable var = (IVariable) reference
+					.getAttribute(IReferenceAttributes.VARIABLE);
+			if (var == null) {
+				// attribute was lost or new value was not created as
+				// something predefined was already there.
+				continue;
+			}
+			final IRVariable rvar = RModelBuilder.create(getContext(), var);
 			reference.setAttribute(IReferenceAttributes.R_VARIABLE, rvar);
 			if (rvar.getType() != null) {
 				setIRType(reference, rvar.getType(), true);

@@ -822,7 +822,8 @@ public class TypeInfoValidator implements IBuildParticipant,
 					child = parentScope.getChild(node.getName().getName());
 				}
 				if (child.exists()) {
-					if (child.getKind() == ReferenceKind.PROPERTY) {
+					final ReferenceKind kind = child.getKind();
+					if (kind == ReferenceKind.PROPERTY) {
 						final Property property = ValueReferenceUtil
 								.extractElement(child, Property.class);
 						if (!property.isHideAllowed()) {
@@ -850,7 +851,7 @@ public class TypeInfoValidator implements IBuildParticipant,
 						}
 					} else if (!Boolean.TRUE.equals(child
 							.getAttribute(IReferenceAttributes.HIDE_ALLOWED))) {
-						if (child.getKind() == ReferenceKind.FUNCTION) {
+						if (kind == ReferenceKind.FUNCTION) {
 							reporter.reportProblem(
 									JavaScriptProblems.FUNCTION_HIDES_FUNCTION,
 									NLS.bind(
@@ -858,11 +859,20 @@ public class TypeInfoValidator implements IBuildParticipant,
 											node.getName().getName()), node
 											.getName().sourceStart(), node
 											.getName().sourceEnd());
-						} else {
+						} else if (kind == ReferenceKind.LOCAL
+								|| kind == ReferenceKind.GLOBAL) {
 							reporter.reportProblem(
 									JavaScriptProblems.FUNCTION_HIDES_VARIABLE,
 									NLS.bind(
 											ValidationMessages.FunctionHidesVariable,
+											node.getName().getName()), node
+											.getName().sourceStart(), node
+											.getName().sourceEnd());
+						} else {
+							reporter.reportProblem(
+									JavaScriptProblems.FUNCTION_HIDES_PREDEFINED,
+									NLS.bind(
+											ValidationMessages.FunctionHidesPredefinedIdentifier,
 											node.getName().getName()), node
 											.getName().sourceStart(), node
 											.getName().sourceEnd());
@@ -1798,19 +1808,20 @@ public class TypeInfoValidator implements IBuildParticipant,
 				child = parentScope.getChild(identifier.getName());
 			}
 			if (child.exists()) {
-				if (child.getKind() == ReferenceKind.ARGUMENT) {
+				final ReferenceKind kind = child.getKind();
+				if (kind == ReferenceKind.ARGUMENT) {
 					reporter.reportProblem(
 							JavaScriptProblems.VAR_HIDES_PARAMETER, NLS.bind(
 									ValidationMessages.VariableHidesParameter,
 									declaration.getVariableName()), identifier
 									.sourceStart(), identifier.sourceEnd());
-				} else if (child.getKind() == ReferenceKind.FUNCTION) {
+				} else if (kind == ReferenceKind.FUNCTION) {
 					reporter.reportProblem(
 							JavaScriptProblems.VAR_HIDES_FUNCTION, NLS.bind(
 									ValidationMessages.VariableHidesFunction,
 									declaration.getVariableName()), identifier
 									.sourceStart(), identifier.sourceEnd());
-				} else if (child.getKind() == ReferenceKind.PROPERTY) {
+				} else if (kind == ReferenceKind.PROPERTY) {
 					final Property property = ValueReferenceUtil
 							.extractElement(child, Property.class);
 					if (property != null && property.getDeclaringType() != null) {
@@ -1832,7 +1843,7 @@ public class TypeInfoValidator implements IBuildParticipant,
 										.sourceEnd());
 
 					}
-				} else if (child.getKind() == ReferenceKind.METHOD) {
+				} else if (kind == ReferenceKind.METHOD) {
 					final IRMethod method = ValueReferenceUtil.extractElement(
 							child, IRMethod.class);
 					if (method != null && method.getDeclaringType() != null) {
@@ -1852,14 +1863,21 @@ public class TypeInfoValidator implements IBuildParticipant,
 								identifier.sourceStart(), identifier
 										.sourceEnd());
 					}
-				} else {
+				} else if (kind == ReferenceKind.LOCAL
+						|| kind == ReferenceKind.GLOBAL) {
 					reporter.reportProblem(
 							JavaScriptProblems.DUPLICATE_VAR_DECLARATION,
 							NLS.bind(ValidationMessages.VariableHidesVariable,
 									declaration.getVariableName()), identifier
 									.sourceStart(), identifier.sourceEnd());
+				} else {
+					reporter.reportProblem(
+							JavaScriptProblems.VAR_HIDES_PREDEFINED,
+							NLS.bind(
+									ValidationMessages.VariableHidesPredefinedIdentifier,
+									declaration.getVariableName()), identifier
+									.sourceStart(), identifier.sourceEnd());
 				}
-
 			}
 		}
 

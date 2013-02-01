@@ -59,11 +59,13 @@ public class ValidationMessages extends NLS {
 	public static String VariableHidesMethodOfType;
 	public static String VariableHidesMethod;
 	public static String VariableHidesFunction;
+	public static String VariableHidesPredefinedIdentifier;
 	public static String UndeclaredVariable;
 	public static String FunctionHidesPropertyOfType;
 	public static String FunctionHidesProperty;
 	public static String FunctionHidesVariable;
 	public static String FunctionHidesFunction;
+	public static String FunctionHidesPredefinedIdentifier;
 	public static String ReturnTypeInconsistentWithPreviousReturn;
 	public static String NonInstantiableType;
 

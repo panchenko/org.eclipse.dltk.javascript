@@ -19,7 +19,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.compiler.problem.IProblem;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
 import org.eclipse.dltk.core.tests.util.StringList;
@@ -233,8 +232,25 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("var XML = 1");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 1, problems.size());
-		// TODO (alex) introduce special problem id
-		assertEquals(JavaScriptProblems.DUPLICATE_VAR_DECLARATION, problems
+		assertEquals(JavaScriptProblems.VAR_HIDES_PREDEFINED, problems.get(0)
+				.getID());
+	}
+
+	public void testVarHidesStringType() {
+		StringList code = new StringList();
+		code.add("var String = 1");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JavaScriptProblems.VAR_HIDES_PREDEFINED, problems.get(0)
+				.getID());
+	}
+
+	public void testFunctionHidesStringType() {
+		StringList code = new StringList();
+		code.add("function String() {}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JavaScriptProblems.FUNCTION_HIDES_PREDEFINED, problems
 				.get(0).getID());
 	}
 
