@@ -14,7 +14,9 @@
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
 import java.util.Collection;
+import java.util.List;
 
+import org.eclipse.dltk.annotations.Nullable;
 import org.eclipse.dltk.internal.javascript.ti.ElementValue;
 import org.eclipse.dltk.javascript.core.Types;
 import org.eclipse.dltk.javascript.typeinference.IAssignProtection;
@@ -680,7 +682,7 @@ public class TypeImpl extends ElementImpl implements Type {
 				typeSystem, this);
 	}
 
-	public Member[] getAdditionalMembers() {
+	public Member[] getAdditionalMembers(@Nullable List<IRType> parameters) {
 		return null;
 	}
 

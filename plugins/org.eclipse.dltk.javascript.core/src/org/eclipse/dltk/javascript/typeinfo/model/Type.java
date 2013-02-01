@@ -13,6 +13,9 @@
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
+import java.util.List;
+
+import org.eclipse.dltk.annotations.Nullable;
 import org.eclipse.dltk.javascript.typeinference.IAssignProtection;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
@@ -316,9 +319,13 @@ public interface Type extends Element {
 	 * Returns array of additional type members, e.g. defined in partial types.
 	 * Can return <code>null</code> if there are no additional members.
 	 * 
+	 * @param parameters
+	 *            <code>null</code> for simple type usage, not <code>null</code>
+	 *            for the parameterized usage.
+	 * 
 	 * @return
 	 */
-	Member[] getAdditionalMembers();
+	Member[] getAdditionalMembers(@Nullable List<IRType> parameters);
 
 	IAssignProtection getReadOnlyStatus(Property property);
 

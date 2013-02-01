@@ -14,6 +14,9 @@ package org.eclipse.dltk.javascript.typeinfo;
 import org.eclipse.dltk.annotations.ConfigurationElement;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
+/**
+ * "Behaviour" associated with {@link Type types}.
+ */
 @ConfigurationElement("metaType")
 public interface MetaType {
 

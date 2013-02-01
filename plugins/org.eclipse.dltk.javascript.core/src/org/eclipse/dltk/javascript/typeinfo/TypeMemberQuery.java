@@ -219,7 +219,7 @@ public class TypeMemberQuery implements Iterable<Member> {
 				final QueueItem item = typeIterator.next();
 				final EList<Member> members = item.type.getMembers();
 				final Member[] additionalMembers = item.type
-						.getAdditionalMembers();
+						.getAdditionalMembers(null);
 				if (item.predicate == MemberPredicates.ALWAYS_TRUE) {
 					if (additionalMembers != null
 							&& additionalMembers.length != 0) {

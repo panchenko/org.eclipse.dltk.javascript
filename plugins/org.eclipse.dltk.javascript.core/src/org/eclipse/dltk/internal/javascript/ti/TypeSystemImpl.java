@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.dltk.annotations.NonNull;
+import org.eclipse.dltk.annotations.Nullable;
 import org.eclipse.dltk.javascript.internal.core.RConstructor;
 import org.eclipse.dltk.javascript.internal.core.RMethod;
 import org.eclipse.dltk.javascript.internal.core.RParameter;
@@ -168,12 +169,13 @@ public class TypeSystemImpl implements ITypeSystem {
 			log("Creating", declaration, "declarations.size=",
 					declarations.size());
 		}
-		buildType(declaration, type, processedTypes);
+		buildType(declaration, type, type.getAdditionalMembers(null),
+				processedTypes);
 		return declaration;
 	}
 
 	private void buildType(final RTypeDeclaration declaration, Type type,
-			Set<Type> processedTypes) {
+			@Nullable final Member[] additionalMembers, Set<Type> processedTypes) {
 		final SimpleType superType = type.getSuperTypeExpr();
 		if (superType != null && superType.getTarget() != null) {
 			if (superType.getTarget() instanceof GenericType) {
@@ -203,7 +205,6 @@ public class TypeSystemImpl implements ITypeSystem {
 			}
 		}
 		declaration.setTraits(toImmutableList(traits));
-		final Member[] additionalMembers = type.getAdditionalMembers();
 		final List<IRMember> members = new ArrayList<IRMember>(type
 				.getMembers().size()
 				+ (additionalMembers != null ? additionalMembers.length : 0));
@@ -407,7 +408,9 @@ public class TypeSystemImpl implements ITypeSystem {
 		parameterized.put(key, declaration);
 		typeVariables.add(declaration);
 		try {
-			buildType(declaration, genericType, new HashSet<Type>());
+			buildType(declaration, genericType,
+					genericType.getAdditionalMembers(declaration
+							.getActualTypeArguments()), new HashSet<Type>());
 		} finally {
 			typeVariables.remove(typeVariables.size() - 1);
 		}

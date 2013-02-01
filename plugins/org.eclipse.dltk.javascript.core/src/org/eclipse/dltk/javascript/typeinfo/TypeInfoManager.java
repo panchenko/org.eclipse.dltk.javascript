@@ -11,8 +11,11 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo;
 
+import static java.util.Collections.unmodifiableList;
+
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -398,6 +401,14 @@ public class TypeInfoManager {
 			}
 		}
 		return DefaultMetaType.DEFAULT;
+	}
+
+	/**
+	 * Returns the unmodifiable list of all the registered {@link MetaType
+	 * metatypes}.
+	 */
+	public static List<MetaType> getMetaTypes() {
+		return unmodifiableList(Arrays.asList(metaTypeManager.getInstances()));
 	}
 
 	/**
