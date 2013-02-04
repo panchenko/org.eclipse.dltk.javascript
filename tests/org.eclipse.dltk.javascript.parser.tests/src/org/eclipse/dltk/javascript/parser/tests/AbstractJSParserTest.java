@@ -29,6 +29,7 @@ import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.parser.JSProblem;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
+import org.eclipse.dltk.javascript.parser.JavaScriptParserProblems;
 
 import com.google.common.base.Throwables;
 
@@ -51,7 +52,9 @@ public abstract class AbstractJSParserTest extends TestCase {
 
 	protected Script parse(final String source) {
 		final Script script = parseRaw(source);
-		if (!script.getStatements().isEmpty()) {
+		if (!script.getStatements().isEmpty()
+				&& !getProblemIds().contains(
+						JavaScriptParserProblems.SYNTAX_ERROR)) {
 			new ASTVerifier(script, source).verify();
 		}
 		assertNotNull(script);

@@ -1019,21 +1019,27 @@ objectLiteral
 	;
 
 objectPropertyInitializer
-  : nameValuePair 
+  : nameValuePair
   | getMethodDeclaration
   | setMethodDeclaration
   ;
-	
+
 nameValuePair
-	: propertyName COLON assignmentExpression
-	-> ^( NAMEDVALUE propertyName assignmentExpression )
+	: propertyName COLON assignmentExpression nameValuePairFix?
+	-> ^( NAMEDVALUE propertyName assignmentExpression nameValuePairFix? )
+	;
+
+nameValuePairFix
+	: colon=COLON assignmentExpression { reportError("Comma or expression expected", $colon); }
+	-> ^( $colon assignmentExpression )
+	| id=identifier COLON assignmentExpression { reportError("Comma expected", $id.start); }
+	-> ^( NAMEDVALUE $id assignmentExpression )
 	;
 
 propertyName
 	: identifier
 	| StringLiteral
 	| numericLiteral
-	| xmlAttribute
 	;
 
 // $>

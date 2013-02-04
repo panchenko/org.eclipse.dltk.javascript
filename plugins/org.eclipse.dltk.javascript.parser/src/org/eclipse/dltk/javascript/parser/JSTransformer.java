@@ -28,6 +28,7 @@ import org.antlr.runtime.tree.Tree;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.AssertionFailedException;
 import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.ast.ASTVisitor;
 import org.eclipse.dltk.compiler.problem.ProblemSeverity;
 import org.eclipse.dltk.compiler.util.Util;
 import org.eclipse.dltk.internal.core.util.WeakHashSet;
@@ -106,6 +107,7 @@ import org.eclipse.dltk.javascript.ast.XmlFragment;
 import org.eclipse.dltk.javascript.ast.XmlLiteral;
 import org.eclipse.dltk.javascript.ast.XmlTextFragment;
 import org.eclipse.dltk.javascript.ast.YieldOperator;
+import org.eclipse.dltk.javascript.core.JavaScriptLanguageUtil;
 import org.eclipse.dltk.javascript.internal.parser.NodeTransformerManager;
 import org.eclipse.dltk.javascript.parser.JSParser.program_return;
 import org.eclipse.dltk.utils.IntList;
@@ -123,6 +125,21 @@ public class JSTransformer {
 	private SymbolTable scope;
 
 	private static final int MAX_RECURSION_DEPTH = 512;
+
+	private static class PropertyInitializerPair extends ASTNode {
+		final PropertyInitializer first;
+		final PropertyInitializer second;
+
+		public PropertyInitializerPair(PropertyInitializer first,
+				PropertyInitializer second) {
+			this.first = first;
+			this.second = second;
+		}
+
+		@Override
+		public void traverse(ASTVisitor visitor) throws Exception {
+		}
+	}
 
 	private final void checkRecursionDepth() {
 		if (parents.size() > MAX_RECURSION_DEPTH) {
@@ -1347,9 +1364,15 @@ public class JSTransformer {
 			if (child.getType() == JSParser.COMMA) {
 				commas.add(getTokenOffset(child.getTokenStartIndex()));
 			} else {
-				initializer
-						.addInitializer((ObjectInitializerPart) transformNode(
-								child, initializer));
+				final ASTNode pi = transformNode(child, initializer);
+				if (pi instanceof PropertyInitializerPair) {
+					final PropertyInitializerPair pair = (PropertyInitializerPair) pi;
+					initializer.addInitializer(pair.first);
+					commas.add(-1);
+					initializer.addInitializer(pair.second);
+				} else {
+					initializer.addInitializer((ObjectInitializerPart) pi);
+				}
 			}
 		}
 		if (!commas.isEmpty()
@@ -1377,15 +1400,12 @@ public class JSTransformer {
 		return initializer;
 	}
 
-	protected ASTNode visitPropertyInitializer(Tree node) {
-
+	private PropertyInitializer buildPropertyInitializer(Tree node) {
 		PropertyInitializer initializer = new PropertyInitializer(getParent());
-
 		initializer.setName(transformExpression(node.getChild(0), initializer));
-
 		final Expression value;
 		final int colonPos;
-		if (node.getChildCount() == 2) {
+		if (node.getChildCount() >= 2) {
 			colonPos = getTokenOffset(JSParser.COLON, node.getChild(0)
 					.getTokenStopIndex() + 1, node.getChild(1)
 					.getTokenStartIndex());
@@ -1397,13 +1417,74 @@ public class JSTransformer {
 			value.setStart(colonPos + 1);
 			value.setEnd(colonPos + 1);
 		}
-
 		initializer.setValue(value);
 		initializer.setColon(colonPos);
-		initializer.setStart(getTokenOffset(node.getTokenStartIndex()));
-		initializer.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
-
+		initializer.setStart(initializer.getName().sourceStart());
+		initializer.setEnd(value.sourceEnd());
 		return initializer;
+	}
+
+	protected ASTNode visitPropertyInitializer(Tree node) {
+		final PropertyInitializer initializer = buildPropertyInitializer(node);
+		if (node.getChildCount() == 3) {
+			final Tree fixNode = node.getChild(2);
+			if (fixNode.getType() == JSParser.NAMEDVALUE) {
+				return new PropertyInitializerPair(initializer,
+						buildPropertyInitializer(fixNode));
+			} else if (fixNode.getType() == JSParser.COLON) {
+				final Expression value1 = initializer.getValue();
+				if (value1 instanceof Identifier
+						|| value1 instanceof StringLiteral
+						&& JavaScriptLanguageUtil
+								.isValidIdentifier(((StringLiteral) value1)
+										.getValue())) {
+					final PropertyInitializer initializer2 = new PropertyInitializer(
+							getParent());
+					initializer2.setColon(getTokenOffset(fixNode
+							.getTokenStartIndex()));
+					initializer2.setValue(transformExpression(
+							fixNode.getChild(0), initializer2));
+					initializer2.setEnd(initializer2.getValue().sourceEnd());
+					initializer2.setName(changeParent(value1, initializer2));
+					initializer2.setStart(value1.sourceStart());
+					final ErrorExpression error = new ErrorExpression(
+							initializer, "");
+					final int colonPos = initializer.getColon() + 1;
+					error.setStart(colonPos);
+					error.setEnd(colonPos);
+					initializer.setValue(error);
+					return new PropertyInitializerPair(initializer,
+							initializer2);
+				}
+			}
+		}
+		return initializer;
+	}
+
+	private Expression changeParent(Expression expression, JSNode newParent) {
+		if (expression instanceof Identifier) {
+			final Identifier identifier = (Identifier) expression;
+			final Identifier copy = new Identifier(newParent);
+			copy.setName(identifier.getName());
+			copyCommonFields(identifier, copy);
+			return copy;
+		} else if (expression instanceof StringLiteral) {
+			final StringLiteral literal = (StringLiteral) expression;
+			final StringLiteral copy = new StringLiteral(newParent);
+			copy.setText(literal.getText());
+			copyCommonFields(literal, copy);
+			return copy;
+		} else {
+			throw new IllegalArgumentException("Unsupported expression "
+					+ expression.getClass().getName());
+		}
+	}
+
+	private static <E extends Expression & Documentable> void copyCommonFields(
+			E source, E dest) {
+		dest.setDocumentation(source.getDocumentation());
+		dest.setStart(source.sourceStart());
+		dest.setEnd(source.sourceEnd());
 	}
 
 	protected ASTNode visitForEachInStatement(Tree node) {

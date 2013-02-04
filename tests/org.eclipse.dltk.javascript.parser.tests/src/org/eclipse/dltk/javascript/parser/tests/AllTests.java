@@ -25,7 +25,7 @@ public class AllTests {
 		suite.addTestSuite(NewTests.class);
 		suite.addTestSuite(VariableDeclarationTests.class);
 		suite.addTestSuite(ArrayInitializerTests.class);
-		suite.addTestSuite(ObjectInitializerTests.class);
+		suite.addTest(new JUnit4TestAdapter(ObjectInitializerTests.class));
 		suite.addTestSuite(FunctionDeclarationTests.class);
 		suite.addTestSuite(XmlQueryTests.class);
 		suite.addTestSuite(XmlLiteralTests.class);

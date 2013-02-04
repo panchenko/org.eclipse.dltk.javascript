@@ -222,7 +222,6 @@ public class JavaScriptParser implements ISourceParser {
 			try {
 				Token first = null;
 				Token last = null;
-				// final StringBuilder sb = new StringBuilder();
 				while (!follow.member(input.LA(1))) {
 					if (input.LA(1) == Token.EOF) {
 						input.rewind();
@@ -230,13 +229,6 @@ public class JavaScriptParser implements ISourceParser {
 						return;
 					}
 					last = input.LT(1);
-					// String tokenText = getTokenErrorDisplay(last);
-					// if (tokenText.startsWith("'") && tokenText.endsWith("'"))
-					// {
-					// tokenText = tokenText.substring(1,
-					// tokenText.length() - 1);
-					// }
-					// sb.append(tokenText);
 					if (first == null) {
 						first = last;
 					}
@@ -265,6 +257,18 @@ public class JavaScriptParser implements ISourceParser {
 			final ISourceRange range = convert(token);
 			reporter.setFormattedMessage(
 					JavaScriptParserProblems.RESERVED_KEYWORD, token.getText());
+			reporter.setSeverity(ProblemSeverity.ERROR);
+			reporter.setRange(range.getOffset(),
+					range.getOffset() + range.getLength());
+			reporter.setLine(token.getLine() - 1);
+			reporter.report();
+		}
+
+		protected void reportError(String message, Token token) {
+			if (reporter == null)
+				return;
+			final ISourceRange range = convert(token);
+			reporter.setMessage(JavaScriptParserProblems.SYNTAX_ERROR, message);
 			reporter.setSeverity(ProblemSeverity.ERROR);
 			reporter.setRange(range.getOffset(),
 					range.getOffset() + range.getLength());
