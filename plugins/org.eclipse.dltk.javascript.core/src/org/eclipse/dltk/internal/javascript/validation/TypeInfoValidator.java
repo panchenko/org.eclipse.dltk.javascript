@@ -1601,35 +1601,8 @@ public class TypeInfoValidator implements IBuildParticipant,
 				IValueReference right, BinaryOperation node) {
 			if (left != null) {
 				checkAssign(left, node);
-				validate(peekFunctionScope(), node.getLeftExpression(), left);
 			}
 			return super.visitAssign(left, right, node);
-		}
-
-		protected boolean validate(FunctionScope scope, Expression expr,
-				IValueReference reference) {
-			final IValueReference parent = reference.getParent();
-			if (parent == null) {
-				// top level
-			} else if (expr instanceof PropertyExpression
-					&& validate(scope, ((PropertyExpression) expr).getObject(),
-							parent)) {
-				final IRType type = JavaScriptValidations.typeOf(parent);
-				if (type != null && TypeUtil.kind(type) == TypeKind.JAVA
-						&& !reference.exists()) {
-					reporter.reportProblem(
-							JavaScriptProblems.UNDEFINED_JAVA_PROPERTY,
-							NLS.bind(ValidationMessages.UndefinedProperty,
-									reference.getName(), type.getName()), expr
-									.sourceStart(), expr.sourceEnd());
-					return false;
-				}
-			} else if (expr instanceof GetArrayItemExpression
-					&& !validate(scope,
-							((GetArrayItemExpression) expr).getArray(), parent)) {
-				return false;
-			}
-			return true;
 		}
 
 		private static boolean isVarOrFunction(IValueReference reference) {

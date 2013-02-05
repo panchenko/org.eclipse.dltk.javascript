@@ -297,6 +297,29 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 				.get(0).getID());
 	}
 
+	public void testUndefinedPropertyAssignment_Object() {
+		StringList code = new StringList();
+		code.add("/** @type Object */");
+		code.add("var x");
+		code.add("x.noname = true");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+
+	public void testUndefinedJavaPropertyOnTopLevelProperty() {
+		List<IProblem> problems = validate("exampleForms.test = 10;");
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JavaScriptProblems.UNDEFINED_JAVA_PROPERTY, problems
+				.get(0).getID());
+	}
+
+	public void testDeprecatedJavaPropertyOnTopLevelProperty() {
+		List<IProblem> problems = validate("exampleForms.deprecatedName = 'DLTK';");
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JavaScriptProblems.DEPRECATED_PROPERTY, problems.get(0)
+				.getID());
+	}
+
 	public void testUndefinedVariableAssignment() {
 		StringList code = new StringList();
 		code.add("x.noname = true");

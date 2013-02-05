@@ -355,28 +355,42 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			if (node.getLeftExpression() instanceof PropertyExpression) {
 				final PropertyExpression property = (PropertyExpression) node
 						.getLeftExpression();
-				if (property.getObject() instanceof ThisExpression
-						&& property.getProperty() instanceof Identifier
+				if (property.getProperty() instanceof Identifier
 						&& !left.exists()) {
-					if (isFunctionDeclaration(property))
-						left.setKind(ReferenceKind.FUNCTION);
-					else {
-						left.setKind(ReferenceKind.FIELD);
-						final Comment comment = JSDocSupport.getComment(node);
-						final JSDocTags tags = parseTags(comment);
-						final JSDocTag typeTag = tags.get(JSDocTag.TYPE);
-						if (typeTag != null) {
-							final JSType type = getDocSupport().parseType(
-									typeTag, false, getProblemReporter());
-							if (type != null) {
-								setIRType(left, type.toRType(context), true);
+					if (property.getObject() instanceof ThisExpression) {
+						if (isFunctionDeclaration(property))
+							left.setKind(ReferenceKind.FUNCTION);
+						else {
+							left.setKind(ReferenceKind.FIELD);
+							final Comment comment = JSDocSupport
+									.getComment(node);
+							final JSDocTags tags = parseTags(comment);
+							final JSDocTag typeTag = tags.get(JSDocTag.TYPE);
+							if (typeTag != null) {
+								final JSType type = getDocSupport().parseType(
+										typeTag, false, getProblemReporter());
+								if (type != null) {
+									setIRType(left, type.toRType(context), true);
+								}
+							}
+						}
+						left.setLocation(ReferenceLocation.create(getSource(),
+								property.sourceStart(), property.sourceEnd(),
+								property.getProperty().sourceStart(), property
+										.getProperty().sourceEnd()));
+					} else {
+						final IValueReference leftParent = left.getParent();
+						if (leftParent != null) {
+							final IRType declaredType = leftParent
+									.getDeclaredType();
+							if (declaredType != null
+									&& !declaredType.isExtensible()
+									&& !declaredType.isJavaScriptObject()) {
+								// skip assignment
+								return right;
 							}
 						}
 					}
-					left.setLocation(ReferenceLocation.create(getSource(),
-							property.sourceStart(), property.sourceEnd(),
-							property.getProperty().sourceStart(), property
-									.getProperty().sourceEnd()));
 				}
 			}
 			if (IValueReference.ARRAY_OP.equals(left.getName())
