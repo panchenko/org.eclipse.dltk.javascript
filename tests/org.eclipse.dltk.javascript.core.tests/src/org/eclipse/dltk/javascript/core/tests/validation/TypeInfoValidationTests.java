@@ -286,7 +286,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 				.getID());
 	}
 
-	public void testUndefinedPropertyAssignment() {
+	public void testUndefinedJavaPropertyAssignment() {
 		StringList code = new StringList();
 		code.add("/** @type ExampleService */");
 		code.add("var x");
@@ -295,6 +295,43 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(problems.toString(), 1, problems.size());
 		assertEquals(JavaScriptProblems.UNDEFINED_JAVA_PROPERTY, problems
 				.get(0).getID());
+	}
+	
+	public void testUndefinedJavaScriptObjectPropertyAssignment() {
+		StringList code = new StringList();
+		code.add("/** @type {Object} */");
+		code.add("var x");
+		code.add("x.noname = true");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+
+	public void testUndefinedJavaScriptRecordTypePropertyAssignment() {
+		StringList code = new StringList();
+		code.add("/** @type {{}} */");
+		code.add("var x");
+		code.add("x.noname = true");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
+	public void testUndefinedJavaScriptCustomTypePropertyAssignment() {
+		StringList code = new StringList();
+		code.add("function MyObject(){}");
+		code.add("/** @type {MyObject} */");
+		code.add("var x");
+		code.add("x.noname = true");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
+	public void testUndefinedPropertyOnJavaPropert() {
+		final StringList code = new StringList();
+		code.add("function caller() {");
+		code.add("	exampleForms.test = 10;");
+		code.add("}");
+		List<IProblem> validate = validate(code.toString());
+		assertEquals(validate.toString(), 1, validate.size());
 	}
 
 	public void testUndefinedPropertyAssignment_Object() {
