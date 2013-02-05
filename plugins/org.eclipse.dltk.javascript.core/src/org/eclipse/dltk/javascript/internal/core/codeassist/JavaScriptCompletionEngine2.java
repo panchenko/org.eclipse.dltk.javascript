@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.dltk.annotations.Internal;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.codeassist.ScriptCompletionEngine;
 import org.eclipse.dltk.compiler.CharOperation;
@@ -134,8 +135,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 					String lastSegment = path.lastSegment();
 					if (lastSegment == null)
 						lastSegment = "";
-					setSourceRange(position - lastSegment.length(),
-							position);
+					setSourceRange(position - lastSegment.length(), position);
 				}
 				final Reporter reporter = new Reporter(inferencer2, path
 						.lastSegment(), position, TypeInfoManager
@@ -240,7 +240,8 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 	 * @param collection
 	 * @param startPart
 	 */
-	private void doCompletionOnMember(ITypeInferenceContext context,
+	@Internal
+	void doCompletionOnMember(ITypeInferenceContext context,
 			IValueCollection collection, CompletionPath path, Reporter reporter) {
 		IValueParent item = collection;
 		for (int i = 0; i < path.segmentCount() - 1; ++i) {
@@ -336,6 +337,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 			}
 		}
 
+		@SuppressWarnings("unused")
 		public void ignore(String generatedIdentifier) {
 			processed.add(generatedIdentifier);
 		}
@@ -547,8 +549,6 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 			proposal.setCompletion(isFunction ? memberName + "()" : memberName);
 			proposal.setName(memberName);
 			proposal.setExtraInfo(member.getSource());
-			proposal.setReplaceRange(startPosition - offset, endPosition
-					- offset);
 			if (isFunction) {
 				List<IRParameter> parameters = null;
 				if (member.getType() instanceof IRFunctionType) {
@@ -567,13 +567,11 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 					if (parameters.get(paramCount - 1).getKind() != ParameterKind.NORMAL) {
 						int requiredCount = parameters.size();
 						while (requiredCount > 0
-								&& parameters
-										.get(requiredCount - 1).getKind() != ParameterKind.NORMAL) {
+								&& parameters.get(requiredCount - 1).getKind() != ParameterKind.NORMAL) {
 							--requiredCount;
 						}
 						if (requiredCount == 0
-								&& parameters.get(requiredCount)
-										.getKind() == ParameterKind.VARARGS) {
+								&& parameters.get(requiredCount).getKind() == ParameterKind.VARARGS) {
 							++requiredCount; // heuristic...
 						}
 						if (requiredCount != paramCount) {
@@ -584,7 +582,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 					}
 				}
 			}
-			requestor.accept(proposal);
+			accept(proposal);
 		}
 
 		/**
@@ -615,8 +613,6 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 					: reference.getName());
 			proposal.setName(reference.getName());
 			proposal.setExtraInfo(reference);
-			proposal.setReplaceRange(startPosition - offset, endPosition
-					- offset);
 			if (proposalKind == CompletionProposal.METHOD_REF) {
 				final IRMethod method = (IRMethod) reference.getAttribute(
 						IReferenceAttributes.R_METHOD, true);
@@ -650,7 +646,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 					}
 				}
 			}
-			requestor.accept(proposal);
+			accept(proposal);
 		}
 
 		public void reportTypeRef(Type type) {
@@ -667,9 +663,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 			proposal.setCompletion(type.getName());
 			proposal.setName(type.getName());
 			proposal.setExtraInfo(type);
-			proposal.setReplaceRange(startPosition - offset, endPosition
-					- offset);
-			requestor.accept(proposal);
+			accept(proposal);
 		}
 
 	}
@@ -680,8 +674,9 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 	 * @param reporter
 	 * @param expressionContext
 	 */
-	private void doGlobalCompletion(IValueCollection collection,
-			Reporter reporter, ExpressionContext expressionContext) {
+	@Internal
+	void doGlobalCompletion(IValueCollection collection, Reporter reporter,
+			ExpressionContext expressionContext) {
 		if (expressionContext != null
 				&& expressionContext.expressionType == ExpressionType.OBJECT_INITIALIZER) {
 			return;
