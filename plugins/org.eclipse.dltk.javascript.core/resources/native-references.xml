@@ -195,10 +195,10 @@
         <itemType xsi:type="ref:TypeVariableReference" variable="@ROOT/Array/E"/>
       </type>
     </members>
-    <members xsi:type="ref:Method" name="every" directType="Boolean" description="Tests whether all elements in the array pass the test implemented by the provided function.">
+    <members xsi:type="ref:Method" name="every" directType="Boolean" description="Tests whether all elements in the array pass the test implemented by the provided function. The callback will be called with 3 arguments (elementValue,elementIndex,traversedArray).">
       <parameters name="callback" directType="Function"/>
     </members>
-    <members xsi:type="ref:Method" name="filter" description="Creates a new array with all elements that pass the test implemented by the provided function.">
+    <members xsi:type="ref:Method" name="filter" description="Creates a new array with all elements that pass the test implemented by the provided function. The callback will be called with 3 arguments (elementValue,elementIndex,traversedArray).">
       <parameters name="callback" directType="Function"/>
       <type xsi:type="ref:ArrayType">
         <itemType xsi:type="ref:TypeVariableReference" variable="@ROOT/Array/E"/>
@@ -220,8 +220,9 @@
       <parameters name="formIndex" kind="OPTIONAL"/>
     </members>
     <members xsi:type="ref:Property" name="length" directType="Number" description="The length returns an integer representing the length of an array."/>
-    <members xsi:type="ref:Method" name="map" directType="Array" description="Creates a new array with the results of calling a provided function on every element in this array.">
+    <members xsi:type="ref:Method" name="map" directType="Array" description="Creates a new array with the results of calling a provided function on every element in this array. The callback will be called with 3 arguments (elementValue,elementIndex,traversedArray). Optionally with a thisObject argument to use as this when executing callback.">
       <parameters name="callback" directType="Function"/>
+      <parameters name="thisArg" kind="OPTIONAL"/>
     </members>
     <members xsi:type="ref:Method" name="pop" description="Removes and returns the last element of an array.">
     	<type xsi:type="ref:TypeVariableReference" variable="@ROOT/Array/E"/>
@@ -244,10 +245,11 @@
         <itemType xsi:type="ref:TypeVariableReference" variable="@ROOT/Array/E"/>
       </type>
     </members>
-    <members xsi:type="ref:Method" name="some" directType="Boolean" description="Tests whether some element in the array passes the test implemented by the provided function.">
+    <members xsi:type="ref:Method" name="some" directType="Boolean" description="Tests whether some element in the array passes the test implemented by the provided function. The callback will be called with 3 arguments (elementValue,elementIndex,traversedArray). Optionally with a thisObject argument to use as this when executing callback.">
       <parameters name="callback" directType="Function"/>
+      <parameters name="thisArg" kind="OPTIONAL"/>
     </members>
-    <members xsi:type="ref:Method" name="sort" description="Sorts the elements of an array.">
+    <members xsi:type="ref:Method" name="sort" description="Sorts the elements of an array. The function will be called with 2 arguments (a,b)">
       <parameters name="sortByFunction" directType="Function" kind="OPTIONAL"/>
       <type xsi:type="ref:ArrayType">
         <itemType xsi:type="ref:TypeVariableReference" variable="@ROOT/Array/E"/>
