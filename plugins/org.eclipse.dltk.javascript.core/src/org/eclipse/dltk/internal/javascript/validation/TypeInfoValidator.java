@@ -24,11 +24,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
-import java.util.WeakHashMap;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -187,24 +187,35 @@ public class TypeInfoValidator implements IBuildParticipant,
 	public static final String ATTR_BINDINGS = TypeInfoValidator.class
 			.getName() + ".BINDINGS";
 
+	private static final int CACHED_BINDINGS_SIZE = 32;
+
 	/**
 	 * Thread specific bindings, so methods from {@link JSBindings} called from
 	 * {@link IBuildParticipant} will return validation specific bindings.
 	 */
-	private static final ThreadLocal<WeakHashMap<Script, JSBindings>> CACHED_BINDINGS = new ThreadLocal<WeakHashMap<Script, JSBindings>>();
+	private static final ThreadLocal<Map<Script, JSBindings>> CACHED_BINDINGS = new ThreadLocal<Map<Script, JSBindings>>();
 
+	@SuppressWarnings("serial")
 	private static void saveCachedBindings(Script script, JSBindings bindings) {
-		WeakHashMap<Script, JSBindings> map = CACHED_BINDINGS.get();
+		Map<Script, JSBindings> map = CACHED_BINDINGS.get();
 		if (map == null) {
-			map = new WeakHashMap<Script, JSBindings>();
+			map = new LinkedHashMap<Script, JSBindings>(
+					(CACHED_BINDINGS_SIZE + CACHED_BINDINGS_SIZE / 3), 0.75f,
+					true) {
+				@Override
+				protected boolean removeEldestEntry(
+						Map.Entry<Script, JSBindings> eldest) {
+					return size() >= CACHED_BINDINGS_SIZE;
+				}
+			};
 			CACHED_BINDINGS.set(map);
 		}
 		map.put(script, bindings);
 	}
 
 	private static void removeCachedBindings() {
-		final WeakHashMap<Script, JSBindings> map = CACHED_BINDINGS.get();
-		if (map != null) {
+		final Map<Script, JSBindings> map = CACHED_BINDINGS.get();
+		if (map != null && !map.isEmpty()) {
 			map.clear();
 		}
 	}
@@ -216,7 +227,7 @@ public class TypeInfoValidator implements IBuildParticipant,
 	 * @return
 	 */
 	public static JSBindings getCachedBindings(Script script) {
-		final WeakHashMap<Script, JSBindings> map = CACHED_BINDINGS.get();
+		final Map<Script, JSBindings> map = CACHED_BINDINGS.get();
 		if (map != null) {
 			return map.get(script);
 		}
