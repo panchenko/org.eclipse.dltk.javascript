@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.dltk.compiler.problem.IProblem;
 import org.eclipse.dltk.compiler.problem.IProblemReporter;
 import org.eclipse.dltk.compiler.problem.ProblemCollector;
@@ -104,4 +105,7 @@ public class TestBuildContext implements IBuildContext {
 		return null;
 	}
 
+	@Override
+	public void recordDependency(IPath dependency, int flags) {
+	}
 }
