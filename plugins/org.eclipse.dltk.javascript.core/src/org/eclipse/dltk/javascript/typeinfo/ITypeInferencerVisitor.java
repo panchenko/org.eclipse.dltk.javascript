@@ -43,4 +43,6 @@ public interface ITypeInferencerVisitor extends INodeVisitor<IValueReference> {
 	void setType(IValueReference value, JSType type, boolean lazyEnabled);
 
 	void suppressProblems(IProblemIdentifier... identifiers);
+
+	void addListener(ITypeInferenceListener listener);
 }

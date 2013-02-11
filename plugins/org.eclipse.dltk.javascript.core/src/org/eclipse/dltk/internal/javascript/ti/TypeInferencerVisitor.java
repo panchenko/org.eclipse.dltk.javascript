@@ -125,6 +125,7 @@ import org.eclipse.dltk.javascript.typeinfo.IRSimpleType;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.IRTypeDeclaration;
 import org.eclipse.dltk.javascript.typeinfo.IRVariable;
+import org.eclipse.dltk.javascript.typeinfo.ITypeInferenceListener;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
@@ -639,6 +640,11 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				variable.addSuppressedWarning(state.asCategory());
 			}
 		}
+		if (listeners != null) {
+			for (ITypeInferenceListener listener : listeners) {
+				listener.variableParsed(variable);
+			}
+		}
 		reference.setAttribute(IReferenceAttributes.VARIABLE, variable);
 
 		reference.setKind(inFunction() ? ReferenceKind.LOCAL
@@ -854,6 +860,11 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		final JSMethod method = new JSMethod(node, getSource());
 		for (IModelBuilder extension : context.getModelBuilders()) {
 			extension.processMethod(node, method, reporter, getTypeChecker());
+		}
+		if (listeners != null) {
+			for (ITypeInferenceListener listener : listeners) {
+				listener.methodParsed(method);
+			}
 		}
 		return method;
 	}

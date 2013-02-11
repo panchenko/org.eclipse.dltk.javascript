@@ -29,6 +29,7 @@ import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinfo.ITypeChecker;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInferenceHandler;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInferenceHandlerFactory;
+import org.eclipse.dltk.javascript.typeinfo.ITypeInferenceListener;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInferencerVisitor;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 
@@ -78,11 +79,16 @@ public abstract class TypeInferencerVisitorBase extends
 		this.context = context;
 	}
 
+	@Nullable
 	private ITypeInferenceHandler[] handlers = null;
+
+	@Nullable
+	ITypeInferenceListener[] listeners = null;
 
 	public void initialize() {
 		contexts.clear();
 		contexts.push(new TopValueCollection(context));
+		listeners = null;
 		final List<ITypeInferenceHandler> handlers = createHandlers();
 		if (handlers != null && !handlers.isEmpty()) {
 			this.handlers = handlers.toArray(new ITypeInferenceHandler[handlers
@@ -102,6 +108,24 @@ public abstract class TypeInferencerVisitorBase extends
 			}
 		}
 		return handlers;
+	}
+
+	public void addListener(ITypeInferenceListener listener) {
+		assert listener != null;
+		if (listeners == null) {
+			listeners = new ITypeInferenceListener[] { listener };
+		} else {
+			final int length = this.listeners.length;
+			for (int i = 0; i < length; ++i) {
+				if (listener.equals(this.listeners[i])) {
+					return;
+				}
+			}
+			System.arraycopy(this.listeners, 0,
+					this.listeners = new ITypeInferenceListener[length + 1], 0,
+					length);
+			this.listeners[length] = listener;
+		}
 	}
 
 	@Override
@@ -156,6 +180,11 @@ public abstract class TypeInferencerVisitorBase extends
 			IValue value = ((ValueCollection) collection).getValue();
 			if (value instanceof Value) {
 				((Value) value).resolveLazyValues(new HashSet<Value>());
+			}
+		}
+		if (listeners != null) {
+			for (ITypeInferenceListener listener : listeners) {
+				listener.done();
 			}
 		}
 	}

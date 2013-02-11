@@ -105,6 +105,7 @@ import org.eclipse.dltk.javascript.typeinfo.IRTypeExtension;
 import org.eclipse.dltk.javascript.typeinfo.IRVariable;
 import org.eclipse.dltk.javascript.typeinfo.ITypeChecker;
 import org.eclipse.dltk.javascript.typeinfo.ITypeCheckerExtension;
+import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
@@ -150,6 +151,7 @@ public class TypeInfoValidator implements IBuildParticipant,
 			inferencer = createTypeInferencer();
 		}
 		inferencer.setModelElement(context.getSourceModule());
+		inferencer.pushAttribute(ITypeInfoContext.BUILD_CONTEXT, context);
 		final JSProblemReporter reporter = JavaScriptValidations
 				.createReporter(context);
 		@SuppressWarnings("unchecked")

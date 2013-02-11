@@ -12,6 +12,7 @@
 package org.eclipse.dltk.javascript.typeinfo;
 
 import org.eclipse.dltk.core.IModelElement;
+import org.eclipse.dltk.core.builder.IBuildContext;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
@@ -131,4 +132,6 @@ public interface ITypeInfoContext extends ITypeSystem {
 	 * @return
 	 */
 	IRLocalType resolveLocalType(String name);
+
+	AttributeKey<IBuildContext> BUILD_CONTEXT = new AttributeKey<IBuildContext>();
 }

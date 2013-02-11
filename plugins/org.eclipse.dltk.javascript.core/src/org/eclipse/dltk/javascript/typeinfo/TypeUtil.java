@@ -99,11 +99,19 @@ public class TypeUtil {
 		return mapType;
 	}
 
+	/**
+	 * @deprecated Use {@link #parameterizedType(String,JSType...)} instead
+	 */
 	public static ParameterizedType genericType(String baseType,
+			JSType... typeParameters) {
+		return parameterizedType(type(baseType), typeParameters);
+	}
+
+	public static ParameterizedType parameterizedType(Type targetType,
 			JSType... typeParameters) {
 		final ParameterizedType genericType = eINSTANCE
 				.createParameterizedType();
-		genericType.setTarget(type(baseType));
+		genericType.setTarget(targetType);
 		for (JSType typeParameter : typeParameters) {
 			genericType.getActualTypeArguments().add(typeParameter);
 		}
