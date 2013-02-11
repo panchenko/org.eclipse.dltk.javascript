@@ -370,15 +370,6 @@ public class RTypes {
 		return new RLocalType(typeSystem, name, value);
 	}
 
-	@Deprecated
-	public static IRType create(JSType type) {
-		ITypeSystem current = ITypeSystem.CURRENT.get();
-		if (current == null) {
-			current = TypeSystems.DELEGATING_TYPE_SYSTEM;
-		}
-		return create(current, type);
-	}
-
 	/**
 	 * Converts the specified type expression to the "resolved" type expression.
 	 */

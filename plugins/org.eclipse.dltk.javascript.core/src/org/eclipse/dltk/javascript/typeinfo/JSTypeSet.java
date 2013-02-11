@@ -227,13 +227,6 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 	}
 
 	/**
-	 * @deprecated Use {@link RTypes#create(JSType)} instead
-	 */
-	public static IRType normalize(JSType type) {
-		return RTypes.create(type);
-	}
-
-	/**
 	 * @deprecated Use {@link RTypes#create(ITypeSystem,JSType)} instead
 	 */
 	public static IRType normalize(ITypeSystem context, JSType type) {
