@@ -30,9 +30,7 @@ class RLocalType extends RType implements IRLocalType {
 	private final IValueReference functionValue;
 	private final String name;
 
-	RLocalType(ITypeSystem typeSystem, String name,
-			IValueReference functionValue) {
-		super(typeSystem);
+	RLocalType(String name, IValueReference functionValue) {
 		this.name = name;
 		this.functionValue = functionValue;
 	}

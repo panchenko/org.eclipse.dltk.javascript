@@ -322,7 +322,8 @@ public class TypeSystemImpl implements ITypeSystem {
 		final GenericType type;
 		final IRType[] parameters;
 
-		public ParameterizedTypeKey(GenericType type, List<IRType> params) {
+		public ParameterizedTypeKey(GenericType type,
+				List<? extends IRType> params) {
 			this.type = type;
 			final int expectedParamCount = type.getTypeParameters().size();
 			this.parameters = new IRType[expectedParamCount];
@@ -378,7 +379,8 @@ public class TypeSystemImpl implements ITypeSystem {
 	/*
 	 * @see ITypeSystem#parameterize(Type, java.util.List)
 	 */
-	public IRTypeDeclaration parameterize(Type target, List<IRType> parameters) {
+	public IRTypeDeclaration parameterize(Type target,
+			List<? extends IRType> parameters) {
 		target = resolveType(target);
 		if (!(target instanceof GenericType)) {
 			return convert0(target);
@@ -391,7 +393,7 @@ public class TypeSystemImpl implements ITypeSystem {
 	private final List<RParameterizedTypeDeclaration> typeVariables = new ArrayList<RParameterizedTypeDeclaration>();
 
 	private RTypeDeclaration parameterizeType(GenericType genericType,
-			List<IRType> parameters) {
+			List<? extends IRType> parameters) {
 		final ParameterizedTypeKey key = new ParameterizedTypeKey(genericType,
 				parameters);
 		{

@@ -118,27 +118,6 @@ public class TypeUtil {
 		return genericType;
 	}
 
-	@Deprecated
-	public static IRTypeDeclaration extractType(ITypeSystem context, IRType type) {
-		if (type instanceof IRSimpleType) {
-			return ((IRSimpleType) type).getDeclaration();
-		} else if (type instanceof IRArrayType) {
-			final IRArrayType arrayType = (IRArrayType) type;
-			final ITypeSystem saved = arrayType.activeTypeSystem();
-			if (saved != null) {
-				context = saved;
-			}
-			return context.parameterize(Types.ARRAY,
-					Collections.singletonList(arrayType.getItemType()));
-		} else if (type instanceof IRMapType) {
-			return RTypes.OBJECT.getDeclaration();
-		} else if (type == RTypes.any()) {
-			return RTypes.OBJECT.getDeclaration();
-		} else {
-			return null;
-		}
-	}
-
 	public static IRType extractArrayItemType(IRType type) {
 		if (type instanceof IRArrayType) {
 			return ((IRArrayType) type).getItemType();

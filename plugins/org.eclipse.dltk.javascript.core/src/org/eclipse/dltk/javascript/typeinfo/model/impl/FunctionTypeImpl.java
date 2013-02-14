@@ -161,11 +161,11 @@ public class FunctionTypeImpl extends MinimalEObjectImpl implements FunctionType
 	 * 
 	 * @generated NOT
 	 */
-    public IRType toRType(ITypeSystem typeSystem) {
-		return RTypes.functionType(
+	public IRType toRType(ITypeSystem typeSystem) {
+		return RTypes.functionType(typeSystem,
 				RModelBuilder.convert(typeSystem, getParameters()),
 				RTypes.create(typeSystem, getReturnType()));
-    }
+	}
 
 	protected void printParameters(StringBuilder sb) {
 		sb.append("(");

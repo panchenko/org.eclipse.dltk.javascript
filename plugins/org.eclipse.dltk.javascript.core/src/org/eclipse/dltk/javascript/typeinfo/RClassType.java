@@ -26,17 +26,8 @@ public class RClassType extends RType implements IRClassType {
 	protected final IRTypeDeclaration declaration;
 
 	protected RClassType(ITypeSystem typeSystem, Type type) {
-		super(typeSystem);
 		this.type = type;
-		this.declaration = type != null ? convert(type) : null;
-		if (DEBUG)
-			if (type != null)
-				checkType(type);
-	}
-
-	protected RClassType(Type type) {
-		this.type = type;
-		this.declaration = type != null ? convert(type) : null;
+		this.declaration = type != null ? typeSystem.convert(type) : null;
 		if (DEBUG)
 			if (type != null)
 				checkType(type);
@@ -84,7 +75,7 @@ public class RClassType extends RType implements IRClassType {
 		} else if (Types.ARRAY == type) {
 			return RTypes.arrayOf(TypeSystems.GLOBAL, RTypes.none());
 		} else {
-			return type.toRType(typeSystem);
+			return type.toRType(declaration.getTypeSystem());
 		}
 	}
 
@@ -94,7 +85,7 @@ public class RClassType extends RType implements IRClassType {
 		} else if (Types.ARRAY == type) {
 			return RTypes.arrayOf(TypeSystems.GLOBAL, RTypes.any());
 		} else {
-			return type.createInstance(typeSystem);
+			return type.createInstance(declaration.getTypeSystem());
 		}
 	}
 

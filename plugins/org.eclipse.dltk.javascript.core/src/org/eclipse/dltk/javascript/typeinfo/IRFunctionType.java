@@ -15,6 +15,11 @@ import java.util.List;
 
 public interface IRFunctionType extends IRType {
 
+	/**
+	 * Returns the type system this instance was created by.
+	 */
+	ITypeSystem getTypeSystem();
+
 	IRType getReturnType();
 
 	List<IRParameter> getParameters();

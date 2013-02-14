@@ -18,12 +18,19 @@ import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 
 class RFunctionType extends RType implements IRFunctionType {
 
+	private final ITypeSystem typeSystem;
 	private final List<IRParameter> parameters;
 	private final IRType returnType;
 
-	public RFunctionType(List<IRParameter> parameters, IRType returnType) {
+	public RFunctionType(ITypeSystem typeSystem, List<IRParameter> parameters,
+			IRType returnType) {
+		this.typeSystem = typeSystem;
 		this.parameters = parameters;
 		this.returnType = returnType;
+	}
+
+	public ITypeSystem getTypeSystem() {
+		return typeSystem;
 	}
 
 	public String getName() {

@@ -145,7 +145,8 @@ public class RParameterizedTypeDeclaration extends RTypeDeclaration implements
 		return typeSystem.contextualize(member, type);
 	}
 
-	public IRTypeDeclaration parameterize(Type target, List<IRType> parameters) {
+	public IRTypeDeclaration parameterize(Type target,
+			List<? extends IRType> parameters) {
 		return typeSystem.parameterize(target, parameters);
 	}
 

@@ -539,7 +539,7 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IValueCollection collection = inference(lines.toString());
 		IValueReference context = collection.getChild("context");
 		IValueReference index = context.getChild("index");
-		assertFalse(index.exists());
+		assertTrue(index.exists());
 		IValueReference prev = context.getChild("prev");
 		assertTrue(prev.exists());
 		// (alex) not sure what is expected here
@@ -613,17 +613,17 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		assertTrue(name.getChild("service").exists());
 		assertTrue(name.getChild("test").exists());
 	}
-	
+
 	public void testExampleTypeWithCollectionInArray() {
 		List<String> lines = new StringList();
-		lines.add("/** @type Array<" + ExampleTypeProvider.TYPE_WITH_COLLECTION + ">"
-				+ " */");
+		lines.add("/** @type Array<" + ExampleTypeProvider.TYPE_WITH_COLLECTION
+				+ ">" + " */");
 		lines.add("var b = new Array()");
 		IValueCollection collection = inference(lines.toString());
 		IValueReference name = collection.getChild("b");
 		assertTrue(name.exists());
-		assertEquals("Array<" + ExampleTypeProvider.TYPE_WITH_COLLECTION + ">", name
-				.getDeclaredType().getName());
+		assertEquals("Array<" + ExampleTypeProvider.TYPE_WITH_COLLECTION + ">",
+				name.getDeclaredType().getName());
 		IValueReference array = name.getChild("[]");
 		assertTrue(array.getChild("service").exists());
 		assertTrue(array.getChild("test").exists());
@@ -1249,10 +1249,11 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		final IValueCollection collection = inference(code.toString());
 		final IRRecordType figure = (IRRecordType) JavaScriptValidations
 				.typeOf(collection.getChild("figure"));
-		final IRFunctionType expected = RTypes.functionType(Arrays.asList(
-				createParameter("x", RTypes.NUMBER, ParameterKind.NORMAL),
-				createParameter("y", RTypes.NUMBER, ParameterKind.NORMAL)),
-				null);
+		final IRFunctionType expected = RTypes.functionType(ts(), Arrays
+				.asList(createParameter("x", RTypes.NUMBER,
+						ParameterKind.NORMAL),
+						createParameter("y", RTypes.NUMBER,
+								ParameterKind.NORMAL)), null);
 		assertEquals(expected, figure.getMember("draw").getType());
 	}
 

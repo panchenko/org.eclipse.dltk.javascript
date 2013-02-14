@@ -128,7 +128,8 @@ public interface ITypeSystem {
 	/**
 	 * Parameterizes the specified generic type with the specified parameters.
 	 */
-	IRTypeDeclaration parameterize(Type target, List<IRType> parameters);
+	IRTypeDeclaration parameterize(Type target,
+			List<? extends IRType> parameters);
 
 	/**
 	 * Returns current value of the specified type variable (if some type is

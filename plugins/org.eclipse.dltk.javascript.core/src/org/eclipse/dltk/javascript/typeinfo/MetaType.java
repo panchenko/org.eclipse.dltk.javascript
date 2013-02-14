@@ -40,12 +40,10 @@ public interface MetaType {
 	 * Creates the corresponding {@link IRType} for the specified
 	 * {@link IRTypeDeclaration} instance.
 	 * 
-	 * @param typeSystem
-	 *            the context for the operation, possible <code>null</code>
 	 * @param type
 	 *            the type to wrap
 	 */
-	IRType toRType(ITypeSystem typeSystem, IRTypeDeclaration declaration);
+	IRType toRType(IRTypeDeclaration declaration);
 
 	/**
 	 * Returns the preferred type system for converting the specified type to

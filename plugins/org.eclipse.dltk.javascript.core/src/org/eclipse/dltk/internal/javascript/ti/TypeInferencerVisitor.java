@@ -127,7 +127,6 @@ import org.eclipse.dltk.javascript.typeinfo.IRTypeDeclaration;
 import org.eclipse.dltk.javascript.typeinfo.IRVariable;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInferenceListener;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
-import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.RModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.RTypes;
@@ -253,7 +252,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			return new ConstantValue(RTypes.arrayOf());
 		} else {
 			return new ConstantValue(RTypes.arrayOf(context,
-					CommonSuperTypeFinder.evaluate(types)));
+					CommonSuperTypeFinder.evaluate(context, types)));
 		}
 	}
 
@@ -479,15 +478,6 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		} else {
 			return null;
 		}
-	}
-
-	protected ITypeSystem getTypeSystemOf(IValueReference reference) {
-		final Object value = reference
-				.getAttribute(IReferenceAttributes.TYPE_SYSTEM);
-		if (value != null) {
-			return (ITypeSystem) value;
-		}
-		return getContext();
 	}
 
 	protected IRType evaluateGenericCall(IRMethod rMethod,
@@ -1100,7 +1090,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					String className = PropertyExpressionUtils
 							.getPath(objectClass);
 					if (className != null) {
-						result.value.setDeclaredType(RTypes.localType(context,
+						result.value.setDeclaredType(RTypes.localType(
 								className, result.typeValue));
 					} else {
 						result.value.setDeclaredType(RTypes.OBJECT);
@@ -1198,7 +1188,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 									.getChild(IValueReference.FUNCTION_OP));
 						}
 						members.add(new RRecordMember(childName, RTypes
-								.functionType(method.getParameters(),
+								.functionType(context, method.getParameters(),
 										returnType), method.getSource()));
 						continue;
 					}

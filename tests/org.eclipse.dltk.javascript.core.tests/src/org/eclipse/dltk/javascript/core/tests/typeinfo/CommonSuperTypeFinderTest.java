@@ -49,10 +49,11 @@ public class CommonSuperTypeFinderTest extends TestCase {
 	}
 
 	private IRType evaluate(IRType... types) {
-		final IRType result = CommonSuperTypeFinder.evaluate(asList(types));
+		final IRType result = CommonSuperTypeFinder.evaluate(typeSystem,
+				asList(types));
 		for (IRType[] permutation : Permutations.of(types)) {
-			assertEquals(result,
-					CommonSuperTypeFinder.evaluate(asList(permutation)));
+			assertEquals(result, CommonSuperTypeFinder.evaluate(typeSystem,
+					asList(permutation)));
 		}
 		return result;
 	}

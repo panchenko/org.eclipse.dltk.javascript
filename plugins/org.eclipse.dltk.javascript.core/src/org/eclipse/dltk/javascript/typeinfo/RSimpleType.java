@@ -22,25 +22,14 @@ public class RSimpleType extends RType implements IRSimpleType {
 	private final IRTypeDeclaration declaration;
 
 	protected RSimpleType(ITypeSystem typeSystem, Type target) {
-		super(typeSystem);
 		assert target != null;
 		if (DEBUG)
 			checkType(target);
-		this.declaration = convert(target);
-	}
-
-	@Deprecated
-	protected RSimpleType(Type type) {
-		this(null, type);
-	}
-
-	protected RSimpleType(ITypeSystem typeSystem, IRTypeDeclaration declaration) {
-		super(typeSystem);
-		assert declaration != null;
-		this.declaration = declaration;
+		this.declaration = typeSystem.convert(target);
 	}
 
 	protected RSimpleType(IRTypeDeclaration declaration) {
+		assert declaration != null;
 		this.declaration = declaration;
 	}
 

@@ -53,7 +53,6 @@ import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueParent;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
-import org.eclipse.dltk.javascript.typeinfo.IRArrayType;
 import org.eclipse.dltk.javascript.typeinfo.IRClassType;
 import org.eclipse.dltk.javascript.typeinfo.IRElement;
 import org.eclipse.dltk.javascript.typeinfo.IRFunctionType;
@@ -449,12 +448,10 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 				} else if (type instanceof IRSimpleType) {
 					final IRTypeDeclaration t = ((IRSimpleType) type)
 							.getDeclaration();
-					if (t != null) {
-						typeQuery.add(
-								t,
-								t.getSource().memberPredicateFor(type,
-										MemberPredicates.NON_STATIC));
-					}
+					typeQuery.add(
+							t,
+							t.getSource().memberPredicateFor(type,
+									MemberPredicates.NON_STATIC));
 				} else if (type instanceof IRRecordType) {
 					members.addAll(((IRRecordType) type).getMembers());
 					typeQuery.add(RTypes.OBJECT.getDeclaration(),
@@ -485,12 +482,6 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 													.getSource());
 								}
 							});
-				} else if (type instanceof IRArrayType) {
-					final IRArrayType arrayType = (IRArrayType) type;
-					typeQuery.add(
-							context.parameterize(Types.ARRAY, Collections
-									.singletonList(arrayType.getItemType())),
-							MemberPredicates.NON_STATIC);
 				} else if (type.isJavaScriptObject()) {
 					typeQuery.add(RTypes.OBJECT.getDeclaration(),
 							MemberPredicates.NON_STATIC);

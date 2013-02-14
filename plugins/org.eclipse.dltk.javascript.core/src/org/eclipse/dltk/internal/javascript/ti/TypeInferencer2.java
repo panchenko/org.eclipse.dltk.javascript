@@ -577,8 +577,8 @@ public class TypeInferencer2 extends TypeSystemImpl implements
 						}
 					}
 					if (value instanceof ImmutableValue) {
-						ElementValue elementValue = ElementValue.createFor(
-								member, this);
+						ElementValue elementValue = ElementValue
+								.createFor(member);
 						return new ValueWithElementValue(
 								(ImmutableValue) value, elementValue);
 					}
@@ -735,7 +735,7 @@ public class TypeInferencer2 extends TypeSystemImpl implements
 			}
 		}
 		if (result != null && result.getKind() == ReferenceKind.FUNCTION) {
-			return RTypes.localType(this, name, result);
+			return RTypes.localType(name, result);
 		}
 		return null;
 	}

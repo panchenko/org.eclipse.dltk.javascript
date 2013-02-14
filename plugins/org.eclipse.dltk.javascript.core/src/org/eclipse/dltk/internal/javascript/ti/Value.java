@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
-import static org.eclipse.dltk.javascript.internal.core.TypeSystems.DELEGATING_TYPE_SYSTEM;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.IdentityHashMap;
@@ -35,11 +33,6 @@ import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public class Value extends ImmutableValue {
-
-	@Override
-	protected ITypeSystem getTypeSystem() {
-		return DELEGATING_TYPE_SYSTEM;
-	}
 
 	@Override
 	public void setDeclaredType(IRType declaredType) {

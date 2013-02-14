@@ -59,7 +59,7 @@ public class RTypeTests extends TestCase {
 				object.isAssignableFrom(arrayOf(ts, simple(ts, Types.STRING))));
 		assertEquals(
 				TypeCompatibility.TRUE,
-				object.isAssignableFrom(RTypes.functionType(
+				object.isAssignableFrom(RTypes.functionType(ts,
 						Collections.<IRParameter> emptyList(),
 						simple(ts, Types.STRING))));
 	}

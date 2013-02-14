@@ -17,7 +17,6 @@ import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinfo.IRFunctionType;
 import org.eclipse.dltk.javascript.typeinfo.IRMethod;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
-import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.RTypes;
 
@@ -28,9 +27,8 @@ class FunctionTypeMethodValue extends ElementValue implements IValue {
 	private final FunctionMethod functionMethod;
 	private final IRMethod method;
 
-	public FunctionTypeMethodValue(ITypeSystem context,
-			IRFunctionType functionType, FunctionMethod functionMethod) {
-		super(context);
+	public FunctionTypeMethodValue(IRFunctionType functionType,
+			FunctionMethod functionMethod) {
 		this.functionType = functionType;
 		this.functionMethod = functionMethod;
 		this.method = functionMethod.create(functionType);
@@ -50,7 +48,7 @@ class FunctionTypeMethodValue extends ElementValue implements IValue {
 		if (IValueReference.FUNCTION_OP.equals(name)) {
 			if (functionType.getReturnType() != null) {
 				if (functionOperator == null) {
-					functionOperator = new TypeValue(context,
+					functionOperator = new TypeValue(
 							functionType.getReturnType());
 				}
 				return functionOperator;
@@ -58,8 +56,8 @@ class FunctionTypeMethodValue extends ElementValue implements IValue {
 				return null;
 			}
 		}
-		final IValue child = ElementValue.findMemberA(context,
-				getDeclaredType(), name, resolve);
+		final IValue child = ElementValue.findMemberA(getDeclaredType(), name,
+				resolve);
 		if (child != null) {
 			return child;
 		}

@@ -1,6 +1,5 @@
 package org.eclipse.dltk.internal.javascript.ti;
 
-import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.RTypes;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
@@ -17,11 +16,6 @@ public class PackageOrClassValue extends Value {
 		if (type != null) {
 			types.add(RTypes.classType(context, type));
 		}
-	}
-
-	@Override
-	protected ITypeSystem getTypeSystem() {
-		return context;
 	}
 
 	@Override

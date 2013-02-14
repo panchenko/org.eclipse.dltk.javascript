@@ -18,7 +18,6 @@ import org.eclipse.dltk.javascript.core.Types;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinfo.IRMember;
-import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.TypeMode;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
@@ -31,11 +30,6 @@ public class TopValueCollection extends ValueCollection {
 
 		public TopValue(ITypeInferenceContext context) {
 			this.context = context;
-		}
-
-		@Override
-		protected ITypeSystem getTypeSystem() {
-			return context;
 		}
 
 		private final Map<String, IValue> memberCache = new HashMap<String, IValue>();
@@ -51,7 +45,7 @@ public class TopValueCollection extends ValueCollection {
 				if (element != null) {
 					value = context.valueOf(element);
 					if (value == null) {
-						value = ElementValue.createFor(element, context);
+						value = ElementValue.createFor(element);
 					}
 					memberCache.put(name, value);
 					return value;
@@ -59,8 +53,8 @@ public class TopValueCollection extends ValueCollection {
 				if (name.equals(IValueReference.ARRAY_OP)) {
 					// special case ARRAY_OP is an instance of an Array not
 					// the Array type/class itself.
-					value = ElementValue.createFor(
-							context.convert(Types.ARRAY), context);
+					value = ElementValue
+							.createFor(context.convert(Types.ARRAY));
 					memberCache.put(name, value);
 					return value;
 				}

@@ -378,7 +378,7 @@ public class GenericMethodTypeInferencer implements ITypeSystem {
 				for (IRType t : types) {
 					copy.add(t);
 				}
-				type = CommonSuperTypeFinder.evaluate(copy);
+				type = CommonSuperTypeFinder.evaluate(typeSystem, copy);
 			} else {
 				type = types.toRType();
 			}
@@ -414,7 +414,8 @@ public class GenericMethodTypeInferencer implements ITypeSystem {
 		return typeSystem.contextualize(member, type);
 	}
 
-	public IRTypeDeclaration parameterize(Type target, List<IRType> parameters) {
+	public IRTypeDeclaration parameterize(Type target,
+			List<? extends IRType> parameters) {
 		return typeSystem.parameterize(target, parameters);
 	}
 

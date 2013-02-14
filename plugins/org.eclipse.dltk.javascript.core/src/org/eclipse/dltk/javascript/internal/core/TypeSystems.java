@@ -16,10 +16,6 @@ import org.eclipse.dltk.javascript.typeinfo.RTypes;
 
 public class TypeSystems {
 
-	public static final ITypeSystem DELEGATING_TYPE_SYSTEM = new DelegatingTypeSystem();
-
-	public static final ITypeSystem WEAK_TYPE_SYSTEM = new WeakTypeSystem();
-
 	/**
 	 * Global type system instance, used by the predefined types, so we can have
 	 * static instances of them, like {@link RTypes#OBJECT}.

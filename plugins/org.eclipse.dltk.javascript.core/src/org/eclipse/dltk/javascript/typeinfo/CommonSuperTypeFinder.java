@@ -55,12 +55,12 @@ public class CommonSuperTypeFinder {
 				++anyCount;
 			} else if (type instanceof IRUnionType) {
 				addAll(((IRUnionType) type).getTargets()); // expand
+			} else if (type instanceof IRArrayType) {
+				arrayTypes.add((IRArrayType) type);
 			} else if (type instanceof IRSimpleType) {
 				simpleTypes.add((IRSimpleType) type);
 			} else if (type instanceof IRClassType) {
 				classTypes.add((IRClassType) type);
-			} else if (type instanceof IRArrayType) {
-				arrayTypes.add((IRArrayType) type);
 			} else if (type instanceof IRMapType) {
 				mapTypes.add((IRMapType) type);
 			} else if (type instanceof IRLocalType) {
@@ -103,7 +103,7 @@ public class CommonSuperTypeFinder {
 					&& areJavaScriptObjects(others);
 		}
 
-		IRType find() {
+		IRType find(ITypeSystem typeSystem) {
 			if (anyCount != 0) {
 				return RTypes.any();
 			}
@@ -141,7 +141,8 @@ public class CommonSuperTypeFinder {
 					// TODO (alex) skip empty arrays
 					itemTypes.add(type.getItemType());
 				}
-				return RTypes.arrayOf(evaluate(itemTypes));
+				return RTypes.arrayOf(typeSystem,
+						evaluate(typeSystem, itemTypes));
 			} else if (!mapTypes.isEmpty()) {
 				if (mapTypes.size() == 1) {
 					return getSingleItem(mapTypes);
@@ -150,8 +151,9 @@ public class CommonSuperTypeFinder {
 				for (IRMapType type : mapTypes) {
 					itemTypes.add(type.getValueType());
 				}
-				return RTypes.mapOf(RTypes.STRING, evaluate(itemTypes));
-			}else if (!localTypes.isEmpty()) {
+				return RTypes.mapOf(RTypes.STRING,
+						evaluate(typeSystem, itemTypes));
+			} else if (!localTypes.isEmpty()) {
 				if (localTypes.size() == 1) {
 					return getSingleItem(localTypes);
 				}
@@ -178,7 +180,8 @@ public class CommonSuperTypeFinder {
 	 * Returns the least common super type among the specified type expressions
 	 * or {@link RTypes#any()}.
 	 */
-	public static IRType evaluate(Collection<? extends IRType> types) {
+	public static IRType evaluate(ITypeSystem typeSystem,
+			Collection<? extends IRType> types) {
 		if (types.isEmpty()) {
 			return RTypes.any();
 		} else {
@@ -190,7 +193,7 @@ public class CommonSuperTypeFinder {
 			}
 			final State state = new State();
 			state.addAll(types);
-			return state.find();
+			return state.find(typeSystem);
 		}
 	}
 

@@ -51,13 +51,6 @@ public interface IRType {
 	TypeCompatibility isAssignableFrom(IRType type);
 
 	/**
-	 * Returns the {@link ITypeSystem} this type expression belongs to, or null.
-	 * 
-	 * @return
-	 */
-	ITypeSystem activeTypeSystem();
-
-	/**
 	 * Answers if additional members could be added to this type expression.
 	 */
 	boolean isExtensible();

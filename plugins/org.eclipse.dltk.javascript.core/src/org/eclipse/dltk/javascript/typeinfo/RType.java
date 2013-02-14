@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo;
 
-import static org.eclipse.dltk.javascript.internal.core.TypeSystems.DELEGATING_TYPE_SYSTEM;
-
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 /**
@@ -21,20 +19,6 @@ import org.eclipse.dltk.javascript.typeinfo.model.Type;
 public abstract class RType implements IRType {
 
 	static final boolean DEBUG = false;
-
-	protected final ITypeSystem typeSystem;
-
-	protected RType() {
-		this(null);
-	}
-
-	protected RType(ITypeSystem typeSystem) {
-		this.typeSystem = typeSystem;
-	}
-
-	public ITypeSystem activeTypeSystem() {
-		return typeSystem;
-	}
 
 	protected final void checkType(Type type) {
 		if (type.isProxy()) {
@@ -86,10 +70,4 @@ public abstract class RType implements IRType {
 	public IRType normalize() {
 		return this;
 	}
-
-	protected final IRTypeDeclaration convert(Type type) {
-		return (typeSystem != null ? typeSystem : DELEGATING_TYPE_SYSTEM)
-				.convert(type);
-	}
-
 }

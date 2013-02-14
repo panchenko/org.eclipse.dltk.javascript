@@ -11,18 +11,28 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo;
 
+import java.util.Collections;
+
+import org.eclipse.dltk.javascript.core.Types;
+import org.eclipse.dltk.javascript.typeinfo.model.Type;
+
 class RArrayType extends RType implements IRArrayType {
 
 	private final IRType itemType;
+	private final IRTypeDeclaration declaration;
 
 	public RArrayType(ITypeSystem typeSystem, IRType itemType) {
-		super(typeSystem);
 		this.itemType = itemType;
+		this.declaration = typeSystem.parameterize(Types.ARRAY,
+				Collections.singletonList(itemType));
 	}
 
-	public RArrayType(IRType itemType) {
-		assert itemType != null;
-		this.itemType = itemType;
+	public Type getTarget() {
+		return Types.ARRAY;
+	}
+
+	public IRTypeDeclaration getDeclaration() {
+		return declaration;
 	}
 
 	public String getName() {
@@ -70,7 +80,7 @@ class RArrayType extends RType implements IRArrayType {
 	public IRType transform(IRTypeTransformer function) {
 		final IRType value = function.transform(itemType);
 		if (value != itemType) {
-			return new RArrayType(value);
+			return new RArrayType(declaration.getTypeSystem(), value);
 		} else {
 			return this;
 		}

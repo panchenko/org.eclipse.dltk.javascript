@@ -1,7 +1,5 @@
 package org.eclipse.dltk.internal.javascript.ti;
 
-import static org.eclipse.dltk.javascript.internal.core.TypeSystems.DELEGATING_TYPE_SYSTEM;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -13,7 +11,6 @@ import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.IRLocalType;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
-import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.RTypes;
 
@@ -209,9 +206,8 @@ public class ImmutableValue implements IValue, IValue2 {
 			if (child != null) {
 				result.add(child);
 			} else {
-				final ITypeSystem typeSystem = value.getTypeSystem();
-				IValue member = ElementValue.findMemberA(typeSystem,
-						value.declaredType, childName, true);
+				IValue member = ElementValue.findMemberA(value.declaredType,
+						childName, true);
 				if (member != null) {
 					result.add(member);
 				}
@@ -222,8 +218,7 @@ public class ImmutableValue implements IValue, IValue2 {
 					valueTypes = value.getTypes();
 				}
 				for (IRType type : valueTypes) {
-					member = ElementValue.findMemberA(typeSystem, type,
-							childName, true);
+					member = ElementValue.findMemberA(type, childName, true);
 					if (member != null) {
 						result.add(member);
 					}
@@ -279,10 +274,8 @@ public class ImmutableValue implements IValue, IValue2 {
 		if (elementValues != null)
 			value = elementValues.get(name);
 		if (value == null && (declaredType != null || !types.isEmpty())) {
-			final ITypeSystem typeSystem = getTypeSystem();
 			if (declaredType != null) {
-				value = ElementValue.findMemberA(typeSystem, declaredType,
-						name, resolve);
+				value = ElementValue.findMemberA(declaredType, name, resolve);
 				if (value != null) {
 					if (elementValues == null)
 						elementValues = new HashMap<String, IValue>(4, 0.9f);
@@ -291,8 +284,7 @@ public class ImmutableValue implements IValue, IValue2 {
 				}
 			}
 			for (IRType type : types) {
-				value = ElementValue.findMemberA(typeSystem, type, name,
-						resolve);
+				value = ElementValue.findMemberA(type, name, resolve);
 				if (value != null) {
 					if (elementValues == null)
 						elementValues = new HashMap<String, IValue>(4, 0.9f);
@@ -365,10 +357,6 @@ public class ImmutableValue implements IValue, IValue2 {
 		if (deletedChildren != null) {
 			deletedChildren.remove(name);
 		}
-	}
-
-	protected ITypeSystem getTypeSystem() {
-		return DELEGATING_TYPE_SYSTEM;
 	}
 
 	public void setDeclaredType(IRType declaredType) {

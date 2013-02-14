@@ -168,36 +168,16 @@ public class RTypes {
 		}
 	}
 
-	public static IRType simple(ITypeSystem typeSystem, Type type) {
+	public static IRSimpleType simple(ITypeSystem typeSystem, Type type) {
 		if (Types.ARRAY == type) {
 			return arrayOf(typeSystem, none());
 		} else {
-			return type.toRType(typeSystem);
+			return (IRSimpleType) type.toRType(typeSystem);
 		}
 	}
 
 	public static IRType simple(IRTypeDeclaration declaration) {
-		return declaration.getSource().getMetaType().toRType(null, declaration);
-	}
-
-	public static IRType simple(ITypeSystem typeSystem,
-			IRTypeDeclaration declaration) {
-		return declaration.getSource().getMetaType()
-				.toRType(typeSystem, declaration);
-	}
-
-	@Deprecated
-	public static IRType simple(Type type) {
-		if (Types.ARRAY == type) {
-			return arrayOf(TypeSystems.GLOBAL, none());
-		} else {
-			return type.toRType(null);
-		}
-	}
-
-	@Deprecated
-	public static IRClassType classType(Type type) {
-		return new RClassType(type);
+		return declaration.getSource().getMetaType().toRType(declaration);
 	}
 
 	public static IRClassType classType(ITypeSystem typeSystem, Type type) {
@@ -227,11 +207,6 @@ public class RTypes {
 
 	public static IRMapType mapOf(final IRType keyType, final IRType valueType) {
 		return new RMapType(keyType, valueType);
-	}
-
-	public static IRMapType mapOf(ITypeSystem typeSystem, final IRType keyType,
-			final IRType valueType) {
-		return new RMapType(typeSystem, keyType, valueType);
 	}
 
 	/**
@@ -343,9 +318,9 @@ public class RTypes {
 		return names;
 	}
 
-	public static IRFunctionType functionType(List<IRParameter> parameters,
-			IRType returnType) {
-		return new RFunctionType(parameters, returnType);
+	public static IRFunctionType functionType(ITypeSystem typeSystem,
+			List<IRParameter> parameters, IRType returnType) {
+		return new RFunctionType(typeSystem, parameters, returnType);
 	}
 
 	public static IRType union(Collection<IRType> targets) {
@@ -355,19 +330,13 @@ public class RTypes {
 	/**
 	 * Creates new instance of the array type with the specified itemType.
 	 */
-	@Deprecated
-	public static IRArrayType arrayOf(final IRType itemType) {
-		return new RArrayType(itemType != null ? itemType : none());
-	}
-
 	public static IRArrayType arrayOf(ITypeSystem typeSystem,
 			final IRType itemType) {
 		return new RArrayType(typeSystem, itemType);
 	}
 
-	public static IRLocalType localType(ITypeSystem typeSystem, String name,
-			IValueReference value) {
-		return new RLocalType(typeSystem, name, value);
+	public static IRLocalType localType(String name, IValueReference value) {
+		return new RLocalType(name, value);
 	}
 
 	/**
@@ -391,24 +360,26 @@ public class RTypes {
 				+ type.getClass().getName());
 	}
 
-	public static final IRSimpleType FUNCTION = (IRSimpleType) simple(
-			TypeSystems.GLOBAL, Types.FUNCTION);
+	public static final IRSimpleType FUNCTION = simple(TypeSystems.GLOBAL,
+			Types.FUNCTION);
 
-	public static final IRType STRING = simple(TypeSystems.GLOBAL, Types.STRING);
+	public static final IRSimpleType STRING = simple(TypeSystems.GLOBAL,
+			Types.STRING);
 
-	public static final IRType NUMBER = simple(TypeSystems.GLOBAL, Types.NUMBER);
+	public static final IRSimpleType NUMBER = simple(TypeSystems.GLOBAL,
+			Types.NUMBER);
 
-	public static final IRType BOOLEAN = simple(TypeSystems.GLOBAL,
+	public static final IRSimpleType BOOLEAN = simple(TypeSystems.GLOBAL,
 			Types.BOOLEAN);
 
-	public static final IRSimpleType OBJECT = (IRSimpleType) simple(
-			TypeSystems.GLOBAL, Types.OBJECT);
+	public static final IRSimpleType OBJECT = simple(TypeSystems.GLOBAL,
+			Types.OBJECT);
 
-	public static final IRSimpleType REGEXP = (IRSimpleType) simple(
-			TypeSystems.GLOBAL, Types.REGEXP);
+	public static final IRSimpleType REGEXP = simple(TypeSystems.GLOBAL,
+			Types.REGEXP);
 
-	public static final IRSimpleType ERROR = (IRSimpleType) simple(
-			TypeSystems.GLOBAL, Types.ERROR);
+	public static final IRSimpleType ERROR = simple(TypeSystems.GLOBAL,
+			Types.ERROR);
 
 	public static List<IRType> convert(ITypeSystem typeSystem, List<JSType> args) {
 		final int size = args.size();
