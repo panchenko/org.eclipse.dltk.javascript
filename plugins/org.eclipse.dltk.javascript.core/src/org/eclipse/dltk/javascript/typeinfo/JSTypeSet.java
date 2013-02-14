@@ -207,7 +207,8 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 
 		@Override
 		public boolean containsAll(JSTypeSet types) {
-			return types.size() == 1 && contains(types.getFirst());
+			return types.isEmpty()
+					|| (types.size() == 1 && contains(types.toRType()));
 		}
 
 		@Override

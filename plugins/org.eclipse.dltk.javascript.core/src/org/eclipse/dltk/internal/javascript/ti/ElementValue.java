@@ -405,7 +405,7 @@ public abstract class ElementValue implements IValue {
 		}
 
 		public IRType getDeclaredType() {
-			return types.getFirst();
+			return types.toRType();
 		}
 
 		public JSTypeSet getDeclaredTypes() {
@@ -441,7 +441,7 @@ public abstract class ElementValue implements IValue {
 			// expression of this type. return then the none static type.
 			if (name.equals(IValueReference.FUNCTION_OP)) {
 				if (types.size() == 1) {
-					final IRType type = types.getFirst();
+					final IRType type = types.toRType();
 					if (type instanceof IRClassType) {
 						return new TypeValue(((IRClassType) type).newItemType());
 					}
@@ -465,7 +465,7 @@ public abstract class ElementValue implements IValue {
 		}
 
 		public IRType getDeclaredType() {
-			return types.getFirst();
+			return types.toRType();
 		}
 
 		public JSTypeSet getDeclaredTypes() {

@@ -74,11 +74,11 @@ public class JavaScriptValidations {
 			}
 			JSTypeSet declaredTypes = reference.getDeclaredTypes();
 			if (declaredTypes.size() == 1) {
-				return declaredTypes.getFirst();
+				return declaredTypes.toRType();
 			}
 			final JSTypeSet types = reference.getTypes();
 			if (types.size() == 1) {
-				return types.getFirst();
+				return types.toRType();
 			}
 		}
 		return null;

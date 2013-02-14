@@ -936,7 +936,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			} else {
 				JSTypeSet types = array.getTypes();
 				if (types.size() > 0)
-					arrayType = TypeUtil.extractArrayItemType(types.getFirst());
+					arrayType = TypeUtil.extractArrayItemType(types.toRType());
 			}
 			if (arrayType != null && child.getDeclaredType() == null) {
 				setIRType(child, arrayType, true);

@@ -2077,7 +2077,7 @@ public class TypeInfoValidator implements IBuildParticipant,
 			if (type == null) {
 				final JSTypeSet types = typeReference.getTypes();
 				if (types.size() > 0) {
-					type = types.getFirst();
+					type = types.toRType();
 				}
 			}
 			if (type != null && type instanceof IRClassType) {
