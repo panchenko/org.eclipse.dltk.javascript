@@ -56,8 +56,8 @@ public abstract class AbstractMatchingNode<E extends ASTNode> implements
 		return false;
 	}
 
-	public boolean resolvePotentialMatch(JSBindings bindings) {
-		return true;
+	public MatchingNode resolvePotentialMatch(JSBindings bindings) {
+		return this;
 	}
 
 	public String getName() {

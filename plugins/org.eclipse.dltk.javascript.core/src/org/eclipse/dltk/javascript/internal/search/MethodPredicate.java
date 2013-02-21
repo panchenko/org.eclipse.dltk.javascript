@@ -79,7 +79,15 @@ public class MethodPredicate extends AbstractMatchingPredicate<MatchingNode> {
 			if (!declarations)
 				return null;
 			final MethodDeclarationNode mNode = (MethodDeclarationNode) node;
-			return matchName(mNode.getName());
+			if (nameStart != -1 && nameEnd != -1 && mNode.method != null) {
+				if (nameStart == mNode.sourceStart()
+						&& nameEnd == mNode.sourceEnd()
+						&& isSame(mNode.method.getLocation().getSourceModule())) {
+					return matchName(mNode.getName());
+				}
+			} else {
+				return matchName(mNode.getName());
+			}
 		} else if (node instanceof FieldDeclarationNode) {
 			if (!declarations)
 				return null;

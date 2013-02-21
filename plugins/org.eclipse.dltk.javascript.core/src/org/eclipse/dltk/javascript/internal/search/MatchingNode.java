@@ -34,7 +34,7 @@ public interface MatchingNode {
 	 * Resolves the target of this node after it was potentially matched.
 	 * Returns <code>true</code> if node was successfully resolved.
 	 */
-	boolean resolvePotentialMatch(JSBindings bindings);
+	MatchingNode resolvePotentialMatch(JSBindings bindings);
 
 	/**
 	 * @param element

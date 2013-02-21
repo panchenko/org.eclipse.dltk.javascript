@@ -73,4 +73,26 @@ public class SearchReferenceTests extends Assert implements
 				.getAncestor(IModelElement.SOURCE_MODULE);
 		assertEquals("length.js", parent.getElementName());
 	}
+	
+	@Test
+	public void testThisFunctionTest() throws CoreException {
+		final TestSearchResults results = PROJECT.search("myfunction", METHOD,
+				REFERENCES);
+		assertEquals(2, results.size());
+		final IModelElement element = results.get(0);
+		final IModelElement parent = element
+				.getAncestor(IModelElement.SOURCE_MODULE);
+		assertEquals("thisobject.js", parent.getElementName());
+	}
+	
+	@Test
+	public void testThisVariableTest() throws CoreException {
+		final TestSearchResults results = PROJECT.search("myvariable", FIELD,
+				REFERENCES);
+		assertEquals(2, results.size());
+		final IModelElement element = results.get(0);
+		final IModelElement parent = element
+				.getAncestor(IModelElement.SOURCE_MODULE);
+		assertEquals("thisobject.js", parent.getElementName());
+	}
 }

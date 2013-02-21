@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.search;
 
-import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
@@ -37,9 +36,7 @@ import org.eclipse.dltk.core.search.matching2.MatchLevel;
 import org.eclipse.dltk.core.search.matching2.MatchingCollector;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.javascript.ast.Script;
-import org.eclipse.dltk.javascript.core.JSBindings;
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
-import org.eclipse.dltk.javascript.internal.core.TemporaryBindings;
 import org.eclipse.dltk.javascript.parser.JavaScriptParserUtil;
 import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
 
@@ -85,6 +82,7 @@ public class JavaScriptMatchLocator implements IMatchLocator,
 			nodeSet.clear();
 			final Script script = JavaScriptParserUtil.parse(module);
 			visitor.visitScript(script);
+			visitor.resolveMatchingNodes(inferencer2, script, module);
 			visitor.report(matchingCollector);
 			if (!nodeSet.isEmpty()) {
 				if (VERBOSE) {
@@ -93,7 +91,7 @@ public class JavaScriptMatchLocator implements IMatchLocator,
 							document, nodeSet.countMatchingNodes(),
 							nodeSet.countPossibleMatchingNodes()));
 				}
-				resolvePotentialMatches(inferencer2, script, module, predicate);
+				resolvePotentialMatches(predicate);
 				participant = document.getParticipant();
 				// report matches according to the module structure
 				module.accept(this);
@@ -117,49 +115,18 @@ public class JavaScriptMatchLocator implements IMatchLocator,
 		}
 	}
 
-	private void resolvePotentialMatches(TypeInferencer2 inferencer2,
-			Script script, ISourceModule module,
+	private void resolvePotentialMatches(
 			final IMatchingPredicate<MatchingNode> predicate) {
-		if (needsResolve(nodeSet.getPossibleMatchingNodes())) {
-			if (VERBOSE) {
-				System.out.println("  resolvePotentialMatches "
-						+ module.getPath() + " via type inference");
-			}
-			final JSBindings bindings = TemporaryBindings.build(inferencer2,
-					module, script);
-			bindings.run(new Runnable() {
-				public void run() {
-					for (MatchingNode node : nodeSet.getPossibleMatchingNodes()) {
-						if (node.resolvePotentialMatch(bindings)) {
-							final MatchLevel level = predicate
-									.resolvePotentialMatch(node);
-							if (level != null
-									&& level != MatchLevel.POSSIBLE_MATCH) {
-								nodeSet.addMatch(node, level);
-							}
-						}
-					}
-				}
-			});
-		} else {
-			for (MatchingNode node : nodeSet.getPossibleMatchingNodes()) {
-				final MatchLevel level = predicate.resolvePotentialMatch(node);
-				if (level != null && level != MatchLevel.POSSIBLE_MATCH) {
-					nodeSet.addMatch(node, level);
-				}
+		for (MatchingNode node : nodeSet.getPossibleMatchingNodes()) {
+			final MatchLevel level = predicate.resolvePotentialMatch(node);
+			if (level != null && level != MatchLevel.POSSIBLE_MATCH) {
+				nodeSet.addMatch(node, level);
 			}
 		}
 		nodeSet.clearPossibleMatchingNodes();
 	}
 
-	private boolean needsResolve(Collection<MatchingNode> nodes) {
-		for (MatchingNode node : nodes) {
-			if (node.needsResolve()) {
-				return true;
-			}
-		}
-		return false;
-	}
+
 
 	public boolean visit(IModelElement element) {
 		return element instanceof ISourceModule || element instanceof IMember;

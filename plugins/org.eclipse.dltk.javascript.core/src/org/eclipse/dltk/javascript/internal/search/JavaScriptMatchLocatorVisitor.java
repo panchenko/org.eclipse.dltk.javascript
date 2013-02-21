@@ -20,12 +20,14 @@ import java.util.Map;
 import java.util.Stack;
 
 import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.core.search.matching2.MatchingCollector;
 import org.eclipse.dltk.internal.javascript.parser.structure.StructureRequestor;
 import org.eclipse.dltk.internal.javascript.ti.JSDocSupport;
 import org.eclipse.dltk.internal.javascript.ti.JSDocSupport.ParameterNode;
 import org.eclipse.dltk.internal.javascript.ti.JSMethod;
 import org.eclipse.dltk.internal.javascript.ti.JSVariable;
+import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.javascript.ast.AbstractNavigationVisitor;
 import org.eclipse.dltk.javascript.ast.Argument;
 import org.eclipse.dltk.javascript.ast.Comment;
@@ -41,6 +43,8 @@ import org.eclipse.dltk.javascript.ast.PropertyExpression;
 import org.eclipse.dltk.javascript.ast.PropertyInitializer;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
+import org.eclipse.dltk.javascript.core.JSBindings;
+import org.eclipse.dltk.javascript.internal.core.TemporaryBindings;
 import org.eclipse.dltk.javascript.parser.JSProblemReporter;
 import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTag;
 import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTags;
@@ -84,6 +88,33 @@ public class JavaScriptMatchLocatorVisitor extends
 						this);
 		this.handlers = extensions.toArray(new IMatchLocatorHandler[extensions
 				.size()]);
+	}
+
+	public void resolveMatchingNodes(TypeInferencer2 inferencer2,
+			Script script, ISourceModule module) {
+		if (needsResolve()) {
+			final List<MatchingNode> tmpNodes = new ArrayList<MatchingNode>();
+			final JSBindings bindings = TemporaryBindings.build(inferencer2,
+					module, script);
+			bindings.run(new Runnable() {
+				public void run() {
+					for (MatchingNode node : nodes) {
+						tmpNodes.add(node.resolvePotentialMatch(bindings));
+					}
+				}
+			});
+			nodes.clear();
+			nodes.addAll(tmpNodes);
+		}
+	}
+
+	private boolean needsResolve() {
+		for (MatchingNode node : nodes) {
+			if (node.needsResolve()) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public void report(MatchingCollector<MatchingNode> matchingCollector) {

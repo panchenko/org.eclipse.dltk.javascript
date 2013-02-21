@@ -42,7 +42,7 @@ public abstract class MemberReferenceNode extends
 	}
 
 	@Override
-	public boolean resolvePotentialMatch(JSBindings bindings) {
+	public MatchingNode resolvePotentialMatch(JSBindings bindings) {
 		if (location == null) {
 			final IValueReference reference = bindings.get(node);
 			if (reference != null) {
@@ -68,7 +68,7 @@ public abstract class MemberReferenceNode extends
 				}
 			}
 		}
-		return location != null;
+		return this;
 	}
 
 }

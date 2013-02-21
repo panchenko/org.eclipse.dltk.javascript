@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.search;
 
+import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.search.FieldDeclarationMatch;
 import org.eclipse.dltk.core.search.FieldReferenceMatch;
@@ -19,9 +20,14 @@ import org.eclipse.dltk.core.search.MethodReferenceMatch;
 import org.eclipse.dltk.core.search.SearchMatch;
 import org.eclipse.dltk.core.search.SearchParticipant;
 import org.eclipse.dltk.core.search.matching2.MatchLevel;
+import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.javascript.ast.Identifier;
+import org.eclipse.dltk.javascript.ast.PropertyExpression;
+import org.eclipse.dltk.javascript.core.JSBindings;
+import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
+import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 
 public class FieldReferenceNode extends MemberReferenceNode {
 
@@ -57,6 +63,41 @@ public class FieldReferenceNode extends MemberReferenceNode {
 		return new FieldReferenceMatch(element, node,
 				level.toSearchMatchAccuracy(), node.sourceStart(), length(),
 				true, true, false, participant, element.getResource());
+	}
+
+	@Override
+	public MatchingNode resolvePotentialMatch(JSBindings bindings) {
+		super.resolvePotentialMatch(bindings);
+		if (kind == ReferenceKind.FUNCTION) {
+			if (location.getNameStart() == node.start()
+					&& location.getNameEnd() == node.end()) {
+				IValueReference reference = bindings.get(node);
+				if (reference == null) {
+					final ASTNode parent = node.getParent();
+					if (parent instanceof PropertyExpression
+							&& ((PropertyExpression) parent).getProperty() == node) {
+						reference = bindings
+								.get(parent);
+					}
+				}
+				if (reference != null) {
+					IMethod method = (IMethod) reference
+							.getAttribute(IReferenceAttributes.METHOD);
+					if (method != null)
+						return new MethodDeclarationNode(node, method);
+				}
+			} else {
+				return new MethodReferenceNode(node, location);
+			}
+		}
+		if (location != null && location.getNameStart() == node.start()
+				&& location.getNameEnd() == node.end()) {
+			// TODO where to get the JSType from? Reference for a
+			// "this.test = 10" doesn't have it.
+			return new FieldDeclarationNode(node, location.getSourceModule(),
+					null);
+		}
+		return this;
 	}
 
 }
