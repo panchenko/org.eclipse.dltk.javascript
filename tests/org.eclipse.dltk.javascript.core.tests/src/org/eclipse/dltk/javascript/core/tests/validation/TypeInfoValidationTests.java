@@ -3099,4 +3099,20 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		List<IProblem> validate = validate(code.toString());
 		assertEquals(0, validate.size());
 	}
+	
+	
+	public void testLocalTypeInRecordType() {
+		final StringList code = new StringList();
+		code.add("function MyObject() {");
+		code.add("	this.mytest = function() {}");
+		code.add("}");
+		code.add("/**");
+		code.add(" * @param {MyObject} param.options");
+		code.add(" */");
+		code.add("function test(param) {");
+		code.add("	param.options.mytest();");
+		code.add("}");
+		List<IProblem> validate = validate(code.toString());
+		assertEquals(0, validate.size());
+	}
 }

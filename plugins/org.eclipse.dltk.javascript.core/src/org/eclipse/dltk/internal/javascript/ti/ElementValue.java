@@ -639,10 +639,10 @@ public abstract class ElementValue implements IValue {
 					}
 				}
 				final IRType propType = getDeclaredType();
-				final IValue eValue = ElementValue.findMemberA(propType, name,
+				child = ElementValue.findMemberA(propType, name,
 						resolve);
-				if (eValue instanceof ElementValue) {
-					child = ((ElementValue) eValue).resolveValue();
+				if (child instanceof ElementValue) {
+					child = ((ElementValue) child).resolveValue();
 					children.put(name, child);
 				}
 			}
@@ -745,13 +745,27 @@ public abstract class ElementValue implements IValue {
 						return child;
 					}
 				}
-				IValue eValue = ElementValue.findMemberA(type, name, resolve);
-				if (eValue instanceof ElementValue) {
-					child = ((ElementValue) eValue).resolveValue();
+				child= ElementValue.findMemberA(type, name, resolve);
+				if (child instanceof ElementValue) {
+					child = ((ElementValue) child).resolveValue();
 					children.put(name, child);
 				}
 			}
 			return child;
+		}
+
+		@Override
+		public final Set<String> getDirectChildren(int flags) {
+			if ((flags & NO_LOCAL_TYPES) == 0) {
+				final Set<String> set = new HashSet<String>();
+				IRType irType = getDeclaredType();
+				if (irType instanceof IRLocalType) {
+					set.addAll(((IRLocalType) irType).getDirectChildren());
+				}
+				return set;
+			} else {
+				return Collections.emptySet();
+			}
 		}
 
 		public IRType getDeclaredType() {

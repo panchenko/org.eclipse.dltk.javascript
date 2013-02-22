@@ -779,4 +779,21 @@ public class CodeCompletion extends AbstractCompletionTest {
 		int position = lastPositionInFile(".", module);
 		basicTest(module, position, names);
 	}
+	
+	public void testLocalTypeInRecordType() {
+		final StringList code = new StringList();
+		code.add("function MyObject() {");
+		code.add("	this.mytest = function() {}");
+		code.add("}");
+		code.add("/**");
+		code.add(" * @param {MyObject} param.options");
+		code.add(" */");
+		code.add("function test(param) {");
+		code.add("	param.options.");
+		code.add("}");
+		final IModuleSource module = new TestModule(code.toString());
+		String[] names = concat(getMembersOfObject(), "mytest");
+		int position = lastPositionInFile(".", module);
+		basicTest(module, position, names);
+	}
 }
