@@ -277,12 +277,20 @@ public class JavaDoc2HTMLTextReader extends SubstitutionTextReader {
 	private int skipTypeDefinition(String s) {
 		final int length = s.length();
 		int i = 0;
+		int braces = 0;
 		// \s*
 		while (i < length && Character.isWhitespace(s.charAt(i)))
 			++i;
 		if (i < length && s.charAt(i) == '{') {
+			braces++;
 			++i;
-			while (i < length && s.charAt(i) != '}') {
+			while (i < length) {
+				if (s.charAt(i) == '}') {
+					if (--braces == 0)
+						break;
+				}
+				if (s.charAt(i) == '{')
+					braces++;
 				++i;
 			}
 			if (i < length) {
@@ -309,9 +317,15 @@ public class JavaDoc2HTMLTextReader extends SubstitutionTextReader {
 			while (i < length && s.charAt(i) != '>')
 				++i;
 		} else {
+			if (i < length && s.charAt(i) == '[')
+				i++; // optional
 			// simply read an identifier
-			while (i < length && Character.isJavaIdentifierPart(s.charAt(i)))
+			while (i < length
+					&& (Character.isJavaIdentifierPart(s.charAt(i)) || s
+							.charAt(i) == '.'))
 				++i;
+			if (i < length && s.charAt(i) == ']')
+				i++; // optional
 		}
 		if (i > paramStart) {
 			return new SourceRange(paramStart, i - paramStart);
