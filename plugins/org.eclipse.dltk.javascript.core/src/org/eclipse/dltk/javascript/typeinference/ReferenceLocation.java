@@ -48,6 +48,24 @@ public abstract class ReferenceLocation {
 
 	public static final ReferenceLocation UNKNOWN = new Unknown();
 
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == this)
+			return true;
+		if (obj instanceof ReferenceLocation) {
+			ReferenceLocation loc = (ReferenceLocation) obj;
+			if (loc.getDeclarationStart() == getDeclarationStart()
+					&& loc.getDeclarationEnd() == getDeclarationEnd()
+					&& loc.getNameStart() == getNameStart()
+					&& loc.getNameEnd() == getNameEnd()) {
+				if (getSource() != null && getSource().equals(loc.getSource()))
+					return true;
+				return getSource() == loc.getSource();
+			}
+		}
+		return false;
+	}
+
 	@Internal
 	static class Unknown extends ReferenceLocation {
 		@Override

@@ -40,6 +40,20 @@ public class ReferenceSource implements IAdaptable {
 	}
 
 	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj instanceof ReferenceSource) {
+			if (modelElement != null
+					&& modelElement
+							.equals(((ReferenceSource) obj).modelElement))
+				return true;
+			return modelElement == ((ReferenceSource) obj).modelElement;
+		}
+		return false;
+	}
+
+	@Override
 	public String toString() {
 		return modelElement != null ? modelElement.getElementName() : "null";
 	}
