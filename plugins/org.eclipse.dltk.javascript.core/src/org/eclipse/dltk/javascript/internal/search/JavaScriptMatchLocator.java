@@ -78,7 +78,7 @@ public class JavaScriptMatchLocator implements IMatchLocator,
 			if (module == null)
 				continue;
 			final JavaScriptMatchLocatorVisitor visitor = new JavaScriptMatchLocatorVisitor(
-					new ReferenceSource(module));
+					ReferenceSource.create(module));
 			nodeSet.clear();
 			final Script script = JavaScriptParserUtil.parse(module);
 			visitor.visitScript(script);

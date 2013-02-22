@@ -12,51 +12,90 @@
 package org.eclipse.dltk.javascript.typeinfo;
 
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.dltk.annotations.Internal;
+import org.eclipse.dltk.annotations.NonNull;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.ISourceModule;
 
-public class ReferenceSource implements IAdaptable {
+public abstract class ReferenceSource implements IAdaptable {
 
-	public static final ReferenceSource UNKNOWN = new ReferenceSource(null) {
+	@Internal
+	static class Unknown extends ReferenceSource {
+		@Override
+		public IModelElement getModelElement() {
+			return null;
+		}
+
+		@Override
+		public ISourceModule getSourceModule() {
+			return null;
+		}
+
 		@Override
 		public String toString() {
 			return "UNKNOWN";
 		}
-	};
-
-	private final IModelElement modelElement;
-
-	public ReferenceSource(IModelElement modelElement) {
-		this.modelElement = modelElement;
 	}
 
-	public IModelElement getModelElement() {
-		return modelElement;
-	}
+	public static final ReferenceSource UNKNOWN = new Unknown();
 
-	public ISourceModule getSourceModule() {
-		return modelElement instanceof ISourceModule ? (ISourceModule) modelElement
-				: null;
-	}
+	private static class ModelElementSource extends ReferenceSource {
+		@NonNull
+		private final IModelElement modelElement;
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj instanceof ReferenceSource) {
-			if (modelElement != null
-					&& modelElement
-							.equals(((ReferenceSource) obj).modelElement))
-				return true;
-			return modelElement == ((ReferenceSource) obj).modelElement;
+		public ModelElementSource(IModelElement modelElement) {
+			this.modelElement = modelElement;
 		}
-		return false;
+
+		@Override
+		public IModelElement getModelElement() {
+			return modelElement;
+		}
+
+		@Override
+		public ISourceModule getSourceModule() {
+			return modelElement instanceof ISourceModule ? (ISourceModule) modelElement
+					: null;
+		}
+
+		@Override
+		public String toString() {
+			return modelElement.getElementName();
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj) {
+				return true;
+			} else if (obj instanceof ModelElementSource) {
+				return modelElement
+						.equals(((ModelElementSource) obj).modelElement);
+			} else {
+				return false;
+			}
+		}
 	}
 
-	@Override
-	public String toString() {
-		return modelElement != null ? modelElement.getElementName() : "null";
+	@Internal
+	static class Dummy extends Unknown {
+		@Override
+		public String toString() {
+			return "Dummy";
+		}
 	}
+
+	/**
+	 * Creates {@link ReferenceSource} for the specified {@link IModelElement}
+	 * if not null or creates new dummy result.
+	 */
+	public static ReferenceSource create(IModelElement modelElement) {
+		return modelElement != null ? new ModelElementSource(modelElement)
+				: new Dummy();
+	}
+
+	public abstract IModelElement getModelElement();
+
+	public abstract ISourceModule getSourceModule();
 
 	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
 		if (adapter == ReferenceSource.class) {

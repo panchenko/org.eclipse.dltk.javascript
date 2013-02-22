@@ -36,7 +36,7 @@ public class JavaScriptSourceElementParser3 implements ISourceElementParser {
 	public void parseSourceModule(IModuleSource module) {
 		final Script script = parse(module);
 		final StructureReporter3 reporter = new StructureReporter3(
-				new ReferenceSource(module.getModelElement()));
+				ReferenceSource.create(module.getModelElement()));
 		final IStructureNode node = reporter.visit(script);
 		reportStructure(script, node);
 	}

@@ -84,7 +84,7 @@ public class TypeInferencer2 extends TypeSystemImpl implements
 	}
 
 	public void setModelElement(IModelElement modelElement) {
-		setSource(new ReferenceSource(modelElement));
+		setSource(ReferenceSource.create(modelElement));
 	}
 
 	public void setSource(ReferenceSource source) {
