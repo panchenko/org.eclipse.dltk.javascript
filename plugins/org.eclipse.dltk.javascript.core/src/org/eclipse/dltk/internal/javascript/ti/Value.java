@@ -286,6 +286,17 @@ public class Value extends ImmutableValue {
 			if (src.location != ReferenceLocation.UNKNOWN
 					&& location == ReferenceLocation.UNKNOWN) {
 				location = src.location;
+			} else if (src.location != ReferenceLocation.UNKNOWN
+					&& src.declaredType != null
+					&& src.kind == ReferenceKind.FUNCTION) {
+				// if src location is known and the src is a function, then we
+				// need to remember the location if this function is used as a
+				// local type (through the assignment)
+				if (attributes == null) {
+					attributes = new HashMap<String, Object>();
+				}
+				attributes.put(IReferenceAttributes.LOCAL_TYPE_LOCATION,
+						src.location);
 			}
 		}
 	}

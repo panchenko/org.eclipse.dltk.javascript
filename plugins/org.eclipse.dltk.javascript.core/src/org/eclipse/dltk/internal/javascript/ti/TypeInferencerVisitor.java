@@ -1122,7 +1122,21 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					result.value.setKind(ReferenceKind.TYPE);
 					String className = PropertyExpressionUtils
 							.getPath(objectClass);
-					if (className != null) {
+					IRMethod method = (IRMethod) result.typeValue
+							.getAttribute(IReferenceAttributes.R_METHOD);
+					if (method != null) {
+						// if a method is found, then check if that
+						// method name 'MyObject' is in the
+						// classname 'xxx.yyy.MyObject' then use the full
+						// classname else use the methodname
+						// (new myVar() when var myVar = MyObject)
+						String methodName = method.getName();
+						if (className == null
+								|| !className.endsWith(methodName)) {
+							className = methodName;
+						}
+					}
+					if (className != null && !className.equals("<anonymous>")) {
 						result.value.setDeclaredType(RTypes.localType(
 								className, result.typeValue));
 					} else {

@@ -25,4 +25,5 @@ public interface IReferenceAttributes {
 	String RESOLVING = "RESOLVING";
 	String PHANTOM = "PHANTOM";
 	String ACCESS = IReferenceAttributes.class.getName() + "#ACCESS";
+	String LOCAL_TYPE_LOCATION = "LOCAL_TYPE_LOCATION";
 }

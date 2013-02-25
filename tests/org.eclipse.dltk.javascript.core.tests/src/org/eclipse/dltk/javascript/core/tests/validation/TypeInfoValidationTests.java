@@ -3083,6 +3083,28 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(0, validate.size());
 	}
 	
+	public void testConstructorFunctionReassignedToVariable() {
+		final StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @constructor"); 
+		code.add(" */");
+		code.add("function MyObject() {");
+		code.add("}");
+		code.add("var test = MyObject;");
+		code.add("function caller() {");
+		code.add("	var x = new test();");
+		code.add("	callee(x);");
+		code.add("}");
+		code.add("/**");
+		code.add("* @param {MyObject} x");
+		code.add("*/");
+		code.add("function callee(x) {");
+		code.add("}");
+		List<IProblem> validate = validate(code.toString());
+		assertEquals(0, validate.size());
+	}
+	
+	
 	public void testLocalTypeParamWithNullArgument() {
 		final StringList code = new StringList();
 		code.add("/**");

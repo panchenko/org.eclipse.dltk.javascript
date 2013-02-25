@@ -111,6 +111,11 @@ class RLocalType extends RType implements IRLocalType {
 	}
 
 	public ReferenceLocation getReferenceLocation() {
+		if (functionValue
+				.getAttribute(IReferenceAttributes.LOCAL_TYPE_LOCATION) instanceof ReferenceLocation) {
+			return (ReferenceLocation) functionValue
+					.getAttribute(IReferenceAttributes.LOCAL_TYPE_LOCATION);
+		}
 		return functionValue.getLocation();
 	}
 

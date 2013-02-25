@@ -46,7 +46,12 @@ public abstract class AbstractReference implements IValueReference,
 				return;
 			}
 			val.clear();
-			if (src instanceof Value && ((IValueProvider) value).isReference()
+			// if value is a set to be a reference but the src is of type
+			// function then still add it (a function reference should really
+			// overwrite the current value
+			if (src instanceof Value
+					&& (((IValueProvider) value).isReference() && !(src
+							.getDeclaredType() != null && src.getKind() == ReferenceKind.FUNCTION))
 					|| value.isParentOf(this)) {
 				val.addReference(src);
 			} else {
