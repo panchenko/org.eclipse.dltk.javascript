@@ -19,6 +19,7 @@ import static org.eclipse.osgi.util.NLS.bind;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -1555,8 +1556,19 @@ public class TypeInfoValidator implements IBuildParticipant,
 				IValueReference argument, @Nullable IRRecordType expectedType) {
 			sb.append('{');
 			boolean appendComma = false;
-			// TODO (alex) direct children and typed children.
-			for (String childName : argument.getDirectChildren()) {
+			HashSet<String> children = new HashSet<String>(
+					argument.getDirectChildren());
+			JSTypeSet types = argument.getTypes();
+			for (IRType type : types) {
+				if (type instanceof IRRecordType) {
+					Collection<IRRecordMember> members = ((IRRecordType) type)
+							.getMembers();
+					for (IRRecordMember member : members) {
+						children.add(member.getName());
+					}
+				}
+			}
+			for (String childName : children) {
 				if (appendComma)
 					sb.append(", ");
 				appendComma = true;
