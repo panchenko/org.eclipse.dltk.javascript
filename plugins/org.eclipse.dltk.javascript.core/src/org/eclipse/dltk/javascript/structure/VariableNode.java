@@ -16,6 +16,8 @@ import java.util.List;
 
 import org.eclipse.dltk.compiler.IElementRequestor.FieldInfo;
 import org.eclipse.dltk.internal.javascript.parser.JSModifiers;
+import org.eclipse.dltk.javascript.ast.FunctionStatement;
+import org.eclipse.dltk.javascript.ast.NewExpression;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
@@ -60,7 +62,16 @@ public class VariableNode extends ParentNode implements IDeclaration {
 	}
 
 	@Override
-	public List<IStructureNode> getChildren() {
+	public List<? extends IStructureNode> getChildren() {
+		// if value is set and a result of "new function() {}
+		// then just return the children of that function object.
+		if (value != null
+				&& declaration.getInitializer() instanceof NewExpression
+				&& ((NewExpression) declaration.getInitializer())
+						.getObjectClass() instanceof FunctionStatement) {
+			return value.getChildren();
+		}
+
 		return value != null ? Collections.singletonList(value) : Collections
 				.<IStructureNode> emptyList();
 	}

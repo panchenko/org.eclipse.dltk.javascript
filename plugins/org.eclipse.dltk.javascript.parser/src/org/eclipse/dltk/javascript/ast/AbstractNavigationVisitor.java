@@ -199,8 +199,7 @@ public class AbstractNavigationVisitor<E> extends ASTVisitor<E> {
 
 	@Override
 	public E visitNewExpression(NewExpression node) {
-		visit(node.getObjectClass());
-		return null;
+		return visit(node.getObjectClass());
 	}
 
 	@Override
