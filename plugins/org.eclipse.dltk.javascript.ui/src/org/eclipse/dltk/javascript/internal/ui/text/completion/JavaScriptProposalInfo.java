@@ -35,6 +35,7 @@ import org.eclipse.dltk.javascript.scriptdoc.ScriptDocumentationProvider;
 import org.eclipse.dltk.javascript.scriptdoc.StringJavaDocCommentReader;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
+import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.ui.documentation.DocumentationUtils;
 import org.eclipse.dltk.ui.documentation.IDocumentationResponse;
@@ -73,7 +74,24 @@ public class JavaScriptProposalInfo extends ProposalInfo {
 			}
 		} else if (ref instanceof IValueReference) {
 			return getInfo((IValueReference) ref);
+		} else if (ref instanceof IMethod) {
+			ISourceRange docRange = ((IMethod) ref).getDocRange();
+			if (docRange != null && docRange.getOffset() > 0
+					&& docRange.getLength() > 0) {
+				ISourceModule sourceModule = ((IMethod) ref).getLocation()
+						.getSourceModule();
+				try {
+					String comment = sourceModule.getSource().substring(
+							docRange.getOffset(),
+							docRange.getOffset() + docRange.getLength());
+					return getString(new JavaDoc2HTMLTextReader(
+							new StringJavaDocCommentReader(comment)));
+				} catch (ModelException e) {
+					e.printStackTrace();
+				}
+			}
 		}
+
 		return null;
 	}
 
