@@ -140,6 +140,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.GenericMethod;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.MapType;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
+import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterizedType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
@@ -850,6 +851,15 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		final JSMethod method = new JSMethod(node, getSource());
 		for (IModelBuilder extension : context.getModelBuilders()) {
 			extension.processMethod(node, method, reporter, getTypeChecker());
+		}
+		if (node.isInlineBlock() && method.getParameterCount() > 0) {
+			final IParameter last = method.getParameters().get(
+					method.getParameterCount() - 1);
+			if (last.getType() == null
+					&& last.getKind() == ParameterKind.NORMAL
+					&& ITypeNames.UNDEFINED.equals(last.getName())) {
+				last.setKind(ParameterKind.OPTIONAL);
+			}
 		}
 		if (listeners != null) {
 			for (ITypeInferenceListener listener : listeners) {

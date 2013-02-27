@@ -3115,4 +3115,22 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		List<IProblem> validate = validate(code.toString());
 		assertEquals(0, validate.size());
 	}
+
+	public void testInlineBlock() {
+		final StringList code = new StringList();
+		code.add("(function(a) {");
+		code.add("})()");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JavaScriptProblems.WRONG_PARAMETERS_UNTYPED,
+				problems.get(0).getID());
+	}
+
+	public void testInlineBlockWithUndefined() {
+		final StringList code = new StringList();
+		code.add("(function(undefined) {");
+		code.add("})()");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
 }

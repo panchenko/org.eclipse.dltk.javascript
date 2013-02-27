@@ -771,9 +771,16 @@ public class TypeInfoValidator implements IBuildParticipant,
 		}
 
 		private void validateHidesByFunction(FunctionStatement node) {
-			List<Argument> args = node.getArguments();
 			IValueCollection peekContext = peekContext();
-			for (Argument argument : args) {
+			final boolean inlineBlock = node.isInlineBlock();
+			for (Argument argument : node.getArguments()) {
+				if (inlineBlock
+						&& ITypeNames.UNDEFINED.equals(argument
+								.getArgumentName())) {
+					// TODO (alex) alternatively, set Element.isHideAllowed()
+					// for the "undefined" property
+					continue;
+				}
 				IValueReference child = peekContext.getChild(argument
 						.getArgumentName());
 				if (child.exists()) {
