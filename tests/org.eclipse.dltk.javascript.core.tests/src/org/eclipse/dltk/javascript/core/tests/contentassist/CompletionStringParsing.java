@@ -90,6 +90,9 @@ public class CompletionStringParsing extends TestCase {
 		assertEquals("x.f2.f2.f1.", parse("x.f2()\n .\n\tf2()\n\t.\n\tf1()\n.", true));
 	}
 
+	public void testWithCommentLineEndingWithDot() throws Exception {
+		assertEquals("x.f2.f2", parse("// this is a comment.\nx.f2().\n\tf2()", true));
+	}
 	public void testWithMultiplyParams() throws Exception {
 		assertEquals("forms.xxx.[].yyy.[]",
 				parse("someCode forms.xxx[xxx,yyy].yyy[xxx,yyy]", true));

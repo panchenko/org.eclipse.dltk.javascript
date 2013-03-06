@@ -130,8 +130,13 @@ public class CompletionString {
 				while (k-- > 0) {
 					if (!Character.isWhitespace(id.charAt(k))) {
 						if (id.charAt(k) == '.') {
-							i = k + 1;
-							continue outer;
+							int lastLineBreak = id.lastIndexOf('\n', k);
+							int nextCommentTag = id
+									.indexOf("//", lastLineBreak);
+							if (nextCommentTag == -1 || nextCommentTag > k) {
+								i = k + 1;
+								continue outer;
+							}
 						}
 						break;
 					}
