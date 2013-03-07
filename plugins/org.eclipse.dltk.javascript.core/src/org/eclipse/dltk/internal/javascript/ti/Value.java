@@ -287,6 +287,19 @@ public class Value extends ImmutableValue {
 		children.put(name, value);
 	}
 
+	public void copyChilds(ImmutableValue value) {
+		if (value.hasReferences()) {
+			execute(value, new Handler<Map<String, ImmutableValue>>() {
+				public void process(ImmutableValue value,
+						Map<String, ImmutableValue> result) {
+					result.putAll(value.children);
+				};
+			}, this.children, new HashSet<IValue>());
+		} else {
+			this.children.putAll(value.children);
+		}
+	}
+
 	public void resolveLazyValues(Set<Value> visited) {
 		if (visited.add(this)) {
 			for (IValue value : references) {

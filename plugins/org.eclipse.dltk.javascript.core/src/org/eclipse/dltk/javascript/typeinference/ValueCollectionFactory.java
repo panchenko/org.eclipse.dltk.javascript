@@ -1,7 +1,6 @@
 package org.eclipse.dltk.javascript.typeinference;
 
 import java.util.HashMap;
-import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.dltk.core.DLTKCore;
@@ -124,13 +123,7 @@ public class ValueCollectionFactory {
 			IValue sourceValue = ((IValueProvider) source).getValue();
 			if (targetValue instanceof Value
 					&& sourceValue instanceof ImmutableValue) {
-				Set<String> children = sourceValue
-						.getDirectChildren(IValue.DEFAULT);
-				for (String childName : children) {
-					((Value) targetValue).putDirectChild(childName,
-							(ImmutableValue) sourceValue.getChild(childName,
-									false));
-				}
+				((Value) targetValue).copyChilds((ImmutableValue) sourceValue);
 			} else {
 				targetValue.addValue(((IValueProvider) source).getValue());
 			}
