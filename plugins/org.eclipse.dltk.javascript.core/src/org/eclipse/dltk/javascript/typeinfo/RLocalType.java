@@ -73,8 +73,10 @@ class RLocalType extends RType implements IRLocalType {
 						.contains(name)) {
 					return declaredValue.getChild(name);
 				}
-				return getChildFromDeclaredTypes(name,
+				IValueReference fromChild = getChildFromDeclaredTypes(name,
 						declaredValue.getDeclaredTypes(), set);
+				if (fromChild != null)
+					return fromChild;
 			}
 		}
 		return null;
