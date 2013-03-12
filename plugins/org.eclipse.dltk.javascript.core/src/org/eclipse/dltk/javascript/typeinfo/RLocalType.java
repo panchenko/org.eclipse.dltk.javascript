@@ -141,4 +141,17 @@ class RLocalType extends RType implements IRLocalType {
 		return name;
 	}
 
+	@Override
+	public int hashCode() {
+		return name.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof RLocalType) {
+			return getReferenceLocation().equals(
+					((RLocalType) obj).getReferenceLocation());
+		}
+		return false;
+	}
 }
