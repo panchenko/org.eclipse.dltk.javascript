@@ -440,4 +440,19 @@ public class FlowValidationTests extends AbstractValidationTest {
 				sCode.substring(problem.getSourceStart(),
 						problem.getSourceEnd()));
 	}
+	
+	
+	public void testDefinePropertyWithGet() {
+		final StringList code = new StringList();
+		code.add("function testing(args) {");
+		code.add("	this.data = args.data");
+		code.add("	Object.defineProperty(this,'data', {");
+		code.add("		get data() {return args.data}");
+		code.add("})");
+		code.add("}");
+		final String sCode = code.toString();
+		final List<IProblem> problems = validate(sCode);
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+
 }

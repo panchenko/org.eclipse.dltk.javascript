@@ -31,6 +31,7 @@ import org.eclipse.dltk.javascript.ast.ForInStatement;
 import org.eclipse.dltk.javascript.ast.ForStatement;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.IfStatement;
+import org.eclipse.dltk.javascript.ast.Method;
 import org.eclipse.dltk.javascript.ast.ReturnStatement;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.Statement;
@@ -206,6 +207,17 @@ public class FlowValidation extends AbstractNavigationVisitor<FlowStatus>
 				reportInconsistentReturn(node);
 			}
 			return result;
+		} finally {
+			scope = savedScope;
+		}
+	}
+
+	@Override
+	protected FlowStatus visitMethod(Method method) {
+		final FlowScope savedScope = scope;
+		scope = new FlowScope();
+		try {
+			return super.visitMethod(method);
 		} finally {
 			scope = savedScope;
 		}
