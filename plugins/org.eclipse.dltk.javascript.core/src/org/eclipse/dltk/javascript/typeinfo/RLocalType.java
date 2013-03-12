@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.dltk.compiler.problem.IValidationStatus;
@@ -47,12 +48,63 @@ class RLocalType extends RType implements IRLocalType {
 
 	public IValueReference getDirectChild(String name) {
 		final IValueReference value = getValue();
-		return value.getDirectChildren(IValue.NO_LOCAL_TYPES).contains(name) ? value
-				.getChild(name) : null;
+		if (value.getDirectChildren(IValue.NO_LOCAL_TYPES).contains(name)) {
+			return value.getChild(name);
+		} else {
+			JSTypeSet declaredTypes = getValue().getDeclaredTypes();
+			HashSet<IRType> set = new HashSet<IRType>();
+			set.add(this);
+			return getChildFromDeclaredTypes(name, declaredTypes, set);
+		}
+	}
+
+	/**
+	 * @param name
+	 * @param declaredTypes
+	 * @param set
+	 */
+	private IValueReference getChildFromDeclaredTypes(String name,
+			JSTypeSet declaredTypes, HashSet<IRType> set) {
+		for (IRType irType : declaredTypes) {
+			if (irType instanceof RLocalType && set.add(irType)) {
+				IValueReference declaredValue = ((RLocalType) irType)
+						.getValue();
+				if (declaredValue.getDirectChildren(IValue.NO_LOCAL_TYPES)
+						.contains(name)) {
+					return declaredValue.getChild(name);
+				}
+				return getChildFromDeclaredTypes(name,
+						declaredValue.getDeclaredTypes(), set);
+			}
+		}
+		return null;
 	}
 
 	public Set<String> getDirectChildren() {
-		return getValue().getDirectChildren(IValue.NO_LOCAL_TYPES);
+		Set<String> children = getValue().getDirectChildren(
+				IValue.NO_LOCAL_TYPES);
+		JSTypeSet declaredTypes = getValue().getDeclaredTypes();
+		HashSet<IRType> set = new HashSet<IRType>();
+		set.add(this);
+		fillDeclaredLocalTypesChildren(children, declaredTypes, set);
+		return children;
+	}
+
+	/**
+	 * @param children
+	 * @param declaredTypes
+	 * @param set
+	 */
+	private void fillDeclaredLocalTypesChildren(Set<String> children,
+			JSTypeSet declaredTypes, HashSet<IRType> set) {
+		for (IRType irType : declaredTypes) {
+			if (irType instanceof RLocalType && set.add(irType)) {
+				children.addAll(((RLocalType) irType).getValue()
+						.getDirectChildren(IValue.NO_LOCAL_TYPES));
+				fillDeclaredLocalTypesChildren(children, ((RLocalType) irType)
+						.getValue().getDeclaredTypes(), set);
+			}
+		}
 	}
 
 	public ReferenceLocation getReferenceLocation() {

@@ -54,4 +54,12 @@
 	enabled="true" 
 	deleted="false" 
 	autoinsert="true">@SuppressWarnings(${warnings})</template>
+<template 
+	context="JSDocTemplateContextType" 
+	id="org.eclipse.dltk.javascript.ui.templates.jsdoc.extends" 
+	name="@extends" 
+	description="%extends.description" 
+	enabled="true" 
+	deleted="false" 
+	autoinsert="true">@extends {${type}}</template>
 </templates>

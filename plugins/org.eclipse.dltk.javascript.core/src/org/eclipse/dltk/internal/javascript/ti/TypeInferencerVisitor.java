@@ -801,8 +801,13 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					RModelBuilder.create(getContext(), method));
 		}
 		final ThisValue thisValue = new ThisValue();
-		thisValue.setDeclaredType(this.context.contextualize(method
-				.getThisType()));
+		if (method.getThisType() != null) {
+			thisValue.setDeclaredType(this.context.contextualize(method
+					.getThisType()));
+		} else if (method.getExtendsType() != null) {
+			thisValue.setDeclaredType(this.context.contextualize(method
+					.getExtendsType()));
+		}
 		final IValueCollection function = new FunctionValueCollection(
 				peekContext(), method.getName(), thisValue,
 				node.isInlineBlock());

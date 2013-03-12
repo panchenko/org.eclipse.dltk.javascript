@@ -3133,4 +3133,47 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
+	
+	public void testExtends() {
+		final StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @constructor"); 
+		code.add(" */");
+		code.add("function BaseBase() {");
+		code.add("	this.basebase = function(a) {}");
+		code.add("	this.x = 10;");
+		code.add("}");
+		code.add("/**");
+		code.add(" * @constructor"); 
+		code.add(" * @extends {BaseBase}");
+		code.add(" */");
+		code.add("function Base() {");
+		code.add("	/** @this {Base} */");
+		code.add("	this.mytest = function(a) {");
+		code.add("		this.basebase(this.x);");
+		code.add("	}");
+		code.add("}");
+		code.add("/**");
+		code.add(" * @constructor"); 
+		code.add(" * @extends {Base}");
+		code.add(" */");
+		code.add("function Child () {");
+		code.add("	/** @this {Child} */");
+		code.add("	this.childsTest = function() {");
+		code.add("		this.mytest(1);");
+		code.add("		this.x = 11;");
+		code.add("		this.basebase(this.x);");
+		code.add("	}");
+		code.add("}");
+		code.add("function test() {");
+		code.add("	var x = new Child();");
+		code.add("	x.childsTest();");
+		code.add("	x.mytest(2);");
+		code.add("	x.x = 1;");
+		code.add("	x.basebase(x.x);");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+
+	}
 }

@@ -796,4 +796,73 @@ public class CodeCompletion extends AbstractCompletionTest {
 		int position = lastPositionInFile(".", module);
 		basicTest(module, position, names);
 	}
+	
+	public void testExtends() {
+		final StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @constructor"); 
+		code.add(" */");
+		code.add("function BaseBase() {");
+		code.add("	this.basebase = function(a) {}");
+		code.add("	this.x = 10;");
+		code.add("}");
+		code.add("/**");
+		code.add(" * @constructor"); 
+		code.add(" * @extends {BaseBase}");
+		code.add(" */");
+		code.add("function Base() {");
+		code.add("	/** @this {Base} */");
+		code.add("	this.mytest = function(a) {");
+		code.add("		this.basebase(this.x);");
+		code.add("	}");
+		code.add("}");
+		code.add("/**");
+		code.add(" * @constructor"); 
+		code.add(" * @extends {Base}");
+		code.add(" */");
+		code.add("function Child () {");
+		code.add("	/** @this {Child} */");
+		code.add("	this.childsTest = function() {");
+		code.add("		this.mytest(1);");
+		code.add("		this.x = 11;");
+		code.add("		this.basebase(this.x);");
+		code.add("	}");
+		code.add("}");
+		code.add("function test() {");
+		code.add("	var x = new Child();");
+		code.add("	x.childsTest();");
+		code.add("	x.mytest(2);");
+		code.add("	x.x = 1;");
+		code.add("	x.basebase(x.x);");
+		code.add("}");
+		final IModuleSource module = new TestModule(code.toString());
+		String[] names = concat(getMembersOfObject(), "mytest","basebase","childsTest","x");
+		int position = lastPositionInFile("x.", module);
+		basicTest(module, position, names);
+	}
+	
+	public void testExtendsInFunction() {
+		final StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @constructor"); 
+		code.add(" */");
+		code.add("function BaseBase() {");
+		code.add("	this.basebase = function(a) {}");
+		code.add("	this.x = 10;");
+		code.add("}");
+		code.add("/**");
+		code.add(" * @constructor"); 
+		code.add(" * @extends {BaseBase}");
+		code.add(" */");
+		code.add("function Base() {");
+		code.add("	/** @this {Base} */");
+		code.add("	this.mytest = function(a) {");
+		code.add("		this.basebase(this.x);");
+		code.add("	}");
+		code.add("}");
+		final IModuleSource module = new TestModule(code.toString());
+		String[] names = concat(getMembersOfObject(), "mytest","basebase","x");
+		int position = lastPositionInFile("this.", module);
+		basicTest(module, position, names);
+	}
 }

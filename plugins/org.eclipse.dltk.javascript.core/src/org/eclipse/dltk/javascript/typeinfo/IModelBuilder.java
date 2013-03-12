@@ -148,6 +148,16 @@ public interface IModelBuilder {
 		 * during the invocation.
 		 */
 		void setThisType(JSType thisType);
+
+		/**
+		 * Returns the type this function that it extends
+		 */
+		JSType getExtendsType();
+
+		/**
+		 * Sets the type of this function that it extends
+		 */
+		void setExtendsType(JSType extendsType);
 	}
 
 	public interface IVariable extends IMember {

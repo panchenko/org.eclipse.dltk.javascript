@@ -49,6 +49,7 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 	private ReferenceLocation location = ReferenceLocation.UNKNOWN;
 	private ISourceRange docRange;
 	private JSType thisType;
+	private JSType extendsType;
 
 	public IParameter createParameter() {
 		return new Parameter();
@@ -135,6 +136,14 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 
 	public void setThisType(JSType thisType) {
 		this.thisType = thisType;
+	}
+
+	public JSType getExtendsType() {
+		return this.extendsType;
+	}
+
+	public void setExtendsType(JSType extendsType) {
+		this.extendsType = extendsType;
 	}
 
 	@Override

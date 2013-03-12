@@ -140,8 +140,23 @@ public class JSDocSupport implements IModelBuilder {
 		parseDeprecation(method, tags, reporter);
 		parseAccessModifiers(method, tags, reporter);
 		parseConstructor(method, tags, reporter);
+		parseExtends(method, tags, reporter, typeChecker);
 		parseThrows(method, tags, reporter, typeChecker);
 		parseSuppressWarnings(method, tags, reporter);
+	}
+
+	private void parseExtends(IMethod method, JSDocTags tags,
+			JSProblemReporter reporter, ITypeChecker typeChecker) {
+		final JSDocTag extendsTag = tags.get(JSDocTag.EXTENDS);
+		if (extendsTag != null) {
+			final JSType type = parseType(extendsTag, false, reporter);
+			if (type != null) {
+				if (typeChecker != null)
+					typeChecker.checkType(type, extendsTag);
+				method.setExtendsType(type);
+			}
+			validateSingleTag(tags, JSDocTag.EXTENDS, reporter);
+		}
 	}
 
 	protected void parseSuppressWarnings(IElement element, JSDocTags tags,
