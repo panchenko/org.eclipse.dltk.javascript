@@ -3176,4 +3176,61 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(problems.toString(), 0, problems.size());
 
 	}
+	
+	public void testExtendsSubAsArgumentForBaseParam() {
+		final StringList code = new StringList();
+
+		code.add("/**");
+		code.add(" * @constructor"); 
+		code.add(" */");
+		code.add("function BaseBase() {}");
+		code.add("/**");
+		code.add(" * @constructor"); 
+		code.add(" * @extends {BaseBase}");
+		code.add(" */");
+		code.add("function Base(){}");
+		code.add("/**");
+		code.add(" * @constructor"); 
+		code.add(" * @extends {Base}");
+		code.add(" */");
+		code.add("function Sub() {}");
+		code.add("function test() {");
+		code.add("	amethod(new Sub());");
+		code.add("	amethod(new Base());");
+		code.add("}");
+		code.add("/**");
+		code.add(" * @param {BaseBase} a");
+		code.add(" */");
+		code.add("function amethod(a) {}");
+		
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+
+	}
+	
+	public void testExtendsBaseAsArgumentForSubParam() {
+		final StringList code = new StringList();
+
+		code.add("/**");
+		code.add(" * @constructor"); 
+		code.add(" */");
+		code.add("function Base(){}");
+		code.add("/**");
+		code.add(" * @constructor"); 
+		code.add(" * @extends {Base}");
+		code.add(" */");
+		code.add("function Sub() {}");
+		code.add("function test() {");
+		code.add("	amethod(new Base());");
+		code.add("}");
+		code.add("/**");
+		code.add(" * @param {Sub} a");
+		code.add(" */");
+		code.add("function amethod(a) {}");
+		
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JavaScriptProblems.WRONG_PARAMETERS, problems.get(0)
+				.getID());
+	}
 }

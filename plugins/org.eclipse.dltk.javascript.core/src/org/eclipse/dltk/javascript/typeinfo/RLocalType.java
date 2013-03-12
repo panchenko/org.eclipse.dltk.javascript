@@ -128,12 +128,25 @@ class RLocalType extends RType implements IRLocalType {
 		if (argument == null)
 			return TypeCompatibility.TRUE;
 		Set<IRType> types = JavaScriptValidations.getTypes(argument);
+		return testLocation(types, new HashSet<IRType>());
+	}
+
+	/**
+	 * @param types
+	 */
+	private IValidationStatus testLocation(Iterable<IRType> types,
+			HashSet<IRType> set) {
 		for (IRType irType : types) {
-			if (irType instanceof IRLocalType) {
+			if (irType instanceof IRLocalType && set.add(irType)) {
 				if (getReferenceLocation().equals(
 						((IRLocalType) irType).getReferenceLocation())) {
 					return TypeCompatibility.TRUE;
 				}
+				
+				IValidationStatus status = testLocation(((IRLocalType) irType)
+						.getValue().getDeclaredTypes(), set);
+				if (status == TypeCompatibility.TRUE)
+					return status;
 			}
 		}
 		return TypeCompatibility.FALSE;
