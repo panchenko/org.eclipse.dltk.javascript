@@ -36,6 +36,7 @@ import org.eclipse.dltk.javascript.scriptdoc.StringJavaDocCommentReader;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
+import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.ui.documentation.DocumentationUtils;
 import org.eclipse.dltk.ui.documentation.IDocumentationResponse;
@@ -73,7 +74,7 @@ public class JavaScriptProposalInfo extends ProposalInfo {
 				}
 			}
 		} else if (ref instanceof IValueReference) {
-			return getInfo((IValueReference) ref);
+			return getInfo( ((IValueReference) ref).getLocation());
 		} else if (ref instanceof IMethod) {
 			ISourceRange docRange = ((IMethod) ref).getDocRange();
 			if (docRange != null && docRange.getOffset() > 0
@@ -90,13 +91,14 @@ public class JavaScriptProposalInfo extends ProposalInfo {
 					e.printStackTrace();
 				}
 			}
+		} else if (ref instanceof IVariable) {
+			return getInfo(((IVariable) ref).getLocation());
 		}
 
 		return null;
 	}
 
-	private String getInfo(IValueReference ref) {
-		final ReferenceLocation location = ref.getLocation();
+	private String getInfo(final ReferenceLocation location) {
 		if (location == ReferenceLocation.UNKNOWN)
 			return null;
 		final ISourceModule m = location.getSourceModule();
