@@ -40,6 +40,7 @@ public class CommonSuperTypeFinder {
 		final Set<IRArrayType> arrayTypes = new HashSet<IRArrayType>();
 		final Set<IRMapType> mapTypes = new HashSet<IRMapType>();
 		final Set<IRLocalType> localTypes = new HashSet<IRLocalType>();
+		final Set<IRRecordType> recordTypes = new HashSet<IRRecordType>();
 		final Set<IRType> others = new HashSet<IRType>();
 
 		void addAll(Collection<? extends IRType> types) {
@@ -65,6 +66,8 @@ public class CommonSuperTypeFinder {
 				mapTypes.add((IRMapType) type);
 			} else if (type instanceof IRLocalType) {
 				localTypes.add((IRLocalType) type);
+			} else if (type instanceof IRRecordType) {
+				recordTypes.add((IRRecordType) type);
 			} else {
 				others.add(type);
 			}
@@ -81,6 +84,8 @@ public class CommonSuperTypeFinder {
 			if (!mapTypes.isEmpty())
 				++result;
 			if (!localTypes.isEmpty())
+				++result;
+			if (!recordTypes.isEmpty())
 				++result;
 			if (!others.isEmpty())
 				++result;
@@ -164,6 +169,20 @@ public class CommonSuperTypeFinder {
 				// TODO super type check?
 				return locations.size() == 1 ? localTypes.iterator().next()
 						: RTypes.OBJECT;
+			} else if (!recordTypes.isEmpty()) {
+				if (recordTypes.size() == 1) {
+					return getSingleItem(recordTypes);
+				}
+				List<IRRecordMember> commonMembers = new ArrayList<IRRecordMember>();
+				for (IRRecordType type : recordTypes) {
+					if (commonMembers.size() == 0)
+						commonMembers.addAll(type.getMembers());
+					else {
+						commonMembers.retainAll(type.getMembers());
+					}
+				}
+				return commonMembers.size() == 0 ? RTypes.OBJECT : RTypes
+						.recordType(commonMembers);
 			} else {
 				assert !others.isEmpty();
 				if (others.size() == 1) {

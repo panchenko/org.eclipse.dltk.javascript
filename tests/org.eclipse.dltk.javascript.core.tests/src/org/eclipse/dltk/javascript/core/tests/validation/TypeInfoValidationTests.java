@@ -3233,4 +3233,40 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(JavaScriptProblems.WRONG_PARAMETERS, problems.get(0)
 				.getID());
 	}
+	
+	public void testRecordTypeCommonBaseTest() {
+		final StringList code = new StringList();
+		code.add("/**");
+		code.add("* @param {Array<Number>|Array<{data: Array<Array<Number>>,label: String=}>} options");
+		code.add("*/");
+		code.add("function test(options) {}");
+		code.add("function test1() {");
+		code.add("	test([");
+		code.add("    { data : [[0, 4]], label : 'Comedy' },");
+		code.add("    { data : [[0, 3]], label : 'Action' },");
+		code.add("    { data : [[0, 1.03]], label : 'Romance', pie : { explode : 50}},");
+		code.add("    { data : [[0, 3.5]], label : 'Drama' }");
+		code.add("	])");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
+	public void testRecordTypeCommonBaseTestWithDifferentType() {
+		final StringList code = new StringList();
+		code.add("/**");
+		code.add("* @param {Array<Number>|Array<{data: Array<Array<Number>>,label: String=}>} options");
+		code.add("*/");
+		code.add("function test(options) {}");
+		code.add("function test1() {");
+		code.add("	test([");
+		code.add("    { data : [[0, 4]], label : 'Comedy' },");
+		code.add("    { data : [[0, 3]], label : 'Action' },");
+		code.add("    { data : [[0, 1.03]], label : 'Romance', pie : { explode : 50}},");
+		code.add("    { data1 : [[0, 3.5]], label : 'Drama' }");
+		code.add("	])");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+	}
 }
