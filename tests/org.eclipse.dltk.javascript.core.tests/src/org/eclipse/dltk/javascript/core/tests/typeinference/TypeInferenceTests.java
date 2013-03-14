@@ -1296,4 +1296,23 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		assertEquals(ITypeNames.NUMBER, o.getName());
 	}
 
+	public void testMapTypeLookup() {
+		final StringList code = new StringList();
+		code.add("/**");
+		code.add("* @type {Object<String>}");
+		code.add("*/");
+		code.add("var MapTypeIds = {");
+		code.add("}");
+		code.add("function test() {");
+		code.add("	var x = MapTypeIds.test;");
+		code.add("}");
+		final IValueCollection collection = inference(code.toString());
+		IValueReference test = collection.getChild("test");
+		IValueCollection functionScope = (IValueCollection) test
+				.getAttribute(IReferenceAttributes.FUNCTION_SCOPE);
+		final IRSimpleType o = (IRSimpleType) JavaScriptValidations
+				.typeOf(functionScope.getChild("x"));
+		assertNotNull(o);
+		assertEquals(ITypeNames.STRING, o.getName());
+	}
 }

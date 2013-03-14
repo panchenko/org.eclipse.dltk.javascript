@@ -865,4 +865,25 @@ public class CodeCompletion extends AbstractCompletionTest {
 		int position = lastPositionInFile("this.", module);
 		basicTest(module, position, names);
 	}
+	
+	public void testCompletionOfObjectInitializer() {
+		final StringList code = new StringList();
+		
+		code.add("/**");
+		code.add("* @type {Object<Object>}");
+		code.add("*/");
+		code.add("var MapTypeIds = {");
+		code.add(" HYBRID: new Object()");
+		code.add("}");
+		code.add("function test() {");
+		code.add("	Map");
+		code.add("}");
+		final IModuleSource module = new TestModule(code.toString());
+		final List<CompletionProposal> results = new ArrayList<CompletionProposal>();
+		final ICompletionEngine completionEngine = createEngine(results,
+				JSCompletionEngine.OPTION_KEYWORDS);
+		completionEngine.complete(module, lastPositionInFile("Map", module), 0);
+		assertEquals(1, results.size());
+		assertEquals(CompletionProposal.FIELD_REF, results.get(0).getKind());
+	}
 }
