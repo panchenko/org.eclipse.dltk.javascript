@@ -95,4 +95,15 @@ public class SearchReferenceTests extends Assert implements
 				.getAncestor(IModelElement.SOURCE_MODULE);
 		assertEquals("thisobject.js", parent.getElementName());
 	}
+	
+	@Test
+	public void testMethodReferenceThatsReferencesInAnArgument() throws CoreException {
+		final TestSearchResults results = PROJECT.search("convertToExternalURL", METHOD,
+				REFERENCES);
+		assertEquals(1, results.size());
+		final IModelElement element = results.get(0);
+		final IModelElement parent = element
+				.getAncestor(IModelElement.SOURCE_MODULE);
+		assertEquals("globals.js", parent.getElementName());
+	}
 }

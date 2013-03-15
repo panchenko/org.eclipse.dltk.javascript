@@ -261,6 +261,17 @@ public class StructureReporter3 extends
 		return null;
 	}
 
+	public IStructureNode visitCallExpression(CallExpression node) {
+		visit(node.getExpression());
+		for (ASTNode argument : node.getArguments()) {
+			IStructureNode visit = visit(argument);
+			if (visit != null) {
+				peek().getScope().addToScope(visit);
+			}
+		}
+		return null;
+	}
+
 	@Override
 	public IStructureNode visitVoidExpression(VoidExpression node) {
 		final Expression expression = node.getExpression();
