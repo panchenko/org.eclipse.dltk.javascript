@@ -48,8 +48,11 @@ import org.eclipse.dltk.javascript.structure.FunctionExpression;
 import org.eclipse.dltk.javascript.structure.FunctionNode;
 import org.eclipse.dltk.javascript.structure.IDeclaration;
 import org.eclipse.dltk.javascript.structure.IParentNode;
+import org.eclipse.dltk.javascript.structure.IScope;
+import org.eclipse.dltk.javascript.structure.IStructureContext;
 import org.eclipse.dltk.javascript.structure.IStructureHandler;
 import org.eclipse.dltk.javascript.structure.IStructureNode;
+import org.eclipse.dltk.javascript.structure.IStructureRequestor;
 import org.eclipse.dltk.javascript.structure.IStructureVisitor;
 import org.eclipse.dltk.javascript.structure.ObjectDeclaration;
 import org.eclipse.dltk.javascript.structure.PropertyDeclaration;
@@ -266,7 +269,7 @@ public class StructureReporter3 extends
 		for (ASTNode argument : node.getArguments()) {
 			IStructureNode visit = visit(argument);
 			if (visit != null) {
-				peek().getScope().addToScope(visit);
+				peek().getScope().addToScope(new ArgumentsStructureNode(visit));
 			}
 		}
 		return null;
@@ -384,6 +387,43 @@ public class StructureReporter3 extends
 
 	public static int getCallArgumentCount(Expression node) {
 		return ((CallExpression) node.getParent()).getArguments().size();
+	}
+
+	private static class ArgumentsStructureNode implements IStructureNode {
+
+		private IStructureNode wrapper;
+
+		public ArgumentsStructureNode(IStructureNode wrapper) {
+			this.wrapper = wrapper;
+		}
+
+		public List<? extends IStructureNode> getChildren() {
+			return wrapper.getChildren();
+		}
+
+		public IParentNode getParent() {
+			return wrapper.getParent();
+		}
+
+		public IScope getScope() {
+			return wrapper.getScope();
+		}
+
+		public int start() {
+			return wrapper.start();
+		}
+
+		public boolean isManyChildren() {
+			return wrapper.isManyChildren();
+		}
+
+		public void reportStructure(IStructureRequestor requestor,
+				IStructureContext context) {
+			context.pushMask(IStructureContext.FIELD);
+			wrapper.reportStructure(requestor, context);
+			context.popMask();
+		}
+
 	}
 
 }
