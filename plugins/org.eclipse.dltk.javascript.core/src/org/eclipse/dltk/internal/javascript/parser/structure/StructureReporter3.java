@@ -265,14 +265,14 @@ public class StructureReporter3 extends
 	}
 
 	public IStructureNode visitCallExpression(CallExpression node) {
-		visit(node.getExpression());
+		IStructureNode retValue = visit(node.getExpression());
 		for (ASTNode argument : node.getArguments()) {
 			IStructureNode visit = visit(argument);
 			if (visit != null) {
 				peek().getScope().addToScope(new ArgumentsStructureNode(visit));
 			}
 		}
-		return null;
+		return retValue;
 	}
 
 	@Override

@@ -106,4 +106,15 @@ public class SearchReferenceTests extends Assert implements
 				.getAncestor(IModelElement.SOURCE_MODULE);
 		assertEquals("globals.js", parent.getElementName());
 	}
+	
+	@Test
+	public void testMethodReferenceThatsReferencesInAVariableFunctionInit() throws CoreException {
+		final TestSearchResults results = PROJECT.search("SvyException", METHOD,
+				REFERENCES);
+		assertEquals(2, results.size());
+		final IModelElement element = results.get(0);
+		final IModelElement parent = element
+				.getAncestor(IModelElement.SOURCE_MODULE);
+		assertEquals("functioncallsinfunctionvariableinit.js", parent.getElementName());
+	}
 }
