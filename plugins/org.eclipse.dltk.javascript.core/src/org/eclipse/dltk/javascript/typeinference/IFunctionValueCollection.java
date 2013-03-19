@@ -21,4 +21,11 @@ public interface IFunctionValueCollection extends IValueCollection {
 	 */
 	boolean isInlineBlock();
 
+	/**
+	 * The name of the function
+	 * 
+	 * @return String the name of the function
+	 */
+	String getFunctionName();
+
 }

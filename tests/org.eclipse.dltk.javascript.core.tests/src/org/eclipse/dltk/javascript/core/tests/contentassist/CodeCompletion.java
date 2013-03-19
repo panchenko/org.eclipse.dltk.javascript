@@ -886,4 +886,19 @@ public class CodeCompletion extends AbstractCompletionTest {
 		assertEquals(1, results.size());
 		assertEquals(CompletionProposal.FIELD_REF, results.get(0).getKind());
 	}
+	
+	public void testThisCompletionInsideObjectFunction() {
+		final StringList code = new StringList();
+		code.add("function Test() {");
+		code.add(" this.x = 10;");
+		code.add(" this.myfunc = function() {");
+		code.add("	this.");
+		code.add(" }");
+		code.add("}");
+		
+		final IModuleSource module = new TestModule(code.toString());
+		String[] names = concat(getMembersOfObject(), "x", "myfunc");
+		int position = lastPositionInFile("this.", module);
+		basicTest(module, position, names);
+	}
 }

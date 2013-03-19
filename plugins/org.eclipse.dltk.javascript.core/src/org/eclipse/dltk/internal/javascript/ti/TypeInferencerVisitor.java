@@ -99,6 +99,7 @@ import org.eclipse.dltk.javascript.parser.PropertyExpressionUtils;
 import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTag;
 import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTags;
 import org.eclipse.dltk.javascript.typeinference.IAssignProtection;
+import org.eclipse.dltk.javascript.typeinference.IFunctionValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.PhantomValueReference;
@@ -359,8 +360,24 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				if (property.getProperty() instanceof Identifier
 						&& !left.exists()) {
 					if (property.getObject() instanceof ThisExpression) {
-						if (isFunctionDeclaration(property))
+						if (isFunctionDeclaration(property)) {
 							left.setKind(ReferenceKind.FUNCTION);
+							// this functions is part of an object ('this'
+							// assignment). Set the this of that function to the
+							// parent local type function.
+							IValueCollection scope = (IValueCollection) right
+									.getAttribute(IReferenceAttributes.FUNCTION_SCOPE);
+							IValueCollection context = peekContext();
+							if (scope != null
+									&& scope.getThis().getDeclaredType() == null
+									&& context instanceof IFunctionValueCollection) {
+								String name = ((IFunctionValueCollection) context)
+										.getFunctionName();
+								scope.getThis().setDeclaredType(
+										RTypes.localType(name, context
+												.getParent().getChild(name)));
+							}
+						}
 						else {
 							left.setKind(ReferenceKind.FIELD);
 							final Comment comment = JSDocSupport

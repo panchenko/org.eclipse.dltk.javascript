@@ -52,6 +52,10 @@ public class FunctionValueCollection extends ValueCollection implements
 		return block;
 	}
 
+	public String getFunctionName() {
+		return functionName;
+	}
+
 	public boolean isScope() {
 		return true;
 	}
