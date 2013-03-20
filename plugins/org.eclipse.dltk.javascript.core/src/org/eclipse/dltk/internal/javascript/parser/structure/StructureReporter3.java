@@ -29,6 +29,7 @@ import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.GetMethod;
 import org.eclipse.dltk.javascript.ast.Identifier;
+import org.eclipse.dltk.javascript.ast.JSDeclaration;
 import org.eclipse.dltk.javascript.ast.JSNode;
 import org.eclipse.dltk.javascript.ast.ObjectInitializer;
 import org.eclipse.dltk.javascript.ast.ObjectInitializerPart;
@@ -68,6 +69,7 @@ public class StructureReporter3 extends
 
 	private final ReferenceSource referenceSource;
 	private final Stack<IParentNode> parents = new Stack<IParentNode>();
+	private final Stack<List<JSDeclaration>> declarations = new Stack<List<JSDeclaration>>();
 	private final IStructureHandler[] handlers;
 
 	private JSDocSupport jsdocSupport = new JSDocSupport();
@@ -119,8 +121,9 @@ public class StructureReporter3 extends
 	@Override
 	public IStructureNode visitScript(Script node) {
 		push(new ScriptScope());
-		// TODO visit scope declarations first?
+		declarations.push(node.getDeclarations());
 		super.visitScript(node);
+		declarations.pop();
 		return pop();
 	}
 
@@ -138,8 +141,9 @@ public class StructureReporter3 extends
 				node.start(), node.end(), functionNode.getNameNode()));
 		functionNode.buildArgumentNodes();
 		push(functionNode);
-		// TODO visit scope declarations?
+		declarations.push(node.getDeclarations());
 		super.visitFunctionStatement(node);
+		declarations.pop();
 		return pop();
 	}
 
@@ -224,7 +228,7 @@ public class StructureReporter3 extends
 		final Expression property = node.getProperty();
 		if (property instanceof Identifier) {
 			final Identifier identifier = (Identifier) property;
-			if (isCallExpression(node)) {
+			if (isFunctionCall(node)) {
 				peek().addMethodReference(identifier,
 						getCallArgumentCount(node));
 			} else {
@@ -246,7 +250,7 @@ public class StructureReporter3 extends
 				if (resolved instanceof FunctionNode) {
 					peek().addMethodReference(
 							node,
-							isCallExpression(node) ? getCallArgumentCount(node)
+							isFunctionCall(node) ? getCallArgumentCount(node)
 									: 0);
 				} else {
 					peek().addFieldReference(node);
@@ -255,7 +259,7 @@ public class StructureReporter3 extends
 				peek().addLocalReference(node, resolved);
 			}
 		} else {
-			if (isCallExpression(node)) {
+			if (isFunctionCall(node)) {
 				peek().addMethodReference(node, getCallArgumentCount(node));
 			} else {
 				peek().addFieldReference(node);
@@ -343,8 +347,9 @@ public class StructureReporter3 extends
 				node.start(), node.end(), functionNode.getNameNode()));
 		functionNode.buildArgumentNodes();
 		push(functionNode);
-		// TODO visit scope declarations?
+		declarations.add(function.getDeclarations());
 		super.visitFunctionStatement(function);
+		declarations.pop();
 		return pop();
 	}
 
@@ -379,6 +384,25 @@ public class StructureReporter3 extends
 		return true;
 	}
 
+	private boolean isFunctionCall(Expression node) {
+		if (isCallExpression(node))
+			return true;
+		if (node instanceof Identifier) {
+			String name = ((Identifier) node).getName();
+			for (int i = declarations.size(); --i >= 0;) {
+				List<JSDeclaration> list = declarations.get(i);
+				for (JSDeclaration declaration : list) {
+					if (declaration instanceof FunctionStatement
+							&& name.equals(((FunctionStatement) declaration)
+									.getFunctionName())) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
 	public static boolean isCallExpression(Expression node) {
 		final ASTNode parent = node.getParent();
 		return parent instanceof CallExpression
@@ -386,7 +410,10 @@ public class StructureReporter3 extends
 	}
 
 	public static int getCallArgumentCount(Expression node) {
-		return ((CallExpression) node.getParent()).getArguments().size();
+		if (isCallExpression(node)) {
+			return ((CallExpression) node.getParent()).getArguments().size();
+		}
+		return 0;
 	}
 
 	private static class ArgumentsStructureNode implements IStructureNode {
@@ -425,5 +452,4 @@ public class StructureReporter3 extends
 		}
 
 	}
-
 }

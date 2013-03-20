@@ -117,4 +117,15 @@ public class SearchReferenceTests extends Assert implements
 				.getAncestor(IModelElement.SOURCE_MODULE);
 		assertEquals("functioncallsinfunctionvariableinit.js", parent.getElementName());
 	}
+	
+	@Test
+	public void testMethodReferenceThatsReferencesAsIdentifier() throws CoreException {
+		final TestSearchResults results = PROJECT.search("referencedFuntion", METHOD,
+				REFERENCES);
+		assertEquals(1, results.size());
+		final IModelElement element = results.get(0);
+		final IModelElement parent = element
+				.getAncestor(IModelElement.SOURCE_MODULE);
+		assertEquals("referencetofunctionasidentifier.js", parent.getElementName());
+	}
 }
