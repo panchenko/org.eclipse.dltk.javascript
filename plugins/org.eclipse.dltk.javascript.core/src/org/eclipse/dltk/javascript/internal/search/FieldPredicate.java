@@ -19,6 +19,7 @@ import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.core.search.matching2.AbstractMatchingPredicate;
 import org.eclipse.dltk.core.search.matching2.MatchLevel;
 import org.eclipse.dltk.internal.core.search.matching.FieldPattern;
+import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 
 @SuppressWarnings("restriction")
@@ -88,6 +89,28 @@ public class FieldPredicate extends AbstractMatchingPredicate<MatchingNode> {
 
 		}
 		return null;
+	}
+
+	@Override
+	public MatchLevel resolvePotentialMatch(MatchingNode node) {
+		if (nameStart != -1 && nameEnd != -1) {
+			if (node instanceof MemberReferenceNode) {
+				final MemberReferenceNode mNode = (MemberReferenceNode) node;
+				final ReferenceLocation location = mNode.location;
+				return location != null && location.getNameStart() == nameStart
+						&& location.getNameEnd() == nameEnd
+						&& isSame(location.getSourceModule()) ? MatchLevel.ACCURATE_MATCH
+						: null;
+			} else if (node instanceof FieldDeclarationNode) {
+				Expression exp = ((FieldDeclarationNode) node).node;
+				if (exp != null && exp.sourceStart() == nameStart
+						&& exp.sourceEnd() == nameEnd
+						&& isSame(((FieldDeclarationNode) node).module)) {
+					return MatchLevel.ACCURATE_MATCH;
+				}
+			}
+		}
+		return super.resolvePotentialMatch(node);
 	}
 
 	private boolean isSame(ISourceModule module) {

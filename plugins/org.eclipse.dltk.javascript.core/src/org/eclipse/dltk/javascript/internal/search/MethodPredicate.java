@@ -25,6 +25,7 @@ import org.eclipse.dltk.core.search.matching2.IMatchingPredicate;
 import org.eclipse.dltk.core.search.matching2.MatchLevel;
 import org.eclipse.dltk.internal.core.search.matching.MethodDeclarationPattern;
 import org.eclipse.dltk.internal.core.search.matching.MethodPattern;
+import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 
 @SuppressWarnings("restriction")
@@ -185,6 +186,14 @@ public class MethodPredicate extends AbstractMatchingPredicate<MatchingNode> {
 						&& location.getNameEnd() == nameEnd
 						&& isSame(location.getSourceModule()) ? MatchLevel.ACCURATE_MATCH
 						: null;
+			} else if (node instanceof MethodDeclarationNode) {
+				Expression exp = ((MethodDeclarationNode) node).node;
+				if (exp != null && exp.sourceStart() == nameStart
+						&& exp.sourceEnd() == nameEnd
+						&& isSame(((MethodDeclarationNode) node).method
+								.getLocation().getSourceModule())) {
+					return MatchLevel.ACCURATE_MATCH;
+				}
 			}
 		}
 		return super.resolvePotentialMatch(node);
