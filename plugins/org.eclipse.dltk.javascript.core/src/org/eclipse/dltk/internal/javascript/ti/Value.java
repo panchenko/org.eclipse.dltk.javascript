@@ -34,6 +34,13 @@ import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public class Value extends ImmutableValue {
 
+	public Value() {
+	}
+
+	public Value(ImmutableValue value) {
+		super(value);
+	}
+
 	@Override
 	public void setDeclaredType(IRType declaredType) {
 		this.declaredType = declaredType;

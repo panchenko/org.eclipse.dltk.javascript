@@ -30,6 +30,24 @@ public class ValueCollectionFactory {
 	}
 
 	/**
+	 * @param collection
+	 *            the {@link IValueCollection} to clone.
+	 * 
+	 * @return the copy of the given collection {@link IValueCollection}
+	 */
+	public static IValueCollection shallowCloneValueCollection(
+			IValueCollection collection) {
+		ImmutableValue value = (ImmutableValue) ((IValueProvider) collection)
+				.getValue();
+		final boolean isScope = collection.isScope();
+		return new ValueCollection(collection.getParent(), new Value(value)) {
+			public boolean isScope() {
+				return isScope;
+			}
+		};
+	}
+
+	/**
 	 * @return a standard none scoped {@link IValueCollection} that gets a
 	 *         parent.
 	 */

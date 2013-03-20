@@ -61,6 +61,18 @@ public class ImmutableValue implements IValue, IValue2 {
 		this.attributes = attributes;
 	}
 
+	protected ImmutableValue(ImmutableValue value) {
+		this.declaredType = value.declaredType;
+		this.types = value.types;
+		this.deletedChildren = value.deletedChildren;
+		this.kind = value.kind;
+		this.location = value.location;
+		this.children = value.children;
+		this.inherited = value.inherited;
+		this.references = value.references;
+		this.attributes = value.attributes;
+	}
+
 	protected final boolean hasReferences() {
 		return !references.isEmpty();
 	}
