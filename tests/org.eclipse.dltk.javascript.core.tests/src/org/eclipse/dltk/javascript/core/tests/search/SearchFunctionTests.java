@@ -129,7 +129,7 @@ public class SearchFunctionTests extends Assert {
 		final TestSearchResults results = PROJECT.search(method,
 				ALL_OCCURRENCES);
 		assertEquals(results.toString(), 2, results.size());
-		assertThat(results.getMatch(0), instanceOf(FieldDeclarationMatch.class));
+		assertThat(results.getMatch(0), instanceOf(MethodDeclarationMatch.class));
 		assertThat(results.getMatch(1), instanceOf(MethodReferenceMatch.class));
 	}
 
@@ -142,7 +142,7 @@ public class SearchFunctionTests extends Assert {
 		final TestSearchResults results = PROJECT.search(method,
 				SearchFor.ALL_OCCURRENCES);
 		assertEquals(2, results.size());
-		assertThat(results.getMatch(0), instanceOf(FieldDeclarationMatch.class));
+		assertThat(results.getMatch(0), instanceOf(MethodDeclarationMatch.class));
 		assertThat(results.getMatch(1), instanceOf(MethodReferenceMatch.class));
 	}
 

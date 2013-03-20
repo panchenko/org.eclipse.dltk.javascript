@@ -159,6 +159,15 @@ public class JavaScriptMatchLocatorVisitor extends
 
 	@Override
 	public IMatchLocatorValue visitFunctionStatement(FunctionStatement node) {
+		return createFunctionDeclaration(node, node.getName());
+	}
+
+	/**
+	 * @param node
+	 * @return
+	 */
+	private IMatchLocatorValue createFunctionDeclaration(
+			FunctionStatement node, Identifier name) {
 		final JSMethod method = new JSMethod(node, referenceSource);
 		jsdocSupport.processMethod(node, method, fReporter, fTypeChecker);
 		final FunctionNode functionNode;
@@ -171,7 +180,7 @@ public class JavaScriptMatchLocatorVisitor extends
 				node.start(), node.end(), functionNode.getNameNode()));
 		functionNode.buildArgumentNodes();
 		push(functionNode);
-		addFunctionDeclaration(node.getName(), node, method);
+		addFunctionDeclaration(name, node, method);
 		visitFunctionBody(node);
 		pop();
 		return null;
@@ -312,9 +321,14 @@ public class JavaScriptMatchLocatorVisitor extends
 			} else if (part instanceof PropertyInitializer) {
 				final PropertyInitializer pi = (PropertyInitializer) part;
 				// TODO (alex) handle jsdoc
-				// TODO (alex) treat as method declaration if function
-				addFieldDeclaration(pi.getName(), null /* declaredType */);
-				visit(pi.getValue());
+				if (pi.getValue() instanceof FunctionStatement) {
+					createFunctionDeclaration(
+							(FunctionStatement) pi.getValue(),
+							(Identifier) pi.getName());
+				} else {
+					addFieldDeclaration(pi.getName(), null /* declaredType */);
+					visit(pi.getValue());
+				}
 			}
 		}
 		return null;

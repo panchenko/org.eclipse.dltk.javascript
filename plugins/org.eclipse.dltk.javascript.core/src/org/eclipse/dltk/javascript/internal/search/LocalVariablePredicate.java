@@ -96,8 +96,8 @@ public class LocalVariablePredicate extends
 				return null;
 			final MethodDeclarationNode mNode = (MethodDeclarationNode) node;
 			final ReferenceLocation location = mNode.method.getLocation();
-			if (location.getNameStart() == nameStart
-					&& location.getNameEnd() == nameEnd
+			if (((location.getNameStart() == nameStart && location.getNameEnd() == nameEnd) || (mNode.node
+					.sourceStart() == nameStart && mNode.node.sourceEnd() == nameEnd))
 					&& isSame(location.getSourceModule())) {
 				return matchName(mNode.method.getName(), MatchLevel.ACCURATE_MATCH);
 			}
