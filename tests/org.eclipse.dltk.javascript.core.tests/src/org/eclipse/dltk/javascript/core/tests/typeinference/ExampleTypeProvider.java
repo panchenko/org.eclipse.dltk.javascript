@@ -203,6 +203,12 @@ public class ExampleTypeProvider implements ITypeProvider {
 			prop2.setType(TypeUtil.ref(ITypeNames.STRING));
 			prop2.setDeprecated(true);
 			type.getMembers().add(prop2);
+			
+			
+			Method method = TypeInfoModelFactory.eINSTANCE.createMethod();
+			method.setName("anyReturn");
+			method.setType( TypeInfoModelFactory.eINSTANCE.createAnyType());
+			type.getMembers().add(method);
 
 			return type;
 		} else if (TYPE_WITH_COLLECTION.equals(typeName)) {

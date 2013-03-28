@@ -246,7 +246,10 @@ public abstract class ElementValue implements IValue {
 				return new RTypeValue(((IRMapType) type).getValueType(), null);
 			}
 		} else if (type == RTypes.any()) {
-			return PhantomValue.VALUE;
+			if (!IValueReference.ARRAY_OP.equals(name)
+					&& !IValueReference.FUNCTION_OP.equals(name)) {
+				return PhantomValue.VALUE;
+			}
 		}
 		return null;
 	}

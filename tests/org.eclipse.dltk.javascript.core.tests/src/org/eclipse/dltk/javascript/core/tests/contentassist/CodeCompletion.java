@@ -521,7 +521,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 		IModuleSource module = createModule("test-element-reference.js");
 		int position = lastPositionInFile(".", module);
 		basicTest(module, position,
-				new String[] { "deprecatedName", "service" });
+				new String[] { "anyReturn","deprecatedName", "service" });
 	}
 
 	public void testNewViaClassRef() {
@@ -900,5 +900,19 @@ public class CodeCompletion extends AbstractCompletionTest {
 		String[] names = concat(getMembersOfObject(), "x", "myfunc");
 		int position = lastPositionInFile("this.", module);
 		basicTest(module, position, names);
+	}
+	
+	
+	public void testAnyTypeNotAFunctionAsMemberReturnType() {
+		final StringList code = new StringList();
+		code.add("var x = exampleForms.anyReturn();");
+		code.add("x");
+		final IModuleSource module = new TestModule(code.toString());
+		final List<CompletionProposal> results = new ArrayList<CompletionProposal>();
+		final ICompletionEngine completionEngine = createEngine(results,
+				JSCompletionEngine.OPTION_KEYWORDS);
+		completionEngine.complete(module, lastPositionInFile("x", module), 0);
+		assertEquals(1, results.size());
+		assertEquals(CompletionProposal.FIELD_REF, results.get(0).getKind());
 	}
 }
