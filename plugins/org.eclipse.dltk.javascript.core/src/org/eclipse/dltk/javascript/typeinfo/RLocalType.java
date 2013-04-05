@@ -22,6 +22,7 @@ import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.PhantomValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 
 /**
  * @author jcompagner
@@ -120,6 +121,16 @@ class RLocalType extends RType implements IRLocalType {
 					((IRLocalType) type).getReferenceLocation())) {
 				return TypeCompatibility.TRUE;
 			}
+		} else if (type instanceof IRSimpleType
+				&& ((IRSimpleType) type).getTarget().getKind() == TypeKind.UNKNOWN
+				&& type.getName().equals(getName())) {
+			// if this RSimpleType was a result of an IRIValueType not being
+			// able to be resolved. just make this assignable if this type is
+			// unknown and has the same name..
+			// this happens when you have something like @return {init.Node} as
+			// function doc, and that Node is not there yet.
+			// see also RSimpleType.isAssignableFrom
+			return TypeCompatibility.TRUE;
 		}
 		return super.isAssignableFrom(type);
 	}

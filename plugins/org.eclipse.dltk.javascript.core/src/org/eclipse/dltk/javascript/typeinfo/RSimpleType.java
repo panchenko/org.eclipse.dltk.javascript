@@ -79,11 +79,11 @@ public class RSimpleType extends RType implements IRSimpleType {
 				&& getTarget().getKind() == TypeKind.UNKNOWN
 				&& type.getName().equals(getName())) {
 			// if this RSimpleType was a result of an IRIValueType not being
-			// able to be resolved.
-			// just make this assignable if this type is unknown and has the
-			// same name..
+			// able to be resolved. just make this assignable if this type is
+			// unknown and has the same name..
 			// this happens when you have something like @return {init.Node} as
 			// function doc, and that Node is not there yet.
+			// see also RLocalType.isAssignableFrom
 			return TypeCompatibility.TRUE;
 		}
 		return testAssignableTo(type);
