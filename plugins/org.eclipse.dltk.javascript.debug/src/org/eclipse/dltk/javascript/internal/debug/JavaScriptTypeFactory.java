@@ -14,6 +14,12 @@ import org.eclipse.dltk.debug.core.model.StringScriptType;
 public class JavaScriptTypeFactory implements IScriptTypeFactory {
 	private static final String[] atomicTypes = { "number", "boolean", "date" };
 
+	private static final ThreadLocal<Integer> detailsLevel = new ThreadLocal<Integer>() {
+		protected Integer initialValue() {
+			return Integer.valueOf(0);
+		}
+	};
+
 	public JavaScriptTypeFactory() {
 
 	}
@@ -26,7 +32,28 @@ public class JavaScriptTypeFactory implements IScriptTypeFactory {
 		}
 
 		if ("javaarray".equals(type) || "array".equals(type)) {
-			return new ArrayScriptType();
+			return new ArrayScriptType() {
+				protected String buildDetailString(IVariable variable)
+						throws DebugException {
+					Integer currentLevel = detailsLevel.get();
+					detailsLevel
+							.set(Integer.valueOf(currentLevel.intValue() + 1));
+					try {
+						if (variable.getValue() instanceof IScriptValue
+								&& currentLevel.intValue() < 2) {
+							IScriptValue value = (IScriptValue) variable
+									.getValue();
+							return value.getType().formatDetails(value);
+						}
+						return super.buildDetailString(variable);
+					} finally {
+						currentLevel = detailsLevel.get();
+						detailsLevel.set(Integer.valueOf(currentLevel
+								.intValue() - 1));
+					}
+
+				}
+			};
 		}
 
 		if ("string".equals(type)) {
@@ -49,27 +76,44 @@ public class JavaScriptTypeFactory implements IScriptTypeFactory {
 			 */
 			public String formatDetails(IScriptValue value) {
 				StringBuffer sb = new StringBuffer();
-				sb.append(value.getRawValue());
-				String id = value.getInstanceId();
-				if (id != null) {
-					sb.append(" (id = " + id + ")");
-				}
+				Integer currentLevel = detailsLevel.get();
+				detailsLevel.set(Integer.valueOf(currentLevel.intValue() + 1));
 				try {
 					IVariable[] variables = value.getVariables();
 					if (variables.length > 0) {
-						sb.append(" {");
+						sb.append("{");
 						for (int i = 0; i < variables.length; i++) {
 							sb.append(variables[i].getName());
 							sb.append(":");
-							sb.append(variables[i].getValue().getValueString());
+							if (variables[i].getValue() instanceof IScriptValue) {
+								if (currentLevel.intValue() < 2) {
+									IScriptValue sv = (IScriptValue) variables[i]
+											.getValue();
+									sb.append(sv.getType().formatDetails(sv));
+								} else
+									sb.append("{...}");
+							} else {
+								sb.append(variables[i].getValue()
+										.getValueString());
+							}
 							sb.append(",");
 						}
 						sb.setLength(sb.length() - 1);
 						sb.append("}");
+					} else {
+						sb.append(value.getRawValue());
+						String id = value.getInstanceId();
+						if (id != null) {
+							sb.append(" (id = " + id + ")");
+						}
 					}
 				} catch (DebugException ex) {
 					DLTKDebugPlugin.logWarning(
 							"error creating variable details", ex);
+				} finally {
+					currentLevel = detailsLevel.get();
+					detailsLevel
+							.set(Integer.valueOf(currentLevel.intValue() - 1));
 				}
 				return sb.toString();
 			}
