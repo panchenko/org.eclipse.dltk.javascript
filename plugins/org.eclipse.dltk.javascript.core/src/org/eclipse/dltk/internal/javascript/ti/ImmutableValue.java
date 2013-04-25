@@ -340,7 +340,8 @@ public class ImmutableValue implements IValue, IValue2 {
 							first = next;
 							continue;
 						}
-						if (next.getTypes().size() > first.getTypes().size()) {
+						if (next.getTypes().size() > first.getTypes().size()
+								&& first.getDeclaredTypes().size() == 0) {
 							first = next;
 						}
 					}
