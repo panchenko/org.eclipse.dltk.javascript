@@ -490,11 +490,29 @@
       <parameters name="searchvalue"/>
     </members>
     <members xsi:type="ref:Method" name="replace" directType="String" description="Replaces some characters with some other characters in a string.">
-      <parameters name="findString"/>
-      <parameters name="newString"/>
+      <parameters name="findString">
+      <type xsi:type="ref:UnionType" >
+		<targets xsi:type="ref:SimpleType" >
+		<target href="proxy:dltk/javascript/typeinfo/type#String"/>
+		</targets>
+		<targets xsi:type="ref:SimpleType" >
+		<target href="proxy:dltk/javascript/typeinfo/type#RegExp"/>
+		</targets>
+		</type>
+	  </parameters>
+      <parameters name="newString">
+       <type xsi:type="ref:UnionType" >
+      	<targets xsi:type="ref:SimpleType" >
+		<target href="proxy:dltk/javascript/typeinfo/type#String"/>
+		</targets>
+		<targets xsi:type="ref:SimpleType" >
+		<target href="proxy:dltk/javascript/typeinfo/type#Function"/>
+		</targets>
+		</type>
+	  </parameters>
     </members>
     <members xsi:type="ref:Method" name="search" directType="Number" description="Searches a string for a specified value.">
-      <parameters name="searchstring"/>
+      <parameters name="regexp"/>
     </members>
     <members xsi:type="ref:Method" name="slice" directType="String" description="Extracts a part of a string and returns the extracted part in a new string.">
       <parameters name="beginSlice" directType="Number"/>
