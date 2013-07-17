@@ -52,7 +52,7 @@ public class JSCodeGeneration {
 		if (existingComment != null && !isEmptyComment(existingComment)) {
 			// update existing doc.
 			List<String> lines = new ArrayList<String>();
-			List<String> paramLines = new ArrayList<String>();
+			List<Param> paramLines = new ArrayList<Param>();
 			int paramStart = -1;
 			StringTokenizer st = new StringTokenizer(existingComment,
 					lineDelimiter);
@@ -64,7 +64,37 @@ public class JSCodeGeneration {
 				if (index != -1) {
 					if (paramStart == -1)
 						paramStart = lines.size() - 1;
-					paramLines.add(line);
+					Param param = new Param();
+					StringTokenizer tokenizer = new StringTokenizer(line, " ");
+					while (tokenizer.hasMoreTokens()) {
+						String token = tokenizer.nextToken();
+						if (token.equals("@param")) {
+							if (tokenizer.hasMoreTokens()) {
+								token = tokenizer.nextToken();
+								if (token.startsWith("{")
+										&& token.endsWith("}")) {
+									param.type = token;
+									if (tokenizer.hasMoreTokens()) {
+										param.name = tokenizer.nextToken();
+									}
+								} else {
+									param.name = token;
+								}
+								if (param.name.startsWith("[")
+										&& param.name.endsWith("]")) {
+									param.optional = true;
+									param.name = param.name.substring(1,
+											param.name.length() - 1);
+								}
+							}
+							if (tokenizer.hasMoreTokens()) {
+								param.doc = tokenizer.nextToken("\n").trim();
+							}
+							break;
+						}
+
+					}
+					paramLines.add(param);
 				} else
 					lines.add(line);
 			}
@@ -75,16 +105,19 @@ public class JSCodeGeneration {
 				outer: for (int paramCounter = 0; paramCounter < parameterLength; paramCounter++) {
 					IParameter parameter = parameters[paramCounter];
 					for (int i = 0; i < paramLines.size(); i++) {
-						String paramLine = paramLines.get(i);
-						if (paramLine.indexOf(" " + parameter.getName()) != -1) {
+						Param param = paramLines.get(i);
+
+						if (param.name.equals(parameter.getName())) {
 							if (i != paramCounter) {
 								paramLines.remove(i);
-								paramLines.add(paramCounter, paramLine);
+								paramLines.add(paramCounter, param);
 							}
 							continue outer;
 						}
 					}
-					paramLines.add(" * @param {Object} " + parameter.getName());
+
+					paramLines.add(new Param(parameter.getName(), "{Object}"));
+					paramCounter--;
 				}
 			} catch (ModelException e) {
 				// ignore
@@ -94,8 +127,13 @@ public class JSCodeGeneration {
 			for (int i = 0; i < lines.size(); i++) {
 				buf.append(lines.get(i)).append(lineDelimiter);
 				if (paramStart == i) {
+					boolean optional = false;
 					for (int j = 0; j < parameterLength; j++) {
-						buf.append(paramLines.get(j)).append(lineDelimiter);
+						Param param = paramLines.get(j);
+						if (!optional)
+							optional = param.optional;
+						param.optional = optional;
+						buf.append(param).append(lineDelimiter);
 					}
 				}
 			}
@@ -258,5 +296,26 @@ public class JSCodeGeneration {
 			++begin;
 		}
 		return begin >= end;
+	}
+
+	private static class Param {
+		private String name;
+		private boolean optional;
+		private String type;
+		private String doc;
+
+		public Param() {
+		}
+
+		public Param(String name, String type) {
+			this.name = name;
+			this.type = type;
+		}
+
+		public String toString() {
+			return " * @param " + (type != null ? type + " " : "")
+					+ (optional ? "[" + name + "]" : name) 
+					+ (doc != null ? " " + doc : "");
+		}
 	}
 }
