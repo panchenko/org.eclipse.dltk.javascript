@@ -70,7 +70,7 @@ public class JSCodeAssistUITest extends Assert {
 
 	@SuppressWarnings("unchecked")
 	private static Matcher<String> stringHasValue() {
-		return CoreMatchers.allOf(CoreMatchers.<String> notNullValue(),
+		return CoreMatchers.allOf(CoreMatchers.<String> notNullValue(String.class),
 				CoreMatchers.not(""));
 	}
 
