@@ -65,7 +65,7 @@ public class JSCodeGeneration {
 					if (paramStart == -1)
 						paramStart = lines.size() - 1;
 					Param param = new Param();
-					StringTokenizer tokenizer = new StringTokenizer(line, " ");
+					StringTokenizer tokenizer = new StringTokenizer(line, " \t");
 					while (tokenizer.hasMoreTokens()) {
 						String token = tokenizer.nextToken();
 						if (token.equals("@param")) {
@@ -88,7 +88,8 @@ public class JSCodeGeneration {
 								}
 							}
 							if (tokenizer.hasMoreTokens()) {
-								param.doc = tokenizer.nextToken("\n").trim();
+								param.doc = tokenizer.nextToken(lineDelimiter)
+										.trim();
 							}
 							break;
 						}
