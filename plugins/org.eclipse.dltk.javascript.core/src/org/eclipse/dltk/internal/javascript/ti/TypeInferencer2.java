@@ -305,6 +305,23 @@ public class TypeInferencer2 extends TypeSystemImpl implements
 				result.addAll(typeNames);
 			}
 		}
+
+		String lowerPrefix = prefix.toLowerCase();
+		synchronized (localTypes) {
+			Set<String> localTypeNames = localTypes.keySet();
+			for (String name : localTypeNames) {
+				String typeName = name;
+				if (typeName.toLowerCase().equals(lowerPrefix))
+					continue; // skip the thing that is already typed.
+				int index = typeName.lastIndexOf('.');
+				if (index != -1) {
+					typeName = typeName.substring(index + 1);
+				}
+				if (typeName.toLowerCase().startsWith(lowerPrefix)) {
+					result.add(name);
+				}
+			}
+		}
 		return result;
 	}
 

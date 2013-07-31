@@ -58,6 +58,7 @@ import org.eclipse.dltk.javascript.ast.GetLocalNameExpression;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.IfStatement;
 import org.eclipse.dltk.javascript.ast.JSDeclaration;
+import org.eclipse.dltk.javascript.ast.JSNode;
 import org.eclipse.dltk.javascript.ast.JSScope;
 import org.eclipse.dltk.javascript.ast.LabelledStatement;
 import org.eclipse.dltk.javascript.ast.NewExpression;
@@ -1362,6 +1363,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	private void handleDeclarations(JSScope scope) {
 		ArrayList<IValueReference> variables = new ArrayList<IValueReference>();
+		ArrayList<ForwardDeclaration> forwardDecls = new ArrayList<ForwardDeclaration>();
 		final IValueCollection context = peekContext();
 		for (JSDeclaration declaration : scope.getDeclarations()) {
 			if (declaration instanceof FunctionStatement) {
@@ -1371,8 +1373,9 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				final IValueReference function = context.createChild(method
 						.getName());
 				initializeFunction(method, function);
-				forwardDeclarations.put(funcNode, new ForwardDeclaration(
-						method, function));
+				ForwardDeclaration fd = new ForwardDeclaration(method, function);
+				forwardDecls.add(fd);
+				forwardDeclarations.put(funcNode, fd);
 			} else if (declaration instanceof VariableDeclaration) {
 				final VariableDeclaration varDeclaration = (VariableDeclaration) declaration;
 				final IValueReference var = createVariable(context,
@@ -1383,9 +1386,43 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				variables.add(var);
 			}
 		}
-		for (ForwardDeclaration decl : forwardDeclarations.values()) {
+		for (ForwardDeclaration decl : forwardDecls) {
 			decl.reference.setAttribute(IReferenceAttributes.R_METHOD,
 					RModelBuilder.create(getContext(), decl.method));
+			if (decl.method.isConstructor()) {
+				String name = decl.method.getName();
+
+				if (scope instanceof FunctionStatement) {
+					JSNode parent = (FunctionStatement) scope;
+					while (parent != null) {
+						if (parent instanceof FunctionStatement) {
+							FunctionStatement fs = (FunctionStatement) parent;
+							if (fs.getName() != null) {
+								name = fs.getName().getName() + '.' + name;
+							} else {
+								parent = fs.getParent();
+								if (parent instanceof BinaryOperation) {
+									Expression leftExpression = ((BinaryOperation) parent)
+											.getLeftExpression();
+									if (leftExpression instanceof PropertyExpression
+											&& ((PropertyExpression) leftExpression)
+													.getObject() instanceof ThisExpression
+											&& ((PropertyExpression) leftExpression)
+													.getProperty() instanceof Identifier) {
+										name = ((Identifier) ((PropertyExpression) leftExpression)
+												.getProperty()).getName()
+												+ '.'
+												+ name;
+									}
+								}
+							}
+						}
+						parent = parent.getParent();
+					}
+				}
+				// this will create a local type
+				this.context.getType(name);
+			}
 		}
 
 		for (IValueReference reference : variables) {

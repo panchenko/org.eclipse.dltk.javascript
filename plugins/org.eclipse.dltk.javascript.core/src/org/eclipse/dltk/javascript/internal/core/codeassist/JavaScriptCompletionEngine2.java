@@ -158,6 +158,8 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 			String prefix, int offset) {
 		final TypeInferencer2 inferencer2 = new TypeInferencer2();
 		inferencer2.setModelElement(module);
+		final Script script = JavaScriptParserUtil.parse(module, null);
+		inferencer2.doInferencing(script);
 		setSourceRange(offset - prefix.length(), offset);
 		doCompletionOnType(mode, new Reporter(inferencer2, prefix, offset,
 				Collections.<IValidatorExtension> emptyList()));
@@ -224,6 +226,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 				reporter.reportTypeRef(type);
 			}
 		}
+
 	}
 
 	private static boolean exists(IValueParent item) {
