@@ -39,6 +39,7 @@ import org.eclipse.dltk.javascript.typeinfo.IMemberEvaluator;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.IRLocalType;
 import org.eclipse.dltk.javascript.typeinfo.IRMember;
+import org.eclipse.dltk.javascript.typeinfo.IRRecordType;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.IRTypeDeclaration;
 import org.eclipse.dltk.javascript.typeinfo.IRTypeTransformer;
@@ -53,6 +54,7 @@ import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
+import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
 import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
@@ -725,6 +727,25 @@ public class TypeInferencer2 extends TypeSystemImpl implements
 		} else {
 			return null;
 		}
+	}
+
+	private Map<String, Object> recordTypes = new HashMap<String, Object>();
+
+	public void registerRecordType(RecordType type) {
+		recordTypes.put(type.getName(), type);
+	}
+
+	public IRRecordType resolveRecordType(String name) {
+		Object recordType = recordTypes.get(name);
+		if (recordType instanceof IRRecordType)
+			return (IRRecordType) recordType;
+		if (recordType instanceof RecordType) {
+			IRRecordType irType = RTypes.recordType();
+			recordTypes.put(name, irType);
+			irType.init(this, ((RecordType) recordType).getMembers());
+			return irType;
+		}
+		return null;
 	}
 
 	public IRLocalType resolveLocalType(String name) {

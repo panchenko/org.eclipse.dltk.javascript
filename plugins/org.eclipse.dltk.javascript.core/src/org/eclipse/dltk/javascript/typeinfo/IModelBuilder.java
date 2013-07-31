@@ -161,6 +161,11 @@ public interface IModelBuilder {
 	}
 
 	public interface IVariable extends IMember {
+
+		JSType getTypeDef();
+
+		void setTypeDef(JSType type);
+
 	}
 
 	/**

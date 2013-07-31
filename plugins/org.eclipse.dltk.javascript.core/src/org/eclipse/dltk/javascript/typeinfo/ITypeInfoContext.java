@@ -15,6 +15,7 @@ import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.builder.IBuildContext;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
+import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
 import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
@@ -112,6 +113,16 @@ public interface ITypeInfoContext extends ITypeSystem {
 	 * temporary.
 	 */
 	ILocalTypeReference registerLocalType(Type type);
+
+	/**
+	 * Registers a record type, this is then seen as a local type under that
+	 * name.
+	 * 
+	 * @param type
+	 */
+	void registerRecordType(RecordType type);
+
+	IRRecordType resolveRecordType(String name);
 
 	/**
 	 * Attribute used by {@link #contextualize(IRType)}.

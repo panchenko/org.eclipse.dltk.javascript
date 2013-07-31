@@ -3291,4 +3291,26 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 1, problems.size());
 	}
+	
+		public void testFluentTypeRecordType() {
+		final StringList code = new StringList();
+		code.add("/**");
+		code.add("* @typedef  {{val:Number,add:function(Number):FluentType}}");
+		code.add("*/");
+		code.add("var FluentType = null;");
+		code.add("/**");
+		code.add("* @param {Number} myVal");
+		code.add("* @return {FluentType}");
+		code.add("*/");
+		code.add("function newFluent(myVal) {");
+		code.add("return {val:myVal,add:function(num) {}};");
+		code.add("}");
+		code.add("function testFluency() {");
+		code.add("var fl = newFluent(12);");
+		code.add("fl.add(4).add(5);");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
 }

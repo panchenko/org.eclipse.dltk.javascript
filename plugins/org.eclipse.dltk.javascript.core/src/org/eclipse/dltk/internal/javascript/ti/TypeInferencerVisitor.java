@@ -144,6 +144,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.MapType;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterizedType;
+import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeVariableClassType;
@@ -662,6 +663,11 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				declaration.sourceStart(), declaration.sourceEnd(),
 				identifier.sourceStart(), identifier.sourceEnd()));
 
+		if (variable.getTypeDef() instanceof RecordType) {
+			RecordType type = (RecordType) variable.getTypeDef();
+			type.setTypeName(varName);
+			this.context.registerRecordType(type);
+		}
 		return reference;
 	}
 

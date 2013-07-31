@@ -12,6 +12,7 @@
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
 import org.eclipse.dltk.javascript.typeinfo.IRLocalType;
+import org.eclipse.dltk.javascript.typeinfo.IRRecordType;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
@@ -139,6 +140,11 @@ public class SimpleTypeImpl extends MinimalEObjectImpl implements SimpleType {
 			IRLocalType valueType = ((ITypeInfoContext) typeSystem).resolveLocalType(t.getName());
 			if (valueType != null)
 				return valueType;
+			IRRecordType recordType = ((ITypeInfoContext) typeSystem)
+					.resolveRecordType(t.getName());
+			if (recordType != null) {
+				return recordType;
+			}
 		}
 		return RTypes.simple(typeSystem, t);
     }

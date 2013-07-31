@@ -22,10 +22,14 @@ import org.eclipse.dltk.javascript.internal.core.RRecordMember;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
+import org.eclipse.emf.common.util.EList;
 
 class RRecordType extends RType implements IRRecordType, IRTypeExtension {
 
 	private final Map<String, IRRecordMember> members = new LinkedHashMap<String, IRRecordMember>();
+
+	public RRecordType() {
+	}
 
 	public RRecordType(ITypeSystem context, Collection<Member> members) {
 		for (Member member : members) {
@@ -40,6 +44,16 @@ class RRecordType extends RType implements IRRecordType, IRTypeExtension {
 	public RRecordType(Collection<IRRecordMember> members) {
 		for (IRRecordMember member : members) {
 			this.members.put(member.getName(), member);
+		}
+	}
+
+	public void init(ITypeSystem context, EList<Member> members) {
+		for (Member member : members) {
+			final JSType type = member.getType();
+			this.members.put(
+					member.getName(),
+					new RRecordMember(member.getName(), type != null ? RTypes
+							.create(context, type) : any(), member));
 		}
 	}
 
@@ -109,7 +123,7 @@ class RRecordType extends RType implements IRRecordType, IRTypeExtension {
 		if (argument == null)
 			return TypeCompatibility.TRUE;
 		final IRRecordType other = RTypes.recordType(argument);
-		return other != RTypes.recordType() ? assignableFromRecordType((RRecordType) other)
+		return other != RTypes.emptyRecordType() ? assignableFromRecordType((RRecordType) other)
 				: TypeCompatibility.FALSE;
 	}
 

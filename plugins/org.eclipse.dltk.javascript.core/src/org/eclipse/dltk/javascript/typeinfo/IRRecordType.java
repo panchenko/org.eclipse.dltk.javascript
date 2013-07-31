@@ -13,10 +13,15 @@ package org.eclipse.dltk.javascript.typeinfo;
 
 import java.util.Collection;
 
+import org.eclipse.dltk.javascript.typeinfo.model.Member;
+import org.eclipse.emf.common.util.EList;
+
 public interface IRRecordType extends IRType {
 
 	IRRecordMember getMember(String name);
 
 	Collection<IRRecordMember> getMembers();
+
+	void init(ITypeSystem context, EList<Member> members);
 
 }

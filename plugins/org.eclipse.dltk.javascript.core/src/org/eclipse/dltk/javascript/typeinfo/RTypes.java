@@ -31,6 +31,7 @@ import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
+import org.eclipse.emf.common.util.EList;
 
 /**
  * Static utility methods pertaining to {@code IRType} instances.
@@ -212,7 +213,7 @@ public class RTypes {
 	/**
 	 * Returns empty record type instance.
 	 */
-	public static IRRecordType recordType() {
+	public static IRRecordType emptyRecordType() {
 		return EMPTY_RECORD_TYPE;
 	}
 
@@ -231,6 +232,9 @@ public class RTypes {
 		public Collection<IRRecordMember> getMembers() {
 			return Collections.emptyList();
 		}
+
+		public void init(ITypeSystem context, EList<Member> members) {
+		}
 	}
 
 	public static IRRecordType recordType(ITypeSystem typeSystem,
@@ -242,10 +246,14 @@ public class RTypes {
 		return new RRecordType(members);
 	}
 
+	public static IRRecordType recordType() {
+		return new RRecordType();
+	}
+
 	/**
 	 * Represents the specified {@link IValueReference} as {@link IRRecordType}.
 	 * Only {@link IRRecordType} value types and direct children are considered,
-	 * otherwise the {@link #recordType() empty record type} is returned.
+	 * otherwise the {@link #emptyRecordType() empty record type} is returned.
 	 */
 	public static IRRecordType recordType(@Nullable IValueReference argument) {
 		if (argument != null) {
@@ -299,10 +307,10 @@ public class RTypes {
 				}
 				return recordType(members);
 			} else {
-				return recordType();
+				return emptyRecordType();
 			}
 		} else {
-			return recordType();
+			return emptyRecordType();
 		}
 	}
 

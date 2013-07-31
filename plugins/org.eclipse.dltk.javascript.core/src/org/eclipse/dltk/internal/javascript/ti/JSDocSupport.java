@@ -350,9 +350,29 @@ public class JSDocSupport implements IModelBuilder {
 		if (variable.getType() == null) {
 			parseType(variable, tags, TYPE_TAGS, reporter, typeChecker);
 		}
+		parseTypeDef(variable, tags, reporter, typeChecker);
 		parseDeprecation(variable, tags, reporter);
 		parseAccessModifiers(variable, tags, reporter);
 		parseSuppressWarnings(variable, tags, reporter);
+	}
+
+	private void parseTypeDef(IVariable variable, JSDocTags tags,
+			JSProblemReporter reporter, ITypeChecker typeChecker) {
+		final JSDocTag typeDefTag = tags.get(JSDocTag.TYPEDEF);
+		if (typeDefTag != null) {
+			final JSType type = parseType(typeDefTag, false, reporter);
+			if (type != null) {
+				if (!(type instanceof RecordType)) {
+					reportProblem(reporter, JSDocProblem.UNSUPPORTED_TYPEDEF,
+							typeDefTag, type.getName());
+				} else {
+					if (typeChecker != null)
+						typeChecker.checkType(type, typeDefTag);
+					variable.setTypeDef(type);
+				}
+			}
+			validateSingleTag(tags, JSDocTag.THIS, reporter);
+		}
 	}
 
 	private void parseThis(IMethod method, JSDocTags tags,
