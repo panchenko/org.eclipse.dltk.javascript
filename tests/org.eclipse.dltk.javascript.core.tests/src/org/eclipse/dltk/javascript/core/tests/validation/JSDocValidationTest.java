@@ -159,4 +159,39 @@ public class JSDocValidationTest extends AbstractValidationTest {
 		assertEquals(problems.toString(), 1, problems.size());
 		assertEquals(JSDocProblem.DUPLICATE_TAG, problems.get(0).getID());
 	}
+	
+	public void testIllegalTypeDefAnnotation() {
+		final StringList code = new StringList();
+		code.add("/**");
+		code.add("* @typedef {String}");
+		code.add("**/");
+		code.add("var g =null");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JSDocProblem.UNSUPPORTED_TYPEDEF, problems.get(0).getID());
+	}
+	
+	public void testDuplicateTypeDefAnnotation() {
+		final StringList code = new StringList();
+		code.add("/**");
+		code.add("* @typedef {{}}");
+		code.add("* @typedef {{}}");
+		code.add("**/");
+		code.add("var g =null");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JSDocProblem.DUPLICATE_TAG, problems.get(0).getID());
+	}
+	
+	public void testTypeWithTypeDefAnnotation() {
+		final StringList code = new StringList();
+		code.add("/**");
+		code.add("* @typedef {{}}");
+		code.add("* @type {{}}");
+		code.add("**/");
+		code.add("var g =null");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JSDocProblem.TYPE_WITH_TYPEDEF, problems.get(0).getID());
+	}
 }

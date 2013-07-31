@@ -371,7 +371,11 @@ public class JSDocSupport implements IModelBuilder {
 					variable.setTypeDef(type);
 				}
 			}
-			validateSingleTag(tags, JSDocTag.THIS, reporter);
+			validateSingleTag(tags, JSDocTag.TYPEDEF, reporter);
+			if (reporter != null && tags.count(JSDocTag.TYPE) > 0) {
+				reportProblem(reporter, JSDocProblem.TYPE_WITH_TYPEDEF,
+						typeDefTag, typeDefTag.name());
+			}
 		}
 	}
 

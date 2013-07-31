@@ -42,7 +42,9 @@ public enum JSDocProblem implements JSProblemIdentifier,
 
 	WRONG_SUPPRESS_WARNING,
 
-	UNSUPPORTED_TYPEDEF;
+	UNSUPPORTED_TYPEDEF,
+
+	TYPE_WITH_TYPEDEF;
 
 	private String message;
 
