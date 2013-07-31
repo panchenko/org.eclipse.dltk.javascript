@@ -11,7 +11,9 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.dltk.javascript.core.Types;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
@@ -33,7 +35,10 @@ class RFunctionType extends RType implements IRFunctionType {
 		return typeSystem;
 	}
 
-	public String getName() {
+	@Override
+	public String toString(Set<RType> processed) {
+		if (!processed.add(this))
+			return JSDocTypeParser.FUNCTION + "(_self)";
 		final StringBuilder sb = new StringBuilder();
 		sb.append(JSDocTypeParser.FUNCTION);
 		sb.append('(');
@@ -45,7 +50,11 @@ class RFunctionType extends RType implements IRFunctionType {
 			if (parameter.getKind() == ParameterKind.VARARGS) {
 				sb.append("...");
 			}
-			sb.append(parameter.getType());
+			if (parameter.getType() instanceof RType) {
+				sb.append(((RType) parameter.getType()).toString(processed));
+			} else {
+				sb.append(parameter.getType());
+			}
 			if (parameter.getKind() == ParameterKind.OPTIONAL) {
 				sb.append("=");
 			}
@@ -53,9 +62,17 @@ class RFunctionType extends RType implements IRFunctionType {
 		sb.append(')');
 		if (returnType != null) {
 			sb.append(':');
-			sb.append(returnType);
+			if (returnType instanceof RType) {
+				sb.append(((RType) returnType).toString(processed));
+			} else {
+				sb.append(returnType);
+			}
 		}
 		return sb.toString();
+	}
+
+	public String getName() {
+		return toString(new HashSet<RType>());
 	}
 
 	@Override

@@ -14,8 +14,10 @@ package org.eclipse.dltk.javascript.typeinfo;
 import static org.eclipse.dltk.javascript.typeinfo.RTypes.any;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.dltk.compiler.problem.IValidationStatus;
 import org.eclipse.dltk.javascript.internal.core.RRecordMember;
@@ -57,7 +59,10 @@ class RRecordType extends RType implements IRRecordType, IRTypeExtension {
 		}
 	}
 
-	public String getName() {
+	@Override
+	public String toString(Set<RType> processed) {
+		if (!processed.add(this))
+			return "{_self}";
 		final StringBuilder sb = new StringBuilder();
 		sb.append('{');
 		for (IRRecordMember member : members.values()) {
@@ -67,7 +72,11 @@ class RRecordType extends RType implements IRRecordType, IRTypeExtension {
 			sb.append(member.getName());
 			if (member.getType() != RTypes.any()) {
 				sb.append(':');
-				sb.append(member.getType().getName());
+				if (member.getType() instanceof RType) {
+					sb.append(((RType) member.getType()).toString(processed));
+				} else {
+					sb.append(member.getType().getName());
+				}
 			}
 			if (member.isOptional()) {
 				sb.append('=');
@@ -75,6 +84,10 @@ class RRecordType extends RType implements IRRecordType, IRTypeExtension {
 		}
 		sb.append('}');
 		return sb.toString();
+	}
+
+	public String getName() {
+		return toString(new HashSet<RType>());
 	}
 
 	public IRRecordMember getMember(String name) {

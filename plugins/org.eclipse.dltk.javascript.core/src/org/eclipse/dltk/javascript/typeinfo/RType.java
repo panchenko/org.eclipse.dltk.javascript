@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 /**
@@ -43,9 +46,13 @@ public abstract class RType implements IRType {
 
 	@Override
 	public final String toString() {
-		return getName();
+		return toString(new HashSet<RType>());
 	}
 
+	public String toString(Set<RType> processed) {
+		return getName();
+	}
+	
 	protected TypeCompatibility testAssignableTo(IRType type) {
 		return type instanceof IRTypeExtension2 ? ((IRTypeExtension2) type)
 				.isAssignableTo(this) : TypeCompatibility.FALSE;
