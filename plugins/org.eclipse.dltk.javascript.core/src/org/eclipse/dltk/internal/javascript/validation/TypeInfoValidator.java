@@ -49,6 +49,7 @@ import org.eclipse.dltk.internal.javascript.parser.JSDocValidatorFactory.TypeChe
 import org.eclipse.dltk.internal.javascript.ti.ConstantValue;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
+import org.eclipse.dltk.internal.javascript.ti.IValue;
 import org.eclipse.dltk.internal.javascript.ti.JSMethod;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencerVisitor;
@@ -1783,9 +1784,17 @@ public class TypeInfoValidator implements IBuildParticipant,
 						assign.problemMessage(), node.sourceStart(),
 						node.sourceEnd());
 			} else if (reference.getKind() == ReferenceKind.FUNCTION) {
+				// test if it is not a function override of a super local type class.
+				Set<String> directChildren = null;
+				if (reference.getParent() != null)
+					directChildren = reference.getParent().getDirectChildren(
+							IValue.NO_LOCAL_TYPES);
+				if (directChildren == null
+						|| directChildren.contains(reference.getName())) {
 				reporter.reportProblem(JavaScriptProblems.UNASSIGNABLE_ELEMENT,
 						ValidationMessages.UnassignableFunction,
 						node.sourceStart(), node.sourceEnd());
+				}
 			}
 		}
 

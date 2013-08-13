@@ -2506,7 +2506,41 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(ValidationMessages.UnassignableFunction, problems.get(0)
 				.getMessage());
 	}
+	
+	
+	public void testAssignToFunctionInAFunction() {
+		final StringList code = new StringList();
+		code.add("function a() {}");
+		code.add("function b() {");
+		code.add("	a = 1");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JavaScriptProblems.UNASSIGNABLE_ELEMENT, problems.get(0)
+				.getID());
+		assertEquals(ValidationMessages.UnassignableFunction, problems.get(0)
+				.getMessage());
+	}
 
+
+	public void testAssignToFunctionOfAParentClass() {
+		final StringList code = new StringList();
+		code.add("function baseObject() {");
+		code.add(" this.myPublicMethod = function() { }");
+		code.add("}");
+		code.add("/**");
+		code.add(" * @constructor");
+		code.add(" * @extends {baseObject}");
+		code.add(" */");
+		code.add("function childObject() {");
+		code.add(" this.myPublicMethod = function() { }");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
+		
+	
 	// This test will not always fail!, this is because sometimes it can map on
 	// String other times it maps on Number (ImmutableValue.getChild())
 	public void testDoubleReferences() {
