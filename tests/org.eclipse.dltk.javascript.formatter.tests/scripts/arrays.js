@@ -10,6 +10,10 @@ var vArray = [1, 2, , ]
 var vArray  = [    1      ,2            ,,,    3            ]
 ==
 var vArray = [1, 2, , , 3]
+==== array-with-first-empty-element
+var  array =  [ , "" ] ;
+==
+var array = [, ""];
 ====
 ==> formatter.braces.array = next.line
 ==== array-brackets-next-line

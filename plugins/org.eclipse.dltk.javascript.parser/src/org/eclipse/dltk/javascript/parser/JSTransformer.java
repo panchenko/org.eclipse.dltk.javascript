@@ -1887,14 +1887,22 @@ public class JSTransformer {
 			final Tree item = child.getChild(0);
 			if (item != null) {
 				array.getItems().add(transformExpression(item, array));
+				if (i != itemCount - 1) {
+					final int nextComma = getTokenOffset(JSParser.COMMA,
+							child.getTokenStopIndex() + 1, node.getChild(i + 1)
+									.getTokenStartIndex());
+					array.getCommas().add(nextComma);
+				}
 			} else {
-				array.getItems().add(new EmptyExpression(getParent()));
-			}
-			if (i > 0) {
-				array.getCommas().add(
-						getTokenOffset(JSParser.COMMA, node.getChild(i - 1)
-								.getTokenStopIndex() + 1, child
-								.getTokenStartIndex()));
+				assert i != itemCount - 1;
+				final int nextComma = getTokenOffset(JSParser.COMMA,
+						child.getTokenStopIndex() + 1, node.getChild(i + 1)
+								.getTokenStartIndex());
+				final EmptyExpression empty = new EmptyExpression(array);
+				empty.setStart(nextComma);
+				empty.setEnd(nextComma);
+				array.getItems().add(empty);
+				array.getCommas().add(nextComma);
 			}
 		}
 		array.setRB(getTokenOffset(node.getChild(itemCount)
