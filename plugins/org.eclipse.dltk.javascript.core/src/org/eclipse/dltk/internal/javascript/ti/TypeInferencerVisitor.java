@@ -120,6 +120,7 @@ import org.eclipse.dltk.javascript.typeinfo.IRArrayType;
 import org.eclipse.dltk.javascript.typeinfo.IRClassType;
 import org.eclipse.dltk.javascript.typeinfo.IRConstructor;
 import org.eclipse.dltk.javascript.typeinfo.IRFunctionType;
+import org.eclipse.dltk.javascript.typeinfo.IRLocalType;
 import org.eclipse.dltk.javascript.typeinfo.IRMapType;
 import org.eclipse.dltk.javascript.typeinfo.IRMethod;
 import org.eclipse.dltk.javascript.typeinfo.IRRecordMember;
@@ -843,8 +844,22 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			thisValue.setDeclaredType(this.context.contextualize(method
 					.getThisType()));
 		} else if (method.getExtendsType() != null) {
-			thisValue.setDeclaredType(this.context.contextualize(method
-					.getExtendsType()));
+			IRType thisType = this.context.contextualize(method
+					.getExtendsType());
+			thisValue.setDeclaredType(thisType);
+			if (thisType instanceof IRLocalType) {
+				IValueReference prototype = result.createChild("prototype");
+				prototype.setDeclaredType(context.getType(ITypeNames.OBJECT)
+						.toRType(context));
+				Set<String> directChildren = ((IRLocalType) thisType)
+						.getDirectChildren();
+				for (String child : directChildren) {
+					prototype.createChild(child).setDeclaredType(
+							context.getType(ITypeNames.FUNCTION).toRType(
+									context));
+				}
+			}
+
 		}
 		final IValueCollection function = new FunctionValueCollection(
 				peekContext(), method.getName(), thisValue,

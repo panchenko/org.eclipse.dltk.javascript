@@ -915,4 +915,38 @@ public class CodeCompletion extends AbstractCompletionTest {
 		assertEquals(1, results.size());
 		assertEquals(CompletionProposal.FIELD_REF, results.get(0).getKind());
 	}
+
+	public void testPrototypeWithExtends() {
+		final StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @constructor");
+		code.add(" */");
+		code.add("function MyConstructor() {");
+		code.add("	this.mypublicfunction = function() {");
+		code.add("	}");
+		code.add("}");
+		code.add("/**");
+		code.add(" * @constructor");
+		code.add(" * @extends {MyConstructor}");
+		code.add(" */");
+		code.add("function MySubConstructor() {");
+		code.add("	this.mypublicfunction = function() {");
+		code.add("		MySubConstructor.prototype.");
+		code.add("	}");
+		code.add("}");
+		final IModuleSource module = new TestModule(code.toString());
+		final List<CompletionProposal> results = new ArrayList<CompletionProposal>();
+		final ICompletionEngine completionEngine = createEngine(results,
+				JSCompletionEngine.OPTION_KEYWORDS);
+		completionEngine.complete(module, lastPositionInFile(".", module), 0);
+		assertEquals(8, results.size());
+		boolean found = false;
+		for (CompletionProposal completionProposal : results) {
+			if (completionProposal.getName().equals("mypublicfunction")) {
+				found = true;
+				break;
+			}
+		}
+		assertEquals(true, found);
+	}
 }
