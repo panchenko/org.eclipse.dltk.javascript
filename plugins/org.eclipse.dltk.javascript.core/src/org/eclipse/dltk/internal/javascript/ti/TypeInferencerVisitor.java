@@ -393,6 +393,20 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 									setIRType(left, type.toRType(context), true);
 								}
 							}
+							if (comment != null) {
+								IValueReference namedChild = extractNamedChild(
+										left, property.getProperty());
+								String name = namedChild.getName();
+								final JSVariable variable = new JSVariable(name);
+								getDocSupport().parseAccessModifiers(variable,
+										tags, reporter);
+								if (variable.getVisibility() != null) {
+									left.setAttribute(
+											IReferenceAttributes.R_VARIABLE,
+											RModelBuilder.create(context,
+													variable));
+								}
+							}
 						}
 						left.setLocation(ReferenceLocation.create(getSource(),
 								property.sourceStart(), property.sourceEnd(),

@@ -3363,5 +3363,24 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 1, problems.size());
 	}
+	
+	public void testProtectedProperty() {
+		if (notYetImplemented(this)) {
+			return;
+		}
+		final StringList code = new StringList();
+		code.add("function tst() {");
+		code.add("/**");
+		code.add(" * @protected");
+		code.add(" */");
+		code.add("this.myproperty = null;");
+		code.add("}");
+		code.add("function test() {");
+		code.add("	var x = new tst();");
+		code.add("	x.myproperty;");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+	}
 
 }
