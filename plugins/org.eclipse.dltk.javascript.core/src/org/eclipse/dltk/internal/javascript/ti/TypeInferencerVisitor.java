@@ -281,6 +281,20 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				}
 			}
 			if (left != null && left.exists()) {
+				if (left.getParent() instanceof ThisValue) {
+					// this is an override, make sure that left is really
+					// created.
+					left.getParent().createChild(left.getName());
+					Expression property = node.getLeftExpression();
+					if (property instanceof PropertyExpression) {
+						left.setLocation(ReferenceLocation.create(getSource(),
+								property.sourceStart(), property.sourceEnd(),
+								((PropertyExpression) property).getProperty()
+										.sourceStart(),
+								((PropertyExpression) property).getProperty()
+										.sourceEnd()));
+					}
+				}
 				left.setAttribute(IReferenceAttributes.RESOLVING, Boolean.TRUE);
 				final IValueReference r;
 				try {

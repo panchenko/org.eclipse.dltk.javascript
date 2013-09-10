@@ -28,6 +28,7 @@ import org.eclipse.dltk.core.IScriptProject;
 import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.core.ISourceReference;
 import org.eclipse.dltk.core.ModelException;
+import org.eclipse.dltk.core.model.UnresolvedElement;
 import org.eclipse.dltk.core.search.IDLTKSearchConstants;
 import org.eclipse.dltk.core.search.SearchEngine;
 import org.eclipse.dltk.core.search.SearchMatch;
@@ -354,4 +355,58 @@ public class SelectionTests extends AbstractModelTests {
 				selectAll(module, lastPositionInFile("String", module, false)));
 	}
 
+	
+	public void testExtends() throws ModelException {
+		IModuleSource module = getModule("extends.js");
+		IModelElement[] elements = select(module,
+				lastPositionInFile("myprop", module, false));
+		assertEquals(1, elements.length);
+		final UnresolvedElement variable1 = (UnresolvedElement) elements[0];
+		elements = select(module,
+				lastPositionInFile("myval", module, false));
+		assertEquals(1, elements.length);
+		final UnresolvedElement variable2 = (UnresolvedElement) elements[0];
+		final int offset1 = variable1.getSourceRange().getOffset();
+		final int offset2 = variable2.getSourceRange().getOffset();
+		
+		assertTrue(offset1 > offset2);
+		
+		ISourceRange nameRange = variable1.getNameRange();
+		assertEquals(
+				"myprop",
+				module.getSourceContents().substring(nameRange.getOffset(),
+						nameRange.getOffset() + nameRange.getLength()));
+		nameRange = variable2.getNameRange();
+		assertEquals(
+				"myval",
+				module.getSourceContents().substring(nameRange.getOffset(),
+						nameRange.getOffset() + nameRange.getLength()));
+	}
+
+	
+	public void testExtends2() throws ModelException {
+		IModuleSource module = getModule("extends.js");
+		IModelElement[] elements = select(module,
+				lastPositionInFile("mypublicfunction", module, false));
+		assertEquals(1, elements.length);
+		IMethod method = (IMethod) elements[0];
+		assertEquals("MySubConstructor", method.getParent().getElementName());
+		ISourceRange nameRange = method.getNameRange();
+		assertEquals(
+				"mypublicfunction",
+				module.getSourceContents().substring(nameRange.getOffset(),
+						nameRange.getOffset() + nameRange.getLength()));
+		
+		elements = select(module,
+				lastPositionInFile("myfunction", module, false));
+		assertEquals(1, elements.length);
+		method = (IMethod) elements[0];
+		assertEquals("MyConstructor", method.getParent().getElementName());
+		nameRange = method.getNameRange();
+		assertEquals(
+				"myfunction",
+				module.getSourceContents().substring(nameRange.getOffset(),
+						nameRange.getOffset() + nameRange.getLength()));
+
+	}
 }
