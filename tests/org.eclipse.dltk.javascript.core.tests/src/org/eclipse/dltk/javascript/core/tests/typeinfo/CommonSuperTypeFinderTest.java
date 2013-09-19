@@ -11,7 +11,10 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.core.tests.typeinfo;
 
-import static java.util.Arrays.asList;
+import static com.google.common.collect.Collections2.permutations;
+
+import java.util.List;
+
 import junit.framework.TestCase;
 
 import org.eclipse.dltk.internal.javascript.ti.TypeSystemImpl;
@@ -22,6 +25,8 @@ import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.RTypes;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
+
+import com.google.common.collect.ImmutableList;
 
 @SuppressWarnings("restriction")
 public class CommonSuperTypeFinderTest extends TestCase {
@@ -49,11 +54,11 @@ public class CommonSuperTypeFinderTest extends TestCase {
 	}
 
 	private IRType evaluate(IRType... types) {
-		final IRType result = CommonSuperTypeFinder.evaluate(typeSystem,
-				asList(types));
-		for (IRType[] permutation : Permutations.of(types)) {
-			assertEquals(result, CommonSuperTypeFinder.evaluate(typeSystem,
-					asList(permutation)));
+		final List<IRType> input = ImmutableList.copyOf(types);
+		final IRType result = CommonSuperTypeFinder.evaluate(typeSystem, input);
+		for (List<IRType> permutation : permutations(input)) {
+			assertEquals(result,
+					CommonSuperTypeFinder.evaluate(typeSystem, permutation));
 		}
 		return result;
 	}
