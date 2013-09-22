@@ -12,12 +12,20 @@ package org.eclipse.dltk.javascript.core;
 import java.io.File;
 
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IExecutableExtensionFactory;
 import org.eclipse.dltk.core.AbstractLanguageToolkit;
 import org.eclipse.dltk.core.IDLTKLanguageToolkit;
 import org.eclipse.dltk.core.environment.IFileHandle;
 
 public class JavaScriptLanguageToolkit extends AbstractLanguageToolkit {
-	private static JavaScriptLanguageToolkit sInstance = new JavaScriptLanguageToolkit();
+	public static class Factory implements IExecutableExtensionFactory {
+		public Object create() throws CoreException {
+			return getDefault();
+		}
+	}
+
+	private static final JavaScriptLanguageToolkit sInstance = new JavaScriptLanguageToolkit();
 
 	public JavaScriptLanguageToolkit() {
 	}

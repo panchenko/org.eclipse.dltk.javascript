@@ -19,7 +19,7 @@
    <extension
          point="org.eclipse.dltk.core.language">
       <language
-            class="org.eclipse.dltk.javascript.core.JavaScriptLanguageToolkit"
+            class="org.eclipse.dltk.javascript.core.JavaScriptLanguageToolkit$Factory"
             nature="org.eclipse.dltk.javascript.core.nature"/>
 </extension>
    <!--
