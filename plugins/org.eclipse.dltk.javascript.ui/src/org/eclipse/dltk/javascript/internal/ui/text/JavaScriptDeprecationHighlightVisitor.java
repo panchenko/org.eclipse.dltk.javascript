@@ -20,7 +20,11 @@ import java.util.Set;
 import org.eclipse.dltk.compiler.problem.IProblem;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
+import org.eclipse.dltk.internal.javascript.ti.JSMethod;
 import org.eclipse.dltk.internal.javascript.validation.TypeInfoValidator.ValidationVisitor;
+import org.eclipse.dltk.javascript.ast.BinaryOperation;
+import org.eclipse.dltk.javascript.ast.FunctionStatement;
+import org.eclipse.dltk.javascript.ast.PropertyExpression;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.parser.ISuppressWarningsState;
 import org.eclipse.dltk.javascript.parser.JSProblemReporter;
@@ -47,6 +51,25 @@ public class JavaScriptDeprecationHighlightVisitor extends ValidationVisitor
 			JavaScriptProblems.DEPRECATED_VARIABLE);
 
 	public void reportProblem(IProblem problem) {
+	}
+
+	@Override
+	protected JSMethod createMethod(FunctionStatement node) {
+		JSMethod method = super.createMethod(node);
+		if (method != null && method.isDeprecated()) {
+			if (node.getName() != null) {
+				requestor.addPosition(node.getName().sourceStart(), node
+						.getName()
+					.sourceEnd(), JS_DEPRECATED);
+			} else if (node.getParent() instanceof BinaryOperation
+					&& ((BinaryOperation) node.getParent()).getLeftExpression() instanceof PropertyExpression) {
+				PropertyExpression exp = (PropertyExpression) ((BinaryOperation) node
+						.getParent()).getLeftExpression();
+				requestor.addPosition(exp.getProperty().sourceStart(), exp
+						.getProperty().sourceEnd(), JS_DEPRECATED);
+			}
+		}
+		return method;
 	}
 
 	public void reportProblem(IProblemIdentifier identifier, String message,
