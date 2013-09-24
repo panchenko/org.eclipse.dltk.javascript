@@ -1194,9 +1194,13 @@ public class TypeInfoValidator implements IBuildParticipant,
 				final IValueReference reference, IValueReference[] arguments,
 				final Expression methodNode, IRMethod method) {
 			if (method.isDeprecated()) {
+				String name = reference.getName();
+				if (name == null || "".equals(name)) {
+					name = method.getName();
+				}
 				reporter.reportProblem(JavaScriptProblems.DEPRECATED_FUNCTION,
 						NLS.bind(ValidationMessages.DeprecatedFunction,
-								reference.getName()), methodNode.sourceStart(),
+								name), methodNode.sourceStart(),
 						methodNode.sourceEnd());
 			}
 			validateAccessibility(methodNode, reference, method);
