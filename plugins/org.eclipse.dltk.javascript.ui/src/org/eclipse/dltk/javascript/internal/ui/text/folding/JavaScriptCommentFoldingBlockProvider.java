@@ -50,7 +50,7 @@ public class JavaScriptCommentFoldingBlockProvider extends
 			IFoldingBlockKind kind, boolean collapse)
 			throws BadLocationException {
 		if ((kind == JavaScriptFoldingBlockKind.COMMENT || kind == JavaScriptFoldingBlockKind.JSDOC)
-				&& collapse != isCollapseHeaderComment()) {
+				&& collapse != isCollapseHeaderComment() && !regions.isEmpty()) {
 			final IRegion first = regions.get(0);
 			if (first.getOffset() == 0 && isFileHeader(document, first)) {
 				requestor.acceptBlock(first.getOffset(), first.getOffset()
