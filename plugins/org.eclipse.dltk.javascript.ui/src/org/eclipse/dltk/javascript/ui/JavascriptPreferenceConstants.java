@@ -78,5 +78,7 @@ public class JavascriptPreferenceConstants extends PreferenceConstants {
 				true);
 		store.setDefault(PreferenceConstants.EDITOR_DOCS_FOLDING_ENABLED, true);
 		store.setDefault(PreferenceConstants.EDITOR_FOLDING_INIT_COMMENTS, true);
+		store.setDefault(
+				PreferenceConstants.EDITOR_FOLDING_INIT_HEADER_COMMENTS, true);
 	}
 }
