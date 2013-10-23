@@ -63,6 +63,19 @@ public class SearchDeclarationTests extends Assert implements
 		assertEquals(IModelElement.SOURCE_MODULE, parent.getElementType());
 		assertEquals("a.js", parent.getElementName());
 	}
+	
+
+	@Test
+	public void testVartextFormatters() throws CoreException {
+		final TestSearchResults results = PROJECT.search("textFormatters", FIELD,
+				DECLARATIONS);
+		assertEquals(1, results.size());
+		final IModelElement method = results.locate(IField.class, "textFormatters");
+		final IModelElement parent = method.getParent();
+		assertEquals(IModelElement.SOURCE_MODULE, parent.getElementType());
+		assertEquals("selection2.js", parent.getElementName());
+	}
+
 
 	@Test
 	public void testVarB() throws CoreException {

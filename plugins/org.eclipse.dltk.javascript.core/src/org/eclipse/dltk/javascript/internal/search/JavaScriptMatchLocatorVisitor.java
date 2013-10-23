@@ -321,7 +321,8 @@ public class JavaScriptMatchLocatorVisitor extends
 			} else if (part instanceof PropertyInitializer) {
 				final PropertyInitializer pi = (PropertyInitializer) part;
 				// TODO (alex) handle jsdoc
-				if (pi.getValue() instanceof FunctionStatement) {
+				if (pi.getValue() instanceof FunctionStatement
+						&& pi.getName() instanceof Identifier) {
 					createFunctionDeclaration(
 							(FunctionStatement) pi.getValue(),
 							(Identifier) pi.getName());
