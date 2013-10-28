@@ -36,10 +36,11 @@ public abstract class RType implements IRType {
 			return TypeCompatibility.FALSE;
 		} else if (type instanceof RUnionType) {
 			for (IRType part : ((RUnionType) type).targets) {
-				if (isAssignableFrom(part).ok()) {
-					return TypeCompatibility.TRUE;
+				if (!isAssignableFrom(part).ok()) {
+					return TypeCompatibility.FALSE;
 				}
 			}
+			return TypeCompatibility.TRUE;
 		}
 		return TypeCompatibility.FALSE;
 	}

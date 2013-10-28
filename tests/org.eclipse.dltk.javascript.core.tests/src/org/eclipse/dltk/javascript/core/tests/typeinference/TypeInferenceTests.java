@@ -1113,7 +1113,7 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IValueCollection collection = inference(code.toString());
 		IValueReference child = collection.getChild("x");
 		IRType type = JavaScriptValidations.typeOf(child);
-		assertEquals(RTypes.arrayOf(ts(), RTypes.OBJECT), type);
+		assertEquals(RTypes.arrayOf(ts(), RTypes.union(Arrays.<IRType>asList(RTypes.STRING,RTypes.NUMBER))), type);
 	}
 
 	public void testArrayInitializerWithVariableNumbers() {

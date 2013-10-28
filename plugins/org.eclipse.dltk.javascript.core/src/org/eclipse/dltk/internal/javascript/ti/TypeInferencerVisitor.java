@@ -256,8 +256,13 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		if (types.isEmpty()) {
 			return new ConstantValue(RTypes.arrayOf());
 		} else {
-			return new ConstantValue(RTypes.arrayOf(context,
-					CommonSuperTypeFinder.evaluate(context, types)));
+			if (types.size() == 1) {
+				return new ConstantValue(RTypes.arrayOf(context,
+						CommonSuperTypeFinder.evaluate(context, types)));
+			} else {
+				return new ConstantValue(RTypes.arrayOf(context,
+						RTypes.union(types)));
+			}
 		}
 	}
 

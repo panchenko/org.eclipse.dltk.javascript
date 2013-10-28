@@ -38,6 +38,13 @@ class RUnionType extends RType implements IRUnionType {
 
 	@Override
 	public TypeCompatibility isAssignableFrom(IRType type) {
+		if (type instanceof IRUnionType) {
+			Set<IRType> targets = ((IRUnionType) type).getTargets();
+			if (this.targets.containsAll(targets)) {
+				return TypeCompatibility.TRUE;
+			}
+			return TypeCompatibility.FALSE;
+		}
 		for (IRType target : targets) {
 			if (target.isAssignableFrom(type).ok()) {
 				return TypeCompatibility.TRUE;
