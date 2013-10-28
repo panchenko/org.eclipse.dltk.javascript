@@ -2193,6 +2193,26 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
+	
+		public void testFunctionFromParamType() {
+		final StringList code = new StringList();
+		code.add("/** @param {function(String)} obj */");
+		code.add("function y(obj) {");
+		code.add("  obj('');");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
+	public void testFunctionCallFromUnion() {
+		final StringList code = new StringList();
+		code.add("/** @param {function(String)|String} obj */");
+		code.add("function y(obj) {");
+		code.add("  obj('');");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
 
 	public void testUnionParamTypeCompatibility() {
 		final StringList code = new StringList();

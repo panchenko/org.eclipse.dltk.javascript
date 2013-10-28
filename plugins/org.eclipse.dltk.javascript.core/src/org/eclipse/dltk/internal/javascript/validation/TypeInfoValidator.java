@@ -104,6 +104,7 @@ import org.eclipse.dltk.javascript.typeinfo.IRRecordType;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.IRTypeDeclaration;
 import org.eclipse.dltk.javascript.typeinfo.IRTypeExtension;
+import org.eclipse.dltk.javascript.typeinfo.IRUnionType;
 import org.eclipse.dltk.javascript.typeinfo.IRVariable;
 import org.eclipse.dltk.javascript.typeinfo.ITypeChecker;
 import org.eclipse.dltk.javascript.typeinfo.ITypeCheckerExtension;
@@ -1094,6 +1095,11 @@ public class TypeInfoValidator implements IBuildParticipant,
 						&& expressionType != RTypes.none()
 						&& !RTypes.FUNCTION.isAssignableFrom(expressionType)
 								.ok()) {
+					if (expressionType instanceof IRUnionType) {
+						if (expressionType.isAssignableFrom(RTypes.FUNCTION)
+								.ok())
+							return;
+					}
 					reporter.reportProblem(
 							JavaScriptProblems.WRONG_FUNCTION,
 							isIdentifier(expression) ? NLS.bind(
