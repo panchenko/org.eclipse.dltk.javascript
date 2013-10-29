@@ -23,6 +23,7 @@ import org.eclipse.dltk.internal.javascript.ti.JSMethod;
 import org.eclipse.dltk.internal.javascript.ti.JSVariable;
 import org.eclipse.dltk.javascript.ast.AbstractNavigationVisitor;
 import org.eclipse.dltk.javascript.ast.BinaryOperation;
+import org.eclipse.dltk.javascript.ast.BooleanLiteral;
 import org.eclipse.dltk.javascript.ast.CallExpression;
 import org.eclipse.dltk.javascript.ast.DecimalLiteral;
 import org.eclipse.dltk.javascript.ast.Expression;
@@ -35,6 +36,7 @@ import org.eclipse.dltk.javascript.ast.ObjectInitializer;
 import org.eclipse.dltk.javascript.ast.ObjectInitializerPart;
 import org.eclipse.dltk.javascript.ast.PropertyExpression;
 import org.eclipse.dltk.javascript.ast.PropertyInitializer;
+import org.eclipse.dltk.javascript.ast.ReturnStatement;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.SetMethod;
 import org.eclipse.dltk.javascript.ast.StringLiteral;
@@ -145,6 +147,25 @@ public class StructureReporter3 extends
 		super.visitFunctionStatement(node);
 		declarations.pop();
 		return pop();
+	}
+
+	@Override
+	public IStructureNode visitReturnStatement(ReturnStatement node) {
+		if (node.getValue() != null) {
+			IParentNode peek = peek();
+			if (peek instanceof FunctionNode) {
+				if (node.getValue() instanceof StringLiteral) {
+					((FunctionNode) peek).setReturnType("String");
+				} else if (node.getValue() instanceof DecimalLiteral) {
+					((FunctionNode) peek).setReturnType("Number");
+				} else if (node.getValue() instanceof BooleanLiteral) {
+					((FunctionNode) peek).setReturnType("Boolean");
+				} else {
+					((FunctionNode) peek).setReturnType("Object");
+				}
+			}
+		}
+		return super.visitReturnStatement(node);
 	}
 
 	@Override

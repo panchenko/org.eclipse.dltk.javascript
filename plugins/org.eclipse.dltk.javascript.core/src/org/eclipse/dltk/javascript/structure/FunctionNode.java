@@ -32,6 +32,7 @@ public abstract class FunctionNode extends Scope {
 
 	final FunctionStatement function;
 	final IMethod method;
+	private String returnType;
 
 	public FunctionNode(IParentNode parent, FunctionStatement function,
 			IMethod method) {
@@ -53,6 +54,10 @@ public abstract class FunctionNode extends Scope {
 
 	public JSType getType() {
 		return method.getType();
+	}
+
+	public void setReturnType(String returnType) {
+		this.returnType = returnType;
 	}
 
 	public int start() {
@@ -117,6 +122,8 @@ public abstract class FunctionNode extends Scope {
 				}
 			}
 			info.returnType = typeToModel(getType());
+			if (info.returnType == null)
+				info.returnType = returnType;
 			info.isConstructor = method.isConstructor();
 			requestor.enterMethod(info, getStructureNameNode(), function,
 					method);
