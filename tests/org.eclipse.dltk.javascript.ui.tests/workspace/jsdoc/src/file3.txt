@@ -2,7 +2,9 @@ var figure = {
 	/**
 	 * @param {Object} x
 	 * @param {Object} y
+	 * @return {String}
 	 */
 	draw: function (x, y) {
+		return "";
 	}
 }

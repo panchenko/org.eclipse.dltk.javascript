@@ -203,7 +203,7 @@ public class StructureParserTests extends TestCase {
 			code.add("    }");
 			code.add("  }");
 			code.add("}");
-			assertEquals(new Root(new Method("a")), parse(code.toString()));
+			assertEquals(new Root(new Method("a").setType("Object")), parse(code.toString()));
 		}
 		{
 			final StringList code = new StringList();

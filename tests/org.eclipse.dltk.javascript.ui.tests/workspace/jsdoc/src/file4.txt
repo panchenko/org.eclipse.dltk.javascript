@@ -1,6 +1,8 @@
 /**
  * @param {Object} x
  * @param {Object} y
+ * @return {Boolean}
  */
 function test(x, y) {
+	 return true;
 }

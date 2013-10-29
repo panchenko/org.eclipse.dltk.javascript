@@ -1,8 +1,6 @@
 var figure = {
 	/**
-	 * @param {Object} x
-	 * @param {Object} y
-	 */
 	draw: function (x, y) {
+		return "";
 	}
 }

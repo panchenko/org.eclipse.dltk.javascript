@@ -50,6 +50,19 @@ public class JSDocEditorTests extends JSAutoEditStrategyTestCase {
 		assertEquals(project.getFileContentsAsString("src/file1.txt"),
 				document.get());
 	}
+	
+	@Test
+	public void functionGeneratedTagsWithReturn() throws BadLocationException,
+			CoreException {
+		final ISourceModule module = checkNotNull(project.getSourceModule(
+				"src", "file4.js"));
+		final IEditorPart part = checkNotNull(DLTKUIPlugin.openInEditor(module));
+		final IDocument document = UICompletionUtil.on(part).getDocument();
+		execute(document, createCommand(ENTER, getEndOfLineOffset(document, 0)));
+		assertEquals(project.getFileContentsAsString("src/file4.txt"),
+				document.get());
+	}
+
 
 	@Test
 	public void functionInObjectLiteralGeneratedTags()
@@ -60,6 +73,18 @@ public class JSDocEditorTests extends JSAutoEditStrategyTestCase {
 		final IDocument document = UICompletionUtil.on(part).getDocument();
 		execute(document, createCommand(ENTER, getEndOfLineOffset(document, 1)));
 		assertEquals(project.getFileContentsAsString("src/file2.txt"),
+				document.get());
+	}
+	
+	@Test
+	public void functionInObjectLiteralGeneratedTagsWithReturn()
+			throws BadLocationException, CoreException {
+		final ISourceModule module = checkNotNull(project.getSourceModule(
+				"src", "file3.js"));
+		final IEditorPart part = checkNotNull(DLTKUIPlugin.openInEditor(module));
+		final IDocument document = UICompletionUtil.on(part).getDocument();
+		execute(document, createCommand(ENTER, getEndOfLineOffset(document, 1)));
+		assertEquals(project.getFileContentsAsString("src/file3.txt"),
 				document.get());
 	}
 
