@@ -3490,6 +3490,31 @@ public void testFunctionCallFromUnion() {
 		assertEquals(problems.toString(), 1, problems.size());
 	}
 	
+	public void testProtectedMemberInAssignedInSubtype() {
+		if (notYetImplemented(this)) {
+			return;
+		}
+		final StringList code = new StringList();
+		code.add("/** @constructor*/");
+		code.add("function proto() {");
+		code.add(" /** @protected */");
+		code.add(" this.map = null");
+		code.add("}");
+		code.add("/**");
+		code.add(" * @constructor");
+		code.add(" * @extends {proto}");
+		code.add(" */");
+		code.add("function ProtoExt() {");
+		code.add(" this.map = 1");
+		code.add("}");
+		code.add("function testProtoExt() {");
+		code.add(" var x = new ProtoExt()");
+		code.add(" x.map;");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+	}
+	
 	public void testFunctionTypeExactParam() {
 		final StringList code = new StringList();
 		code.add("/**");
@@ -3619,6 +3644,5 @@ public void testFunctionCallFromUnion() {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-
 
 }

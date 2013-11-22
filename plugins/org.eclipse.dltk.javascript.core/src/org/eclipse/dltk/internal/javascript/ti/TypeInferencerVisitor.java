@@ -288,8 +288,14 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			if (left != null && left.exists()) {
 				if (left.getParent() instanceof ThisValue) {
 					// this is an override, make sure that left is really
-					// created.
+					// created. copy over the variable (so that visibility is used)
+					Object variable = left
+							.getAttribute(IReferenceAttributes.R_VARIABLE);
 					left.getParent().createChild(left.getName());
+					if (variable != null) {
+						left.setAttribute(IReferenceAttributes.R_VARIABLE,
+								variable);
+					}
 					Expression property = node.getLeftExpression();
 					if (property instanceof PropertyExpression) {
 						left.setLocation(ReferenceLocation.create(getSource(),
