@@ -1476,8 +1476,16 @@ public class TypeInfoValidator implements IBuildParticipant,
 		private TypeCompatibility testArgumentType(IRType paramType,
 				IValueReference argument) {
 			if (argument != null && paramType != null) {
-				final IRType argumentType = JavaScriptValidations
+				final IRType argumentType;
+				if (argument.getAttribute(IReferenceAttributes.R_METHOD) != null) {
+					IRMethod method = (IRMethod) argument
+							.getAttribute(IReferenceAttributes.R_METHOD);
+					argumentType = RTypes.functionType(getContext(),
+							method.getParameters(), method.getType());
+				} else {
+					argumentType = JavaScriptValidations
 						.typeOf(argument);
+				}
 				if (argumentType != null) {
 					return paramType.isAssignableFrom(argumentType);
 				}
@@ -1552,6 +1560,11 @@ public class TypeInfoValidator implements IBuildParticipant,
 						&& parameter.getType() instanceof IRRecordType) {
 					describeRecordTypeArgument(sb, argument,
 							(IRRecordType) parameter.getType());
+				} else if (argument.getAttribute(IReferenceAttributes.R_METHOD) != null) {
+					IRMethod method = (IRMethod) argument
+							.getAttribute(IReferenceAttributes.R_METHOD);
+					sb.append(RTypes.functionType(getContext(),
+							method.getParameters(), method.getType()).getName());
 				} else if (argument.getDeclaredType() != null) {
 					sb.append(argument.getDeclaredType().getName());
 				} else {

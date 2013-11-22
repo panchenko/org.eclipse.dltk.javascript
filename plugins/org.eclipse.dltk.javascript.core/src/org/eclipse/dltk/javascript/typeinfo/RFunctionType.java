@@ -80,7 +80,54 @@ class RFunctionType extends RType implements IRFunctionType {
 		if (super.isAssignableFrom(type).ok()) {
 			return TypeCompatibility.TRUE;
 		} else if (type instanceof RFunctionType) {
-			return TypeCompatibility.TRUE;
+			RFunctionType funcType = (RFunctionType) type;
+			// if return type is null or it is a IRRecordType instance then it
+			// is always just fine.
+			// RecordType is hard to check, can be type defs with fluent typing.
+			TypeCompatibility returnType = (getReturnType() == null || getReturnType() instanceof IRRecordType) ? TypeCompatibility.TRUE
+					: TypeCompatibility.FALSE;
+			if (returnType == TypeCompatibility.FALSE
+					&& funcType.getReturnType() != null
+					&& getReturnType() != null) {
+				returnType = getReturnType().isAssignableFrom(
+						funcType.getReturnType());
+			}
+			TypeCompatibility paramsType = TypeCompatibility.TRUE;
+			if (returnType == TypeCompatibility.TRUE) {
+				paramsType = ((funcType.getParameters() == null || funcType
+						.getParameters().size() == 0) && (getParameters() == null || getParameters()
+						.size() == 0)) ? TypeCompatibility.TRUE
+						: TypeCompatibility.FALSE;
+				if ((funcType.getParameters() != null && funcType
+						.getParameters().size() > 0)
+						&& (getParameters() != null && getParameters().size() > 0)) {
+					paramsType = TypeCompatibility.TRUE;
+					for (int i = 0; i < getParameters().size(); i++) {
+						IRParameter parameter = getParameters().get(i);
+						if (parameter.getType() != null) {
+							if (i < funcType.getParameters().size()) {
+								IRParameter funcParam = funcType
+										.getParameters().get(i);
+								if (funcParam.getType() != null) {
+									if (funcParam.getType().isAssignableFrom(
+											parameter.getType()) == TypeCompatibility.FALSE) {
+										paramsType = TypeCompatibility.FALSE;
+										break;
+									}
+								} else {
+									paramsType = TypeCompatibility.FALSE;
+									break;
+								}
+							} else if (!parameter.isOptional()) {
+								paramsType = TypeCompatibility.FALSE;
+								break;
+							}
+						}
+					}
+				}
+			}
+			return (returnType == TypeCompatibility.TRUE && paramsType == TypeCompatibility.TRUE) ? TypeCompatibility.TRUE
+					: TypeCompatibility.FALSE;
 		} else if (type instanceof IRSimpleType) {
 			// TODO (alex) convert when creating type
 			return TypeCompatibility

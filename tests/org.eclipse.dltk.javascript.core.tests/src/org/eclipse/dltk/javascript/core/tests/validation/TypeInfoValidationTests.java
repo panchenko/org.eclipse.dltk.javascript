@@ -3489,5 +3489,136 @@ public void testFunctionCallFromUnion() {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 1, problems.size());
 	}
+	
+	public void testFunctionTypeExactParam() {
+		final StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @param {function(String, Number)} f");
+		code.add(" */");
+		code.add("function test(f) {}");
+		code.add("/** @type {function(String,Number)} */");
+		code.add("var f = function(a,b){};");
+		code.add("test(f);");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
+	public void testFunctionTypeObjectParam() {
+		final StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @param {function(String, Number)} f");
+		code.add(" */");
+		code.add("function test(f) {}");
+		code.add("/** @type {function(Object,Object)} */");
+		code.add("var f = function(a,b){};");
+		code.add("test(f);");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
+	public void testFunctionTypeObjectArgument() {
+		final StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @param {function(Object, Object)} f");
+		code.add(" */");
+		code.add("function test(f) {}");
+		code.add("/** @type {function(String,Number)} */");
+		code.add("var f = function(a,b){};");
+		code.add("test(f);");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+	}
+	
+	public void testFunctionTypeExactReturnType() {
+		final StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @param {function(String, Number):Boolean} f");
+		code.add(" */");
+		code.add("function test(f) {}");
+		code.add("/** @type {function(String,Number):Boolean} */");
+		code.add("var f = function(a,b){};");
+		code.add("test(f);");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
+	public void testFunctionTypeObjectReturnType() {
+		final StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @param {function(String, Number):Object} f");
+		code.add(" */");
+		code.add("function test(f) {}");
+		code.add("/** @type {function(String,Number):Boolean} */");
+		code.add("var f = function(a,b){};");
+		code.add("test(f);");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
+	public void testFunctionTypeObjectCallerReturnType() {
+		final StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @param {function(String, Number):Boolean} f");
+		code.add(" */");
+		code.add("function test(f) {}");
+		code.add("/** @type {function(String,Number):Object} */");
+		code.add("var f = function(a,b){};");
+		code.add("test(f);");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+	}
+
+	public void testFunctionTypeObjectNoReturnType() {
+		final StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @param {function(String, Number)} f");
+		code.add(" */");
+		code.add("function test(f) {}");
+		code.add("/** @type {function(String,Number):Object} */");
+		code.add("var f = function(a,b){};");
+		code.add("test(f);");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
+	public void testFunctionTypeObjectNoCallerReturnType() {
+		final StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @param {function(String, Number):Boolean} f");
+		code.add(" */");
+		code.add("function test(f) {}");
+		code.add("/** @type {function(String,Number)} */");
+		code.add("var f = function(a,b){};");
+		code.add("test(f);");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+	}
+
+	
+	public void testFunctionTypeOptionalParam() {
+		final StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @param {function(String, Number, String=):Boolean} f");
+		code.add(" */");
+		code.add("function test(f) {}");
+		code.add("/** @type {function(String,Number):Boolean} */");
+		code.add("var f = function(a,b){};");
+		code.add("test(f);");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+	public void testFunctionTypeOptionalArgument() {
+		final StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @param {function(String, Number):Boolean} f");
+		code.add(" */");
+		code.add("function test(f) {}");
+		code.add("/** @type {function(String,Number,String=):Boolean} */");
+		code.add("var f = function(a,b){};");
+		code.add("test(f);");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+
 
 }
