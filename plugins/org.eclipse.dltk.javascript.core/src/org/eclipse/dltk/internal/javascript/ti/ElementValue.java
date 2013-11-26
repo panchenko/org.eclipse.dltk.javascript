@@ -625,6 +625,15 @@ public abstract class ElementValue implements IValue {
 			return ReferenceKind.PROPERTY;
 		}
 
+		@Override
+		public Set<String> getDirectChildren(int flags) {
+			IValue value = resolveValue();
+			if (value != null && value != this) {
+				return value.getDirectChildren(flags);
+			}
+			return super.getDirectChildren(flags);
+		}
+
 		public IValue getChild(String name, boolean resolve) {
 			IValue child = children.get(name);
 			if (child == null) {
@@ -649,8 +658,8 @@ public abstract class ElementValue implements IValue {
 						resolve);
 				if (child instanceof ElementValue) {
 					child = ((ElementValue) child).resolveValue();
-					children.put(name, child);
 				}
+				children.put(name, child);
 			}
 			return child;
 		}
