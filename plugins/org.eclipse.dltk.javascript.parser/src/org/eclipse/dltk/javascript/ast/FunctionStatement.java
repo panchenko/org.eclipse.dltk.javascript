@@ -30,6 +30,8 @@ public class FunctionStatement extends Expression implements ISourceableBlock,
 	private StatementBlock body;
 	private int LP = -1;
 	private int RP = -1;
+	// TODO (alex) remove unused field in DLTK 6.0
+	@Deprecated
 	private int colonPosition = -1;
 	private Comment documentation;
 	private final boolean declaration;
@@ -144,10 +146,12 @@ public class FunctionStatement extends Expression implements ISourceableBlock,
 		this.RP = RP;
 	}
 
+	@Deprecated
 	public int getColonPosition() {
 		return colonPosition;
 	}
 
+	@Deprecated
 	public void setColonPosition(int colonPosition) {
 		this.colonPosition = colonPosition;
 	}

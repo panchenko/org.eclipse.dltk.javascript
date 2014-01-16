@@ -18,6 +18,8 @@ public class VariableDeclaration extends JSNode implements ISourceable,
 		JSDeclaration {
 
 	private Identifier identifier;
+	// TODO (alex) remove unused field in DLTK 6.0
+	@Deprecated
 	private int colonPosition = -1;
 	private int assignPosition = -1;
 	private Expression initializer;
@@ -55,10 +57,12 @@ public class VariableDeclaration extends JSNode implements ISourceable,
 		}
 	}
 
+	@Deprecated
 	public int getColonPosition() {
 		return colonPosition;
 	}
 
+	@Deprecated
 	public void setColonPosition(int colonPosition) {
 		this.colonPosition = colonPosition;
 	}
