@@ -148,8 +148,10 @@ public class JSDocTypeParser {
 
 	protected JSType parseTypeName(CharStream input) throws ParseException {
 		final int start = input.index();
+		int ch;
+		int end;
 		for (;;) {
-			int ch = input.LT(1);
+			ch = input.LT(1);
 			if (extensionChars != null) {
 				for (int i = 0; i < extensionChars.length; ++i) {
 					if (extensionChars[i] == ch) {
@@ -165,57 +167,66 @@ public class JSDocTypeParser {
 					}
 				}
 			}
-			if (ch == '<') {
-				final int baseEnd = input.index();
-				final String baseType = input.substring(start, baseEnd - 1);
-				input.consume();
-				final List<JSType> typeParams = parseTypeParams(input);
-				match(input, '>');
-				JSType type = createGenericType(baseType, typeParams);
-				if (extension != null) {
-					extension.reportType(type, start, baseEnd);
-				}
-				return checkIfArray(input, type);
-			} else if (ch == '.' && input.LT(2) == '<') {
-				final int baseEnd = input.index();
-				final String baseType = input.substring(start, baseEnd - 1);
-				input.consume();
-				input.consume();
-				final List<JSType> typeParams = parseTypeParams(input);
-				match(input, '>');
-				JSType type = createGenericType(baseType, typeParams);
-				if (extension != null) {
-					extension.reportType(type, start, baseEnd);
-				}
-				return checkIfArray(input, type);
-			} else if (ch == '('
-					&& FUNCTION
-							.equals(input.substring(start, input.index() - 1))) {
-				input.consume();
-				final FunctionType functionType = TypeInfoModelFactory.eINSTANCE
-						.createFunctionType();
-				parseFunctionParams(input, functionType.getParameters());
-				match(input, ')');
+			if (Character.isWhitespace(ch)) {
+				end = input.index();
 				skipSpaces(input);
-				if (input.LT(1) == ':') {
-					input.consume();
-					skipSpaces(input);
-					functionType.setReturnType(parse(input, false));
-				}
-				return checkIfArray(input, functionType);
-			} else if (ch == '[') {
-				final JSType itemType = createType(input, start);
-				input.consume();
-				match(input, ']');
-				final JSType array = createArray(itemType);
-				return checkIfArray(input, array);
-			} else if (ch == CharStream.EOF || Character.isWhitespace(ch)
-					|| ch == '|' || ch == ',' || ch == '=' || ch == '}'
-					|| ch == '>' || ch == ')' || ch == ']') {
-				return input.index() > start ? createType(input, start) : null;
+				ch = input.LT(1);
+			} else if (ch == '<' || ch == '(' || ch == '['
+					|| ch == CharStream.EOF || ch == '|' || ch == ','
+					|| ch == '=' || ch == '}' || ch == '>' || ch == ')'
+					|| ch == ']') {
+				end = input.index();
+			} else if (ch == '.' && input.LT(2) == '<') {
+				end = input.index();
 			} else {
 				input.consume();
+				continue;
 			}
+			break;
+		}
+		if (ch == '<') {
+			final String baseType = input.substring(start, end - 1);
+			input.consume();
+			final List<JSType> typeParams = parseTypeParams(input);
+			match(input, '>');
+			JSType type = createGenericType(baseType, typeParams);
+			if (extension != null) {
+				extension.reportType(type, start, end);
+			}
+			return checkIfArray(input, type);
+		} else if (ch == '.' && input.LT(2) == '<') {
+			final String baseType = input.substring(start, end - 1);
+			input.consume();
+			input.consume();
+			final List<JSType> typeParams = parseTypeParams(input);
+			match(input, '>');
+			JSType type = createGenericType(baseType, typeParams);
+			if (extension != null) {
+				extension.reportType(type, start, end);
+			}
+			return checkIfArray(input, type);
+		} else if (ch == '('
+				&& FUNCTION.equals(input.substring(start, end - 1))) {
+			input.consume();
+			final FunctionType functionType = TypeInfoModelFactory.eINSTANCE
+					.createFunctionType();
+			parseFunctionParams(input, functionType.getParameters());
+			match(input, ')');
+			skipSpaces(input);
+			if (input.LT(1) == ':') {
+				input.consume();
+				skipSpaces(input);
+				functionType.setReturnType(parse(input, false));
+			}
+			return checkIfArray(input, functionType);
+		} else if (ch == '[') {
+			final JSType itemType = createType(input, start, end);
+			input.consume();
+			match(input, ']');
+			final JSType array = createArray(itemType);
+			return checkIfArray(input, array);
+		} else {
+			return end > start ? createType(input, start, end) : null;
 		}
 	}
 
@@ -236,8 +247,7 @@ public class JSDocTypeParser {
 		return null;
 	}
 
-	private JSType createType(CharStream input, final int start) {
-		final int end = input.index();
+	private JSType createType(CharStream input, final int start, final int end) {
 		final JSType type = createType(translate(input
 				.substring(start, end - 1)));
 		if (extension != null) {

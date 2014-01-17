@@ -187,6 +187,13 @@ public class JSDocTypeParserTests extends TestCase {
 		assertRef("Number", type.getReturnType());
 	}
 
+	public void testFunctionType4() {
+		final FunctionType type = (FunctionType) parse("function ( String ) : Number");
+		assertEquals(1, type.getParameters().size());
+		assertRef("String", type.getParameters().get(0).getType());
+		assertRef("Number", type.getReturnType());
+	}
+
 	public void testFunctionTypeVarArgs() {
 		final FunctionType type = (FunctionType) parse("function(string, ...[number]): number");
 		assertEquals(2, type.getParameters().size());
