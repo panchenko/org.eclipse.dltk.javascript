@@ -659,7 +659,8 @@ public abstract class ElementValue implements IValue {
 				if (child instanceof ElementValue) {
 					child = ((ElementValue) child).resolveValue();
 				}
-				children.put(name, child);
+				if (child != null)
+					children.put(name, child);
 			}
 			return child;
 		}
