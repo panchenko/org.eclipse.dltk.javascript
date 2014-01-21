@@ -3,6 +3,7 @@
   <ref:Type name="Error" kind="PREDEFINED" superType="Object">
   	<members xsi:type="ref:Property" name="name" directType="String" description="Error name."/>
   	<members xsi:type="ref:Property" name="message" directType="String" description="Error message."/>
+  	<members xsi:type="ref:Property" name="stack" directType="String" description="The stacktrace."/>
     <staticConstructor name="Error" directType="Error">
       <parameters name="message" kind="OPTIONAL" directType="Object"/>
     </staticConstructor>
