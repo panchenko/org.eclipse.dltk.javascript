@@ -18,6 +18,7 @@ import java.util.List;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.dltk.core.builder.IBuildContext;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
+import org.eclipse.dltk.internal.javascript.ti.JSDocSupport;
 import org.eclipse.dltk.javascript.ast.AbstractNavigationVisitor;
 import org.eclipse.dltk.javascript.ast.BreakStatement;
 import org.eclipse.dltk.javascript.ast.CaseClause;
@@ -44,6 +45,8 @@ import org.eclipse.dltk.javascript.ast.VoidExpression;
 import org.eclipse.dltk.javascript.ast.WhileStatement;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.parser.Reporter;
+import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTag;
+import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTags;
 import org.eclipse.osgi.util.NLS;
 
 public class FlowValidation extends AbstractNavigationVisitor<FlowStatus>
@@ -204,6 +207,17 @@ public class FlowValidation extends AbstractNavigationVisitor<FlowStatus>
 			final FlowStatus result = super.visitFunctionStatement(node);
 			if (scope.contains(FlowEndKind.RETURNS_VALUE)
 					&& (scope.contains(FlowEndKind.RETURNS) || result.noReturn)) {
+				if (result.noReturn && result.returnValue
+						&& node.getDocumentation() != null) {
+					JSDocTags parse = JSDocSupport.parse(node
+							.getDocumentation());
+					// if it does return a value and it has a no return and it
+					// is a constructor function then don't report it. Very
+					// likely a construct to support a constructor function
+					// without the new keyword.
+					if (parse.count(JSDocTag.CONSTRUCTOR) == 1)
+						return result;
+				}
 				reportInconsistentReturn(node);
 			}
 			return result;

@@ -454,5 +454,30 @@ public class FlowValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(sCode);
 		assertEquals(problems.toString(), 0, problems.size());
 	}
+	
+	
+	public void testConstructorFunctionReturningItself() {
+		final StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @constructor");
+		code.add(" */");
+		code.add("function MyConstructor(){");
+		code.add("	if (!(this instanceof MyConstructor))");
+		code.add("	  { return new MyConstructor() }");
+		code.add("}");
+		final String sCode = code.toString();
+		final List<IProblem> problems = validate(sCode);
+		assertEquals(problems.toString(), 0, problems.size());
+	}
 
+	public void testFunctionReturningItself() {
+		final StringList code = new StringList();
+		code.add("function MyConstructor(){");
+		code.add("	if (!(this instanceof MyConstructor))");
+		code.add("	  { return new MyConstructor() }");
+		code.add("}");
+		final String sCode = code.toString();
+		final List<IProblem> problems = validate(sCode);
+		assertEquals(problems.toString(), 1, problems.size());
+	}
 }
