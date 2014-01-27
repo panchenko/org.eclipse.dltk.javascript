@@ -52,6 +52,11 @@ public class Identifier extends Expression implements Documentable {
 	}
 
 	@Override
+	public String toString() {
+		return name;
+	}
+
+	@Override
 	public String toSourceString(String indentationString) {
 		return name;
 	}

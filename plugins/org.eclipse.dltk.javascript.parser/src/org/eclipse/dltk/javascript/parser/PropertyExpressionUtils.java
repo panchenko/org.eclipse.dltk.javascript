@@ -12,6 +12,7 @@
 package org.eclipse.dltk.javascript.parser;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.dltk.javascript.ast.DecimalLiteral;
@@ -67,6 +68,25 @@ public class PropertyExpressionUtils {
 			if (!buildPath(buffer, functionStatement.getName()))
 				return false;
 			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public static List<String> path(Expression expression) {
+		final List<String> buffer = new ArrayList<String>(4);
+		return path(buffer, expression) ? buffer : Collections
+				.<String> emptyList();
+	}
+
+	private static boolean path(List<String> buffer, Expression expression) {
+		if (expression instanceof Identifier) {
+			buffer.add(((Identifier) expression).getName());
+			return true;
+		} else if (expression instanceof PropertyExpression) {
+			final PropertyExpression propertyExpression = (PropertyExpression) expression;
+			return path(buffer, propertyExpression.getObject())
+					&& path(buffer, propertyExpression.getProperty());
 		} else {
 			return false;
 		}

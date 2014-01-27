@@ -388,6 +388,12 @@
              id="org.eclipse.dltk.javascript.preferences.error.warning"
              name="%ErrorWarningPreferencePage.name">
        </page>	          
+      <page
+            category="org.eclipse.dltk.javascript.ui.javascript"
+            class="org.eclipse.dltk.javascript.internal.ui.library.TypeLibraryPreferencePage"
+            id="org.eclipse.dltk.javascript.ui.TypeLibraries"
+            name="Type Libraries">
+      </page>
 	 </extension>
 	 <extension
        point="org.eclipse.ui.perspectives">
@@ -984,4 +990,11 @@
    </markerTypeCategory>
  </extension>
 
+  <extension point="org.eclipse.dltk.ui.buildpathContainerPage">
+    <buildpathContainerPage
+      class="org.eclipse.dltk.javascript.internal.ui.library.TypeLibraryContainerPage"
+      id="org.eclipse.dltk.javascript.TypeLibrary"
+      name="javaScript Type Library"
+      nature="org.eclipse.dltk.javascript.core.nature" />
+  </extension>
 </plugin>

@@ -28,6 +28,7 @@
             <element ref="runtimeTypeFactory"/>
             <element ref="metaType"/>
             <element ref="runtimeType"/>
+            <element ref="library"/>
          </choice>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -50,6 +51,21 @@
                </documentation>
                <appInfo>
                   <meta.attribute translatable="true"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="library">
+      <complexType>
+         <attribute name="location" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="resource"/>
                </appInfo>
             </annotation>
          </attribute>

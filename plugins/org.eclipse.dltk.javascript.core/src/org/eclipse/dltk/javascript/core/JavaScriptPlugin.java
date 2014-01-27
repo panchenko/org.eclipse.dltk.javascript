@@ -12,6 +12,7 @@ package org.eclipse.dltk.javascript.core;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.dltk.javascript.typeinfo.TypeLibraryManager;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -45,6 +46,7 @@ public class JavaScriptPlugin extends Plugin {
 	@Override
 	public void stop(BundleContext context) throws Exception {
 		super.stop(context);
+		TypeLibraryManager.shutdown();
 		plugin = null;
 	}
 
