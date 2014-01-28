@@ -19,6 +19,7 @@ import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 
 import com.google.common.base.Charsets;
+import com.google.common.collect.ImmutableMap;
 
 public class ClosureCompilerApplication implements IApplication {
 
@@ -33,9 +34,10 @@ public class ClosureCompilerApplication implements IApplication {
 
 		compiler.resolveTypes();
 
-		compiler.save(new File(
-				"/home/alex/DLTK/org.eclipse.dltk.javascript/tools/org.eclipse.dltk.javascript.typelib.compiler/dom."
-						+ TypeLibraryFormat.FILE_EXTENSION));
+		compiler.save(
+				new File("/home/alex/DLTK/org.eclipse.dltk.javascript/tools/org.eclipse.dltk.javascript.typelib.compiler/dom."
+						+ TypeLibraryFormat.FILE_EXTENSION),
+				ImmutableMap.of(TypeLibraryFormat.NAME_HEADER, "w3c_dom", TypeLibraryFormat.VERSION_HEADER, "1.0"));
 
 		// TODO Auto-generated method stub
 		return null;

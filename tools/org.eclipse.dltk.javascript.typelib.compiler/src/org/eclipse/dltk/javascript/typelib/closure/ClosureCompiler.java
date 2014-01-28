@@ -50,7 +50,6 @@ import org.eclipse.dltk.javascript.parser.jsdoc.SimpleJSDocParser;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
-import org.eclipse.dltk.javascript.typeinfo.TypeLibraryFormat;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
@@ -74,7 +73,6 @@ import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.FluentIterable;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
 import com.google.common.collect.Sets.SetView;
 import com.google.common.io.Files;
@@ -131,11 +129,8 @@ public class ClosureCompiler {
 		parseMethods(script);
 	}
 
-	public void save(File output) throws IOException {
-		TypeLibCompilerUtil.save(
-				output,
-				ImmutableMap.of(TypeLibraryFormat.NAME_HEADER, "w3c_dom", TypeLibraryFormat.VERSION_HEADER, "1.0"),
-				resource);
+	public void save(File output, Map<String, String> manifest) throws IOException {
+		TypeLibCompilerUtil.save(output, manifest, resource);
 		info("Saved to %s", output);
 	}
 
