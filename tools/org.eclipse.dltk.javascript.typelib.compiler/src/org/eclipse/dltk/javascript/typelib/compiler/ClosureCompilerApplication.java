@@ -29,8 +29,13 @@ public class ClosureCompilerApplication implements IApplication {
 		final ClosureCompiler compiler = new ClosureCompiler();
 		compiler.load(new File("/home/alex/DLTK/closure-compiler/externs/w3c_dom1.js"), Charsets.UTF_8);
 		compiler.load(new File("/home/alex/DLTK/closure-compiler/externs/w3c_dom2.js"), Charsets.UTF_8);
+		compiler.load(new File("/home/alex/DLTK/closure-compiler/externs/w3c_event.js"), Charsets.UTF_8);
 
-		compiler.save(new File("/home/alex/DLTK/dom." + TypeLibraryFormat.FILE_EXTENSION));
+		compiler.resolveTypes();
+
+		compiler.save(new File(
+				"/home/alex/DLTK/org.eclipse.dltk.javascript/tools/org.eclipse.dltk.javascript.typelib.compiler/dom."
+						+ TypeLibraryFormat.FILE_EXTENSION));
 
 		// TODO Auto-generated method stub
 		return null;

@@ -14,16 +14,15 @@ package org.eclipse.dltk.javascript.typelib.closure;
 import static com.google.common.base.Predicates.instanceOf;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Collection;
+import java.util.Formatter;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
+import java.util.Set;
 
 import org.eclipse.dltk.compiler.problem.IProblem;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
@@ -52,6 +51,7 @@ import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.dltk.javascript.typeinfo.TypeLibraryFormat;
+import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
@@ -60,15 +60,22 @@ import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelResourceSet;
+import org.eclipse.dltk.javascript.typelib.compiler.TypeLibCompilerUtil;
 import org.eclipse.dltk.utils.TextUtils;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.xmi.XMIResource;
 
 import com.google.common.base.Function;
+import com.google.common.base.Joiner;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.FluentIterable;
-import com.google.common.io.Closeables;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Sets;
+import com.google.common.collect.Sets.SetView;
 import com.google.common.io.Files;
 
 @SuppressWarnings("restriction")
@@ -89,6 +96,7 @@ public class ClosureCompiler {
 
 	private static final String CONST = "@const";
 	private static final String INTERFACE_TAG = "@interface";
+	private static final String IMPLEMENTS_TAG = "@implements";
 	private static final String PROTOTYPE = "prototype";
 
 	private final SimpleJSDocParser jsdocParser = new SimpleJSDocParser();
@@ -123,23 +131,10 @@ public class ClosureCompiler {
 	}
 
 	public void save(File output) throws IOException {
-		final FileOutputStream outputStream = new FileOutputStream(output);
-		try {
-			final ZipOutputStream zip = new ZipOutputStream(outputStream);
-			try {
-				zip.putNextEntry(new ZipEntry(TypeLibraryFormat.MANIFEST_FILE));
-				final Properties manifest = new Properties();
-				manifest.put(TypeLibraryFormat.NAME_HEADER, "w3c_dom");
-				manifest.put(TypeLibraryFormat.VERSION_HEADER, "2.0");
-				manifest.store(zip, null);
-				zip.putNextEntry(new ZipEntry(TypeLibraryFormat.TYPES_FILE));
-				resource.save(zip, null);
-			} finally {
-				Closeables.closeQuietly(zip);
-			}
-		} finally {
-			Closeables.closeQuietly(outputStream);
-		}
+		TypeLibCompilerUtil.save(
+				output,
+				ImmutableMap.of(TypeLibraryFormat.NAME_HEADER, "w3c_dom", TypeLibraryFormat.VERSION_HEADER, "1.0"),
+				resource);
 		info("Saved to %s", output);
 	}
 
@@ -173,7 +168,17 @@ public class ClosureCompiler {
 						if (extendsType instanceof SimpleType) {
 							type.setSuperTypeExpr((SimpleType) extendsType);
 						} else {
-							warn(function, "%s invalid type value %s", JSDocTag.EXTENDS, extendsType.getClass().getName());
+							warn(extendsTag, "%s invalid type value %s", JSDocTag.EXTENDS, extendsType.getClass().getName());
+						}
+					}
+				}
+				for (JSDocTag implementsTag : tags.list(IMPLEMENTS_TAG)) {
+					final JSType implementsType = jsdocSupport.parseType(implementsTag, false, null);
+					if (implementsType != null) {
+						if (implementsType instanceof SimpleType) {
+							type.getTraits().add(((SimpleType) implementsType).getTarget());
+						} else {
+							warn(implementsTag, "%s invalid type value %s", IMPLEMENTS_TAG, implementsType.getClass().getName());
 						}
 					}
 				}
@@ -389,8 +394,15 @@ public class ClosureCompiler {
 	}
 
 	private void log(String level, ISourceNode node, String format, Object... args) {
-		System.out
-				.println(level + " " + (lineTracker.getLineNumberOfOffset(node.start()) + 1) + ": " + String.format(format, args));
+		final StringBuilder sb = new StringBuilder();
+		sb.append(level);
+		if (node != null) {
+			sb.append(" ");
+			sb.append(lineTracker.getLineNumberOfOffset(node.start()) + 1);
+		}
+		sb.append(": ");
+		new Formatter(sb).format(format, args);
+		System.out.println(sb.toString());
 	}
 
 	public void reset() {
@@ -410,5 +422,43 @@ public class ClosureCompiler {
 				return (E) input.getExpression();
 			}
 		});
+	}
+
+	public void resolveTypes() {
+		if (resource.getResourceSet() == null) {
+			new TypeInfoModelResourceSet().getResources().add(resource); // for proxy resolution
+		}
+		final Set<String> proxies = Sets.newHashSet();
+		for (Iterator<EObject> i = resource.getAllContents(); i.hasNext();) {
+			final EObject o = i.next();
+			if (o instanceof SimpleType) {
+				final SimpleType simple = (SimpleType) o;
+				final Type type = simple.getTarget();
+				if (type.isProxy()) {
+					String name = type.getName();
+					if (name.endsWith("?")) { // workaround for (opts:number?=) parameter declaration
+						name = TypeInfoModelLoader.getInstance().translateTypeName(name.substring(0, name.length() - 1));
+						simple.setTarget(TypeUtil.type(name));
+						if (!simple.getTarget().isProxy()) {
+							continue;
+						}
+					}
+					proxies.add(name);
+				}
+			} else if (o instanceof Type) {
+				for (Type trait : ((Type) o).getTraits()) {
+					if (trait.isProxy()) {
+						proxies.add(trait.getName());
+					}
+				}
+			}
+		}
+		if (!proxies.isEmpty()) {
+			warn(null, "Unresolved type(s): %s", Joiner.on(',').join(proxies));
+			final SetView<String> intersection = Sets.intersection(proxies, types.keySet());
+			if (!intersection.isEmpty()) {
+				error(null, "Proxy resolution failed for " + intersection);
+			}
+		}
 	}
 }
