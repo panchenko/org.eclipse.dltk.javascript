@@ -62,6 +62,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelResourceSet;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeLiteral;
 import org.eclipse.dltk.javascript.typelib.compiler.TypeLibCompilerUtil;
 import org.eclipse.dltk.utils.TextUtils;
 import org.eclipse.emf.ecore.EObject;
@@ -161,6 +162,10 @@ public class ClosureCompiler {
 				type.setInstantiable(constructorTag != null);
 				types.put(name, type);
 				resource.getContents().add(type);
+				final TypeLiteral literal = TypeInfoModelFactory.eINSTANCE.createTypeLiteral();
+				literal.setName(name);
+				literal.setTarget(type);
+				resource.getContents().add(literal);
 				final JSDocTag extendsTag = tags.get(JSDocTag.EXTENDS);
 				if (extendsTag != null) {
 					final JSType extendsType = jsdocSupport.parseType(extendsTag, false, null);
