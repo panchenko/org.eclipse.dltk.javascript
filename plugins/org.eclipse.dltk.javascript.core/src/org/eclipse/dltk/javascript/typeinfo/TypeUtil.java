@@ -348,4 +348,17 @@ public class TypeUtil {
 		return false;
 	}
 
+	/**
+	 * Answers if this type can defined overloaded methods.
+	 * 
+	 * @since 5.1
+	 */
+	public static boolean isOverloadAllowed(Type type) {
+		final MetaType mt = type.getMetaType();
+		if (mt instanceof MetaTypeExtension) {
+			return ((MetaTypeExtension) mt).isOverloadAllowed(type);
+		} else {
+			return type.getKind() == TypeKind.JAVA;
+		}
+	}
 }

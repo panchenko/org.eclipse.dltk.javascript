@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.dltk.utils.CompoundIterator;
 
 /**
@@ -362,14 +361,15 @@ public class RTypeMemberQuery implements Iterable<IRMember> {
 		}
 
 		protected static Object createKey(IRMember member) {
-			if (member instanceof IRMethod && member.getDeclaringType() != null
-					&& member.getDeclaringType().getKind() == TypeKind.JAVA) {
-				return new MethodKey((IRMethod) member);
-			} else {
-				return new MemberKey(member);
+			if (member instanceof IRMethod) {
+				final IRTypeDeclaration declaration = member.getDeclaringType();
+				if (declaration != null
+						&& TypeUtil.isOverloadAllowed(declaration.getSource())) {
+					return new MethodKey((IRMethod) member);
+				}
 			}
+			return new MemberKey(member);
 		}
-
 	}
 
 	/**

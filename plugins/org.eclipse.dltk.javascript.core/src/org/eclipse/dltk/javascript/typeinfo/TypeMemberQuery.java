@@ -26,7 +26,6 @@ import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.dltk.utils.CompoundIterator;
 import org.eclipse.emf.common.util.EList;
 
@@ -388,12 +387,13 @@ public class TypeMemberQuery implements Iterable<Member> {
 		}
 
 		protected static Object createKey(Member member) {
-			if (member instanceof Method && member.getDeclaringType() != null
-					&& member.getDeclaringType().getKind() == TypeKind.JAVA) {
-				return new MethodKey((Method) member);
-			} else {
-				return new MemberKey(member);
+			if (member instanceof Method) {
+				final Type type = member.getDeclaringType();
+				if (type != null && TypeUtil.isOverloadAllowed(type)) {
+					return new MethodKey((Method) member);
+				}
 			}
+			return new MemberKey(member);
 		}
 
 	}

@@ -13,5 +13,8 @@
             </run>
       </application>
    </extension>
+   <extension point="org.eclipse.dltk.javascript.core.typeinfo">
+   		<library location="dom.typelib"/>
+   </extension>
 
 </plugin>

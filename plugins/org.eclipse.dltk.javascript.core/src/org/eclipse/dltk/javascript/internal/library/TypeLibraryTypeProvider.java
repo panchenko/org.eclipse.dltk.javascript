@@ -13,7 +13,9 @@ package org.eclipse.dltk.javascript.internal.library;
 
 import java.util.Set;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.dltk.core.IModelElement;
+import org.eclipse.dltk.internal.core.ExternalScriptProject;
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 import org.eclipse.dltk.javascript.typeinfo.ITypeProvider;
@@ -22,6 +24,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 import com.google.common.util.concurrent.UncheckedExecutionException;
 
+@SuppressWarnings("restriction")
 public class TypeLibraryTypeProvider implements ITypeProvider {
 
 	private TypeLibraryModelResourceSet resourceSet;
@@ -31,9 +34,14 @@ public class TypeLibraryTypeProvider implements ITypeProvider {
 		if (element == null) {
 			return false;
 		}
+		final IProject project = element.getScriptProject().getProject();
+		if (ExternalScriptProject.EXTERNAL_PROJECT_NAME.equals(project
+				.getName())) {
+			return false;
+		}
 		try {
 			resourceSet = TypeLibraryModelResourceSetCache.getInstance()
-					.getUnchecked(element.getScriptProject().getProject());
+					.getUnchecked(project);
 		} catch (UncheckedExecutionException e) {
 			JavaScriptPlugin.error("Error loading type libraries", e);
 			return false;

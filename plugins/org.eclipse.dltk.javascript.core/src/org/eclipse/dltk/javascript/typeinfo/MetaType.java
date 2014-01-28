@@ -16,6 +16,11 @@ import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 /**
  * "Behaviour" associated with {@link Type types}.
+ * 
+ * Custom implementations should extend {@link DefaultMetaType}, instead of
+ * implementing this interface directly.
+ * 
+ * @noimplement This interface is not intended to be implemented by clients.
  */
 @ConfigurationElement("metaType")
 public interface MetaType {

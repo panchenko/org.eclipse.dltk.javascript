@@ -193,5 +193,6 @@
    </extension>
    <extension point="org.eclipse.dltk.javascript.core.typeinfo">
 		<provider class="org.eclipse.dltk.javascript.internal.library.TypeLibraryTypeProvider"/>
+		<metaType class="org.eclipse.dltk.javascript.typeinfo.TypeLibraryMetaType"/>
    </extension>
 </plugin>
