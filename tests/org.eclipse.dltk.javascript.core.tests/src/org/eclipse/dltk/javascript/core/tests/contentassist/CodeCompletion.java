@@ -949,4 +949,42 @@ public class CodeCompletion extends AbstractCompletionTest {
 		}
 		assertEquals(true, found);
 	}
+	
+	public void testPrototypeFunctionWith2Extends() {
+		final StringList code = new StringList();
+		code.add("function A() {}");
+		code.add("A.prototype.afunction = function(){ }");
+		code.add("/**");
+		code.add(" * @extends {A}");
+		code.add(" */");
+		code.add("function B() {}");
+		code.add("B.prototype = new A();");
+		code.add("B.prototype.bfunction = function(){ }");
+		code.add("/**");
+		code.add(" * @extends {B}");
+		code.add(" */");
+		code.add("function C() {}");
+		code.add("C.prototype = new B();");
+		code.add("C.prototype.testDirectAssignment = function(){ }");
+		code.add("var x = new C();");
+		code.add("x.");
+		final IModuleSource module = new TestModule(code.toString());
+		final List<CompletionProposal> results = new ArrayList<CompletionProposal>();
+		final ICompletionEngine completionEngine = createEngine(results,
+				JSCompletionEngine.OPTION_KEYWORDS);
+		completionEngine.complete(module, lastPositionInFile(".", module), 0);
+		int found = 0;
+		for (CompletionProposal completionProposal : results) {
+			if (completionProposal.getName().equals("testDirectAssignment")) {
+				found++;
+			}
+			if (completionProposal.getName().equals("bfunction")) {
+				found++;
+			}
+			if (completionProposal.getName().equals("afunction")) {
+				found++;
+			}
+		}
+		assertEquals(3, found);
+	}
 }

@@ -48,15 +48,7 @@ class RLocalType extends RType implements IRLocalType {
 	}
 
 	public IValueReference getDirectChild(String name) {
-		final IValueReference value = getValue();
-		if (value.getDirectChildren(IValue.NO_LOCAL_TYPES).contains(name)) {
-			return value.getChild(name);
-		} else {
-			JSTypeSet declaredTypes = getValue().getDeclaredTypes();
-			HashSet<IRType> set = new HashSet<IRType>();
-			set.add(this);
-			return getChildFromDeclaredTypes(name, declaredTypes, set);
-		}
+		return getChild(this, name, new HashSet<IRType>());
 	}
 
 	/**
@@ -67,30 +59,56 @@ class RLocalType extends RType implements IRLocalType {
 	private IValueReference getChildFromDeclaredTypes(String name,
 			JSTypeSet declaredTypes, HashSet<IRType> set) {
 		for (IRType irType : declaredTypes) {
-			if (irType instanceof RLocalType && set.add(irType)) {
-				IValueReference declaredValue = ((RLocalType) irType)
-						.getValue();
-				if (declaredValue.getDirectChildren(IValue.NO_LOCAL_TYPES)
-						.contains(name)) {
-					return declaredValue.getChild(name);
-				}
-				IValueReference fromChild = getChildFromDeclaredTypes(name,
-						declaredValue.getDeclaredTypes(), set);
-				if (fromChild != null)
-					return fromChild;
+			if (irType instanceof RLocalType) {
+				IValueReference child = getChild((RLocalType) irType, name, set);
+				if (child != null)
+					return child;
 			}
 		}
 		return null;
 	}
 
+	private IValueReference getChild(RLocalType irType, String name,
+			HashSet<IRType> set) {
+		if (set.add(irType)) {
+			IValueReference declaredValue = irType.getValue();
+			if (declaredValue.getDirectChildren(IValue.NO_LOCAL_TYPES)
+					.contains(name)) {
+				return declaredValue.getChild(name);
+			}
+			IValueReference fromChild = getChildFromDeclaredTypes(name,
+					declaredValue.getDeclaredTypes(), set);
+			if (fromChild == null) {
+				IValueReference prototype = irType.functionValue
+						.getChild(PROTOTYPE_PROPERTY);
+				if (prototype.getDirectChildren().contains(name)) {
+					return prototype.getChild(name);
+				}
+			}
+			return fromChild;
+		}
+		return null;
+	}
+
 	public Set<String> getDirectChildren() {
-		Set<String> children = getValue().getDirectChildren(
-				IValue.NO_LOCAL_TYPES);
-		JSTypeSet declaredTypes = getValue().getDeclaredTypes();
-		HashSet<IRType> set = new HashSet<IRType>();
-		set.add(this);
-		fillDeclaredLocalTypesChildren(children, declaredTypes, set);
+		Set<String> children = new HashSet<String>();
+		fillChildren(this, children, new HashSet<IRType>());
 		return children;
+	}
+
+	private static void fillChildren(RLocalType rLocalType,
+			Set<String> children,
+			HashSet<IRType> set) {
+		if (set.add(rLocalType)) {
+			IValueReference value = rLocalType.getValue();
+			children.addAll(value.getDirectChildren(
+					IValue.NO_LOCAL_TYPES));
+			IValueReference prototype = rLocalType.functionValue
+					.getChild(PROTOTYPE_PROPERTY);
+			children.addAll(prototype.getDirectChildren());
+			fillDeclaredLocalTypesChildren(children, value
+					.getDeclaredTypes(), set);
+		}
 	}
 
 	/**
@@ -98,7 +116,7 @@ class RLocalType extends RType implements IRLocalType {
 	 * @param declaredTypes
 	 * @param set
 	 */
-	private void fillDeclaredLocalTypesChildren(Set<String> children,
+	private static void fillDeclaredLocalTypesChildren(Set<String> children,
 			JSTypeSet declaredTypes, HashSet<IRType> set) {
 		for (IRType irType : declaredTypes) {
 			if (irType instanceof RLocalType && set.add(irType)) {

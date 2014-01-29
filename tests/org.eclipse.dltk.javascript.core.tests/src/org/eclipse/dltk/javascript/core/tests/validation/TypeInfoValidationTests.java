@@ -3644,5 +3644,53 @@ public void testFunctionCallFromUnion() {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
+	
+	public void testPrototypeFunction() {
+		final StringList code = new StringList();
+		code.add("function A() {}");
+		code.add("A.prototype.testDirectAssignment = function(){ }");
+		code.add("var x = new A();");
+		code.add("x.testDirectAssignment();");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
 
+	public void testPrototypeFunctionWithExtends() {
+		final StringList code = new StringList();
+		code.add("function A() {}");
+		code.add("/**");
+		code.add(" * @extends {A}");
+		code.add(" */");
+		code.add("function B() {}");
+		code.add("B.prototype = new A();");
+		code.add("B.prototype.testDirectAssignment = function(){ }");
+		code.add("var x = new B();");
+		code.add("x.testDirectAssignment();");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
+	public void testPrototypeFunctionWith2Extends() {
+		final StringList code = new StringList();
+		code.add("function A() {}");
+		code.add("A.prototype.afunction = function(){ }");
+		code.add("/**");
+		code.add(" * @extends {A}");
+		code.add(" */");
+		code.add("function B() {}");
+		code.add("B.prototype = new A();");
+		code.add("B.prototype.bfunction = function(){ }");
+		code.add("/**");
+		code.add(" * @extends {B}");
+		code.add(" */");
+		code.add("function C() {}");
+		code.add("C.prototype = new B();");
+		code.add("C.prototype.testDirectAssignment = function(){ }");
+		code.add("var x = new C();");
+		code.add("x.testDirectAssignment();");
+		code.add("x.bfunction();");
+		code.add("x.afunction();");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
 }
