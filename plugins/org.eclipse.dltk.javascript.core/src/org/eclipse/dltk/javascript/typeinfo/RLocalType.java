@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -81,9 +82,9 @@ class RLocalType extends RType implements IRLocalType {
 			if (fromChild == null) {
 				IValueReference prototype = irType.functionValue
 						.getChild(PROTOTYPE_PROPERTY);
-				if (prototype.getDirectChildren().contains(name)) {
-					return prototype.getChild(name);
-				}
+				fromChild = prototype.getChild(name);
+				if (!fromChild.exists())
+					fromChild = null;
 			}
 			return fromChild;
 		}
@@ -106,6 +107,7 @@ class RLocalType extends RType implements IRLocalType {
 			IValueReference prototype = rLocalType.functionValue
 					.getChild(PROTOTYPE_PROPERTY);
 			children.addAll(prototype.getDirectChildren());
+			fillDeclaredLocalTypesChildren(children, prototype.getTypes(), set);
 			fillDeclaredLocalTypesChildren(children, value
 					.getDeclaredTypes(), set);
 		}
@@ -124,6 +126,12 @@ class RLocalType extends RType implements IRLocalType {
 						.getDirectChildren(IValue.NO_LOCAL_TYPES));
 				fillDeclaredLocalTypesChildren(children, ((RLocalType) irType)
 						.getValue().getDeclaredTypes(), set);
+			} else if (irType instanceof RRecordType && set.add(irType)) {
+				Collection<IRRecordMember> members = ((RRecordType) irType)
+						.getMembers();
+				for (IRRecordMember member : members) {
+					children.add(member.getName());
+				}
 			}
 		}
 	}

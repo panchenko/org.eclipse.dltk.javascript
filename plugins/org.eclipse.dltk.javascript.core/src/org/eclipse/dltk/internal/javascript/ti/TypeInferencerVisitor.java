@@ -467,6 +467,17 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 							}
 						}
 					}
+				} else {
+					// create a new object if prototype is directly set to record type value.
+					Object attribute = left
+							.getAttribute(IReferenceAttributes.ELEMENT);
+					if (attribute instanceof IRProperty
+							&& ((IRProperty) attribute).getName().equals(
+									IRLocalType.PROTOTYPE_PROPERTY)) {
+						left.getParent()
+								.createChild(IRLocalType.PROTOTYPE_PROPERTY)
+								.setValue(new AnonymousValue());
+					}
 				}
 			}
 			if (IValueReference.ARRAY_OP.equals(left.getName())

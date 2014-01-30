@@ -987,4 +987,30 @@ public class CodeCompletion extends AbstractCompletionTest {
 		}
 		assertEquals(3, found);
 	}
+	
+	public void testPrototypeWithRecordTypeConstruction() {
+		final StringList code = new StringList();
+		code.add("function D1() {}");
+		code.add("D1.prototype = {test: function(){}}");
+		code.add("D1.prototype.testDirectAssignment = function(){}");
+		code.add("var x = new D1()");
+		code.add("x.");
+		final IModuleSource module = new TestModule(code.toString());
+		final List<CompletionProposal> results = new ArrayList<CompletionProposal>();
+		final ICompletionEngine completionEngine = createEngine(results,
+				JSCompletionEngine.OPTION_KEYWORDS);
+		completionEngine.complete(module, lastPositionInFile(".", module), 0);
+		int found = 0;
+		for (CompletionProposal completionProposal : results) {
+			if (completionProposal.getName().equals("test")) {
+				found++;
+			}
+			if (completionProposal.getName().equals("testDirectAssignment")) {
+				found++;
+			}
+		}
+		assertEquals(2, found);
+	}
+	
+
 }

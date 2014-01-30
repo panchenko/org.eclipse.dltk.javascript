@@ -3693,4 +3693,17 @@ public void testFunctionCallFromUnion() {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
+	
+	
+	public void testPrototypeWithRecordTypeConstruction() {
+		final StringList code = new StringList();
+		code.add("function D1() {}");
+		code.add("D1.prototype = {test: function(a){}}");
+		code.add("D1.prototype.testDirectAssignment = function(b){}");
+		code.add("var x = new D1()");
+		code.add("x.test(1)");
+		code.add("x.testDirectAssignment(2)");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
 }
