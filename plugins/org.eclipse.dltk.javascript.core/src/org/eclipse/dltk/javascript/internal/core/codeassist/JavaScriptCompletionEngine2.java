@@ -583,64 +583,74 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		 * @param reference
 		 */
 		private void reportReference(IValueReference reference) {
-			int proposalKind = CompletionProposal.FIELD_REF;
-			final ReferenceKind kind = reference.getKind();
-			if (reference.getAttribute(IReferenceAttributes.PHANTOM, true) == null
-					&& (kind == ReferenceKind.FUNCTION || reference
-							.hasChild(IValueReference.FUNCTION_OP))) {
-				proposalKind = CompletionProposal.METHOD_REF;
-			} else if (kind == ReferenceKind.LOCAL) {
-				proposalKind = CompletionProposal.LOCAL_VARIABLE_REF;
-			}
-			CompletionProposal proposal = CompletionProposal.create(
-					proposalKind, position);
+			Object element = reference
+					.getAttribute(IReferenceAttributes.ELEMENT);
+			if (element instanceof IRMember) {
+				reportMember((IRMember) element,
+						((IRMember) element).getName(), true);
+			} else {
+				int proposalKind = CompletionProposal.FIELD_REF;
+				final ReferenceKind kind = reference.getKind();
+				if (reference.getAttribute(IReferenceAttributes.PHANTOM, true) == null
+						&& (kind == ReferenceKind.FUNCTION || reference
+								.hasChild(IValueReference.FUNCTION_OP))) {
+					proposalKind = CompletionProposal.METHOD_REF;
+				} else if (kind == ReferenceKind.LOCAL) {
+					proposalKind = CompletionProposal.LOCAL_VARIABLE_REF;
+				}
+				CompletionProposal proposal = CompletionProposal.create(
+						proposalKind, position);
 
-			int relevance = computeBaseRelevance();
-			relevance += computeRelevanceForInterestingProposal();
-			relevance += computeRelevanceForCaseMatching(prefix,
-					reference.getName());
-			relevance += computeRelevanceForRestrictions(IAccessRule.K_ACCESSIBLE);
-			proposal.setRelevance(relevance);
+				int relevance = computeBaseRelevance();
+				relevance += computeRelevanceForInterestingProposal();
+				relevance += computeRelevanceForCaseMatching(prefix,
+						reference.getName());
+				relevance += computeRelevanceForRestrictions(IAccessRule.K_ACCESSIBLE);
+				proposal.setRelevance(relevance);
 
-			proposal.setCompletion(proposalKind == CompletionProposal.METHOD_REF ? reference
-					.getName() + "()"
-					: reference.getName());
-			proposal.setName(reference.getName());
-			proposal.setExtraInfo(reference);
-			if (proposalKind == CompletionProposal.METHOD_REF) {
-				final IRMethod method = (IRMethod) reference.getAttribute(
-						IReferenceAttributes.R_METHOD, true);
-				if (method != null) {
-					int paramCount = method.getParameterCount();
-					if (paramCount > 0) {
-						final String[] params = new String[paramCount];
-						for (int i = 0; i < paramCount; ++i) {
-							params[i] = method.getParameters().get(i).getName();
-						}
-						proposal.setParameterNames(params);
-						if (method.getParameters().get(paramCount - 1)
-								.getKind() != ParameterKind.NORMAL) {
-							int requiredCount = method.getParameters().size();
-							while (requiredCount > 0
-									&& method.getParameters()
-											.get(requiredCount - 1).getKind() != ParameterKind.NORMAL) {
-								--requiredCount;
+				proposal.setCompletion(proposalKind == CompletionProposal.METHOD_REF ? reference
+						.getName() + "()"
+						: reference.getName());
+				proposal.setName(reference.getName());
+				proposal.setExtraInfo(reference);
+				if (proposalKind == CompletionProposal.METHOD_REF) {
+					final IRMethod method = (IRMethod) reference.getAttribute(
+							IReferenceAttributes.R_METHOD, true);
+					if (method != null) {
+						int paramCount = method.getParameterCount();
+						if (paramCount > 0) {
+							final String[] params = new String[paramCount];
+							for (int i = 0; i < paramCount; ++i) {
+								params[i] = method.getParameters().get(i)
+										.getName();
 							}
-							if (requiredCount == 0
-									&& method.getParameters()
-											.get(requiredCount).getKind() == ParameterKind.VARARGS) {
-								++requiredCount; // heuristic...
-							}
-							if (requiredCount != paramCount) {
-								proposal.setAttribute(
-										CompletionProposal.ATTR_REQUIRED_PARAM_COUNT,
-										requiredCount);
+							proposal.setParameterNames(params);
+							if (method.getParameters().get(paramCount - 1)
+									.getKind() != ParameterKind.NORMAL) {
+								int requiredCount = method.getParameters()
+										.size();
+								while (requiredCount > 0
+										&& method.getParameters()
+												.get(requiredCount - 1)
+												.getKind() != ParameterKind.NORMAL) {
+									--requiredCount;
+								}
+								if (requiredCount == 0
+										&& method.getParameters()
+												.get(requiredCount).getKind() == ParameterKind.VARARGS) {
+									++requiredCount; // heuristic...
+								}
+								if (requiredCount != paramCount) {
+									proposal.setAttribute(
+											CompletionProposal.ATTR_REQUIRED_PARAM_COUNT,
+											requiredCount);
+								}
 							}
 						}
 					}
 				}
+				accept(proposal);
 			}
-			accept(proposal);
 		}
 
 		public void reportTypeRef(Type type) {
