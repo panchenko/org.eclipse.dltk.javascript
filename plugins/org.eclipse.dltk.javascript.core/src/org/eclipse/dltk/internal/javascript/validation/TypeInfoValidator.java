@@ -94,6 +94,7 @@ import org.eclipse.dltk.javascript.typeinfo.IRClassType;
 import org.eclipse.dltk.javascript.typeinfo.IRConstructor;
 import org.eclipse.dltk.javascript.typeinfo.IRElement;
 import org.eclipse.dltk.javascript.typeinfo.IRFunctionType;
+import org.eclipse.dltk.javascript.typeinfo.IRLocalType;
 import org.eclipse.dltk.javascript.typeinfo.IRMapType;
 import org.eclipse.dltk.javascript.typeinfo.IRMember;
 import org.eclipse.dltk.javascript.typeinfo.IRMethod;
@@ -1814,8 +1815,19 @@ public class TypeInfoValidator implements IBuildParticipant,
 				// test if it is not a function override of a super local type class.
 				Set<String> directChildren = null;
 				if (reference.getParent() != null)
-					directChildren = reference.getParent().getDirectChildren(
+					if (reference.getParent().getName()
+							.equals(IRLocalType.PROTOTYPE_PROPERTY)) {
+						directChildren = Collections.emptySet(); // just ignore
+																	// it if it
+																	// is an
+																	// assignment
+																	// to
+																	// prototype
+					} else {
+						directChildren = reference.getParent()
+								.getDirectChildren(
 							IValue.NO_LOCAL_TYPES);
+					}
 				if (directChildren == null
 						|| directChildren.contains(reference.getName())) {
 				reporter.reportProblem(JavaScriptProblems.UNASSIGNABLE_ELEMENT,

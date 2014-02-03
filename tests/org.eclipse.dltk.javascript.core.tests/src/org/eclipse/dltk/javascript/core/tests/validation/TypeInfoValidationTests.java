@@ -3748,6 +3748,42 @@ public void testFunctionCallFromUnion() {
 
 	}
 	
+	public void testPrototypeOverrideFunctions() {
+		final StringList code = new StringList();
+		code.add("function Base(name) {");
+		code.add("	this.name = name");
+		code.add("}");
+		code.add("Base.prototype = {");
+		code.add("		method: function(a,b,c) {");
+		code.add("			return 'method1 in base called'");
+		code.add("		}");
+		code.add("}");
+		code.add("Base.prototype.method2 = function(a,b,c) {");
+		code.add("		return 'method2 in base called'");
+		code.add("}");
+		code.add("/**");
+		code.add(" * @extends {Base}");
+		code.add(" */");
+		code.add("function Sub(name, age) {");
+		code.add("	Base.call(this, name)");
+		code.add("	this.age = age");
+		code.add("}");
+		code.add("Sub.prototype = Object.create(Base.prototype, {");
+		code.add("			method: {");
+		code.add("				value: function(a,b) {");
+		code.add("					return 'method1 in sub called'");
+		code.add("				},");
+		code.add("				enumerable: true");
+		code.add("			}");
+		code.add("		})");
+		code.add("Sub.prototype.method2 = function(a,b,c) {");
+		code.add("		return 'method2 in sub called'");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+
+	}
+	
 	public void testApplyCall() {
 		final StringList code = new StringList();
 		code.add("function test() {var args = Array.prototype.slice.apply(arguments, [1]);");
