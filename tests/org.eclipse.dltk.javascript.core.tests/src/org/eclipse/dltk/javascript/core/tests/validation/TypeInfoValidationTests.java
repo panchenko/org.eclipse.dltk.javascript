@@ -3706,4 +3706,85 @@ public void testFunctionCallFromUnion() {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
+	
+	public void testPrototypeThroughObjectCreate() {
+		final StringList code = new StringList();
+		code.add("function Base(name) {");
+		code.add("	this.name = name");
+		code.add("}");
+		code.add("Base.prototype = {");
+		code.add("		baseMethod: function(a,b,c) {");
+		code.add("			return 'baseMethod called'");
+		code.add("		}");
+		code.add("}");
+		code.add("/**");
+		code.add(" * @extends {Base}");
+		code.add(" */");
+		code.add("function Sub(name, age) {");
+		code.add("	Base.call(this, name)");
+		code.add("	this.age = age");
+		code.add("}");
+		code.add("Sub.prototype = Object.create(Base.prototype, {");
+		code.add("			subMethod: {");
+		code.add("				value: function(a,b) {");
+		code.add("					return 'subMethod called'");
+		code.add("				},");
+		code.add("				enumerable: true");
+		code.add("			}");
+		code.add("		})");
+		code.add("Sub.prototype.subMethod2 = function(a,b,c) {");
+		code.add("		return 'subMethod2 called'");
+		code.add("}");
+		code.add("function test2() {");
+		code.add("	var x = new Sub('DLTK', 11)");
+		code.add("	var name = x.name;");
+		code.add("	var age = x.age;");
+		code.add("	x.baseMethod(name,age,age);");
+		code.add("	x.subMethod(name,age)");
+		code.add("	x.subMethod2(name,age,age);");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+
+	}
+	
+	public void testApplyCall() {
+		final StringList code = new StringList();
+		code.add("function test() {var args = Array.prototype.slice.apply(arguments, [1]);");
+		code.add("args.slice(1);}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+
+	public void testCallCall() {
+		final StringList code = new StringList();
+		code.add("function test() {");
+		code.add("var args = Array.prototype.slice.call(arguments, 1);");
+		code.add("args.slice(1);");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
+	public void testBindCall() {
+		final StringList code = new StringList();
+		code.add("function A(nr) {");
+		code.add("	this.nr = nr;");
+		code.add("	/**");
+		code.add("	 * @return {Number}");
+		code.add("	 */");
+		code.add("	this.getNr = function()");
+		code.add("	{");
+		code.add("		return this.nr;");
+		code.add("	}");
+		code.add("}");
+		code.add("var a1 = new A(1);");
+		code.add("var a2 = new A(2);");
+		code.add("var a = a1.getNr();");
+		code.add("a.toExponential();");
+		code.add("var b = a1.getNr.bind(a2)();");
+		code.add("b.toExponential();");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
 }

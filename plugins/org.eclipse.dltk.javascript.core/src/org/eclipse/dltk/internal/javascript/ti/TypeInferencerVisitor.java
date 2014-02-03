@@ -13,6 +13,7 @@ package org.eclipse.dltk.internal.javascript.ti;
 
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.List;
@@ -125,6 +126,7 @@ import org.eclipse.dltk.javascript.typeinfo.IRMapType;
 import org.eclipse.dltk.javascript.typeinfo.IRMethod;
 import org.eclipse.dltk.javascript.typeinfo.IRProperty;
 import org.eclipse.dltk.javascript.typeinfo.IRRecordMember;
+import org.eclipse.dltk.javascript.typeinfo.IRRecordType;
 import org.eclipse.dltk.javascript.typeinfo.IRSimpleType;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.IRTypeDeclaration;
@@ -533,6 +535,11 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					reference, IRMethod.class);
 			if (methods != null && methods.size() == 1) {
 				final IRMethod method = methods.get(0);
+				IValueReference ref = checkSpecialJavascriptFunctionCalls(
+						reference,
+						arguments, method);
+				if (ref != null)
+					return ref;
 				if (method.isGeneric()) {
 					final IRType type = evaluateGenericCall(method, arguments);
 					return ConstantValue.of(type);
@@ -565,6 +572,62 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		} else {
 			return null;
 		}
+	}
+
+	protected IValueReference checkSpecialJavascriptFunctionCalls(
+			final IValueReference reference, final IValueReference[] arguments,
+			final IRMethod method) {
+		if (method.getName() != null) {
+			if (reference.getParent() != null
+					&& RTypes.FUNCTION.getDeclaration().equals(
+							method.getDeclaringType())) {
+
+				if ("call".equals(method.getName())
+						|| "apply".equals(method.getName())) {
+					Object x = reference.getParent().getAttribute(
+							IReferenceAttributes.ELEMENT);
+					if (x instanceof IRMethod) {
+						return ConstantValue.of(((IRMethod) x).getType());
+					}
+				} else if ("bind".equals(method.getName())) {
+					return reference.getParent();
+				}
+			} else if (method.getName().equals("create")
+					&& RTypes.OBJECT.getDeclaration().equals(
+							method.getDeclaringType())) {
+				if (arguments.length == 1)
+					return arguments[0];
+				else if (arguments.length == 2) {
+					AnonymousValue value = new AnonymousValue();
+					value.addValue(arguments[0], false);
+					JSTypeSet types = arguments[1].getTypes();
+					for (IRType type : types) {
+						if (type instanceof IRRecordType) {
+							List<IRRecordMember> newMembers = new ArrayList<IRRecordMember>();
+							Collection<IRRecordMember> members = ((IRRecordType) type)
+									.getMembers();
+							for (IRRecordMember member : members) {
+								if (member.getType() instanceof IRRecordType) {
+									IRRecordMember valueMember = ((IRRecordType) member
+											.getType()).getMember("value");
+									if (valueMember != null) {
+										newMembers.add(new RRecordMember(member
+												.getName(), valueMember
+												.getType(), valueMember
+												.getSource()));
+									}
+								}
+							}
+							value.addValue(ConstantValue.of(RTypes
+									.recordType(newMembers)), true);
+						}
+					}
+
+					return value;
+				}
+			}
+		}
+		return null;
 	}
 
 	protected IRType evaluateGenericCall(IRMethod rMethod,

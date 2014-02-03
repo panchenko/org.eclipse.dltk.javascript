@@ -959,6 +959,10 @@ public class TypeInfoValidator implements IBuildParticipant,
 					reference, IRMethod.class);
 			if (methods != null && methods.size() == 1) {
 				final IRMethod method = methods.get(0);
+				IValueReference ref = checkSpecialJavascriptFunctionCalls(
+						reference, arguments, method);
+				if (ref != null)
+					return ref;
 				if (method.isGeneric()) {
 					if (!JavaScriptValidations.checkParameterCount(method,
 							args.size())) {
