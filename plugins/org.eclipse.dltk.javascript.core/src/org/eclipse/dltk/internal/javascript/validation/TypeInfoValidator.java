@@ -1082,7 +1082,7 @@ public class TypeInfoValidator implements IBuildParticipant,
 				if (expressionType instanceof IRFunctionType) {
 					validateCallExpressionRMethod(reference, arguments,
 							methodNode, new RMethodFunctionWrapper(
-									(IRFunctionType) expressionType));
+									(IRFunctionType) expressionType, reference));
 					return;
 				} else if (expressionType instanceof IRClassType) {
 					final IRTypeDeclaration target = ((IRClassType) expressionType)

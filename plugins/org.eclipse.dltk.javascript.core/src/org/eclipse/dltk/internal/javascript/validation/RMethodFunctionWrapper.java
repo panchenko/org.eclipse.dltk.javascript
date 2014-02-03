@@ -16,7 +16,11 @@ import java.util.Set;
 
 import org.eclipse.dltk.compiler.problem.IProblemCategory;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
+import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
+import org.eclipse.dltk.javascript.typeinference.IValueReference;
+import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 import org.eclipse.dltk.javascript.typeinfo.IRFunctionType;
+import org.eclipse.dltk.javascript.typeinfo.IRMember;
 import org.eclipse.dltk.javascript.typeinfo.IRMethod;
 import org.eclipse.dltk.javascript.typeinfo.IRParameter;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
@@ -28,9 +32,23 @@ import org.eclipse.dltk.javascript.typeinfo.model.Visibility;
 public class RMethodFunctionWrapper implements IRMethod {
 
 	private final IRFunctionType functionType;
+	private final Visibility visibility;
 
-	public RMethodFunctionWrapper(IRFunctionType functionType) {
+	public RMethodFunctionWrapper(IRFunctionType functionType,
+			IValueReference reference) {
 		this.functionType = functionType;
+		IMethod method = (IMethod) reference.getAttribute(
+				IReferenceAttributes.METHOD, true);
+		if (method != null)
+			visibility = method.getVisibility();
+		else {
+			IRMember member = (IRMember) reference.getAttribute(
+					IReferenceAttributes.ELEMENT, true);
+			if (member != null)
+				visibility = member.getVisibility();
+			else
+				visibility = Visibility.PUBLIC;
+		}
 	}
 
 	public boolean isDeprecated() {
@@ -38,7 +56,7 @@ public class RMethodFunctionWrapper implements IRMethod {
 	}
 
 	public Visibility getVisibility() {
-		return Visibility.PUBLIC;
+		return visibility;
 	}
 
 	public String getName() {
