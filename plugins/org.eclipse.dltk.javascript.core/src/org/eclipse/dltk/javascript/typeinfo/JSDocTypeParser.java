@@ -388,6 +388,17 @@ public class JSDocTypeParser {
 			}
 			final JSType type = parse(input, true);
 			if (type != null) {
+				if (input.LT(1) == '.' && input.LT(2) == '.'
+						&& input.LT(3) == '.') {
+					input.consume();
+					input.consume();
+					input.consume();
+					varargs = true;
+					if (input.LT(1) == '[') {
+						input.consume();
+						squareBracket = true;
+					}
+				}
 				final Parameter parameter = TypeInfoModelFactory.eINSTANCE
 						.createParameter();
 				parameter.setType(type);
