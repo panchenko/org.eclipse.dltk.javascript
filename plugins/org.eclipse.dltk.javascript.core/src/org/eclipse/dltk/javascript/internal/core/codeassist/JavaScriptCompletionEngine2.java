@@ -556,6 +556,11 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 					final String[] params = new String[paramCount];
 					for (int i = 0; i < paramCount; ++i) {
 						params[i] = parameters.get(i).getName();
+						if (params[i] == null
+								&& parameters.get(i).getType() != null)
+							params[i] = parameters.get(i).getType().getName();
+						if (params[i] == null)
+							params[i] = "anon_" + i;
 					}
 					proposal.setParameterNames(params);
 					if (parameters.get(paramCount - 1).getKind() != ParameterKind.NORMAL) {

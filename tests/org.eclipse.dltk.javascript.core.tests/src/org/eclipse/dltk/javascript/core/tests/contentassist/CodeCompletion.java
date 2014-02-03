@@ -1013,4 +1013,32 @@ public class CodeCompletion extends AbstractCompletionTest {
 	}
 	
 
+	public void testTypeDefParameterNamesTest() {
+		final StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @typedef {{ log: function(String, Number, *) }}");
+		code.add(" */");
+		code.add("var myType");
+		code.add("function tst(){");
+		code.add("	/**");
+		code.add("	 * @type {myType}");
+		code.add("	 */");
+		code.add("	var x = null;");
+		code.add("	x.log");
+		code.add("}");
+		final IModuleSource module = new TestModule(code.toString());
+		final List<CompletionProposal> results = new ArrayList<CompletionProposal>();
+		final ICompletionEngine completionEngine = createEngine(results,
+				JSCompletionEngine.OPTION_KEYWORDS);
+		completionEngine.complete(module, lastPositionInFile(".log", module), 0);
+		assertEquals(1, results.size());
+		CompletionProposal completionProposal = results.get(0);
+		assertEquals("log", completionProposal.getName());
+		String[] parameterNames = completionProposal.getParameterNames();
+		assertEquals(3, parameterNames.length);
+		assertEquals("String", parameterNames[0]);
+		assertEquals("Number", parameterNames[1]);
+		assertEquals("Any", parameterNames[2]);
+		
+	}
 }
