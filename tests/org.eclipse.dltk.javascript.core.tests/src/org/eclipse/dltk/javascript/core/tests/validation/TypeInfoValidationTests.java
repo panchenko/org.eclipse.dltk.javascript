@@ -3824,23 +3824,18 @@ public void testFunctionCallFromUnion() {
 		assertEquals(problems.toString(), 0, problems.size());
 	}
 	
-	
 	public void testDeprecatedProrotypeFunctions() {
 		final StringList code = new StringList();
 		code.add("function Sub(name, age) {");
 		code.add(" this.age = age");
 		code.add("}");
 		code.add("Sub.prototype = {");
-		code.add("		  /**");
-		code.add("		   * @deprecated");
-		code.add("		   */");
-		code.add("		  baseMethod: function() {");
-		code.add("		   return 'baseMethod called'");
-		code.add("		  }");
-		code.add("		 }");
-		code.add("	  /**");
-		code.add("	   * @deprecated");
-		code.add("	   */");
+		code.add("	/** @deprecated */");
+		code.add("	baseMethod: function() {");
+		code.add("	  return 'baseMethod called'");
+		code.add("	}");
+		code.add("}");
+		code.add("/** @deprecated */");
 		code.add("Sub.prototype.subMethod2 = function(a,b,c) {");
 		code.add("	return 'subMethod2 called'");
 		code.add("}");
