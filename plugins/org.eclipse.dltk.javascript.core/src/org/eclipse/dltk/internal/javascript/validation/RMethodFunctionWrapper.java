@@ -18,6 +18,7 @@ import org.eclipse.dltk.compiler.problem.IProblemCategory;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
+import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMember;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 import org.eclipse.dltk.javascript.typeinfo.IRFunctionType;
 import org.eclipse.dltk.javascript.typeinfo.IRMember;
@@ -32,7 +33,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Visibility;
 public class RMethodFunctionWrapper implements IRMethod {
 
 	private final IRFunctionType functionType;
-	private final Visibility visibility;
+	private final Object source;
 
 	public RMethodFunctionWrapper(IRFunctionType functionType,
 			IValueReference reference) {
@@ -40,26 +41,32 @@ public class RMethodFunctionWrapper implements IRMethod {
 		IMethod method = (IMethod) reference.getAttribute(
 				IReferenceAttributes.METHOD, true);
 		if (method != null)
-			visibility = method.getVisibility();
-		else {
-			IRMember member = (IRMember) reference.getAttribute(
-					IReferenceAttributes.ELEMENT, true);
-			if (member != null)
-				visibility = member.getVisibility();
-			else
-				visibility = Visibility.PUBLIC;
-		}
+			source = method;
+		else
+			source = reference.getAttribute(IReferenceAttributes.ELEMENT, true);
 	}
 
 	public boolean isDeprecated() {
+		if (source instanceof IRMember)
+			return ((IRMember) source).isDeprecated();
+		if (source instanceof IMember)
+			return ((IMember) source).isDeprecated();
 		return false;
 	}
 
 	public Visibility getVisibility() {
-		return visibility;
+		if (source instanceof IRMember)
+			return ((IRMember) source).getVisibility();
+		if (source instanceof IMember)
+			return ((IMember) source).getVisibility();
+		return Visibility.PUBLIC;
 	}
 
 	public String getName() {
+		if (source instanceof IRMember)
+			return ((IRMember) source).getName();
+		if (source instanceof IMember)
+			return ((IMember) source).getName();
 		return null;
 	}
 
@@ -68,10 +75,16 @@ public class RMethodFunctionWrapper implements IRMethod {
 	}
 
 	public Set<IProblemCategory> getSuppressedWarnings() {
+		if (source instanceof IRMember)
+			return ((IRMember) source).getSuppressedWarnings();
+		if (source instanceof IMember)
+			return ((IMember) source).getSuppressedWarnings();
 		return null;
 	}
 
 	public boolean isSuppressed(IProblemIdentifier problemIdentifier) {
+		if (source instanceof IRMember)
+			return ((IRMember) source).isSuppressed(problemIdentifier);
 		return false;
 	}
 
@@ -101,22 +114,32 @@ public class RMethodFunctionWrapper implements IRMethod {
 	}
 
 	public IRTypeDeclaration getDeclaringType() {
+		if (source instanceof IRMember)
+			return ((IRMember) source).getDeclaringType();
 		return null;
 	}
 
 	public boolean isStatic() {
+		if (source instanceof IRMember)
+			return ((IRMember) source).isStatic();
 		return false;
 	}
 
 	public boolean isAbstract() {
+		if (source instanceof IRMethod)
+			return ((IRMethod) source).isAbstract();
 		return false;
 	}
 
 	public boolean isVisible() {
+		if (source instanceof IRMember)
+			return ((IRMember) source).isVisible();
 		return true;
 	}
 
 	public boolean isGeneric() {
+		if (source instanceof IRMethod)
+			return ((IRMethod) source).isGeneric();
 		return false;
 	}
 
