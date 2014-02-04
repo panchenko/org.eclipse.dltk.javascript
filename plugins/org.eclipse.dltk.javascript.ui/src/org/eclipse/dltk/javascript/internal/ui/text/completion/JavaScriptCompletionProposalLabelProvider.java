@@ -11,6 +11,7 @@ package org.eclipse.dltk.javascript.internal.ui.text.completion;
 
 import org.eclipse.dltk.core.CompletionProposal;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
+import org.eclipse.dltk.internal.javascript.ti.JSMethod;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
@@ -316,6 +317,8 @@ public class JavaScriptCompletionProposalLabelProvider extends
 			final IVariable variable = (IVariable) reference
 					.getAttribute(IReferenceAttributes.VARIABLE);
 			return variable != null && variable.isDeprecated();
+		} else if (proposal.getExtraInfo() instanceof JSMethod) {
+			return ((JSMethod) proposal.getExtraInfo()).isDeprecated();
 		}
 		return false;
 	}
