@@ -3824,7 +3824,7 @@ public void testFunctionCallFromUnion() {
 		assertEquals(problems.toString(), 0, problems.size());
 	}
 	
-	public void testDeprecatedProrotypeFunctions() {
+	public void testDeprecatedPrototypeFunctions() {
 		final StringList code = new StringList();
 		code.add("function Sub(name, age) {");
 		code.add(" this.age = age");
@@ -3845,11 +3845,39 @@ public void testFunctionCallFromUnion() {
 		code.add("	y.baseMethod();");
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 2, problems.size());
+		assertEquals(JavaScriptProblems.DEPRECATED_FUNCTION, problems.get(0)
+				.getID());
+		assertEquals(JavaScriptProblems.DEPRECATED_FUNCTION, problems.get(1)
+				.getID());
+	}
+	
+	public void testDeprecatedValidation() {
+		final StringList code = new StringList();
+		code.add("var y = {");
+		code.add("	/**");
+		code.add("	 * @deprecated"); 
+		code.add("	 */");
+		code.add("	func1: function() {}");
+		code.add("}");
+		code.add("/**");
+		code.add(" * @deprecated"); 
+		code.add(" */");
+		code.add("y.func = function() {}");
+		code.add("/**");
+		code.add(" * @deprecated"); 
+		code.add(" */");
+		code.add("function test() {}");
+		code.add("y.test = test;");
+		code.add("y.func();");
+		code.add("y.func1();");
+		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 3, problems.size());
 		assertEquals(JavaScriptProblems.DEPRECATED_FUNCTION, problems.get(0)
 				.getID());
 		assertEquals(JavaScriptProblems.DEPRECATED_FUNCTION, problems.get(1)
 				.getID());
 		assertEquals(JavaScriptProblems.DEPRECATED_FUNCTION, problems.get(2)
-				.getID());	}
+				.getID());
+	}
 }

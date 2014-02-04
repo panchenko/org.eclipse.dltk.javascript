@@ -2060,7 +2060,15 @@ public class TypeInfoValidator implements IBuildParticipant,
 					IRMethod method = (IRMethod) result.getAttribute(R_METHOD);
 					if (method != null) {
 						if (method.isDeprecated()) {
-							reporter.reportProblem(
+							boolean report = true;
+							JSNode parent = propertyExpression.getParent();
+							if (parent instanceof BinaryOperation) {
+								Expression rightExpression = ((BinaryOperation) parent)
+										.getRightExpression();
+								report = !(rightExpression instanceof FunctionStatement);
+							}
+							if (report)
+								reporter.reportProblem(
 									JavaScriptProblems.DEPRECATED_FUNCTION,
 									NLS.bind(
 											ValidationMessages.DeprecatedFunction,
