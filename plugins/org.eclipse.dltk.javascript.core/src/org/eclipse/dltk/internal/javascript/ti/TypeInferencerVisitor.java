@@ -594,12 +594,10 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				}
 			} else if (method.getName().equals("create")
 					&& RTypes.OBJECT.getDeclaration().equals(
-							method.getDeclaringType())) {
-				if (arguments.length == 1)
-					return arguments[0];
-				else if (arguments.length == 2) {
-					AnonymousValue value = new AnonymousValue();
-					value.addValue(arguments[0], false);
+							method.getDeclaringType()) && arguments.length > 0) {
+				AnonymousValue value = new AnonymousValue();
+				value.addValue(arguments[0], false);
+				if (arguments.length == 2) {
 					JSTypeSet types = arguments[1].getTypes();
 					for (IRType type : types) {
 						if (type instanceof IRRecordType) {
@@ -622,7 +620,6 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 									.recordType(newMembers)), true);
 						}
 					}
-
 					return value;
 				}
 			}

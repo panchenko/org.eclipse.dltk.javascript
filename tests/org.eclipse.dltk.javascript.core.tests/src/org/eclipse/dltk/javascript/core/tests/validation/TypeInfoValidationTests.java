@@ -3880,4 +3880,39 @@ public void testFunctionCallFromUnion() {
 		assertEquals(JavaScriptProblems.DEPRECATED_FUNCTION, problems.get(2)
 				.getID());
 	}
+	
+	public void testObjectCreateWith2SubclassesUsingtheBase() {
+		final StringList code = new StringList();
+		code.add("function AbstractMessage(format, parameters, throwable) {");
+		code.add("	this.throwable = throwable");
+		code.add("}");
+		code.add("/**");
+		code.add(" * @return {Error}");
+		code.add(" */");
+		code.add(" AbstractMessage.prototype.getThrowable = function() {");
+		code.add("	 return null;");
+		code.add("}");
+		code.add("function ObjectMessage(object) {}");
+		code.add("ObjectMessage.prototype = Object.create(AbstractMessage.prototype)");
+		code.add("ObjectMessage.prototype.constructor = ObjectMessage");
+		code.add("ObjectMessage.prototype.getThrowable = function() {");
+		code.add("	return (this.format instanceof Error) ? this.format : null");
+		code.add("}");
+		code.add("function LogEvent(message) {");
+		code.add("	/**");
+		code.add("	 * @type {AbstractMessage}");
+		code.add("	 */");
+		code.add("	this.message = message");
+		code.add("}");
+		code.add("function OutputAppender() {}");
+		code.add("/**");
+		code.add(" * @param {LogEvent} logEvent");
+		code.add(" */");
+		code.add("OutputAppender.prototype.append = function(logEvent){");
+		code.add("	var ex2 = logEvent.message.getThrowable()");
+		code.add("	ex2.stack");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
 }
