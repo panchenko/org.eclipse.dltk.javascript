@@ -6,6 +6,7 @@ import static org.eclipse.dltk.javascript.typeinfo.MemberPredicates.STATIC;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -1070,4 +1071,74 @@ public class CodeCompletion extends AbstractCompletionTest {
 		assertEquals("Any", parameterNames[2]);
 		
 	}
+	
+	
+	public void testPrototypeChainWithExtendsPublicPrivateAndProtectedMethods() {
+		final StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @param {String} name");
+		code.add(" */");
+		code.add("function BaseEntity(name) {");
+		code.add("	/**");
+		code.add("	 * @protected");
+		code.add("	 */");
+		code.add("	this.name = name");
+		code.add("}");
+		code.add("BaseEntity.prototype = {");
+		code.add("	publicMethod: function() {},");
+		code.add("		/**");
+		code.add("		 * @protected");
+		code.add("		 */");
+		code.add("		protectedMethod: function() {},");
+		code.add("		/**");
+		code.add("		 * @deprecated");
+		code.add("		 */");
+		code.add("		deprecatedMethod: function() {}");
+		code.add("}");
+		code.add("BaseEntity.prototype.getName = function() {");
+		code.add("	return this.name");
+		code.add("}");
+		code.add("/**");
+		code.add(" * @extends {BaseEntity}");
+		code.add(" * @param {Str*ing} name");
+		code.add(" * @param {String} type");
+		code.add(" * @constructor ");
+		code.add(" */");
+		code.add("function ExtendedEntity(name, type) {");
+		code.add("	if (! (this instanceof ExtendedEntity)) {");
+		code.add("	return new ExtendedEntity(name, type)");
+		code.add("}");
+		code.add("BaseEntity.call(this, name)");
+		code.add("/**@protected*/");
+		code.add("this.type = type");
+		code.add("}");
+		code.add("ExtendedEntity.prototype = Object.create(BaseEntity.prototype)");
+		code.add("ExtendedEntity.prototype.constructor = ExtendedEntity");
+		code.add("ExtendedEntity.prototype.getType = function() {");
+		code.add(" return this.type");
+		code.add("}");
+		code.add("function test() {");
+		code.add(" var x = new ExtendedEntity('Servoy', 'company')");
+		code.add(" x.");
+		code.add("}");
+		final IModuleSource module = new TestModule(code.toString());
+		final List<CompletionProposal> results = new ArrayList<CompletionProposal>();
+		final ICompletionEngine completionEngine = createEngine(results,
+				JSCompletionEngine.OPTION_KEYWORDS);
+		completionEngine.complete(module, lastPositionInFile("x.", module), 0);
+		assertEquals(14, results.size());
+		
+		HashSet<String> names = new HashSet<String>(16);
+		for (CompletionProposal cp : results) {
+			names.add(cp.getName());
+		}
+		
+		assertTrue(names.contains("getType"));
+		assertTrue(names.contains("publicMethod"));
+		assertTrue(names.contains("deprecatedMethod"));
+		assertTrue(names.contains("getName"));
+		
+//		assertFalse(names.contains("protectedMethod"));
+	}
 }
+

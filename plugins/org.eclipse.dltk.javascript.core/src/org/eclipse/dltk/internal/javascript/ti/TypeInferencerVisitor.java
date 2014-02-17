@@ -616,12 +616,14 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 									}
 								}
 							}
-							value.addValue(ConstantValue.of(RTypes
+							if (newMembers.size() > 0) {
+								value.addValue(ConstantValue.of(RTypes
 									.recordType(newMembers)), true);
+							}
 						}
 					}
-					return value;
 				}
+				return value;
 			}
 		}
 		return null;
