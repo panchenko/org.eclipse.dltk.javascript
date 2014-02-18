@@ -596,7 +596,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					&& RTypes.OBJECT.getDeclaration().equals(
 							method.getDeclaringType()) && arguments.length > 0) {
 				AnonymousValue value = new AnonymousValue();
-				value.addValue(arguments[0], false);
+				value.getValue().addValue(
+						((IValueProvider) arguments[0]).getValue());
 				if (arguments.length == 2) {
 					JSTypeSet types = arguments[1].getTypes();
 					for (IRType type : types) {
