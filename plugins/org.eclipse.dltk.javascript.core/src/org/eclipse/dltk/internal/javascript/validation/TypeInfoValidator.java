@@ -985,6 +985,45 @@ public class TypeInfoValidator implements IBuildParticipant,
 				pushExpressionValidator(new CallExpressionValidator(
 						peekFunctionScope(), node, reference, arguments,
 						methods));
+				if (methods != null && methods.size() > 1) {
+					// try to found the best match
+					IRMethod bestMatch = null;
+					outer: for (IRMethod method : methods) {
+						if (method.getParameterCount() == arguments.length) {
+							for (int i = 0; i < arguments.length; i++) {
+								TypeCompatibility tc = testArgumentType(method
+										.getParameters().get(i).getType(),
+										arguments[i]);
+								if (tc != TypeCompatibility.TRUE) {
+									continue outer;
+								}
+							}
+							// both match, which one is the more specific one
+							if (bestMatch != null) {
+								List<IRParameter> parameters = method
+										.getParameters();
+								for (int i = 0; i < parameters.size(); i++) {
+									IRType type = parameters.get(i).getType();
+									if (type != null) {
+										IRType bestMatchType = bestMatch
+												.getParameters().get(i)
+												.getType();
+										if (bestMatchType == null) {
+											break;
+										}
+										if (type.isAssignableFrom(bestMatchType) == TypeCompatibility.TRUE) {
+											continue outer;
+										}
+									}
+								}
+
+							}
+							bestMatch = method;
+						}
+					}
+					if (bestMatch != null)
+						return ConstantValue.of(bestMatch.getType());
+				}
 				final IRType expressionType = JavaScriptValidations
 						.typeOf(reference);
 				if (expressionType != null) {
@@ -1574,7 +1613,7 @@ public class TypeInfoValidator implements IBuildParticipant,
 					sb.append(argument.getDeclaredType().getName());
 				} else {
 					final JSTypeSet types = argument.getTypes();
-					if (types.size() == 1) {
+					if (types.size() > 0) {
 						sb.append(types.toRType().getName());
 					} else {
 						sb.append('?');

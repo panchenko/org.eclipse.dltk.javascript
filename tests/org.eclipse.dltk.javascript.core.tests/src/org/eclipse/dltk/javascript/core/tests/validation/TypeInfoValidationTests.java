@@ -3915,4 +3915,15 @@ public void testFunctionCallFromUnion() {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
+	
+	public void testUnionTypeAsArgument() {
+		final StringList code = new StringList();
+		code.add("var s = '== {{DATE}} ==';");
+		code.add("var x = 10;");
+		code.add("if (s)");
+		code.add("	x = ''");
+		code.add("s = s.replace('',x);");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+	}
 }
