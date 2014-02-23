@@ -17,6 +17,7 @@ import java.util.Iterator;
 import org.eclipse.dltk.javascript.typeinfo.TypeLibraryFormat;
 import org.eclipse.dltk.javascript.typeinfo.TypeLibraryMetaType;
 import org.eclipse.dltk.javascript.typeinfo.model.Constructor;
+import org.eclipse.dltk.javascript.typeinfo.model.MConstructor;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
@@ -50,10 +51,13 @@ public class ClosureCompilerApplication implements IApplication {
 		for (Type type : v.getTypes()) {
 			type.setMetaType(TypeLibraryMetaType.INSTANCE);
 			if (type.getStaticConstructor() != null) {
-				type.getStaticConstructor().setName(type.getName());
-			}
-			for (Constructor constructor : type.getConstructors()) {
-				constructor.setName(type.getName());
+				if (type.getStaticConstructor() instanceof MConstructor) {
+					for (Constructor constructor : ((MConstructor) type.getStaticConstructor()).getChildren()) {
+						constructor.setName(type.getName());
+					}
+				} else {
+					type.getStaticConstructor().setName(type.getName());
+				}
 			}
 			// remove "$" methods - we model them as static constructors.
 			for (Iterator<Member> i = type.getMembers().iterator(); i.hasNext();) {

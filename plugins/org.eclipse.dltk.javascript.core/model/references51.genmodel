@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.eclipse.dltk.javascript.core/src" modelPluginID="org.eclipse.dltk.javascript.core"
+    modelName="References51" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    importerID="org.eclipse.emf.importer.ecore" complianceLevel="6.0" copyrightFields="false"
+    runtimeVersion="2.6" usedGenPackages="references.genmodel#//model" importOrganizing="true">
+  <foreignModel>references51.ecore</foreignModel>
+  <genPackages prefix="TypeInfoModel51" basePackage="org.eclipse.dltk.javascript.typeinfo"
+      disposableProviderFactory="true" ecorePackage="references51.ecore#/">
+    <genClasses ecoreClass="references51.ecore#//MConstructor">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference references51.ecore#//MConstructor/children"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

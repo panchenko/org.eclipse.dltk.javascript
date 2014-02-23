@@ -41,7 +41,7 @@ public class RTypeDeclaration implements IRTypeDeclaration {
 	private List<RTypeDeclaration> traits;
 	private List<IRMember> members;
 	private List<IRConstructor> constructors;
-	private IRConstructor staticConstructor;
+	private List<IRConstructor> staticConstructors;
 
 	public RTypeDeclaration(ITypeSystem typeSystem, Type type) {
 		this.typeSystem = typeSystem;
@@ -159,11 +159,16 @@ public class RTypeDeclaration implements IRTypeDeclaration {
 	}
 
 	public IRConstructor getStaticConstructor() {
-		return staticConstructor;
+		return !staticConstructors.isEmpty() ? staticConstructors.get(0) : null;
 	}
 
-	public void setStaticConstructor(IRConstructor staticConstructor) {
-		this.staticConstructor = staticConstructor;
+	@Override
+	public List<IRConstructor> getStaticConstructors() {
+		return staticConstructors;
+	}
+
+	public void setStaticConstructors(List<IRConstructor> staticConstructors) {
+		this.staticConstructors = staticConstructors;
 	}
 
 	public TypeCompatibility isAssignableFrom(IRTypeDeclaration declaration) {

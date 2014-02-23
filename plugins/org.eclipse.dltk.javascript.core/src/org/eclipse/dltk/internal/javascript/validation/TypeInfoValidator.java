@@ -987,40 +987,8 @@ public class TypeInfoValidator implements IBuildParticipant,
 						methods));
 				if (methods != null && methods.size() > 1) {
 					// try to found the best match
-					IRMethod bestMatch = null;
-					outer: for (IRMethod method : methods) {
-						if (method.getParameterCount() == arguments.length) {
-							for (int i = 0; i < arguments.length; i++) {
-								TypeCompatibility tc = testArgumentType(method
-										.getParameters().get(i).getType(),
-										arguments[i]);
-								if (tc != TypeCompatibility.TRUE) {
-									continue outer;
-								}
-							}
-							// both match, which one is the more specific one
-							if (bestMatch != null) {
-								List<IRParameter> parameters = method
-										.getParameters();
-								for (int i = 0; i < parameters.size(); i++) {
-									IRType type = parameters.get(i).getType();
-									if (type != null) {
-										IRType bestMatchType = bestMatch
-												.getParameters().get(i)
-												.getType();
-										if (bestMatchType == null) {
-											break;
-										}
-										if (type.isAssignableFrom(bestMatchType) == TypeCompatibility.TRUE) {
-											continue outer;
-										}
-									}
-								}
-
-							}
-							bestMatch = method;
-						}
-					}
+					final IRMethod bestMatch = findMostSpecific(methods,
+							arguments);
 					if (bestMatch != null)
 						return ConstantValue.of(bestMatch.getType());
 				}
@@ -1046,6 +1014,42 @@ public class TypeInfoValidator implements IBuildParticipant,
 				}
 			}
 			return reference.getChild(IValueReference.FUNCTION_OP);
+		}
+
+		private <M extends IRMethod> M findMostSpecific(
+				List<M> methods, IValueReference[] arguments) {
+			M bestMatch = null;
+			outer: for (M method : methods) {
+				if (method.getParameterCount() == arguments.length) {
+					final List<IRParameter> parameters = method.getParameters();
+					for (int i = 0; i < arguments.length; i++) {
+						TypeCompatibility tc = testArgumentType(
+								parameters.get(i).getType(), arguments[i]);
+						if (tc != TypeCompatibility.TRUE) {
+							continue outer;
+						}
+					}
+					// both match, which one is the more specific one
+					if (bestMatch != null) {
+						for (int i = 0; i < parameters.size(); i++) {
+							IRType type = parameters.get(i).getType();
+							if (type != null) {
+								IRType bestMatchType = bestMatch
+										.getParameters().get(i).getType();
+								if (bestMatchType == null) {
+									break;
+								}
+								if (type.isAssignableFrom(bestMatchType) == TypeCompatibility.TRUE) {
+									continue outer;
+								}
+							}
+						}
+
+					}
+					bestMatch = method;
+				}
+			}
+			return bestMatch;
 		}
 
 		private void pushExpressionValidator(
@@ -1127,11 +1131,15 @@ public class TypeInfoValidator implements IBuildParticipant,
 					final IRTypeDeclaration target = ((IRClassType) expressionType)
 							.getDeclaration();
 					if (target != null) {
-						final IRConstructor constructor = target
-								.getStaticConstructor();
-						if (constructor != null) {
-							validateCallExpressionMethod(node, reference,
-									arguments, methodNode, constructor);
+						final List<IRConstructor> constructors = target
+								.getStaticConstructors();
+						if (!constructors.isEmpty()) {
+							final IRConstructor constructor = JavaScriptValidations
+									.selectMethod(constructors, arguments, true);
+							if (constructor != null) {
+								validateCallExpressionMethod(node, reference,
+										arguments, methodNode, constructor);
+							}
 							return;
 						}
 					}

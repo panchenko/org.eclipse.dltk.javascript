@@ -37,12 +37,14 @@ import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.Constructor;
 import org.eclipse.dltk.javascript.typeinfo.model.FunctionType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
+import org.eclipse.dltk.javascript.typeinfo.model.MConstructor;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModel51Factory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
 import org.eclipse.dltk.javascript.typeinfo.model.Visibility;
@@ -168,9 +170,13 @@ public class VJETCompiler extends AbstractTypeLibraryCompiler {
 						method.setType(TypeUtil.ref(type));
 						if (type.getStaticConstructor() == null) {
 							type.setStaticConstructor((Constructor) method);
+						} else if (type.getStaticConstructor() instanceof MConstructor) {
+							((MConstructor) type.getStaticConstructor()).getChildren().add((Constructor) method);
 						} else {
-							// TODO implement something for this
-							warn(comment, "Skip additional %s constructor", isStatic ? "static" : "instance");
+							final MConstructor mConstructor = TypeInfoModel51Factory.eINSTANCE.createMConstructor();
+							mConstructor.getChildren().add(type.getStaticConstructor());
+							mConstructor.getChildren().add((Constructor) method);
+							type.setStaticConstructor(mConstructor);
 						}
 					} else {
 						type.getMembers().add(method);
@@ -222,7 +228,6 @@ public class VJETCompiler extends AbstractTypeLibraryCompiler {
 			if (tokenizer.peek() == Token.LEFT_PAREN && returnType instanceof SimpleType
 					&& "constructs".equals(returnType.getName())) {
 				method = TypeInfoModelFactory.eINSTANCE.createConstructor();
-				method.setStatic(isStatic);
 			} else {
 				throw new DeclarationException("Method name expected, got %s:%s", tokenizer.peek(), tokenizer.value());
 			}

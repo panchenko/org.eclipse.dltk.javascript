@@ -195,4 +195,12 @@
 		<provider class="org.eclipse.dltk.javascript.internal.library.TypeLibraryTypeProvider"/>
 		<metaType class="org.eclipse.dltk.javascript.typeinfo.TypeLibraryMetaType"/>
    </extension>
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated references51 -->
+      <package
+            uri="http://www.eclipse.org/dltk/javascript/typeinfo51.ecore"
+            class="org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModel51Package"
+            genModel="model/references51.genmodel"/>
+   </extension>
+
 </plugin>

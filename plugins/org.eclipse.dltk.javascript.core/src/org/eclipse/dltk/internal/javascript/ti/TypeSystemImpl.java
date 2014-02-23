@@ -47,6 +47,7 @@ import org.eclipse.dltk.javascript.typeinfo.RTypes;
 import org.eclipse.dltk.javascript.typeinfo.model.Constructor;
 import org.eclipse.dltk.javascript.typeinfo.model.GenericType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
+import org.eclipse.dltk.javascript.typeinfo.model.MConstructor;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
@@ -226,8 +227,21 @@ public class TypeSystemImpl implements ITypeSystem {
 		declaration.setConstructors(ImmutableList.copyOf(constructors));
 		final Constructor staticConstructor = type.getStaticConstructor();
 		if (staticConstructor != null) {
-			declaration.setStaticConstructor(convertConstructor(
-					staticConstructor, declaration));
+			if (staticConstructor instanceof MConstructor) {
+				final List<Constructor> staticConstructors = ((MConstructor) staticConstructor)
+						.getChildren();
+				final List<IRConstructor> buffer = new ArrayList<IRConstructor>(
+						staticConstructors.size());
+				for (Constructor constructor : staticConstructors) {
+					buffer.add(convertConstructor(constructor, declaration));
+				}
+				declaration.setStaticConstructors(ImmutableList.copyOf(buffer));
+			} else {
+				declaration
+						.setStaticConstructors(ImmutableList
+								.of(convertConstructor(staticConstructor,
+										declaration)));
+			}
 		}
 	}
 

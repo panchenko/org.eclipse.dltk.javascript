@@ -62,7 +62,14 @@ public interface IRTypeDeclaration extends IRElement {
 	 * function, e.g. <code>String(1)</code>
 	 */
 	@Nullable
+	@Deprecated
 	IRConstructor getStaticConstructor();
+
+	/**
+	 * Returns the constructors which are called when this type is used as
+	 * function, e.g. <code>String(1)</code>
+	 */
+	List<IRConstructor> getStaticConstructors();
 
 	/**
 	 * Returns the kind of this type, just delegates to {@link Type#getKind()}
