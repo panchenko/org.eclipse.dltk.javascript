@@ -21,6 +21,8 @@ import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
  * @author jcompagner
  */
 public interface IRLocalType extends IRType, IRTypeExtension {
+	public static final String PROTOTYPE_PROPERTY = "prototype";
+
 	public IValueReference getValue();
 
 	@Nullable

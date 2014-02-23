@@ -69,6 +69,8 @@ public class RRecordMember implements IRRecordMember {
 	}
 
 	public Visibility getVisibility() {
+		if (source instanceof IMember)
+			return ((IMember) source).getVisibility();
 		return Visibility.PUBLIC;
 	}
 

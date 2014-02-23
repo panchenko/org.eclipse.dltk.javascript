@@ -3644,5 +3644,286 @@ public void testFunctionCallFromUnion() {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
+	
+	public void testPrototypeFunction() {
+		final StringList code = new StringList();
+		code.add("function A() {}");
+		code.add("A.prototype.testDirectAssignment = function(){ }");
+		code.add("var x = new A();");
+		code.add("x.testDirectAssignment();");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
 
+	public void testPrototypeFunctionWithExtends() {
+		final StringList code = new StringList();
+		code.add("function A() {}");
+		code.add("/**");
+		code.add(" * @extends {A}");
+		code.add(" */");
+		code.add("function B() {}");
+		code.add("B.prototype = new A();");
+		code.add("B.prototype.testDirectAssignment = function(){ }");
+		code.add("var x = new B();");
+		code.add("x.testDirectAssignment();");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
+	public void testPrototypeFunctionWith2Extends() {
+		final StringList code = new StringList();
+		code.add("function A() {}");
+		code.add("A.prototype.afunction = function(){ }");
+		code.add("/**");
+		code.add(" * @extends {A}");
+		code.add(" */");
+		code.add("function B() {}");
+		code.add("B.prototype = new A();");
+		code.add("B.prototype.bfunction = function(){ }");
+		code.add("/**");
+		code.add(" * @extends {B}");
+		code.add(" */");
+		code.add("function C() {}");
+		code.add("C.prototype = new B();");
+		code.add("C.prototype.testDirectAssignment = function(){ }");
+		code.add("var x = new C();");
+		code.add("x.testDirectAssignment();");
+		code.add("x.bfunction();");
+		code.add("x.afunction();");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
+	
+	public void testPrototypeWithRecordTypeConstruction() {
+		final StringList code = new StringList();
+		code.add("function D1() {}");
+		code.add("D1.prototype = {test: function(a){}}");
+		code.add("D1.prototype.testDirectAssignment = function(b){}");
+		code.add("var x = new D1()");
+		code.add("x.test(1)");
+		code.add("x.testDirectAssignment(2)");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
+	public void testPrototypeThroughObjectCreate() {
+		final StringList code = new StringList();
+		code.add("function Base(name) {");
+		code.add("	this.name = name");
+		code.add("}");
+		code.add("Base.prototype = {");
+		code.add("		baseMethod: function(a,b,c) {");
+		code.add("			return 'baseMethod called'");
+		code.add("		}");
+		code.add("}");
+		code.add("/**");
+		code.add(" * @extends {Base}");
+		code.add(" */");
+		code.add("function Sub(name, age) {");
+		code.add("	Base.call(this, name)");
+		code.add("	this.age = age");
+		code.add("}");
+		code.add("Sub.prototype = Object.create(Base.prototype, {");
+		code.add("			subMethod: {");
+		code.add("				value: function(a,b) {");
+		code.add("					return 'subMethod called'");
+		code.add("				},");
+		code.add("				enumerable: true");
+		code.add("			}");
+		code.add("		})");
+		code.add("Sub.prototype.subMethod2 = function(a,b,c) {");
+		code.add("		return 'subMethod2 called'");
+		code.add("}");
+		code.add("function test2() {");
+		code.add("	var x = new Sub('DLTK', 11)");
+		code.add("	var name = x.name;");
+		code.add("	var age = x.age;");
+		code.add("	x.baseMethod(name,age,age);");
+		code.add("	x.subMethod(name,age)");
+		code.add("	x.subMethod2(name,age,age);");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+
+	}
+	
+	public void testPrototypeOverrideFunctions() {
+		final StringList code = new StringList();
+		code.add("function Base(name) {");
+		code.add("	this.name = name");
+		code.add("}");
+		code.add("Base.prototype = {");
+		code.add("		method: function(a,b,c) {");
+		code.add("			return 'method1 in base called'");
+		code.add("		}");
+		code.add("}");
+		code.add("Base.prototype.method2 = function(a,b,c) {");
+		code.add("		return 'method2 in base called'");
+		code.add("}");
+		code.add("/**");
+		code.add(" * @extends {Base}");
+		code.add(" */");
+		code.add("function Sub(name, age) {");
+		code.add("	Base.call(this, name)");
+		code.add("	this.age = age");
+		code.add("}");
+		code.add("Sub.prototype = Object.create(Base.prototype, {");
+		code.add("			method: {");
+		code.add("				value: function(a,b) {");
+		code.add("					return 'method1 in sub called'");
+		code.add("				},");
+		code.add("				enumerable: true");
+		code.add("			}");
+		code.add("		})");
+		code.add("Sub.prototype.method2 = function(a,b,c) {");
+		code.add("		return 'method2 in sub called'");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+
+	}
+	
+	public void testApplyCall() {
+		final StringList code = new StringList();
+		code.add("function test() {var args = Array.prototype.slice.apply(arguments, [1]);");
+		code.add("args.slice(1);}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+
+	public void testCallCall() {
+		final StringList code = new StringList();
+		code.add("function test() {");
+		code.add("var args = Array.prototype.slice.call(arguments, 1);");
+		code.add("args.slice(1);");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
+	public void testBindCall() {
+		final StringList code = new StringList();
+		code.add("function A(nr) {");
+		code.add("	this.nr = nr;");
+		code.add("	/**");
+		code.add("	 * @return {Number}");
+		code.add("	 */");
+		code.add("	this.getNr = function()");
+		code.add("	{");
+		code.add("		return this.nr;");
+		code.add("	}");
+		code.add("}");
+		code.add("var a1 = new A(1);");
+		code.add("var a2 = new A(2);");
+		code.add("var a = a1.getNr();");
+		code.add("a.toExponential();");
+		code.add("var b = a1.getNr.bind(a2)();");
+		code.add("b.toExponential();");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
+	public void testDeprecatedPrototypeFunctions() {
+		final StringList code = new StringList();
+		code.add("function Sub(name, age) {");
+		code.add(" this.age = age");
+		code.add("}");
+		code.add("Sub.prototype = {");
+		code.add("	/** @deprecated */");
+		code.add("	baseMethod: function() {");
+		code.add("	  return 'baseMethod called'");
+		code.add("	}");
+		code.add("}");
+		code.add("/** @deprecated */");
+		code.add("Sub.prototype.subMethod2 = function(a,b,c) {");
+		code.add("	return 'subMethod2 called'");
+		code.add("}");
+		code.add("function test2() {");
+		code.add("	var y = new Sub('test2',2);");
+		code.add("	y.subMethod2(1,2,3);");
+		code.add("	y.baseMethod();");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 2, problems.size());
+		assertEquals(JavaScriptProblems.DEPRECATED_FUNCTION, problems.get(0)
+				.getID());
+		assertEquals(JavaScriptProblems.DEPRECATED_FUNCTION, problems.get(1)
+				.getID());
+	}
+	
+	public void testDeprecatedValidation() {
+		final StringList code = new StringList();
+		code.add("var y = {");
+		code.add("	/**");
+		code.add("	 * @deprecated"); 
+		code.add("	 */");
+		code.add("	func1: function() {}");
+		code.add("}");
+		code.add("/**");
+		code.add(" * @deprecated"); 
+		code.add(" */");
+		code.add("y.func = function() {}");
+		code.add("/**");
+		code.add(" * @deprecated"); 
+		code.add(" */");
+		code.add("function test() {}");
+		code.add("y.test = test;");
+		code.add("y.func();");
+		code.add("y.func1();");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 3, problems.size());
+		assertEquals(JavaScriptProblems.DEPRECATED_FUNCTION, problems.get(0)
+				.getID());
+		assertEquals(JavaScriptProblems.DEPRECATED_FUNCTION, problems.get(1)
+				.getID());
+		assertEquals(JavaScriptProblems.DEPRECATED_FUNCTION, problems.get(2)
+				.getID());
+	}
+	
+	public void testObjectCreateWith2SubclassesUsingtheBase() {
+		final StringList code = new StringList();
+		code.add("function AbstractMessage(format, parameters, throwable) {");
+		code.add("	this.throwable = throwable");
+		code.add("}");
+		code.add("/**");
+		code.add(" * @return {Error}");
+		code.add(" */");
+		code.add(" AbstractMessage.prototype.getThrowable = function() {");
+		code.add("	 return null;");
+		code.add("}");
+		code.add("function ObjectMessage(object) {}");
+		code.add("ObjectMessage.prototype = Object.create(AbstractMessage.prototype)");
+		code.add("ObjectMessage.prototype.constructor = ObjectMessage");
+		code.add("ObjectMessage.prototype.getThrowable = function() {");
+		code.add("	return (this.format instanceof Error) ? this.format : null");
+		code.add("}");
+		code.add("function LogEvent(message) {");
+		code.add("	/**");
+		code.add("	 * @type {AbstractMessage}");
+		code.add("	 */");
+		code.add("	this.message = message");
+		code.add("}");
+		code.add("function OutputAppender() {}");
+		code.add("/**");
+		code.add(" * @param {LogEvent} logEvent");
+		code.add(" */");
+		code.add("OutputAppender.prototype.append = function(logEvent){");
+		code.add("	var ex2 = logEvent.message.getThrowable()");
+		code.add("	ex2.stack");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
+	public void testUnionTypeAsArgument() {
+		final StringList code = new StringList();
+		code.add("var s = '== {{DATE}} ==';");
+		code.add("var x = 10;");
+		code.add("if (s)");
+		code.add("	x = ''");
+		code.add("s = s.replace('',x);");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+	}
 }

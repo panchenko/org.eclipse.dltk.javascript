@@ -141,7 +141,8 @@ public abstract class ElementValue implements IValue {
 				if (!selection.isEmpty()) {
 					if (selection.size() == 1) {
 						final IRMember selected = selection.get(0);
-						if ("prototype".equals(selected.getName())
+						if (IRLocalType.PROTOTYPE_PROPERTY.equals(selected
+								.getName())
 								&& selected instanceof IRProperty) {
 							if (t != null) {
 								return new PrototypePropertyValue(

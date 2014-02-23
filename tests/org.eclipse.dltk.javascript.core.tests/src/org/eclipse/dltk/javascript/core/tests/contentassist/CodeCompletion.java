@@ -6,6 +6,7 @@ import static org.eclipse.dltk.javascript.typeinfo.MemberPredicates.STATIC;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -949,4 +950,195 @@ public class CodeCompletion extends AbstractCompletionTest {
 		}
 		assertEquals(true, found);
 	}
+	
+	public void testPrototypeFunctionWith2Extends() {
+		final StringList code = new StringList();
+		code.add("function A() {}");
+		code.add("A.prototype.afunction = function(){ }");
+		code.add("/**");
+		code.add(" * @extends {A}");
+		code.add(" */");
+		code.add("function B() {}");
+		code.add("B.prototype = new A();");
+		code.add("B.prototype.bfunction = function(){ }");
+		code.add("/**");
+		code.add(" * @extends {B}");
+		code.add(" */");
+		code.add("function C() {}");
+		code.add("C.prototype = new B();");
+		code.add("C.prototype.testDirectAssignment = function(){ }");
+		code.add("var x = new C();");
+		code.add("x.");
+		final IModuleSource module = new TestModule(code.toString());
+		final List<CompletionProposal> results = new ArrayList<CompletionProposal>();
+		final ICompletionEngine completionEngine = createEngine(results,
+				JSCompletionEngine.OPTION_KEYWORDS);
+		completionEngine.complete(module, lastPositionInFile(".", module), 0);
+		int found = 0;
+		for (CompletionProposal completionProposal : results) {
+			if (completionProposal.getName().equals("testDirectAssignment")) {
+				found++;
+			}
+			if (completionProposal.getName().equals("bfunction")) {
+				found++;
+			}
+			if (completionProposal.getName().equals("afunction")) {
+				found++;
+			}
+		}
+		assertEquals(3, found);
+	}
+	
+	public void testPrototypeWithRecordTypeConstruction() {
+		final StringList code = new StringList();
+		code.add("function D1() {}");
+		code.add("D1.prototype = {test: function(){}}");
+		code.add("D1.prototype.testDirectAssignment = function(){}");
+		code.add("var x = new D1()");
+		code.add("x.");
+		final IModuleSource module = new TestModule(code.toString());
+		final List<CompletionProposal> results = new ArrayList<CompletionProposal>();
+		final ICompletionEngine completionEngine = createEngine(results,
+				JSCompletionEngine.OPTION_KEYWORDS);
+		completionEngine.complete(module, lastPositionInFile(".", module), 0);
+		int found = 0;
+		for (CompletionProposal completionProposal : results) {
+			if (completionProposal.getName().equals("test")) {
+				found++;
+			}
+			if (completionProposal.getName().equals("testDirectAssignment")) {
+				found++;
+			}
+		}
+		assertEquals(2, found);
+	}
+	
+
+	public void testTypeDefParameterNamesTest() {
+		final StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @typedef {{ log: function(String, Number, *) }}");
+		code.add(" */");
+		code.add("var myType");
+		code.add("function tst(){");
+		code.add("	/**");
+		code.add("	 * @type {myType}");
+		code.add("	 */");
+		code.add("	var x = null;");
+		code.add("	x.log");
+		code.add("}");
+		final IModuleSource module = new TestModule(code.toString());
+		final List<CompletionProposal> results = new ArrayList<CompletionProposal>();
+		final ICompletionEngine completionEngine = createEngine(results,
+				JSCompletionEngine.OPTION_KEYWORDS);
+		completionEngine.complete(module, lastPositionInFile(".log", module), 0);
+		assertEquals(1, results.size());
+		CompletionProposal completionProposal = results.get(0);
+		assertEquals("log", completionProposal.getName());
+		String[] parameterNames = completionProposal.getParameterNames();
+		assertEquals(3, parameterNames.length);
+		assertEquals("String", parameterNames[0]);
+		assertEquals("Number", parameterNames[1]);
+		assertEquals("Any", parameterNames[2]);
+		
+	}
+	
+	public void testTypeDefParameterNamesTestWithVariableArguments() {
+		final StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @typedef {{ log: function(String, Number, *...) }}");
+		code.add(" */");
+		code.add("var myType");
+		code.add("function tst(){");
+		code.add("	/**");
+		code.add("	 * @type {myType}");
+		code.add("	 */");
+		code.add("	var x = null;");
+		code.add("	x.log");
+		code.add("}");
+		final IModuleSource module = new TestModule(code.toString());
+		final List<CompletionProposal> results = new ArrayList<CompletionProposal>();
+		final ICompletionEngine completionEngine = createEngine(results,
+				JSCompletionEngine.OPTION_KEYWORDS);
+		completionEngine.complete(module, lastPositionInFile(".log", module), 0);
+		assertEquals(1, results.size());
+		CompletionProposal completionProposal = results.get(0);
+		assertEquals("log", completionProposal.getName());
+		String[] parameterNames = completionProposal.getParameterNames();
+		assertEquals(3, parameterNames.length);
+		assertEquals("String", parameterNames[0]);
+		assertEquals("Number", parameterNames[1]);
+		assertEquals("Any", parameterNames[2]);
+		
+	}
+	
+	
+	public void testPrototypeChainWithExtendsPublicPrivateAndProtectedMethods() {
+		final StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @param {String} name");
+		code.add(" */");
+		code.add("function BaseEntity(name) {");
+		code.add("	/**");
+		code.add("	 * @protected");
+		code.add("	 */");
+		code.add("	this.name = name");
+		code.add("}");
+		code.add("BaseEntity.prototype = {");
+		code.add("	publicMethod: function() {},");
+		code.add("		/**");
+		code.add("		 * @protected");
+		code.add("		 */");
+		code.add("		protectedMethod: function() {},");
+		code.add("		/**");
+		code.add("		 * @deprecated");
+		code.add("		 */");
+		code.add("		deprecatedMethod: function() {}");
+		code.add("}");
+		code.add("BaseEntity.prototype.getName = function() {");
+		code.add("	return this.name");
+		code.add("}");
+		code.add("/**");
+		code.add(" * @extends {BaseEntity}");
+		code.add(" * @param {Str*ing} name");
+		code.add(" * @param {String} type");
+		code.add(" * @constructor ");
+		code.add(" */");
+		code.add("function ExtendedEntity(name, type) {");
+		code.add("	if (! (this instanceof ExtendedEntity)) {");
+		code.add("	return new ExtendedEntity(name, type)");
+		code.add("}");
+		code.add("BaseEntity.call(this, name)");
+		code.add("/**@protected*/");
+		code.add("this.type = type");
+		code.add("}");
+		code.add("ExtendedEntity.prototype = Object.create(BaseEntity.prototype)");
+		code.add("ExtendedEntity.prototype.constructor = ExtendedEntity");
+		code.add("ExtendedEntity.prototype.getType = function() {");
+		code.add(" return this.type");
+		code.add("}");
+		code.add("function test() {");
+		code.add(" var x = new ExtendedEntity('Servoy', 'company')");
+		code.add(" x.");
+		code.add("}");
+		final IModuleSource module = new TestModule(code.toString());
+		final List<CompletionProposal> results = new ArrayList<CompletionProposal>();
+		final ICompletionEngine completionEngine = createEngine(results,
+				JSCompletionEngine.OPTION_KEYWORDS);
+		completionEngine.complete(module, lastPositionInFile("x.", module), 0);
+		assertEquals(14, results.size());
+		
+		HashSet<String> names = new HashSet<String>(16);
+		for (CompletionProposal cp : results) {
+			names.add(cp.getName());
+		}
+		
+		assertTrue(names.contains("getType"));
+		assertTrue(names.contains("publicMethod"));
+		assertTrue(names.contains("deprecatedMethod"));
+		assertTrue(names.contains("getName"));
+		
+//		assertFalse(names.contains("protectedMethod"));
+	}
 }
+

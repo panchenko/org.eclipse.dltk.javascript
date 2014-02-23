@@ -13,6 +13,7 @@ package org.eclipse.dltk.internal.javascript.ti;
 
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.List;
@@ -123,7 +124,9 @@ import org.eclipse.dltk.javascript.typeinfo.IRFunctionType;
 import org.eclipse.dltk.javascript.typeinfo.IRLocalType;
 import org.eclipse.dltk.javascript.typeinfo.IRMapType;
 import org.eclipse.dltk.javascript.typeinfo.IRMethod;
+import org.eclipse.dltk.javascript.typeinfo.IRProperty;
 import org.eclipse.dltk.javascript.typeinfo.IRRecordMember;
+import org.eclipse.dltk.javascript.typeinfo.IRRecordType;
 import org.eclipse.dltk.javascript.typeinfo.IRSimpleType;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.IRTypeDeclaration;
@@ -448,8 +451,34 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 									&& !declaredType.isJavaScriptObject()) {
 								// skip assignment
 								return right;
+							} else {
+								// if the assignment is done on the prototype property
+								// then make sure it is not IRProperty (the one from Object itself)
+								// replace that with a AnonymousValue
+								Object attribute = leftParent
+										.getAttribute(IReferenceAttributes.ELEMENT);
+								if (attribute instanceof IRProperty
+										&& ((IRProperty) attribute).getName()
+												.equals(IRLocalType.PROTOTYPE_PROPERTY)) {
+									leftParent.getParent()
+											.createChild(
+													IRLocalType.PROTOTYPE_PROPERTY)
+											.setValue(new AnonymousValue());
+								}
+
 							}
 						}
+					}
+				} else {
+					// create a new object if prototype is directly set to record type value.
+					Object attribute = left
+							.getAttribute(IReferenceAttributes.ELEMENT);
+					if (attribute instanceof IRProperty
+							&& ((IRProperty) attribute).getName().equals(
+									IRLocalType.PROTOTYPE_PROPERTY)) {
+						left.getParent()
+								.createChild(IRLocalType.PROTOTYPE_PROPERTY)
+								.setValue(new AnonymousValue());
 					}
 				}
 			}
@@ -506,6 +535,11 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					reference, IRMethod.class);
 			if (methods != null && methods.size() == 1) {
 				final IRMethod method = methods.get(0);
+				IValueReference ref = checkSpecialJavascriptFunctionCalls(
+						reference,
+						arguments, method);
+				if (ref != null)
+					return ref;
 				if (method.isGeneric()) {
 					final IRType type = evaluateGenericCall(method, arguments);
 					return ConstantValue.of(type);
@@ -538,6 +572,62 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		} else {
 			return null;
 		}
+	}
+
+	protected IValueReference checkSpecialJavascriptFunctionCalls(
+			final IValueReference reference, final IValueReference[] arguments,
+			final IRMethod method) {
+		if (method.getName() != null) {
+			if (reference.getParent() != null
+					&& RTypes.FUNCTION.getDeclaration().equals(
+							method.getDeclaringType())) {
+
+				if ("call".equals(method.getName())
+						|| "apply".equals(method.getName())) {
+					Object x = reference.getParent().getAttribute(
+							IReferenceAttributes.ELEMENT);
+					if (x instanceof IRMethod) {
+						return ConstantValue.of(((IRMethod) x).getType());
+					}
+				} else if ("bind".equals(method.getName())) {
+					return reference.getParent();
+				}
+			} else if (method.getName().equals("create")
+					&& RTypes.OBJECT.getDeclaration().equals(
+							method.getDeclaringType()) && arguments.length > 0) {
+				AnonymousValue value = new AnonymousValue();
+				value.getValue().addValue(
+						((IValueProvider) arguments[0]).getValue());
+				if (arguments.length == 2) {
+					JSTypeSet types = arguments[1].getTypes();
+					for (IRType type : types) {
+						if (type instanceof IRRecordType) {
+							List<IRRecordMember> newMembers = new ArrayList<IRRecordMember>();
+							Collection<IRRecordMember> members = ((IRRecordType) type)
+									.getMembers();
+							for (IRRecordMember member : members) {
+								if (member.getType() instanceof IRRecordType) {
+									IRRecordMember valueMember = ((IRRecordType) member
+											.getType()).getMember("value");
+									if (valueMember != null) {
+										newMembers.add(new RRecordMember(member
+												.getName(), valueMember
+												.getType(), valueMember
+												.getSource()));
+									}
+								}
+							}
+							if (newMembers.size() > 0) {
+								value.addValue(ConstantValue.of(RTypes
+									.recordType(newMembers)), true);
+							}
+						}
+					}
+				}
+				return value;
+			}
+		}
+		return null;
 	}
 
 	protected IRType evaluateGenericCall(IRMethod rMethod,
@@ -873,7 +963,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					.getExtendsType());
 			thisValue.setDeclaredType(thisType);
 			if (thisType instanceof IRLocalType) {
-				IValueReference prototype = result.createChild("prototype");
+				IValueReference prototype = result
+						.createChild(IRLocalType.PROTOTYPE_PROPERTY);
 				prototype.setDeclaredType(context.getType(ITypeNames.OBJECT)
 						.toRType(context));
 				Set<String> directChildren = ((IRLocalType) thisType)

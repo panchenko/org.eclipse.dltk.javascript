@@ -23,8 +23,10 @@ import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
 import org.eclipse.dltk.internal.javascript.ti.JSMethod;
 import org.eclipse.dltk.internal.javascript.validation.TypeInfoValidator.ValidationVisitor;
 import org.eclipse.dltk.javascript.ast.BinaryOperation;
+import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.PropertyExpression;
+import org.eclipse.dltk.javascript.ast.PropertyInitializer;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.parser.ISuppressWarningsState;
 import org.eclipse.dltk.javascript.parser.JSProblemReporter;
@@ -67,6 +69,11 @@ public class JavaScriptDeprecationHighlightVisitor extends ValidationVisitor
 						.getParent()).getLeftExpression();
 				requestor.addPosition(exp.getProperty().sourceStart(), exp
 						.getProperty().sourceEnd(), JS_DEPRECATED);
+			} else if (node.getParent() instanceof PropertyInitializer) {
+				Expression name = ((PropertyInitializer) node.getParent())
+						.getName();
+				requestor.addPosition(name.sourceStart(), name.sourceEnd(),
+						JS_DEPRECATED);
 			}
 		}
 		return method;

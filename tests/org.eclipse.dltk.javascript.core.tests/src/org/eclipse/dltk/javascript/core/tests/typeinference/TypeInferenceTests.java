@@ -1315,4 +1315,30 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		assertNotNull(o);
 		assertEquals(ITypeNames.STRING, o.getName());
 	}
+	
+	public void testBaseTypeWith2SubClasses() {
+		final StringList code = new StringList();
+		
+		code.add("/** @constructor */");
+		code.add("function base() {");
+		code.add("	this.baseVar = 10;");
+		code.add("	this.baseMethod = function(){};");
+		code.add("}");
+		code.add("/** @constructor ");
+		code.add(" * @extends {base} */");
+		code.add("function A1() {};");
+		code.add("A1.prototype =  new base();");
+		code.add("A1.prototype.constructor = A1;");
+		code.add("A1.prototype.methodAddedToA1Prototype = function() {};");
+		code.add("/** @constructor ");
+		code.add(" * @extends {base} */");
+		code.add("function A2() {};");
+		code.add("A2.prototype =  new base();");
+		code.add("A2.prototype.constructor = A2;");
+		code.add("var x = new A2();");
+		final IValueCollection collection = inference(code.toString());
+		IValueReference test = collection.getChild("x");
+		Set<String> directChildren = test.getDirectChildren();
+		assertEquals(2, directChildren.size());
+	}
 }
