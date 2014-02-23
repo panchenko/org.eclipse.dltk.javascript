@@ -60,6 +60,8 @@ import org.eclipse.dltk.javascript.typeinfo.model.TypeVariable;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.InternalEObject;
 
+import com.google.common.collect.ImmutableList;
+
 public class TypeSystemImpl implements ITypeSystem {
 
 	/*
@@ -204,7 +206,7 @@ public class TypeSystemImpl implements ITypeSystem {
 				traits.add(t);
 			}
 		}
-		declaration.setTraits(toImmutableList(traits));
+		declaration.setTraits(ImmutableList.copyOf(traits));
 		final List<IRMember> members = new ArrayList<IRMember>(type
 				.getMembers().size()
 				+ (additionalMembers != null ? additionalMembers.length : 0));
@@ -216,23 +218,18 @@ public class TypeSystemImpl implements ITypeSystem {
 				members.add(convertMember(member, declaration));
 			}
 		}
-		declaration.setMembers(toImmutableList(members));
+		declaration.setMembers(ImmutableList.copyOf(members));
 		final List<IRConstructor> constructors = new ArrayList<IRConstructor>(
 				type.getConstructors().size());
 		for (Constructor constructor : type.getConstructors()) {
 			constructors.add(convertConstructor(constructor, declaration));
 		}
-		declaration.setConstructors(toImmutableList(constructors));
+		declaration.setConstructors(ImmutableList.copyOf(constructors));
 		final Constructor staticConstructor = type.getStaticConstructor();
 		if (staticConstructor != null) {
 			declaration.setStaticConstructor(convertConstructor(
 					staticConstructor, declaration));
 		}
-	}
-
-	private static <E> List<E> toImmutableList(List<E> list) {
-		// TODO (alex) introduce real immutable lists
-		return list.isEmpty() ? Collections.<E> emptyList() : list;
 	}
 
 	private void log(Object... args) {
@@ -315,7 +312,7 @@ public class TypeSystemImpl implements ITypeSystem {
 					typeSystem, param.getType()) : RTypes.any();
 			result.add(new RParameter(param.getName(), type, param.getKind()));
 		}
-		return toImmutableList(result);
+		return ImmutableList.copyOf(result);
 	}
 
 	private static class ParameterizedTypeKey {
@@ -519,7 +516,7 @@ public class TypeSystemImpl implements ITypeSystem {
 					parameters.add(parameter);
 				}
 			}
-			return toImmutableList(parameters);
+			return ImmutableList.copyOf(parameters);
 		}
 	}
 

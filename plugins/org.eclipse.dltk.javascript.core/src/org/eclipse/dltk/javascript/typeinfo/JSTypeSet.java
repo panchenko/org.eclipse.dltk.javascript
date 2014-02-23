@@ -21,25 +21,9 @@ import org.eclipse.dltk.javascript.core.Types;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
+import com.google.common.collect.Iterators;
+
 public abstract class JSTypeSet implements Iterable<IRType> {
-
-	private static class EmptyIterator implements Iterator<IRType> {
-
-		protected EmptyIterator() {
-		}
-
-		public boolean hasNext() {
-			return false;
-		}
-
-		public IRType next() {
-			throw new NoSuchElementException();
-		}
-
-		public void remove() {
-			throw new UnsupportedOperationException();
-		}
-	}
 
 	private static class JSEmptyTypeSet extends JSTypeSet {
 
@@ -47,7 +31,7 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 		}
 
 		public Iterator<IRType> iterator() {
-			return new EmptyIterator();
+			return Iterators.emptyIterator();
 		}
 
 		@Override
