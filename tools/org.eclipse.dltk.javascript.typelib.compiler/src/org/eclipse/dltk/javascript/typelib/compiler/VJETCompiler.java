@@ -222,7 +222,6 @@ public class VJETCompiler extends AbstractTypeLibraryCompiler {
 			if (tokenizer.peek() == Token.LEFT_PAREN && returnType instanceof SimpleType
 					&& "constructs".equals(returnType.getName())) {
 				method = TypeInfoModelFactory.eINSTANCE.createConstructor();
-				method.setName(methodName);
 				method.setStatic(isStatic);
 			} else {
 				throw new DeclarationException("Method name expected, got %s:%s", tokenizer.peek(), tokenizer.value());
