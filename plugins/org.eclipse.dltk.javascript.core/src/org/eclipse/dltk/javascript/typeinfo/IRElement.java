@@ -16,6 +16,9 @@ import java.util.Set;
 import org.eclipse.dltk.compiler.problem.IProblemCategory;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 
+/**
+ * @noimplement This interface is not intended to be implemented by clients.
+ */
 public interface IRElement {
 
 	String getName();

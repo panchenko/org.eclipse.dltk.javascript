@@ -13,6 +13,9 @@ package org.eclipse.dltk.javascript.typeinfo;
 
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 
+/**
+ * @noimplement This interface is not intended to be implemented by clients.
+ */
 public interface IRProperty extends IRVariable {
 
 	boolean isReadOnly();

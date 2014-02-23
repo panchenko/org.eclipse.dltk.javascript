@@ -24,6 +24,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
  * 
  * @see Type
  * @see ITypeSystem
+ * @noimplement This interface is not intended to be implemented by clients.
  */
 public interface IRTypeDeclaration extends IRElement {
 

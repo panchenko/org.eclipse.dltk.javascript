@@ -13,6 +13,9 @@ package org.eclipse.dltk.javascript.typeinfo;
 
 import java.util.List;
 
+/**
+ * @noimplement This interface is not intended to be implemented by clients.
+ */
 public interface IRMethod extends IRMember {
 
 	int getParameterCount();

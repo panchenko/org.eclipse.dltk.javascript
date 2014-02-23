@@ -13,6 +13,9 @@ package org.eclipse.dltk.javascript.typeinfo;
 
 import org.eclipse.dltk.javascript.typeinfo.model.Visibility;
 
+/**
+ * @noimplement This interface is not intended to be implemented by clients.
+ */
 public interface IRMember extends IRElement {
 
 	IRType getType();
