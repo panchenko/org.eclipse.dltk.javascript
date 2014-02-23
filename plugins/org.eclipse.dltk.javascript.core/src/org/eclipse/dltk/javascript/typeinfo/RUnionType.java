@@ -12,17 +12,17 @@
 package org.eclipse.dltk.javascript.typeinfo;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashSet;
 import java.util.Set;
+
+import com.google.common.collect.ImmutableSet;
 
 class RUnionType extends RType implements IRUnionType {
 
-	final Set<IRType> targets = new LinkedHashSet<IRType>();
+	final ImmutableSet<IRType> targets;
 
 	public RUnionType(Collection<IRType> targets) {
 		assert !targets.contains(null);
-		this.targets.addAll(targets);
+		this.targets = ImmutableSet.copyOf(targets);
 	}
 
 	public String getName() {
@@ -54,7 +54,7 @@ class RUnionType extends RType implements IRUnionType {
 	}
 
 	public Set<IRType> getTargets() {
-		return Collections.unmodifiableSet(targets);
+		return targets;
 	}
 
 	@Override

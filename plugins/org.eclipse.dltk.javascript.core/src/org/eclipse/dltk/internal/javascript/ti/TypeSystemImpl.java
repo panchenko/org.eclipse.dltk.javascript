@@ -16,7 +16,6 @@ import static org.eclipse.dltk.javascript.typeinfo.RTypes.none;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -303,7 +302,7 @@ public class TypeSystemImpl implements ITypeSystem {
 	public static List<IRParameter> convertParameters(ITypeSystem typeSystem,
 			List<Parameter> parameters) {
 		if (parameters.isEmpty()) {
-			return Collections.emptyList();
+			return ImmutableList.of();
 		}
 		final List<IRParameter> result = new ArrayList<IRParameter>(
 				parameters.size());
@@ -502,7 +501,7 @@ public class TypeSystemImpl implements ITypeSystem {
 	private static List<IRParameter> transformParameters(final IRMethod method,
 			final IRTypeTransformer transformer) {
 		if (method.getParameterCount() == 0) {
-			return Collections.emptyList();
+			return ImmutableList.of();
 		} else {
 			final List<IRParameter> parameters = new ArrayList<IRParameter>(
 					method.getParameterCount());

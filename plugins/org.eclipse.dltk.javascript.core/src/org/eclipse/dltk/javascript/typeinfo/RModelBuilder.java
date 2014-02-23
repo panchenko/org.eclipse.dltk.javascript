@@ -28,6 +28,8 @@ import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 import org.eclipse.dltk.javascript.typeinfo.model.Visibility;
 
+import com.google.common.collect.ImmutableList;
+
 public class RModelBuilder {
 
 	private static class RElement implements IRElement {
@@ -223,7 +225,7 @@ public class RModelBuilder {
 	public static List<IRParameter> convert(ITypeSystem context,
 			List<Parameter> parameters) {
 		if (parameters.isEmpty()) {
-			return Collections.emptyList();
+			return ImmutableList.of();
 		} else {
 			final List<IRParameter> params = new ArrayList<IRParameter>(
 					parameters.size());
@@ -233,7 +235,7 @@ public class RModelBuilder {
 				params.add(new RParameter(parameter.getName(), paramType,
 						parameter.getKind()));
 			}
-			return params;
+			return ImmutableList.copyOf(params);
 		}
 	}
 
@@ -245,7 +247,7 @@ public class RModelBuilder {
 	private static List<IRParameter> convertParams0(ITypeInfoContext context,
 			List<IParameter> parameters) {
 		if (parameters.isEmpty()) {
-			return Collections.emptyList();
+			return ImmutableList.of();
 		} else {
 			final List<IRParameter> params = new ArrayList<IRParameter>(
 					parameters.size());
@@ -255,7 +257,7 @@ public class RModelBuilder {
 				params.add(new RParameter(parameter.getName(), paramType,
 						parameter.getKind()));
 			}
-			return params;
+			return ImmutableList.copyOf(params);
 		}
 	}
 
