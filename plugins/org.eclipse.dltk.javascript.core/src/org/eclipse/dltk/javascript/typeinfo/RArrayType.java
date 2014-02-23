@@ -36,7 +36,8 @@ class RArrayType extends RType implements IRArrayType {
 	}
 
 	public String getName() {
-		return ITypeNames.ARRAY + '<' + itemType.getName() + '>';
+		return ITypeNames.ARRAY + '<'
+				+ (itemType == RTypes.none() ? "?" : itemType.getName()) + '>';
 	}
 
 	public IRType getItemType() {
