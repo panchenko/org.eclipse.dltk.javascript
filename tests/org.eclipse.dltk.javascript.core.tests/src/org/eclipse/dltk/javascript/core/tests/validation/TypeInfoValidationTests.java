@@ -3926,4 +3926,20 @@ public void testFunctionCallFromUnion() {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 1, problems.size());
 	}
+	
+	public void testThisAssignedToVariable() {
+		final StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @constructor ");
+		code.add(" */");
+		code.add("function cust() {");   
+		code.add("	var self = this;");
+		code.add("    this.boo = 42;");
+		code.add("    this.func = function(){");
+		code.add("    	self.boo.toFixed()");
+		code.add("    }");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
 }

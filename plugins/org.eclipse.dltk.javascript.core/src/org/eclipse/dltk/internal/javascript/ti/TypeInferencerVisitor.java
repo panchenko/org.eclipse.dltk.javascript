@@ -1243,6 +1243,19 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				return this;
 			return super.getChild(name);
 		}
+
+		@Override
+		public void setValue(IValueReference value) {
+			if (value instanceof ThisValue) {
+				// make sure a copy is created so that the this values of
+				// various instances are not shared over those instances.
+				IValue val = createValue();
+				if (val != null)
+					val.addValue(((ThisValue) value).getValue());
+			} else {
+				super.setValue(value);
+			}
+		}
 	}
 
 	public static class VisitNewResult {
