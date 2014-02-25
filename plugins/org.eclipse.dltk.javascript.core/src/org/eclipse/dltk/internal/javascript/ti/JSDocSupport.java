@@ -486,6 +486,8 @@ public class JSDocSupport implements IModelBuilder {
 									.getParameter(objectName);
 							if (param != null) {
 								param.setType(propertiesType);
+								if (pp.optional)
+									param.setKind(ParameterKind.OPTIONAL);
 							} else {
 								int index = objectName.lastIndexOf('.');
 								if (index == -1) {

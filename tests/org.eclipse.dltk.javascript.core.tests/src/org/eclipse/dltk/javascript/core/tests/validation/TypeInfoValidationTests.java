@@ -3942,4 +3942,33 @@ public void testFunctionCallFromUnion() {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
+	
+	public void testOptionalRecordTypePropertiesParam() {
+		final StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @param {Function} f");
+		code.add(" * @param {Boolean} [options.one]");
+		code.add(" * @param {Boolean} [options.two]");
+		code.add(" */");
+		code.add("function api(f, options) {}");
+		code.add("function test() {");
+		code.add("	api(function(){})");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+	public void testNoneOptionalRecordTypePropertiesParam() {
+		final StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @param {Function} f");
+		code.add(" * @param {Boolean} options.one");
+		code.add(" * @param {Boolean} [options.two]");
+		code.add(" */");
+		code.add("function api(f, options) {}");
+		code.add("function test() {");
+		code.add("	api(function(){})");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+	}
 }
