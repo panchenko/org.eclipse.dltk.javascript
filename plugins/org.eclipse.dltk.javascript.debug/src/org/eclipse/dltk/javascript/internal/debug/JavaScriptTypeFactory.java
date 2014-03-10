@@ -43,7 +43,13 @@ public class JavaScriptTypeFactory implements IScriptTypeFactory {
 								&& currentLevel.intValue() < 2) {
 							IScriptValue value = (IScriptValue) variable
 									.getValue();
-							return value.getType().formatDetails(value);
+							try {
+								Integer.parseInt(variable.getName());
+								return value.getType().formatDetails(value);
+							} catch (Exception e) {
+							}
+							return variable.getName() + ':'
+									+ value.getType().formatDetails(value);
 						}
 						return super.buildDetailString(variable);
 					} finally {
