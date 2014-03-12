@@ -20,6 +20,15 @@ public class JavaScriptDebugHover extends ScriptDebugHover {
 			protected boolean isShowLabelDetails(IScriptValue value) {
 				return true;
 			}
+
+			@Override
+			protected String getValueText(IScriptValue value) {
+				String valueText = super.getValueText(value);
+				if (valueText != null && valueText.length() > 400) {
+					valueText = valueText.substring(0, 400) + "...";
+				}
+				return valueText;
+			}
 		};
 	}
 
