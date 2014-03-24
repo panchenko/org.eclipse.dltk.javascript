@@ -206,12 +206,20 @@
     <members xsi:type="ti:Method" name="addEventListener">
       <parameters name="type"/>
       <parameters name="listener"/>
-      <parameters name="opt_useCapture"/>
+      <parameters name="opt_useCapture" kind="OPTIONAL">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+        </type>
+      </parameters>
     </members>
     <members xsi:type="ti:Method" name="removeEventListener">
       <parameters name="type"/>
       <parameters name="listener"/>
-      <parameters name="opt_useCapture"/>
+      <parameters name="opt_useCapture" kind="OPTIONAL">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+        </type>
+      </parameters>
     </members>
     <members xsi:type="ti:Method" name="dispatchEvent">
       <parameters name="evt"/>
@@ -522,6 +530,13 @@
         </parameters>
       </type>
     </members>
+    <members xsi:type="ti:Property" name="onbeforeinput">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
     <members xsi:type="ti:Property" name="onbeforeunload">
       <type xsi:type="ti:FunctionType">
         <parameters>
@@ -621,6 +636,13 @@
       </type>
     </members>
     <members xsi:type="ti:Property" name="onfocusout">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="oninput">
       <type xsi:type="ti:FunctionType">
         <parameters>
           <type xsi:type="ti:SimpleType" target="Event"/>
@@ -1154,12 +1176,20 @@
     <members xsi:type="ti:Method" name="addEventListener">
       <parameters name="type"/>
       <parameters name="listener"/>
-      <parameters name="opt_useCapture"/>
+      <parameters name="opt_useCapture" kind="OPTIONAL">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+        </type>
+      </parameters>
     </members>
     <members xsi:type="ti:Method" name="removeEventListener">
       <parameters name="type"/>
       <parameters name="listener"/>
-      <parameters name="opt_useCapture"/>
+      <parameters name="opt_useCapture" kind="OPTIONAL">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+        </type>
+      </parameters>
     </members>
     <members xsi:type="ti:Method" name="dispatchEvent">
       <parameters name="evt"/>
