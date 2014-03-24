@@ -1318,7 +1318,6 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 	
 	public void testBaseTypeWith2SubClasses() {
 		final StringList code = new StringList();
-		
 		code.add("/** @constructor */");
 		code.add("function base() {");
 		code.add("	this.baseVar = 10;");
@@ -1341,4 +1340,17 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		Set<String> directChildren = test.getDirectChildren();
 		assertEquals(2, directChildren.size());
 	}
+	
+	public void test2InstancesOfTheSameFunctionAddingAfieldTo1() {
+		final StringList code = new StringList();
+		code.add("function cust(){}");
+		code.add("var x = new cust();");
+		code.add("x.test = 10;");
+		code.add("var y = new cust();");
+		final IValueCollection collection = inference(code.toString());
+		IValueReference test = collection.getChild("y");
+		Set<String> directChildren = test.getDirectChildren();
+		assertFalse(directChildren.contains("test"));
+	}
+
 }

@@ -596,8 +596,10 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					&& RTypes.OBJECT.getDeclaration().equals(
 							method.getDeclaringType()) && arguments.length > 0) {
 				AnonymousValue value = new AnonymousValue();
-				value.getValue().addValue(
-						((IValueProvider) arguments[0]).getValue());
+				IValue argumentValue = ((IValueProvider) arguments[0])
+						.getValue();
+				if (argumentValue != null)
+					value.getValue().addValue(argumentValue);
 				if (arguments.length == 2) {
 					JSTypeSet types = arguments[1].getTypes();
 					for (IRType type : types) {
@@ -1242,6 +1244,19 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			if (name.equals(IValueReference.FUNCTION_OP))
 				return this;
 			return super.getChild(name);
+		}
+
+		@Override
+		public void setValue(IValueReference value) {
+			if (value instanceof ThisValue) {
+				// make sure a copy is created so that the this values of
+				// various instances are not shared over those instances.
+				IValue val = createValue();
+				if (val != null)
+					val.addValue(((ThisValue) value).getValue());
+			} else {
+				super.setValue(value);
+			}
 		}
 	}
 

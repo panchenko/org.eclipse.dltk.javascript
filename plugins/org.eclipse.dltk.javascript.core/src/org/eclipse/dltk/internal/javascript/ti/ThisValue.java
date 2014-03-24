@@ -28,11 +28,6 @@ public class ThisValue extends AnonymousReferenceValue {
 	}
 
 	@Override
-	public boolean isReference() {
-		return false;
-	}
-
-	@Override
 	public ReferenceKind getKind() {
 		return ReferenceKind.THIS;
 	}
