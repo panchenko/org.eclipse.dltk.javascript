@@ -9,7 +9,7 @@
             thread="main"
             visible="true">
             <run
-                  class="org.eclipse.dltk.javascript.typelib.compiler.ClosureCompilerApplication">
+                  class="org.eclipse.dltk.javascript.typelib.compiler.Application">
             </run>
       </application>
    </extension>

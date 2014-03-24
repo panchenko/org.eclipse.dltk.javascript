@@ -12,6 +12,7 @@
 package org.eclipse.dltk.javascript.typelib.compiler;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Iterator;
 
 import org.eclipse.dltk.javascript.typeinfo.TypeLibraryFormat;
@@ -27,22 +28,24 @@ import org.eclipse.equinox.app.IApplicationContext;
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableMap;
 
-public class ClosureCompilerApplication implements IApplication {
+public class Application implements IApplication {
 
 	@Override
 	public Object start(IApplicationContext context) throws Exception {
 		final String[] args = (String[]) context.getArguments().get(IApplicationContext.APPLICATION_ARGS);
 
-		// final AbstractTypeLibraryCompiler compiler = new ClosureCompiler();
-		// compiler.load(new File("/home/alex/DLTK/closure-compiler/externs/w3c_dom1.js"), Charsets.UTF_8);
-		// compiler.load(new File("/home/alex/DLTK/closure-compiler/externs/w3c_dom2.js"), Charsets.UTF_8);
-		// compiler.load(new File("/home/alex/DLTK/closure-compiler/externs/w3c_event.js"), Charsets.UTF_8);
-		// compiler.resolveTypes();
-		// compiler.save(
-		// new File("/home/alex/DLTK/org.eclipse.dltk.javascript/tools/org.eclipse.dltk.javascript.typelib.compiler/dom."
-		// + TypeLibraryFormat.FILE_EXTENSION),
-		// ImmutableMap.of(TypeLibraryFormat.NAME_HEADER, "w3c_dom", TypeLibraryFormat.VERSION_HEADER, "1.0"));
+		compileDOM();
 
+		compilejQuery();
+
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * @throws IOException
+	 */
+	private void compilejQuery() throws IOException {
 		final VJETCompiler v = new VJETCompiler();
 		v.load(new File("/home/alex/DLTK/vjet/org.eclipse.vjet.typelibs/JQueryTL/src/org/jquery/jQuery.js"), Charsets.UTF_8);
 		v.resolveTypes();
@@ -70,12 +73,22 @@ public class ClosureCompilerApplication implements IApplication {
 		v.mergeMethodParameterTypes();
 
 		v.save(
-				new File("/home/alex/DLTK/org.eclipse.dltk.javascript/tools/org.eclipse.dltk.javascript.typelib.compiler/jQuery."
-						+ TypeLibraryFormat.FILE_EXTENSION),
+				new File("/home/alex/DLTK/org.eclipse.dltk.javascript/plugins/org.eclipse.dltk.javascript.typelibs/jQuery"),
 				ImmutableMap.of(TypeLibraryFormat.NAME_HEADER, "jQuery", TypeLibraryFormat.VERSION_HEADER, "1.9"));
+	}
 
-		// TODO Auto-generated method stub
-		return null;
+	/**
+	 * @throws IOException
+	 */
+	private void compileDOM() throws IOException {
+		final AbstractTypeLibraryCompiler compiler = new ClosureCompiler();
+		compiler.load(new File("/home/alex/DLTK/closure-compiler/externs/w3c_dom1.js"), Charsets.UTF_8);
+		compiler.load(new File("/home/alex/DLTK/closure-compiler/externs/w3c_dom2.js"), Charsets.UTF_8);
+		compiler.load(new File("/home/alex/DLTK/closure-compiler/externs/w3c_event.js"), Charsets.UTF_8);
+		compiler.resolveTypes();
+		compiler.save(
+				new File("/home/alex/DLTK/org.eclipse.dltk.javascript/plugins/org.eclipse.dltk.javascript.typelibs/dom"),
+				ImmutableMap.of(TypeLibraryFormat.NAME_HEADER, "w3c_dom", TypeLibraryFormat.VERSION_HEADER, "1.0"));
 	}
 
 	@Override

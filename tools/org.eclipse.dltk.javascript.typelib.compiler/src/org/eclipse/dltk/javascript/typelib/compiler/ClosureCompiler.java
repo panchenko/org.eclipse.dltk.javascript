@@ -9,7 +9,7 @@
  * Contributors:
  *     Alex Panchenko - initial API and Implementation
  *******************************************************************************/
-package org.eclipse.dltk.javascript.typelib.closure;
+package org.eclipse.dltk.javascript.typelib.compiler;
 
 import static com.google.common.base.Predicates.instanceOf;
 
@@ -41,7 +41,6 @@ import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
-import org.eclipse.dltk.javascript.typelib.compiler.AbstractTypeLibraryCompiler;
 import org.eclipse.dltk.utils.TextUtils;
 
 import com.google.common.base.Function;

@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typelib.compiler;
 
+@SuppressWarnings("serial")
 public class DeclarationException extends RuntimeException {
 	public DeclarationException(String format, Object... args) {
 		super(String.format(format, args));

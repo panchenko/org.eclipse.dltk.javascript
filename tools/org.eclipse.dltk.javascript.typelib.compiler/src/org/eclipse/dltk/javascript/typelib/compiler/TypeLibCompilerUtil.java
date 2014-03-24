@@ -16,8 +16,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Properties;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 import org.eclipse.dltk.javascript.typeinfo.TypeLibraryFormat;
 import org.eclipse.emf.ecore.xmi.XMIResource;
@@ -26,22 +24,21 @@ import com.google.common.io.Closeables;
 
 public class TypeLibCompilerUtil {
 
-	public static void save(File output, Map<String, String> manifest, XMIResource resource) throws IOException {
-		final FileOutputStream outputStream = new FileOutputStream(output);
+	public static void save(File outputDirectory, Map<String, String> manifest, XMIResource resource) throws IOException {
+		outputDirectory.mkdirs();
+		final FileOutputStream manifestStream = new FileOutputStream(new File(outputDirectory, TypeLibraryFormat.MANIFEST_FILE));
 		try {
-			final ZipOutputStream zip = new ZipOutputStream(outputStream);
-			try {
-				zip.putNextEntry(new ZipEntry(TypeLibraryFormat.MANIFEST_FILE));
-				final Properties properties = new Properties();
-				properties.putAll(manifest);
-				properties.store(zip, null);
-				zip.putNextEntry(new ZipEntry(TypeLibraryFormat.TYPES_FILE));
-				resource.save(zip, null);
-			} finally {
-				Closeables.closeQuietly(zip);
-			}
+			final Properties properties = new Properties();
+			properties.putAll(manifest);
+			properties.store(manifestStream, null);
 		} finally {
-			Closeables.closeQuietly(outputStream);
+			Closeables.closeQuietly(manifestStream);
+		}
+		final FileOutputStream resourceStream = new FileOutputStream(new File(outputDirectory, TypeLibraryFormat.TYPES_FILE));
+		try {
+			resource.save(resourceStream, null);
+		} finally {
+			Closeables.closeQuietly(resourceStream);
 		}
 	}
 }
