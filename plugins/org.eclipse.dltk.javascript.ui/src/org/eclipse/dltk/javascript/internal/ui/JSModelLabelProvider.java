@@ -11,11 +11,13 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.ui;
 
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.dltk.core.IField;
 import org.eclipse.dltk.core.IMember;
 import org.eclipse.dltk.core.IMethod;
 import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.internal.javascript.parser.JSModifiers;
+import org.eclipse.dltk.javascript.internal.library.TypeLibraryProjectFragment;
 import org.eclipse.dltk.ui.DLTKPluginImages;
 import org.eclipse.dltk.ui.ScriptElementImageProvider;
 import org.eclipse.dltk.ui.viewsupport.ImageDescriptorRegistry;
@@ -72,6 +74,10 @@ public class JSModelLabelProvider extends BaseLabelProvider implements
 	}
 
 	public String getText(Object element) {
+		if (element instanceof TypeLibraryProjectFragment) {
+			final IPath path = ((TypeLibraryProjectFragment) element).getPath();
+			return path.segment(1) + " " + path.segment(2);
+		}
 		return null;
 	}
 

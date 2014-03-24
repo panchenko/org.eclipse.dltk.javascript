@@ -57,6 +57,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.Version;
 import org.osgi.service.prefs.BackingStoreException;
 
+import com.google.common.io.Closeables;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
@@ -75,7 +76,9 @@ public class TypeLibraryManager {
 				if (bundle == null) {
 					continue;
 				}
-				registerBundledLibrary(bundle, element.getAttribute("location"));
+				registerBundledLibrary(bundle,
+						element.getAttribute("location"),
+						"dir".equals(element.getAttribute("shape")));
 			}
 		}
 		for (File file : loadFromPreferences()) {
@@ -90,10 +93,11 @@ public class TypeLibraryManager {
 		}
 	}
 
-	private TypeLibrary registerBundledLibrary(Bundle bundle, String location) {
+	private TypeLibrary registerBundledLibrary(Bundle bundle, String location,
+			boolean directory) {
 		try {
 			return registerLibrary(BundleUtil.getFile(bundle, location),
-					TypeLibrary.Kind.BUILTIN);
+					TypeLibrary.Kind.BUILTIN, directory);
 		} catch (Exception e) {
 			JavaScriptPlugin.error(NLS.bind(
 					"Error registering library {0} from {1}", location,
@@ -124,6 +128,12 @@ public class TypeLibraryManager {
 	 */
 	public TypeLibrary registerLibrary(File libraryFile, TypeLibrary.Kind kind)
 			throws TypeLibraryException, IOException {
+		return registerLibrary(libraryFile, kind, false);
+	}
+
+	private TypeLibrary registerLibrary(File libraryFile,
+			TypeLibrary.Kind kind, boolean directory)
+			throws TypeLibraryException, IOException {
 		libraryFile = libraryFile.getAbsoluteFile();
 		synchronized (libraries) {
 			final LibraryRecord loaded = libraries.get(libraryFile);
@@ -131,15 +141,21 @@ public class TypeLibraryManager {
 				return loaded;
 			}
 		}
-		final LibraryRecord record = loadLibrary(libraryFile, kind);
+		final LibraryRecord record = loadLibrary(libraryFile, kind, directory);
 		synchronized (libraries) {
 			libraries.put(libraryFile, record);
 		}
 		return record;
 	}
 
-	private LibraryRecord loadLibrary(File libraryFile, TypeLibrary.Kind kind)
-			throws TypeLibraryException, IOException {
+	private LibraryRecord loadLibrary(File libraryFile, TypeLibrary.Kind kind,
+			boolean directory) throws TypeLibraryException, IOException {
+		return directory ? loadLibraryDir(libraryFile, kind) : loadLibraryFile(
+				libraryFile, kind);
+	}
+
+	private LibraryRecord loadLibraryFile(File libraryFile,
+			TypeLibrary.Kind kind) throws TypeLibraryException, IOException {
 		boolean hasTypes = false;
 		Properties manifest = null;
 		final ZipInputStream stream = new ZipInputStream(new FileInputStream(
@@ -194,7 +210,52 @@ public class TypeLibraryManager {
 					"Type library {0} manifest contains invalid version {1}",
 					libraryFile, versionString), e);
 		}
-		return new LibraryRecord(libraryFile, kind, name, version);
+		return new LibraryRecord(libraryFile, kind, name, version, false);
+	}
+
+	private LibraryRecord loadLibraryDir(File libraryDir, TypeLibrary.Kind kind)
+			throws TypeLibraryException, IOException {
+		final Properties manifest = new Properties();
+		try {
+			final InputStream inputStream = new FileInputStream(new File(
+					libraryDir, TypeLibraryFormat.MANIFEST_FILE));
+			try {
+				manifest.load(inputStream);
+			} catch (IOException e) {
+				Closeables.closeQuietly(inputStream);
+			}
+		} catch (FileNotFoundException e) {
+			throw new TypeLibraryException(NLS.bind(
+					"Type library {0} does not contain {1}", libraryDir,
+					TypeLibraryFormat.MANIFEST_FILE), e);
+		}
+		if (!new File(libraryDir, TypeLibraryFormat.TYPES_FILE).isFile()) {
+			throw new TypeLibraryException(NLS.bind(
+					"Type library {0} does not contain {1}", libraryDir,
+					TypeLibraryFormat.TYPES_FILE));
+		}
+		final String name = manifest.getProperty(TypeLibraryFormat.NAME_HEADER);
+		if (name == null || name.length() == 0) {
+			throw new TypeLibraryException(NLS.bind(
+					"Type library {0} manifest does not contain", libraryDir,
+					TypeLibraryFormat.NAME_HEADER));
+		}
+		final String versionString = manifest
+				.getProperty(TypeLibraryFormat.VERSION_HEADER);
+		if (versionString == null || versionString.length() == 0) {
+			throw new TypeLibraryException(NLS.bind(
+					"Type library {0} manifest does not contain {1}",
+					libraryDir, TypeLibraryFormat.VERSION_HEADER));
+		}
+		final Version version;
+		try {
+			version = Version.parseVersion(versionString);
+		} catch (IllegalArgumentException e) {
+			throw new TypeLibraryException(NLS.bind(
+					"Type library {0} manifest contains invalid version {1}",
+					libraryDir, versionString), e);
+		}
+		return new LibraryRecord(libraryDir, kind, name, version, true);
 	}
 
 	/**
@@ -310,18 +371,35 @@ public class TypeLibraryManager {
 		return null;
 	}
 
+	/**
+	 * @param name
+	 * @param version
+	 * @return
+	 */
+	public TypeLibrary findExact(String name, String version) {
+		final Version parsedVersion;
+		try {
+			parsedVersion = new Version(version);
+		} catch (IllegalArgumentException e) {
+			return null;
+		}
+		return findExact(name, parsedVersion);
+	}
+
 	private static class LibraryRecord implements TypeLibrary {
 		final File file;
 		final TypeLibrary.Kind kind;
 		final String name;
 		final Version version;
+		final boolean directory;
 
 		LibraryRecord(File file, TypeLibrary.Kind kind, String name,
-				Version version) {
+				Version version, boolean directory) {
 			this.file = file;
 			this.kind = kind;
 			this.name = name;
 			this.version = version;
+			this.directory = directory;
 		}
 
 		public String name() {
@@ -605,19 +683,29 @@ public class TypeLibraryManager {
 		if (record != null) {
 			return record;
 		}
-		return loadLibrary(file, TypeLibrary.Kind.USER);
+		return loadLibrary(file, TypeLibrary.Kind.USER, false);
 	}
 
 	/**
-	 * @param f
-	 * @param typesFile
+	 * @param libraryName
+	 * @param version
+	 * @param entry
 	 * @return
 	 * @throws IOException
 	 */
-	public InputStream openEntry(File libraryFile, String entry)
-			throws IOException {
+	public InputStream openEntry(String libraryName, String version,
+			String entry) throws IOException {
+		final LibraryRecord record = (LibraryRecord) findExact(libraryName,
+				version);
+		if (record == null) {
+			throw new IOException(NLS.bind("Library {0}/{1} not found",
+					libraryName, version));
+		}
+		if (record.directory) {
+			return new FileInputStream(new File(record.file, entry));
+		}
 		final ZipInputStream stream = new ZipInputStream(new FileInputStream(
-				libraryFile));
+				record.file));
 		boolean success = false;
 		try {
 			ZipEntry zipEntry;
@@ -633,10 +721,10 @@ public class TypeLibraryManager {
 					stream.close();
 				} catch (IOException e) {
 					JavaScriptPlugin.warning(NLS.bind("Error closing {0}",
-							libraryFile));
+							record.file));
 				}
 			}
 		}
-		throw new FileNotFoundException(libraryFile + "#" + entry);
+		throw new FileNotFoundException(record.file + "#" + entry);
 	}
 }

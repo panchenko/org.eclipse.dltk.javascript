@@ -1,0 +1,2691 @@
+<?xml version="1.0" encoding="ASCII"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:t51="http://www.eclipse.org/dltk/javascript/typeinfo51.ecore" xmlns:ti="http://www.eclipse.org/dltk/javascript/typeinfo.ecore">
+  <ti:Type name="jQuery" metaType="org.eclipse.dltk.javascript.typeinfo.TypeLibraryMetaType">
+    <members xsi:type="ti:Method" name="noConflict" static="true">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+    </members>
+    <members xsi:type="ti:Method" name="noConflict" static="true">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="extreme">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="ajax" static="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="proxy:dltk/javascript/typeinfo/type#XMLHttpRequest"/>
+      </type>
+      <parameters name="options">
+        <type xsi:type="ti:MapType">
+          <keyType xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </keyType>
+          <valueType xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+          </valueType>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="get" static="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="proxy:dltk/javascript/typeinfo/type#XMLHttpRequest"/>
+      </type>
+      <parameters name="url">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="get" static="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="proxy:dltk/javascript/typeinfo/type#XMLHttpRequest"/>
+      </type>
+      <parameters name="url">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+      <parameters name="data">
+        <type xsi:type="ti:MapType">
+          <keyType xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </keyType>
+          <valueType xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+          </valueType>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="get" static="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="proxy:dltk/javascript/typeinfo/type#XMLHttpRequest"/>
+      </type>
+      <parameters name="url">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+      <parameters name="data">
+        <type xsi:type="ti:MapType">
+          <keyType xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </keyType>
+          <valueType xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+          </valueType>
+        </type>
+      </parameters>
+      <parameters name="callback">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="get" static="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="proxy:dltk/javascript/typeinfo/type#XMLHttpRequest"/>
+      </type>
+      <parameters name="url">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+      <parameters name="data">
+        <type xsi:type="ti:MapType">
+          <keyType xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </keyType>
+          <valueType xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+          </valueType>
+        </type>
+      </parameters>
+      <parameters name="callback">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+      <parameters name="type">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="getJSON" static="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="proxy:dltk/javascript/typeinfo/type#XMLHttpRequest"/>
+      </type>
+      <parameters name="url">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="getJSON" static="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="proxy:dltk/javascript/typeinfo/type#XMLHttpRequest"/>
+      </type>
+      <parameters name="url">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+      <parameters name="data">
+        <type xsi:type="ti:MapType">
+          <keyType xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </keyType>
+          <valueType xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+          </valueType>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="getJSON" static="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="proxy:dltk/javascript/typeinfo/type#XMLHttpRequest"/>
+      </type>
+      <parameters name="url">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+      <parameters name="data">
+        <type xsi:type="ti:MapType">
+          <keyType xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </keyType>
+          <valueType xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+          </valueType>
+        </type>
+      </parameters>
+      <parameters name="callback">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="getScript" static="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="proxy:dltk/javascript/typeinfo/type#XMLHttpRequest"/>
+      </type>
+      <parameters name="url">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="getScript" static="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="proxy:dltk/javascript/typeinfo/type#XMLHttpRequest"/>
+      </type>
+      <parameters name="url">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+      <parameters name="callback">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="post" static="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="proxy:dltk/javascript/typeinfo/type#XMLHttpRequest"/>
+      </type>
+      <parameters name="url">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="post" static="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="proxy:dltk/javascript/typeinfo/type#XMLHttpRequest"/>
+      </type>
+      <parameters name="url">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+      <parameters name="data">
+        <type xsi:type="ti:MapType">
+          <keyType xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </keyType>
+          <valueType xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+          </valueType>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="post" static="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="proxy:dltk/javascript/typeinfo/type#XMLHttpRequest"/>
+      </type>
+      <parameters name="url">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+      <parameters name="data">
+        <type xsi:type="ti:MapType">
+          <keyType xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </keyType>
+          <valueType xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+          </valueType>
+        </type>
+      </parameters>
+      <parameters name="callback">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="ajaxSetup" static="true">
+      <parameters name="options">
+        <type xsi:type="ti:MapType">
+          <keyType xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </keyType>
+          <valueType xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+          </valueType>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Property" name="support" static="true">
+      <type xsi:type="ti:MapType">
+        <keyType xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </keyType>
+        <valueType xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+        </valueType>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="browser" static="true">
+      <type xsi:type="ti:MapType">
+        <keyType xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </keyType>
+        <valueType xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+        </valueType>
+      </type>
+    </members>
+    <members xsi:type="ti:Method" name="each" static="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+      </type>
+      <parameters name="object">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+        </type>
+      </parameters>
+      <parameters name="callback">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="extend" static="true">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="object">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="extend" static="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+      </type>
+      <parameters name="deep">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+        </type>
+      </parameters>
+      <parameters name="target">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+        </type>
+      </parameters>
+      <parameters name="object1">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+        </type>
+      </parameters>
+      <parameters name="objectN" kind="VARARGS">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="extend" static="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+      </type>
+      <parameters name="target">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+        </type>
+      </parameters>
+      <parameters name="object1">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+        </type>
+      </parameters>
+      <parameters name="objectN" kind="VARARGS">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="grep" static="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Array"/>
+      </type>
+      <parameters name="array">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Array"/>
+        </type>
+      </parameters>
+      <parameters name="callback">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="grep" static="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Array"/>
+      </type>
+      <parameters name="array">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Array"/>
+        </type>
+      </parameters>
+      <parameters name="callback">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+      <parameters name="invert">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="makeArray" static="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Array"/>
+      </type>
+      <parameters name="object">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="map" static="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Array"/>
+      </type>
+      <parameters name="array">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Array"/>
+        </type>
+      </parameters>
+      <parameters name="callback">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="inArray" static="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+      <parameters name="value">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+        </type>
+      </parameters>
+      <parameters name="array">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Array"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="merge" static="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Array"/>
+      </type>
+      <parameters name="a1">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Array"/>
+        </type>
+      </parameters>
+      <parameters name="a2">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Array"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="unique" static="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Array"/>
+      </type>
+      <parameters name="array">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Array"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="isArray" static="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+      </type>
+      <parameters name="object">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="isFunction" static="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+      </type>
+      <parameters name="oject">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="trim" static="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+      <parameters name="str">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="param" static="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+      <parameters name="obj">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="data" static="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+      <parameters name="elem">
+        <type xsi:type="ti:SimpleType">
+          <target href="proxy:dltk/javascript/typeinfo/type#Element"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="data" static="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+      </type>
+      <parameters name="elem">
+        <type xsi:type="ti:SimpleType">
+          <target href="proxy:dltk/javascript/typeinfo/type#Element"/>
+        </type>
+      </parameters>
+      <parameters name="name">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="data" static="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+      </type>
+      <parameters name="elem">
+        <type xsi:type="ti:SimpleType">
+          <target href="proxy:dltk/javascript/typeinfo/type#Element"/>
+        </type>
+      </parameters>
+      <parameters name="name">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+      <parameters name="value">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="removeData" static="true">
+      <parameters name="elem">
+        <type xsi:type="ti:SimpleType">
+          <target href="proxy:dltk/javascript/typeinfo/type#Element"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="removeData" static="true">
+      <parameters name="elem">
+        <type xsi:type="ti:SimpleType">
+          <target href="proxy:dltk/javascript/typeinfo/type#Element"/>
+        </type>
+      </parameters>
+      <parameters name="name">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="each">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="callback">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="size">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="length">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="selector">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="context">
+      <type xsi:type="ti:SimpleType">
+        <target href="proxy:dltk/javascript/typeinfo/type#Node"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Method" name="get">
+      <type xsi:type="ti:SimpleType">
+        <target href="proxy:dltk/javascript/typeinfo/type#Element"/>
+      </type>
+      <parameters name="index">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="get">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Array"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Method" name="index">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+      <parameters name="subject">
+        <type xsi:type="ti:SimpleType" target="jQuery"/>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="index">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+      <parameters name="elem">
+        <type xsi:type="ti:SimpleType">
+          <target href="proxy:dltk/javascript/typeinfo/type#Element"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="data">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+      </type>
+      <parameters name="name">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="data">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="name">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+      <parameters name="value">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="removeData">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="name">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="queue">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Array"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Method" name="queue">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Array"/>
+      </type>
+      <parameters name="name">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="queue">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="callback">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="queue">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="name">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+      <parameters name="callback">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="queue">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="queue">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Array"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="queue">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="name">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+      <parameters name="queue">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Array"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="dequeue">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+    </members>
+    <members xsi:type="ti:Method" name="dequeue">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="name">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="attr">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+      </type>
+      <parameters name="name">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="attr">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="properties">
+        <type xsi:type="ti:MapType">
+          <keyType xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </keyType>
+          <valueType xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+          </valueType>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="attr">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="key">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+      <parameters name="value">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="attr">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="key">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+      <parameters name="fn">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="removeAttr">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="name">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="addClass">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="clz">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="hasClass">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+      </type>
+      <parameters name="clz">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="removeClass">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+    </members>
+    <members xsi:type="ti:Method" name="removeClass">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="clz">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="toggleClass">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="clz">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="toggleClass">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="clz">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+      <parameters name="switchIt">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="html">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Method" name="html">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="val">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="text">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Method" name="text">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="value">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="val">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Method" name="val">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="val">
+        <type xsi:type="ti:UnionType">
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </targets>
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Array"/>
+          </targets>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="add">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="expr">
+        <type xsi:type="ti:UnionType">
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </targets>
+          <targets xsi:type="ti:SimpleType">
+            <target href="proxy:dltk/javascript/typeinfo/type#Element"/>
+          </targets>
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Array"/>
+          </targets>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="andSelf">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+    </members>
+    <members xsi:type="ti:Method" name="children">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+    </members>
+    <members xsi:type="ti:Method" name="children">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="expr">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="closest">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="expr">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="contents">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+    </members>
+    <members xsi:type="ti:Method" name="end">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+    </members>
+    <members xsi:type="ti:Method" name="eq">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="position">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="filter">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="expr">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="filter">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="func">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="find">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="expr">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="first">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+    </members>
+    <members xsi:type="ti:Method" name="last">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+    </members>
+    <members xsi:type="ti:Method" name="has">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="contained">
+        <type xsi:type="ti:SimpleType">
+          <target href="proxy:dltk/javascript/typeinfo/type#Element"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="has">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="selector">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="is">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+      </type>
+      <parameters name="expr">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="map">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="func">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="next">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+    </members>
+    <members xsi:type="ti:Method" name="next">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="expr">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="nextAll">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+    </members>
+    <members xsi:type="ti:Method" name="nextAll">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="expr">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="not">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="expr">
+        <type xsi:type="ti:UnionType">
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </targets>
+          <targets xsi:type="ti:SimpleType">
+            <target href="proxy:dltk/javascript/typeinfo/type#Element"/>
+          </targets>
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Array"/>
+          </targets>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="offsetParent">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+    </members>
+    <members xsi:type="ti:Method" name="parent">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+    </members>
+    <members xsi:type="ti:Method" name="parent">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="expr">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="parents">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+    </members>
+    <members xsi:type="ti:Method" name="parents">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="expr">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="prev">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+    </members>
+    <members xsi:type="ti:Method" name="prev">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="expr">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="prevAll">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+    </members>
+    <members xsi:type="ti:Method" name="prevAll">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="expr">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="siblings">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+    </members>
+    <members xsi:type="ti:Method" name="siblings">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="expr">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="slice">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="start">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="slice">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="start">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+        </type>
+      </parameters>
+      <parameters name="end">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="append">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="content">
+        <type xsi:type="ti:UnionType">
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </targets>
+          <targets xsi:type="ti:SimpleType">
+            <target href="proxy:dltk/javascript/typeinfo/type#Node"/>
+          </targets>
+          <targets xsi:type="ti:SimpleType" target="jQuery"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="appendTo">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="selector">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="appendTo">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="elem">
+        <type xsi:type="ti:SimpleType">
+          <target href="proxy:dltk/javascript/typeinfo/type#HTMLElement"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="prepend">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="content">
+        <type xsi:type="ti:UnionType">
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </targets>
+          <targets xsi:type="ti:SimpleType">
+            <target href="proxy:dltk/javascript/typeinfo/type#Element"/>
+          </targets>
+          <targets xsi:type="ti:SimpleType" target="jQuery"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="prependTo">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="selector">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="after">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="content">
+        <type xsi:type="ti:UnionType">
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </targets>
+          <targets xsi:type="ti:SimpleType">
+            <target href="proxy:dltk/javascript/typeinfo/type#Element"/>
+          </targets>
+          <targets xsi:type="ti:SimpleType" target="jQuery"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="before">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="content">
+        <type xsi:type="ti:UnionType">
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </targets>
+          <targets xsi:type="ti:SimpleType">
+            <target href="proxy:dltk/javascript/typeinfo/type#Element"/>
+          </targets>
+          <targets xsi:type="ti:SimpleType" target="jQuery"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="insertAfter">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="content">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="insertAfter">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="node">
+        <type xsi:type="ti:SimpleType">
+          <target href="proxy:dltk/javascript/typeinfo/type#Node"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="insertBefore">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="content">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="wrap">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="html">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="wrap">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="elem">
+        <type xsi:type="ti:SimpleType">
+          <target href="proxy:dltk/javascript/typeinfo/type#Element"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="wrapAll">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="html">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="wrapAll">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="elem">
+        <type xsi:type="ti:SimpleType">
+          <target href="proxy:dltk/javascript/typeinfo/type#Element"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="wrapInner">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="elem">
+        <type xsi:type="ti:SimpleType">
+          <target href="proxy:dltk/javascript/typeinfo/type#Element"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="wrapInner">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="html">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="replaceWith">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="content">
+        <type xsi:type="ti:UnionType">
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </targets>
+          <targets xsi:type="ti:SimpleType">
+            <target href="proxy:dltk/javascript/typeinfo/type#Element"/>
+          </targets>
+          <targets xsi:type="ti:SimpleType" target="jQuery"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="replaceAll">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="selector">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="empty">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+    </members>
+    <members xsi:type="ti:Method" name="remove">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+    </members>
+    <members xsi:type="ti:Method" name="remove">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="expr">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="clone">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+    </members>
+    <members xsi:type="ti:Method" name="clone">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="more">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="css">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+      <parameters name="name">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="css">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="styleDecl">
+        <type xsi:type="ti:MapType">
+          <keyType xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </keyType>
+          <valueType xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+          </valueType>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="css">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="key">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+      <parameters name="value">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="offset">
+      <type xsi:type="ti:MapType">
+        <keyType xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </keyType>
+        <valueType xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+        </valueType>
+      </type>
+    </members>
+    <members xsi:type="ti:Method" name="position">
+      <type xsi:type="ti:MapType">
+        <keyType xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </keyType>
+        <valueType xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+        </valueType>
+      </type>
+    </members>
+    <members xsi:type="ti:Method" name="scrollTop">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Method" name="scrollTop">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="value">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="scrollLeft">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Method" name="scrollLeft">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="value">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="height">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Method" name="height">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="value">
+        <type xsi:type="ti:UnionType">
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+          </targets>
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </targets>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="width">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Method" name="width">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="value">
+        <type xsi:type="ti:UnionType">
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+          </targets>
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </targets>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="innerHeight">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Method" name="innerWidth">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Method" name="outerHeight">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+      <parameters name="margin">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="outerWidth">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+      <parameters name="margin">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="ready">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="callback">
+        <type xsi:type="ti:FunctionType"/>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="bind">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="eventType">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+      <parameters name="eventData">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+        </type>
+      </parameters>
+      <parameters name="func">
+        <type xsi:type="ti:FunctionType">
+          <parameters name="eventObject" kind="OPTIONAL">
+            <type xsi:type="ti:SimpleType">
+              <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+            </type>
+          </parameters>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="bind">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="eventType">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+      <parameters name="func">
+        <type xsi:type="ti:FunctionType">
+          <parameters name="eventObject" kind="OPTIONAL">
+            <type xsi:type="ti:SimpleType">
+              <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+            </type>
+          </parameters>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="bind">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="eventFuncBindingMap">
+        <type xsi:type="ti:MapType">
+          <keyType xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </keyType>
+          <valueType xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+          </valueType>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="one">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="eventType">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+      <parameters name="eventData">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+        </type>
+      </parameters>
+      <parameters name="func">
+        <type xsi:type="ti:FunctionType">
+          <parameters name="eventObject" kind="OPTIONAL">
+            <type xsi:type="ti:SimpleType">
+              <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+            </type>
+          </parameters>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="one">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="eventType">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+      <parameters name="func">
+        <type xsi:type="ti:FunctionType">
+          <parameters name="eventObject" kind="OPTIONAL">
+            <type xsi:type="ti:SimpleType">
+              <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+            </type>
+          </parameters>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="trigger">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="type">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="trigger">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="type">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+        </type>
+      </parameters>
+      <parameters name="data">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Array"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="triggerHandler">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+      </type>
+      <parameters name="type">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="triggerHandler">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+      </type>
+      <parameters name="type">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+        </type>
+      </parameters>
+      <parameters name="data">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Array"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="unbind">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+    </members>
+    <members xsi:type="ti:Method" name="unbind">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="eventType">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="unbind">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="eventType">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+        </type>
+      </parameters>
+      <parameters name="func">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="live">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="type">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+      <parameters name="eventData">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+        </type>
+      </parameters>
+      <parameters name="func">
+        <type xsi:type="ti:FunctionType">
+          <parameters name="eventObject" kind="OPTIONAL">
+            <type xsi:type="ti:SimpleType">
+              <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+            </type>
+          </parameters>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="live">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="type">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+      <parameters name="func">
+        <type xsi:type="ti:FunctionType">
+          <parameters name="eventObject" kind="OPTIONAL">
+            <type xsi:type="ti:SimpleType">
+              <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+            </type>
+          </parameters>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="die">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+    </members>
+    <members xsi:type="ti:Method" name="die">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="type">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="die">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="type">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+        </type>
+      </parameters>
+      <parameters name="data">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="blur">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+    </members>
+    <members xsi:type="ti:Method" name="blur">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="fn">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="change">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+    </members>
+    <members xsi:type="ti:Method" name="change">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="func">
+        <type xsi:type="ti:FunctionType">
+          <parameters name="eventObject" kind="OPTIONAL">
+            <type xsi:type="ti:SimpleType">
+              <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+            </type>
+          </parameters>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="click">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+    </members>
+    <members xsi:type="ti:Method" name="click">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="func">
+        <type xsi:type="ti:FunctionType">
+          <parameters name="eventObject" kind="OPTIONAL">
+            <type xsi:type="ti:SimpleType">
+              <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+            </type>
+          </parameters>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="dblclick">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+    </members>
+    <members xsi:type="ti:Method" name="dblclick">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="func">
+        <type xsi:type="ti:FunctionType">
+          <parameters name="eventObject" kind="OPTIONAL">
+            <type xsi:type="ti:SimpleType">
+              <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+            </type>
+          </parameters>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="delegate">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="selector">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+      <parameters name="eventType">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+      <parameters name="eventData">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+        </type>
+      </parameters>
+      <parameters name="func">
+        <type xsi:type="ti:FunctionType">
+          <parameters name="eventObject" kind="OPTIONAL">
+            <type xsi:type="ti:SimpleType">
+              <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+            </type>
+          </parameters>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="delegate">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="selector">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+      <parameters name="eventType">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+      <parameters name="func">
+        <type xsi:type="ti:FunctionType">
+          <parameters name="eventObject" kind="OPTIONAL">
+            <type xsi:type="ti:SimpleType">
+              <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+            </type>
+          </parameters>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="error">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+    </members>
+    <members xsi:type="ti:Method" name="error">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="errHandleFunc">
+        <type xsi:type="ti:FunctionType"/>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="focus">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+    </members>
+    <members xsi:type="ti:Method" name="focus">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="func">
+        <type xsi:type="ti:FunctionType">
+          <parameters name="eventObject" kind="OPTIONAL">
+            <type xsi:type="ti:SimpleType">
+              <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+            </type>
+          </parameters>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="hover">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="over">
+        <type xsi:type="ti:FunctionType">
+          <parameters name="eventObject" kind="OPTIONAL">
+            <type xsi:type="ti:SimpleType">
+              <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+            </type>
+          </parameters>
+        </type>
+      </parameters>
+      <parameters name="out">
+        <type xsi:type="ti:FunctionType">
+          <parameters name="eventObject" kind="OPTIONAL">
+            <type xsi:type="ti:SimpleType">
+              <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+            </type>
+          </parameters>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="keydown">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+    </members>
+    <members xsi:type="ti:Method" name="keydown">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="func">
+        <type xsi:type="ti:FunctionType">
+          <parameters name="eventObject" kind="OPTIONAL">
+            <type xsi:type="ti:SimpleType">
+              <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+            </type>
+          </parameters>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="keypress">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+    </members>
+    <members xsi:type="ti:Method" name="keypress">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="func">
+        <type xsi:type="ti:FunctionType">
+          <parameters name="eventObject" kind="OPTIONAL">
+            <type xsi:type="ti:SimpleType">
+              <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+            </type>
+          </parameters>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="keyup">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+    </members>
+    <members xsi:type="ti:Method" name="keyup">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="fn">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="mousedown">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="fn">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="mouseenter">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="fn">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="mouseleave">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="fn">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="mousemove">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="fn">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="mouseout">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="fn">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="mouseover">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="fn">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="mouseup">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="fn">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="resize">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="fn">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="scroll">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="fn">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="select">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+    </members>
+    <members xsi:type="ti:Method" name="select">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="fn">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="submit">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+    </members>
+    <members xsi:type="ti:Method" name="submit">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="fn">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="unload">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="fn">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="show">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+    </members>
+    <members xsi:type="ti:Method" name="show">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="speed">
+        <type xsi:type="ti:UnionType">
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+          </targets>
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </targets>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="show">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="speed">
+        <type xsi:type="ti:UnionType">
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+          </targets>
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </targets>
+        </type>
+      </parameters>
+      <parameters name="callback">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="hide">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+    </members>
+    <members xsi:type="ti:Method" name="hide">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="speed">
+        <type xsi:type="ti:UnionType">
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+          </targets>
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </targets>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="hide">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="speed">
+        <type xsi:type="ti:UnionType">
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+          </targets>
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </targets>
+        </type>
+      </parameters>
+      <parameters name="callback">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="toggle">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="funcs" kind="VARARGS">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="toggle">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="flag">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="toggle">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="speed">
+        <type xsi:type="ti:UnionType">
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+          </targets>
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </targets>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="toggle">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="speed">
+        <type xsi:type="ti:UnionType">
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+          </targets>
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </targets>
+        </type>
+      </parameters>
+      <parameters name="callback">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="slideDown">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="speed">
+        <type xsi:type="ti:UnionType">
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+          </targets>
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </targets>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="slideDown">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="speed">
+        <type xsi:type="ti:UnionType">
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+          </targets>
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </targets>
+        </type>
+      </parameters>
+      <parameters name="callback">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="slideUp">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="speed">
+        <type xsi:type="ti:UnionType">
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+          </targets>
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </targets>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="slideUp">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="speed">
+        <type xsi:type="ti:UnionType">
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+          </targets>
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </targets>
+        </type>
+      </parameters>
+      <parameters name="callback">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="slideToggle">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="speed">
+        <type xsi:type="ti:UnionType">
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+          </targets>
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </targets>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="slideToggle">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="speed">
+        <type xsi:type="ti:UnionType">
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+          </targets>
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </targets>
+        </type>
+      </parameters>
+      <parameters name="callback">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="fadeIn">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="speed">
+        <type xsi:type="ti:UnionType">
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+          </targets>
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </targets>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="fadeIn">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="speed">
+        <type xsi:type="ti:UnionType">
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+          </targets>
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </targets>
+        </type>
+      </parameters>
+      <parameters name="callback">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="fadeOut">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="speed">
+        <type xsi:type="ti:UnionType">
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+          </targets>
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </targets>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="fadeOut">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="speed">
+        <type xsi:type="ti:UnionType">
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+          </targets>
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </targets>
+        </type>
+      </parameters>
+      <parameters name="callback">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="fadeTo">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="speed">
+        <type xsi:type="ti:UnionType">
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+          </targets>
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </targets>
+        </type>
+      </parameters>
+      <parameters name="opacity">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="fadeTo">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="speed">
+        <type xsi:type="ti:UnionType">
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+          </targets>
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </targets>
+        </type>
+      </parameters>
+      <parameters name="opacity">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+        </type>
+      </parameters>
+      <parameters name="callback">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="animate">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="params">
+        <type xsi:type="ti:MapType">
+          <keyType xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </keyType>
+          <valueType xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+          </valueType>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="animate">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="params">
+        <type xsi:type="ti:MapType">
+          <keyType xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </keyType>
+          <valueType xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+          </valueType>
+        </type>
+      </parameters>
+      <parameters name="duration">
+        <type xsi:type="ti:UnionType">
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+          </targets>
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </targets>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="animate">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="params">
+        <type xsi:type="ti:MapType">
+          <keyType xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </keyType>
+          <valueType xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+          </valueType>
+        </type>
+      </parameters>
+      <parameters name="duration">
+        <type xsi:type="ti:UnionType">
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+          </targets>
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </targets>
+        </type>
+      </parameters>
+      <parameters name="callback">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="animate">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="params">
+        <type xsi:type="ti:MapType">
+          <keyType xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </keyType>
+          <valueType xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+          </valueType>
+        </type>
+      </parameters>
+      <parameters name="duration">
+        <type xsi:type="ti:UnionType">
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+          </targets>
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </targets>
+        </type>
+      </parameters>
+      <parameters name="easing">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="animate">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="params">
+        <type xsi:type="ti:MapType">
+          <keyType xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </keyType>
+          <valueType xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+          </valueType>
+        </type>
+      </parameters>
+      <parameters name="duration">
+        <type xsi:type="ti:UnionType">
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+          </targets>
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </targets>
+        </type>
+      </parameters>
+      <parameters name="easing">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+      <parameters name="callback">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="animate">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="params">
+        <type xsi:type="ti:MapType">
+          <keyType xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </keyType>
+          <valueType xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+          </valueType>
+        </type>
+      </parameters>
+      <parameters name="options">
+        <type xsi:type="ti:MapType">
+          <keyType xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </keyType>
+          <valueType xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+          </valueType>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="stop">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+    </members>
+    <members xsi:type="ti:Method" name="stop">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="clearQueue">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="stop">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="clearQueue">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+        </type>
+      </parameters>
+      <parameters name="gotoEnd">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="load">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="onLoadFunc">
+        <type xsi:type="ti:FunctionType">
+          <parameters name="eventObject" kind="OPTIONAL">
+            <type xsi:type="ti:SimpleType">
+              <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+            </type>
+          </parameters>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="load">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="url">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="load">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="url">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+      <parameters name="data">
+        <type xsi:type="ti:UnionType">
+          <targets xsi:type="ti:MapType">
+            <keyType xsi:type="ti:SimpleType">
+              <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+            </keyType>
+            <valueType xsi:type="ti:SimpleType">
+              <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+            </valueType>
+          </targets>
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </targets>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="load">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="url">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+      <parameters name="data">
+        <type xsi:type="ti:UnionType">
+          <targets xsi:type="ti:MapType">
+            <keyType xsi:type="ti:SimpleType">
+              <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+            </keyType>
+            <valueType xsi:type="ti:SimpleType">
+              <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+            </valueType>
+          </targets>
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </targets>
+        </type>
+      </parameters>
+      <parameters name="callback">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="ajaxComplete">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="callback">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="ajaxError">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="callback">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="ajaxSend">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="callback">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="ajaxStart">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="callback">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="ajaxStop">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="callback">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="ajaxSuccess">
+      <type xsi:type="ti:SimpleType" target="jQuery"/>
+      <parameters name="callback">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="serialize">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Method" name="serializeArray">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Array"/>
+      </type>
+    </members>
+    <staticConstructor xsi:type="t51:MConstructor">
+      <children name="jQuery">
+        <type xsi:type="ti:SimpleType" target="jQuery"/>
+        <parameters name="selector">
+          <type xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </type>
+        </parameters>
+      </children>
+      <children name="jQuery">
+        <type xsi:type="ti:SimpleType" target="jQuery"/>
+        <parameters name="selector">
+          <type xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </type>
+        </parameters>
+        <parameters name="context">
+          <type xsi:type="ti:SimpleType">
+            <target href="proxy:dltk/javascript/typeinfo/type#Node"/>
+          </type>
+        </parameters>
+      </children>
+      <children name="jQuery">
+        <type xsi:type="ti:SimpleType" target="jQuery"/>
+        <parameters name="selector">
+          <type xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </type>
+        </parameters>
+        <parameters name="context">
+          <type xsi:type="ti:SimpleType">
+            <target href="proxy:dltk/javascript/typeinfo/type#Element"/>
+          </type>
+        </parameters>
+      </children>
+      <children name="jQuery">
+        <type xsi:type="ti:SimpleType" target="jQuery"/>
+        <parameters name="selector">
+          <type xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </type>
+        </parameters>
+        <parameters name="document">
+          <type xsi:type="ti:SimpleType">
+            <target href="proxy:dltk/javascript/typeinfo/type#HTMLDocument"/>
+          </type>
+        </parameters>
+      </children>
+      <children name="jQuery">
+        <type xsi:type="ti:SimpleType" target="jQuery"/>
+        <parameters name="selector">
+          <type xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </type>
+        </parameters>
+        <parameters name="context">
+          <type xsi:type="ti:SimpleType" target="jQuery"/>
+        </parameters>
+      </children>
+      <children name="jQuery">
+        <type xsi:type="ti:SimpleType" target="jQuery"/>
+        <parameters name="elements">
+          <type xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Array"/>
+          </type>
+        </parameters>
+      </children>
+      <children name="jQuery">
+        <type xsi:type="ti:SimpleType" target="jQuery"/>
+        <parameters name="element">
+          <type xsi:type="ti:SimpleType">
+            <target href="proxy:dltk/javascript/typeinfo/type#Node"/>
+          </type>
+        </parameters>
+      </children>
+      <children name="jQuery">
+        <type xsi:type="ti:SimpleType" target="jQuery"/>
+        <parameters name="element">
+          <type xsi:type="ti:SimpleType">
+            <target href="proxy:dltk/javascript/typeinfo/type#Element"/>
+          </type>
+        </parameters>
+      </children>
+      <children name="jQuery">
+        <type xsi:type="ti:SimpleType" target="jQuery"/>
+        <parameters name="document">
+          <type xsi:type="ti:SimpleType">
+            <target href="proxy:dltk/javascript/typeinfo/type#HTMLDocument"/>
+          </type>
+        </parameters>
+      </children>
+      <children name="jQuery">
+        <type xsi:type="ti:SimpleType" target="jQuery"/>
+        <parameters name="callback">
+          <type xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Function"/>
+          </type>
+        </parameters>
+      </children>
+      <children name="jQuery">
+        <type xsi:type="ti:SimpleType" target="jQuery"/>
+        <parameters name="win">
+          <type xsi:type="ti:SimpleType">
+            <target href="proxy:dltk/javascript/typeinfo/type#Window"/>
+          </type>
+        </parameters>
+      </children>
+    </staticConstructor>
+  </ti:Type>
+  <ti:TypeLiteral name="jQuery" target="jQuery"/>
+  <ti:TypeLiteral name="$" target="jQuery"/>
+</xmi:XMI>

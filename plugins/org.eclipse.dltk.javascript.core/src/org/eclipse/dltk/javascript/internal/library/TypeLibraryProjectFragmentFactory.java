@@ -11,12 +11,12 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.library;
 
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.dltk.core.IBuildpathEntry;
 import org.eclipse.dltk.core.IProjectFragment;
 import org.eclipse.dltk.core.IProjectFragmentFactory;
 import org.eclipse.dltk.core.IScriptProject;
 import org.eclipse.dltk.internal.core.ScriptProject;
-import org.eclipse.dltk.javascript.typeinfo.TypeLibraryFormat;
 
 @SuppressWarnings("restriction")
 public class TypeLibraryProjectFragmentFactory implements
@@ -24,10 +24,9 @@ public class TypeLibraryProjectFragmentFactory implements
 
 	public IProjectFragment create(IScriptProject project,
 			IBuildpathEntry resolvedEntry) {
-		if (TypeLibraryFormat.FILE_EXTENSION.equals(resolvedEntry.getPath()
-				.getFileExtension())) {
-			return new TypeLibraryProjectFragment((ScriptProject) project,
-					resolvedEntry.getPath());
+		final IPath path = resolvedEntry.getPath();
+		if (TypeLibraryContainer.ENTRY_PREFIX.isPrefixOf(path)) {
+			return new TypeLibraryProjectFragment((ScriptProject) project, path);
 		}
 		return null;
 	}

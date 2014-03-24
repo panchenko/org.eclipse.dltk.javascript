@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   	<extension point="org.eclipse.dltk.javascript.core.typeinfo">
+   		<library location="dom/" shape="dir"/>
+   	</extension>
+   	<extension point="org.eclipse.dltk.javascript.core.typeinfo">
+   		<library location="jQuery/" shape="dir"/>
+   	</extension>
+</plugin>

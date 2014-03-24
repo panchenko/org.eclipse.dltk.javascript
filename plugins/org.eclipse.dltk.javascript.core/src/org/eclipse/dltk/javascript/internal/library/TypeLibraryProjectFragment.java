@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.library;
 
-import java.io.File;
 import java.util.Map;
 
 import org.eclipse.core.resources.IResource;
@@ -27,8 +26,6 @@ import org.eclipse.dltk.core.IProjectFragment;
 import org.eclipse.dltk.core.IScriptFolder;
 import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.core.WorkingCopyOwner;
-import org.eclipse.dltk.core.environment.EnvironmentPathUtils;
-import org.eclipse.dltk.core.environment.IFileHandle;
 import org.eclipse.dltk.internal.core.CopyProjectFragmentOperation;
 import org.eclipse.dltk.internal.core.MementoModelElementUtil;
 import org.eclipse.dltk.internal.core.ModelElement;
@@ -38,17 +35,20 @@ import org.eclipse.dltk.internal.core.Openable;
 import org.eclipse.dltk.internal.core.OpenableElementInfo;
 import org.eclipse.dltk.internal.core.ScriptProject;
 import org.eclipse.dltk.internal.core.util.MementoTokenizer;
+import org.eclipse.dltk.javascript.typeinfo.TypeLibraryManager;
 
 @SuppressWarnings("restriction")
 public class TypeLibraryProjectFragment extends Openable implements
 		IProjectFragment {
 
-	private final IPath libaryPath;
+	private final IPath path;
 
 	public TypeLibraryProjectFragment(ScriptProject parent, IPath path)
 			throws IllegalArgumentException {
 		super(parent);
-		this.libaryPath = path;
+		assert TypeLibraryContainer.ENTRY_PREFIX.isPrefixOf(path)
+				&& path.segmentCount() == 3;
+		this.path = path;
 	}
 
 	public int getElementType() {
@@ -65,7 +65,7 @@ public class TypeLibraryProjectFragment extends Openable implements
 	}
 
 	public IPath getPath() {
-		return libaryPath;
+		return path;
 	}
 
 	public int getKind() throws ModelException {
@@ -160,10 +160,6 @@ public class TypeLibraryProjectFragment extends Openable implements
 		return true;
 	}
 
-	protected File getLibraryFile() {
-		return EnvironmentPathUtils.getLocalPath(libaryPath).toFile();
-	}
-
 	@Override
 	protected Object createElementInfo() {
 		return new OpenableElementInfo();
@@ -193,12 +189,12 @@ public class TypeLibraryProjectFragment extends Openable implements
 
 	@Override
 	public String getElementName() {
-		return libaryPath.lastSegment();
+		return path.segment(1);
 	}
 
 	@Override
 	public int hashCode() {
-		return this.libaryPath.hashCode();
+		return this.path.hashCode();
 	}
 
 	@Override
@@ -207,7 +203,7 @@ public class TypeLibraryProjectFragment extends Openable implements
 			return true;
 		if (o instanceof TypeLibraryProjectFragment) {
 			final TypeLibraryProjectFragment other = (TypeLibraryProjectFragment) o;
-			return this.libaryPath.equals(other.libaryPath);
+			return this.path.equals(other.path);
 		} else {
 			return false;
 		}
@@ -218,8 +214,8 @@ public class TypeLibraryProjectFragment extends Openable implements
 	 */
 	@Override
 	protected boolean resourceExists() {
-		final IFileHandle file = EnvironmentPathUtils.getFile(libaryPath);
-		return file != null && file.isFile();
+		return TypeLibraryManager.getManager().findExact(path.segment(1),
+				path.segment(2)) != null;
 	}
 
 	/*

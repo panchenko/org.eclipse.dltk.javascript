@@ -24,10 +24,10 @@ import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.IProjectFragment;
 import org.eclipse.dltk.core.ModelException;
-import org.eclipse.dltk.core.environment.EnvironmentPathUtils;
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 import org.eclipse.emf.common.util.URI;
 
@@ -53,11 +53,11 @@ public class TypeLibraryModelResourceSetCache {
 							for (IProjectFragment fragment : DLTKCore.create(
 									key).getProjectFragments()) {
 								if (fragment instanceof TypeLibraryProjectFragment) {
-									final URI uri = URI
-											.createFileURI(EnvironmentPathUtils
-													.getLocalPath(
-															fragment.getPath())
-													.toFile().toString());
+									final IPath path = fragment.getPath();
+									final URI uri = URI.createHierarchicalURI(
+											TypeLibraryModelResourceSet.SCHEME,
+											path.segment(1), null,
+											path.segment(2), null);
 									resourceSet.getResource(uri, true);
 								}
 							}

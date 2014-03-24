@@ -1,0 +1,3545 @@
+<?xml version="1.0" encoding="ASCII"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ti="http://www.eclipse.org/dltk/javascript/typeinfo.ecore">
+  <ti:Type name="DOMException">
+    <members xsi:type="ti:Property" name="INDEX_SIZE_ERR" static="true" readOnly="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="DOMSTRING_SIZE_ERR" static="true" readOnly="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="HIERARCHY_REQUEST_ERR" static="true" readOnly="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="WRONG_DOCUMENT_ERR" static="true" readOnly="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="INVALID_CHARACTER_ERR" static="true" readOnly="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="NO_DATA_ALLOWED_ERR" static="true" readOnly="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="NO_MODIFICATION_ALLOWED_ERR" static="true" readOnly="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="NOT_FOUND_ERR" static="true" readOnly="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="NOT_SUPPORTED_ERR" static="true" readOnly="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="INUSE_ATTRIBUTE_ERR" static="true" readOnly="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="INVALID_STATE_ERR" static="true" readOnly="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="SYNTAX_ERR" static="true" readOnly="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="INVALID_MODIFICATION_ERR" static="true" readOnly="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="NAMESPACE_ERR" static="true" readOnly="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="INVALID_ACCESS_ERR" static="true" readOnly="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+  </ti:Type>
+  <ti:TypeLiteral name="DOMException" target="DOMException"/>
+  <ti:Type name="ExceptionCode"/>
+  <ti:TypeLiteral name="ExceptionCode" target="ExceptionCode"/>
+  <ti:Type name="DOMImplementation">
+    <members xsi:type="ti:Method" name="hasFeature">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+      </type>
+      <parameters name="feature">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+      <parameters name="version">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+  </ti:Type>
+  <ti:TypeLiteral name="DOMImplementation" target="DOMImplementation"/>
+  <ti:Type name="Node" traits="EventTarget">
+    <members xsi:type="ti:Property" name="attributes">
+      <type xsi:type="ti:SimpleType" target="NamedNodeMap"/>
+    </members>
+    <members xsi:type="ti:Property" name="childNodes">
+      <type xsi:type="ti:SimpleType" target="NodeList"/>
+    </members>
+    <members xsi:type="ti:Property" name="firstChild">
+      <type xsi:type="ti:SimpleType" target="Node"/>
+    </members>
+    <members xsi:type="ti:Property" name="lastChild">
+      <type xsi:type="ti:SimpleType" target="Node"/>
+    </members>
+    <members xsi:type="ti:Property" name="nextSibling">
+      <type xsi:type="ti:SimpleType" target="Node"/>
+    </members>
+    <members xsi:type="ti:Property" name="nodeName">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="nodeValue">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="nodeType">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="ownerDocument">
+      <type xsi:type="ti:SimpleType" target="Document"/>
+    </members>
+    <members xsi:type="ti:Property" name="parentNode">
+      <type xsi:type="ti:SimpleType" target="Node"/>
+    </members>
+    <members xsi:type="ti:Property" name="previousSibling">
+      <type xsi:type="ti:SimpleType" target="Node"/>
+    </members>
+    <members xsi:type="ti:Property" name="ATTRIBUTE_NODE" static="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="CDATA_SECTION_NODE" static="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="COMMENT_NODE" static="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="DOCUMENT_FRAGMENT_NODE" static="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="DOCUMENT_NODE" static="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="DOCUMENT_TYPE_NODE" static="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="ELEMENT_NODE" static="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="ENTITY_NODE" static="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="ENTITY_REFERENCE_NODE" static="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="PROCESSING_INSTRUCTION_NODE" static="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="TEXT_NODE" static="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="XPATH_NAMESPACE_NODE" static="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="NOTATION_NODE" static="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Method" name="addEventListener">
+      <parameters name="type"/>
+      <parameters name="listener"/>
+      <parameters name="opt_useCapture"/>
+    </members>
+    <members xsi:type="ti:Method" name="removeEventListener">
+      <parameters name="type"/>
+      <parameters name="listener"/>
+      <parameters name="opt_useCapture"/>
+    </members>
+    <members xsi:type="ti:Method" name="dispatchEvent">
+      <parameters name="evt"/>
+    </members>
+    <members xsi:type="ti:Method" name="appendChild">
+      <type xsi:type="ti:SimpleType" target="Node"/>
+      <parameters name="newChild">
+        <type xsi:type="ti:SimpleType" target="Node"/>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="cloneNode">
+      <type xsi:type="ti:SimpleType" target="Node"/>
+      <parameters name="deep">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="hasChildNodes">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Method" name="insertBefore">
+      <type xsi:type="ti:SimpleType" target="Node"/>
+      <parameters name="newChild">
+        <type xsi:type="ti:SimpleType" target="Node"/>
+      </parameters>
+      <parameters name="refChild">
+        <type xsi:type="ti:SimpleType" target="Node"/>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="removeChild">
+      <type xsi:type="ti:SimpleType" target="Node"/>
+      <parameters name="oldChild">
+        <type xsi:type="ti:SimpleType" target="Node"/>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="replaceChild">
+      <type xsi:type="ti:SimpleType" target="Node"/>
+      <parameters name="newChild">
+        <type xsi:type="ti:SimpleType" target="Node"/>
+      </parameters>
+      <parameters name="oldChild">
+        <type xsi:type="ti:SimpleType" target="Node"/>
+      </parameters>
+    </members>
+  </ti:Type>
+  <ti:TypeLiteral name="Node" target="Node"/>
+  <ti:Type name="DocumentFragment">
+    <superTypeExpr target="Node"/>
+  </ti:Type>
+  <ti:TypeLiteral name="DocumentFragment" target="DocumentFragment"/>
+  <ti:Type name="Document">
+    <members xsi:type="ti:Property" name="doctype">
+      <type xsi:type="ti:SimpleType" target="DocumentType"/>
+    </members>
+    <members xsi:type="ti:Property" name="documentElement">
+      <type xsi:type="ti:SimpleType" target="Element"/>
+    </members>
+    <members xsi:type="ti:Property" name="implementation">
+      <type xsi:type="ti:SimpleType" target="DOMImplementation"/>
+    </members>
+    <members xsi:type="ti:Method" name="createAttribute">
+      <type xsi:type="ti:SimpleType" target="Attr"/>
+      <parameters name="name">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="createComment">
+      <type xsi:type="ti:SimpleType" target="Comment"/>
+      <parameters name="data">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="createCDATASection">
+      <type xsi:type="ti:SimpleType" target="CDATASection"/>
+      <parameters name="data">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="createDocumentFragment">
+      <type xsi:type="ti:SimpleType" target="DocumentFragment"/>
+    </members>
+    <members xsi:type="ti:Method" name="createElement">
+      <type xsi:type="ti:SimpleType" target="Element"/>
+      <parameters name="tagName">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="createEntityReference">
+      <type xsi:type="ti:SimpleType" target="EntityReference"/>
+      <parameters name="name">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="createProcessingInstruction">
+      <type xsi:type="ti:SimpleType" target="ProcessingInstruction"/>
+      <parameters name="target">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+      <parameters name="data">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="createTextNode">
+      <type xsi:type="ti:SimpleType" target="Text"/>
+      <parameters name="data">
+        <type xsi:type="ti:UnionType">
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+          </targets>
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </targets>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="getElementsByTagName">
+      <type xsi:type="ti:SimpleType" target="NodeList"/>
+      <parameters name="tagname">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <superTypeExpr target="Node"/>
+  </ti:Type>
+  <ti:TypeLiteral name="Document" target="Document"/>
+  <ti:Type name="NodeList">
+    <members xsi:type="ti:Property" name="length">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Method" name="item">
+      <type xsi:type="ti:SimpleType" target="Node"/>
+      <parameters name="index">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+        </type>
+      </parameters>
+    </members>
+  </ti:Type>
+  <ti:TypeLiteral name="NodeList" target="NodeList"/>
+  <ti:Type name="NamedNodeMap">
+    <members xsi:type="ti:Property" name="length">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Method" name="getNamedItem">
+      <type xsi:type="ti:SimpleType" target="Node"/>
+      <parameters name="name">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="item">
+      <type xsi:type="ti:SimpleType" target="Node"/>
+      <parameters name="index">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="removeNamedItem">
+      <type xsi:type="ti:SimpleType" target="Node"/>
+      <parameters name="name">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="setNamedItem">
+      <type xsi:type="ti:SimpleType" target="Node"/>
+      <parameters name="arg">
+        <type xsi:type="ti:SimpleType" target="Node"/>
+      </parameters>
+    </members>
+  </ti:Type>
+  <ti:TypeLiteral name="NamedNodeMap" target="NamedNodeMap"/>
+  <ti:Type name="CharacterData">
+    <members xsi:type="ti:Property" name="data">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="length">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Method" name="appendData">
+      <type xsi:type="ti:UndefinedType"/>
+      <parameters name="arg">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="deleteData">
+      <type xsi:type="ti:UndefinedType"/>
+      <parameters name="offset">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+        </type>
+      </parameters>
+      <parameters name="count">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="insertData">
+      <type xsi:type="ti:UndefinedType"/>
+      <parameters name="offset">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+        </type>
+      </parameters>
+      <parameters name="arg">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="replaceData">
+      <type xsi:type="ti:UndefinedType"/>
+      <parameters name="offset">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+        </type>
+      </parameters>
+      <parameters name="count">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+        </type>
+      </parameters>
+      <parameters name="arg">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="substringData">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+      <parameters name="offset">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+        </type>
+      </parameters>
+      <parameters name="count">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+        </type>
+      </parameters>
+    </members>
+    <superTypeExpr target="Node"/>
+  </ti:Type>
+  <ti:TypeLiteral name="CharacterData" target="CharacterData"/>
+  <ti:Type name="Attr">
+    <members xsi:type="ti:Property" name="name">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="specified">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="value">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <superTypeExpr target="Node"/>
+  </ti:Type>
+  <ti:TypeLiteral name="Attr" target="Attr"/>
+  <ti:Type name="Element">
+    <members xsi:type="ti:Property" name="tagName">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onabort">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onbeforeunload">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onblur">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onchange">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onclick">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="oncompositionstart">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="oncompositionupdate">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="oncompositionend">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="oncontextmenu">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="oncopy">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="oncut">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="ondblclick">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onerror">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onfocus">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onfocusin">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onfocusout">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onkeydown">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onkeypress">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onkeyup">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onload">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onunload">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onmousedown">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onmousemove">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onmouseout">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onmouseover">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onmouseup">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onmousewheel">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onpaste">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onreset">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onresize">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onscroll">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onselect">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onsubmit">
+      <type xsi:type="ti:FunctionType">
+        <parameters kind="OPTIONAL">
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="ontextinput">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onwheel">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Method" name="getAttribute">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+      <parameters name="name">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+      <parameters name="opt_flags" kind="OPTIONAL">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="getAttributeNode">
+      <type xsi:type="ti:SimpleType" target="Attr"/>
+      <parameters name="name">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="getElementsByTagName">
+      <type xsi:type="ti:SimpleType" target="NodeList"/>
+      <parameters name="tagname">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="removeAttribute">
+      <type xsi:type="ti:UndefinedType"/>
+      <parameters name="name">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="removeAttributeNode">
+      <type xsi:type="ti:SimpleType" target="Attr"/>
+      <parameters name="oldAttr">
+        <type xsi:type="ti:SimpleType" target="Attr"/>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="setAttribute">
+      <type xsi:type="ti:UndefinedType"/>
+      <parameters name="name">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+      <parameters name="value">
+        <type xsi:type="ti:UnionType">
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </targets>
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+          </targets>
+          <targets xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+          </targets>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="setAttributeNode">
+      <type xsi:type="ti:SimpleType" target="Attr"/>
+      <parameters name="newAttr">
+        <type xsi:type="ti:SimpleType" target="Attr"/>
+      </parameters>
+    </members>
+    <superTypeExpr target="Node"/>
+  </ti:Type>
+  <ti:TypeLiteral name="Element" target="Element"/>
+  <ti:Type name="Text">
+    <members xsi:type="ti:Method" name="splitText">
+      <type xsi:type="ti:SimpleType" target="Text"/>
+      <parameters name="offset">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+        </type>
+      </parameters>
+    </members>
+    <superTypeExpr target="CharacterData"/>
+  </ti:Type>
+  <ti:TypeLiteral name="Text" target="Text"/>
+  <ti:Type name="Comment">
+    <superTypeExpr target="CharacterData"/>
+  </ti:Type>
+  <ti:TypeLiteral name="Comment" target="Comment"/>
+  <ti:Type name="CDATASection">
+    <superTypeExpr target="Text"/>
+  </ti:Type>
+  <ti:TypeLiteral name="CDATASection" target="CDATASection"/>
+  <ti:Type name="DocumentType">
+    <members xsi:type="ti:Property" name="entities">
+      <type xsi:type="ti:SimpleType" target="NamedNodeMap"/>
+    </members>
+    <members xsi:type="ti:Property" name="name">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="notations">
+      <type xsi:type="ti:SimpleType" target="NamedNodeMap"/>
+    </members>
+    <superTypeExpr target="Node"/>
+  </ti:Type>
+  <ti:TypeLiteral name="DocumentType" target="DocumentType"/>
+  <ti:Type name="Notation">
+    <members xsi:type="ti:Property" name="publicId">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="systemId">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <superTypeExpr target="Node"/>
+  </ti:Type>
+  <ti:TypeLiteral name="Notation" target="Notation"/>
+  <ti:Type name="Entity">
+    <members xsi:type="ti:Property" name="publicId">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="systemId">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="notationName">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <superTypeExpr target="Node"/>
+  </ti:Type>
+  <ti:TypeLiteral name="Entity" target="Entity"/>
+  <ti:Type name="EntityReference">
+    <superTypeExpr target="Node"/>
+  </ti:Type>
+  <ti:TypeLiteral name="EntityReference" target="EntityReference"/>
+  <ti:Type name="ProcessingInstruction">
+    <members xsi:type="ti:Property" name="data">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="target">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <superTypeExpr target="Node"/>
+  </ti:Type>
+  <ti:TypeLiteral name="ProcessingInstruction" target="ProcessingInstruction"/>
+  <ti:Type name="Window" traits="EventTarget">
+    <members xsi:type="ti:Property" name="onabort">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onbeforeunload">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onblur">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onchange">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onclick">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onclose">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="oncontextmenu">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="ondblclick">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="ondragdrop">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onerror">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </type>
+        </parameters>
+        <parameters>
+          <type xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+          </type>
+        </parameters>
+        <parameters>
+          <type xsi:type="ti:SimpleType">
+            <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+          </type>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onfocus">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onhashchange">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onkeydown">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onkeypress">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onkeyup">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onload">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onmousedown">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onmousemove">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onmouseout">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onmouseover">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onmouseup">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onmousewheel">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onpaint">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onpopstate">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onreset">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onresize">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onscroll">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onselect">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onsubmit">
+      <type xsi:type="ti:FunctionType">
+        <parameters kind="OPTIONAL">
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onunload">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="onwheel">
+      <type xsi:type="ti:FunctionType">
+        <parameters>
+          <type xsi:type="ti:SimpleType" target="Event"/>
+        </parameters>
+      </type>
+    </members>
+    <members xsi:type="ti:Method" name="addEventListener">
+      <parameters name="type"/>
+      <parameters name="listener"/>
+      <parameters name="opt_useCapture"/>
+    </members>
+    <members xsi:type="ti:Method" name="removeEventListener">
+      <parameters name="type"/>
+      <parameters name="listener"/>
+      <parameters name="opt_useCapture"/>
+    </members>
+    <members xsi:type="ti:Method" name="dispatchEvent">
+      <parameters name="evt"/>
+    </members>
+  </ti:Type>
+  <ti:TypeLiteral name="Window" target="Window"/>
+  <ti:Type name="HTMLCollection">
+    <members xsi:type="ti:Property" name="length">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Method" name="item">
+      <type xsi:type="ti:SimpleType" target="Node"/>
+      <parameters name="index">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+        </type>
+      </parameters>
+    </members>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLCollection" target="HTMLCollection"/>
+  <ti:Type name="HTMLOptionsCollection">
+    <members xsi:type="ti:Property" name="length">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Method" name="item">
+      <type xsi:type="ti:SimpleType" target="Node"/>
+      <parameters name="index">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+        </type>
+      </parameters>
+    </members>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLOptionsCollection" target="HTMLOptionsCollection"/>
+  <ti:Type name="HTMLDocument">
+    <members xsi:type="ti:Property" name="title">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="referrer">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="domain">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="URL">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="body">
+      <type xsi:type="ti:SimpleType" target="HTMLElement"/>
+    </members>
+    <members xsi:type="ti:Property" name="images">
+      <type xsi:type="ti:SimpleType" target="HTMLCollection"/>
+    </members>
+    <members xsi:type="ti:Property" name="applets">
+      <type xsi:type="ti:SimpleType" target="HTMLCollection"/>
+    </members>
+    <members xsi:type="ti:Property" name="links">
+      <type xsi:type="ti:SimpleType" target="HTMLCollection"/>
+    </members>
+    <members xsi:type="ti:Property" name="forms">
+      <type xsi:type="ti:SimpleType" target="HTMLCollection"/>
+    </members>
+    <members xsi:type="ti:Property" name="anchors">
+      <type xsi:type="ti:SimpleType" target="HTMLCollection"/>
+    </members>
+    <members xsi:type="ti:Property" name="cookie">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Method" name="open">
+      <type xsi:type="ti:UndefinedType"/>
+    </members>
+    <members xsi:type="ti:Method" name="close">
+      <type xsi:type="ti:UndefinedType"/>
+    </members>
+    <members xsi:type="ti:Method" name="write">
+      <type xsi:type="ti:UndefinedType"/>
+      <parameters name="text">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="writeln">
+      <type xsi:type="ti:UndefinedType"/>
+      <parameters name="text">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="getElementsByName">
+      <type xsi:type="ti:SimpleType" target="NodeList"/>
+      <parameters name="elementName">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="createNodeIterator">
+      <type xsi:type="ti:SimpleType" target="NodeIterator"/>
+      <parameters name="root">
+        <type xsi:type="ti:SimpleType" target="Node"/>
+      </parameters>
+      <parameters name="whatToShow" kind="OPTIONAL">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+        </type>
+      </parameters>
+      <parameters name="filter" kind="OPTIONAL">
+        <type xsi:type="ti:SimpleType" target="NodeFilter"/>
+      </parameters>
+      <parameters name="entityReferenceExpansion" kind="OPTIONAL">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="createTreeWalker">
+      <type xsi:type="ti:SimpleType" target="TreeWalker"/>
+      <parameters name="root">
+        <type xsi:type="ti:SimpleType" target="Node"/>
+      </parameters>
+      <parameters name="whatToShow" kind="OPTIONAL">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+        </type>
+      </parameters>
+      <parameters name="filter" kind="OPTIONAL">
+        <type xsi:type="ti:SimpleType" target="NodeFilter"/>
+      </parameters>
+      <parameters name="entityReferenceExpansion" kind="OPTIONAL">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+        </type>
+      </parameters>
+    </members>
+    <superTypeExpr target="Document"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLDocument" target="HTMLDocument"/>
+  <ti:Type name="NodeFilter" instantiable="false">
+    <members xsi:type="ti:Property" name="SHOW_TEXT" static="true" readOnly="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="SHOW_ALL" static="true" readOnly="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="SHOW_ATTRIBUTE" static="true" readOnly="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="SHOW_CDATA_SECTION" static="true" readOnly="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="SHOW_COMMENT" static="true" readOnly="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="SHOW_DOCUMENT" static="true" readOnly="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="SHOW_DOCUMENT_FRAGMENT" static="true" readOnly="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="SHOW_DOCUMENT_TYPE" static="true" readOnly="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="SHOW_ELEMENT" static="true" readOnly="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="SHOW_ENTITY" static="true" readOnly="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="SHOW_ENTITY_REFERENCE" static="true" readOnly="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="SHOW_NOTATION" static="true" readOnly="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="SHOW_PROCESSING_INSTRUCTION" static="true" readOnly="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="FILTER_ACCEPT" static="true" readOnly="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="FILTER_REJECT" static="true" readOnly="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="FILTER_SKIP" static="true" readOnly="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Method" name="acceptNode">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+      <parameters name="n">
+        <type xsi:type="ti:SimpleType" target="Node"/>
+      </parameters>
+    </members>
+  </ti:Type>
+  <ti:TypeLiteral name="NodeFilter" target="NodeFilter"/>
+  <ti:Type name="NodeIterator" instantiable="false">
+    <members xsi:type="ti:Method" name="detach"/>
+    <members xsi:type="ti:Method" name="nextNode">
+      <type xsi:type="ti:SimpleType" target="Node"/>
+    </members>
+    <members xsi:type="ti:Method" name="previousNode">
+      <type xsi:type="ti:SimpleType" target="Node"/>
+    </members>
+  </ti:Type>
+  <ti:TypeLiteral name="NodeIterator" target="NodeIterator"/>
+  <ti:Type name="TreeWalker" instantiable="false">
+    <members xsi:type="ti:Property" name="root">
+      <type xsi:type="ti:SimpleType" target="Node"/>
+    </members>
+    <members xsi:type="ti:Property" name="whatToShow">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="filter">
+      <type xsi:type="ti:SimpleType" target="NodeFilter"/>
+    </members>
+    <members xsi:type="ti:Property" name="expandEntityReference">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="currentNode">
+      <type xsi:type="ti:SimpleType" target="Node"/>
+    </members>
+    <members xsi:type="ti:Method" name="firstChild">
+      <type xsi:type="ti:SimpleType" target="Node"/>
+    </members>
+    <members xsi:type="ti:Method" name="lastChild">
+      <type xsi:type="ti:SimpleType" target="Node"/>
+    </members>
+    <members xsi:type="ti:Method" name="nextNode">
+      <type xsi:type="ti:SimpleType" target="Node"/>
+    </members>
+    <members xsi:type="ti:Method" name="nextSibling">
+      <type xsi:type="ti:SimpleType" target="Node"/>
+    </members>
+    <members xsi:type="ti:Method" name="parentNode">
+      <type xsi:type="ti:SimpleType" target="Node"/>
+    </members>
+    <members xsi:type="ti:Method" name="previousNode">
+      <type xsi:type="ti:SimpleType" target="Node"/>
+    </members>
+    <members xsi:type="ti:Method" name="previousSibling">
+      <type xsi:type="ti:SimpleType" target="Node"/>
+    </members>
+  </ti:Type>
+  <ti:TypeLiteral name="TreeWalker" target="TreeWalker"/>
+  <ti:Type name="HTMLElement">
+    <members xsi:type="ti:Property" name="id">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="title">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="lang">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="dir">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="className">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <superTypeExpr target="Element"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLElement" target="HTMLElement"/>
+  <ti:Type name="HTMLHtmlElement">
+    <members xsi:type="ti:Property" name="version">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLHtmlElement" target="HTMLHtmlElement"/>
+  <ti:Type name="HTMLHeadElement">
+    <members xsi:type="ti:Property" name="profile">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLHeadElement" target="HTMLHeadElement"/>
+  <ti:Type name="HTMLLinkElement">
+    <members xsi:type="ti:Property" name="disabled">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="charset">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="href">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="hreflang">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="media">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="rel">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="rev">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="target">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="type">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="sheet"/>
+    <superTypeExpr target="HTMLElement"/>
+    <traits href="proxy:dltk/javascript/typeinfo/type#LinkStyle"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLLinkElement" target="HTMLLinkElement"/>
+  <ti:Type name="HTMLTitleElement">
+    <members xsi:type="ti:Property" name="text">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLTitleElement" target="HTMLTitleElement"/>
+  <ti:Type name="HTMLMetaElement">
+    <members xsi:type="ti:Property" name="content">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="httpEquiv">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="name">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="scheme">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLMetaElement" target="HTMLMetaElement"/>
+  <ti:Type name="HTMLBaseElement">
+    <members xsi:type="ti:Property" name="href">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="target">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLBaseElement" target="HTMLBaseElement"/>
+  <ti:Type name="HTMLIsIndexElement">
+    <members xsi:type="ti:Property" name="form">
+      <type xsi:type="ti:SimpleType" target="HTMLFormElement"/>
+    </members>
+    <members xsi:type="ti:Property" name="prompt">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLIsIndexElement" target="HTMLIsIndexElement"/>
+  <ti:Type name="HTMLStyleElement">
+    <members xsi:type="ti:Property" name="disabled">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="media">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="type">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="sheet"/>
+    <superTypeExpr target="HTMLElement"/>
+    <traits href="proxy:dltk/javascript/typeinfo/type#LinkStyle"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLStyleElement" target="HTMLStyleElement"/>
+  <ti:Type name="HTMLBodyElement">
+    <members xsi:type="ti:Property" name="aLink">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="background">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="bgColor">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="link">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="text">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="vLink">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLBodyElement" target="HTMLBodyElement"/>
+  <ti:Type name="HTMLFormElement">
+    <members xsi:type="ti:Property" name="elements">
+      <type xsi:type="ti:SimpleType" target="HTMLCollection"/>
+    </members>
+    <members xsi:type="ti:Property" name="length">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="name">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="acceptCharset">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="action">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="enctype">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="method">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="target">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Method" name="submit">
+      <type xsi:type="ti:UndefinedType"/>
+    </members>
+    <members xsi:type="ti:Method" name="reset">
+      <type xsi:type="ti:UndefinedType"/>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLFormElement" target="HTMLFormElement"/>
+  <ti:Type name="HTMLSelectElement">
+    <members xsi:type="ti:Property" name="type">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="selectedIndex">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="value">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="length">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="form">
+      <type xsi:type="ti:SimpleType" target="HTMLFormElement"/>
+    </members>
+    <members xsi:type="ti:Property" name="options">
+      <type xsi:type="ti:SimpleType" target="HTMLOptionsCollection"/>
+    </members>
+    <members xsi:type="ti:Property" name="disabled">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="multiple">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="name">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="size">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="tabIndex">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Method" name="add">
+      <type xsi:type="ti:UndefinedType"/>
+      <parameters name="element">
+        <type xsi:type="ti:SimpleType" target="HTMLElement"/>
+      </parameters>
+      <parameters name="before">
+        <type xsi:type="ti:SimpleType" target="HTMLElement"/>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="blur">
+      <type xsi:type="ti:UndefinedType"/>
+    </members>
+    <members xsi:type="ti:Method" name="focus">
+      <type xsi:type="ti:UndefinedType"/>
+    </members>
+    <members xsi:type="ti:Method" name="remove">
+      <type xsi:type="ti:UndefinedType"/>
+      <parameters name="index">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+        </type>
+      </parameters>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLSelectElement" target="HTMLSelectElement"/>
+  <ti:Type name="HTMLOptGroupElement">
+    <members xsi:type="ti:Property" name="disabled">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="label">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLOptGroupElement" target="HTMLOptGroupElement"/>
+  <ti:Type name="HTMLOptionElement">
+    <members xsi:type="ti:Property" name="defaultSelected">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="disabled">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="form">
+      <type xsi:type="ti:SimpleType" target="HTMLFormElement"/>
+    </members>
+    <members xsi:type="ti:Property" name="index">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="label">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="selected">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="text">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="value">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLOptionElement" target="HTMLOptionElement"/>
+  <ti:Type name="HTMLInputElement">
+    <members xsi:type="ti:Property" name="accept">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="accessKey">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="align">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="alt">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="checked">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="defaultChecked">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="defaultValue">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="disabled">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="form">
+      <type xsi:type="ti:SimpleType" target="HTMLFormElement"/>
+    </members>
+    <members xsi:type="ti:Property" name="maxLength">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="name">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="readOnly">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="size">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="src">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="tabIndex">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="type">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="useMap">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="value">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Method" name="blur">
+      <type xsi:type="ti:UndefinedType"/>
+    </members>
+    <members xsi:type="ti:Method" name="click">
+      <type xsi:type="ti:UndefinedType"/>
+    </members>
+    <members xsi:type="ti:Method" name="focus">
+      <type xsi:type="ti:UndefinedType"/>
+    </members>
+    <members xsi:type="ti:Method" name="select">
+      <type xsi:type="ti:UndefinedType"/>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLInputElement" target="HTMLInputElement"/>
+  <ti:Type name="HTMLTextAreaElement">
+    <members xsi:type="ti:Property" name="accessKey">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="cols">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="defaultValue">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="disabled">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="form">
+      <type xsi:type="ti:SimpleType" target="HTMLFormElement"/>
+    </members>
+    <members xsi:type="ti:Property" name="name">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="readOnly">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="rows">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="tabIndex">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="type">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="value">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Method" name="blur">
+      <type xsi:type="ti:UndefinedType"/>
+    </members>
+    <members xsi:type="ti:Method" name="focus">
+      <type xsi:type="ti:UndefinedType"/>
+    </members>
+    <members xsi:type="ti:Method" name="select">
+      <type xsi:type="ti:UndefinedType"/>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLTextAreaElement" target="HTMLTextAreaElement"/>
+  <ti:Type name="HTMLButtonElement">
+    <members xsi:type="ti:Property" name="accessKey">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="disabled">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="form">
+      <type xsi:type="ti:SimpleType" target="HTMLFormElement"/>
+    </members>
+    <members xsi:type="ti:Property" name="name">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="tabIndex">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="type">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="value">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLButtonElement" target="HTMLButtonElement"/>
+  <ti:Type name="HTMLLabelElement">
+    <members xsi:type="ti:Property" name="accessKey">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="form">
+      <type xsi:type="ti:SimpleType" target="HTMLFormElement"/>
+    </members>
+    <members xsi:type="ti:Property" name="htmlFor">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLLabelElement" target="HTMLLabelElement"/>
+  <ti:Type name="HTMLFieldSetElement">
+    <members xsi:type="ti:Property" name="form">
+      <type xsi:type="ti:SimpleType" target="HTMLFormElement"/>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLFieldSetElement" target="HTMLFieldSetElement"/>
+  <ti:Type name="HTMLLegendElement">
+    <members xsi:type="ti:Property" name="accessKey">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="align">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="form">
+      <type xsi:type="ti:SimpleType" target="HTMLFormElement"/>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLLegendElement" target="HTMLLegendElement"/>
+  <ti:Type name="HTMLUListElement">
+    <members xsi:type="ti:Property" name="compact">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="type">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLUListElement" target="HTMLUListElement"/>
+  <ti:Type name="HTMLOListElement">
+    <members xsi:type="ti:Property" name="compact">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="start">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="type">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLOListElement" target="HTMLOListElement"/>
+  <ti:Type name="HTMLDListElement">
+    <members xsi:type="ti:Property" name="compact">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+      </type>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLDListElement" target="HTMLDListElement"/>
+  <ti:Type name="HTMLDirectoryElement">
+    <members xsi:type="ti:Property" name="compact">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+      </type>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLDirectoryElement" target="HTMLDirectoryElement"/>
+  <ti:Type name="HTMLMenuElement">
+    <members xsi:type="ti:Property" name="compact">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+      </type>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLMenuElement" target="HTMLMenuElement"/>
+  <ti:Type name="HTMLLIElement">
+    <members xsi:type="ti:Property" name="type">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="value">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLLIElement" target="HTMLLIElement"/>
+  <ti:Type name="HTMLDivElement">
+    <members xsi:type="ti:Property" name="align">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLDivElement" target="HTMLDivElement"/>
+  <ti:Type name="HTMLParagraphElement">
+    <members xsi:type="ti:Property" name="align">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLParagraphElement" target="HTMLParagraphElement"/>
+  <ti:Type name="HTMLHeadingElement">
+    <members xsi:type="ti:Property" name="align">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLHeadingElement" target="HTMLHeadingElement"/>
+  <ti:Type name="HTMLQuoteElement">
+    <members xsi:type="ti:Property" name="cite">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLQuoteElement" target="HTMLQuoteElement"/>
+  <ti:Type name="HTMLPreElement">
+    <members xsi:type="ti:Property" name="width">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLPreElement" target="HTMLPreElement"/>
+  <ti:Type name="HTMLBRElement">
+    <members xsi:type="ti:Property" name="clear">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLBRElement" target="HTMLBRElement"/>
+  <ti:Type name="HTMLBaseFontElement">
+    <members xsi:type="ti:Property" name="color">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="face">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="size">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLBaseFontElement" target="HTMLBaseFontElement"/>
+  <ti:Type name="HTMLFontElement">
+    <members xsi:type="ti:Property" name="color">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="face">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="size">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLFontElement" target="HTMLFontElement"/>
+  <ti:Type name="HTMLHRElement">
+    <members xsi:type="ti:Property" name="align">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="noShade">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="size">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="width">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLHRElement" target="HTMLHRElement"/>
+  <ti:Type name="HTMLModElement">
+    <members xsi:type="ti:Property" name="cite">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="dateTime">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLModElement" target="HTMLModElement"/>
+  <ti:Type name="HTMLAnchorElement">
+    <members xsi:type="ti:Property" name="accessKey">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="charset">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="coords">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="href">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="hreflang">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="name">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="rel">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="rev">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="shape">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="tabIndex">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="target">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="type">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Method" name="blur">
+      <type xsi:type="ti:UndefinedType"/>
+    </members>
+    <members xsi:type="ti:Method" name="focus">
+      <type xsi:type="ti:UndefinedType"/>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLAnchorElement" target="HTMLAnchorElement"/>
+  <ti:Type name="HTMLImageElement">
+    <members xsi:type="ti:Property" name="align">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="alt">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="border">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="height">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="hspace">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="isMap">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="longDesc">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="lowSrc">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="name">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="src">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="useMap">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="vspace">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="width">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLImageElement" target="HTMLImageElement"/>
+  <ti:Type name="HTMLObjectElement">
+    <members xsi:type="ti:Property" name="align">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="archive">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="border">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="code">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="codeBase">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="codeType">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="contentDocument">
+      <type xsi:type="ti:SimpleType" target="Document"/>
+    </members>
+    <members xsi:type="ti:Property" name="data">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="declare">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="form">
+      <type xsi:type="ti:SimpleType" target="HTMLFormElement"/>
+    </members>
+    <members xsi:type="ti:Property" name="height">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="hspace">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="name">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="standby">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="tabIndex">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="type">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="useMap">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="vspace">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="width">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLObjectElement" target="HTMLObjectElement"/>
+  <ti:Type name="HTMLParamElement">
+    <members xsi:type="ti:Property" name="name">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="type">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="value">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="valueType">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLParamElement" target="HTMLParamElement"/>
+  <ti:Type name="HTMLAppletElement">
+    <members xsi:type="ti:Property" name="align">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="alt">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="archive">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="code">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="codeBase">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="height">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="hspace">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="name">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="object">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="vspace">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="width">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLAppletElement" target="HTMLAppletElement"/>
+  <ti:Type name="HTMLMapElement">
+    <members xsi:type="ti:Property" name="areas">
+      <type xsi:type="ti:SimpleType" target="HTMLCollection"/>
+    </members>
+    <members xsi:type="ti:Property" name="name">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLMapElement" target="HTMLMapElement"/>
+  <ti:Type name="HTMLAreaElement">
+    <members xsi:type="ti:Property" name="accessKey">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="alt">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="coords">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="href">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="noHref">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="shape">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="tabIndex">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="target">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLAreaElement" target="HTMLAreaElement"/>
+  <ti:Type name="HTMLScriptElement">
+    <members xsi:type="ti:Property" name="charset">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="defer">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="event">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="htmlFor">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="src">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="text">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="type">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLScriptElement" target="HTMLScriptElement"/>
+  <ti:Type name="HTMLTableElement">
+    <members xsi:type="ti:Property" name="align">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="bgColor">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="border">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="caption">
+      <type xsi:type="ti:SimpleType" target="HTMLTableCaptionElement"/>
+    </members>
+    <members xsi:type="ti:Property" name="cellPadding">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="cellSpacing">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="frame">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="rows">
+      <type xsi:type="ti:SimpleType" target="HTMLCollection"/>
+    </members>
+    <members xsi:type="ti:Property" name="rules">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="summary">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="tBodies">
+      <type xsi:type="ti:SimpleType" target="HTMLCollection"/>
+    </members>
+    <members xsi:type="ti:Property" name="tFoot">
+      <type xsi:type="ti:SimpleType" target="HTMLTableSectionElement"/>
+    </members>
+    <members xsi:type="ti:Property" name="tHead">
+      <type xsi:type="ti:SimpleType" target="HTMLTableSectionElement"/>
+    </members>
+    <members xsi:type="ti:Property" name="width">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Method" name="createCaption">
+      <type xsi:type="ti:SimpleType" target="HTMLElement"/>
+    </members>
+    <members xsi:type="ti:Method" name="createTFoot">
+      <type xsi:type="ti:SimpleType" target="HTMLElement"/>
+    </members>
+    <members xsi:type="ti:Method" name="createTHead">
+      <type xsi:type="ti:SimpleType" target="HTMLElement"/>
+    </members>
+    <members xsi:type="ti:Method" name="deleteCaption">
+      <type xsi:type="ti:UndefinedType"/>
+    </members>
+    <members xsi:type="ti:Method" name="deleteRow">
+      <type xsi:type="ti:SimpleType" target="HTMLElement"/>
+      <parameters name="index">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="deleteTFoot">
+      <type xsi:type="ti:UndefinedType"/>
+    </members>
+    <members xsi:type="ti:Method" name="deleteTHead">
+      <type xsi:type="ti:UndefinedType"/>
+    </members>
+    <members xsi:type="ti:Method" name="insertRow">
+      <type xsi:type="ti:SimpleType" target="HTMLElement"/>
+      <parameters name="index">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+        </type>
+      </parameters>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLTableElement" target="HTMLTableElement"/>
+  <ti:Type name="HTMLTableCaptionElement">
+    <members xsi:type="ti:Property" name="align">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLTableCaptionElement" target="HTMLTableCaptionElement"/>
+  <ti:Type name="HTMLTableColElement">
+    <members xsi:type="ti:Property" name="align">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="ch">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="chOff">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="span">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="vAlign">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="width">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLTableColElement" target="HTMLTableColElement"/>
+  <ti:Type name="HTMLTableSectionElement">
+    <members xsi:type="ti:Property" name="align">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="ch">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="chOff">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="rows">
+      <type xsi:type="ti:SimpleType" target="HTMLCollection"/>
+    </members>
+    <members xsi:type="ti:Property" name="vAlign">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Method" name="deleteRow">
+      <type xsi:type="ti:SimpleType" target="HTMLElement"/>
+      <parameters name="index">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="insertRow">
+      <type xsi:type="ti:SimpleType" target="HTMLElement"/>
+      <parameters name="index">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+        </type>
+      </parameters>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLTableSectionElement" target="HTMLTableSectionElement"/>
+  <ti:Type name="HTMLTableRowElement">
+    <members xsi:type="ti:Property" name="align">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="bgColor">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="cells">
+      <type xsi:type="ti:SimpleType" target="HTMLCollection"/>
+    </members>
+    <members xsi:type="ti:Property" name="ch">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="chOff">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="rowIndex">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="sectionRowIndex">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="vAlign">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Method" name="deleteCell">
+      <type xsi:type="ti:UndefinedType"/>
+      <parameters name="index">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="insertCell">
+      <type xsi:type="ti:SimpleType" target="HTMLElement"/>
+      <parameters name="index">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+        </type>
+      </parameters>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLTableRowElement" target="HTMLTableRowElement"/>
+  <ti:Type name="HTMLTableCellElement">
+    <members xsi:type="ti:Property" name="abbr">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="align">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="axis">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="bgColor">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="cellIndex">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="ch">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="chOff">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="colSpan">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="headers">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="height">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="noWrap">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="rowSpan">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="scope">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="vAlign">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="width">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLTableCellElement" target="HTMLTableCellElement"/>
+  <ti:Type name="HTMLFrameSetElement">
+    <members xsi:type="ti:Property" name="cols">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="rows">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLFrameSetElement" target="HTMLFrameSetElement"/>
+  <ti:Type name="HTMLFrameElement">
+    <members xsi:type="ti:Property" name="contentDocument">
+      <type xsi:type="ti:SimpleType" target="Document"/>
+    </members>
+    <members xsi:type="ti:Property" name="frameBorder">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="longDesc">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="marginHeight">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="marginWidth">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="name">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="noResize">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="scrolling">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="src">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLFrameElement" target="HTMLFrameElement"/>
+  <ti:Type name="HTMLIFrameElement">
+    <members xsi:type="ti:Property" name="align">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="contentDocument">
+      <type xsi:type="ti:SimpleType" target="Document"/>
+    </members>
+    <members xsi:type="ti:Property" name="frameBorder">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="height">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="longDesc">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="marginHeight">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="marginWidth">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="name">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="scrolling">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="src">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="width">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <superTypeExpr target="HTMLElement"/>
+  </ti:Type>
+  <ti:TypeLiteral name="HTMLIFrameElement" target="HTMLIFrameElement"/>
+  <ti:Type name="EventTarget" instantiable="false">
+    <members xsi:type="ti:Method" name="addEventListener">
+      <type xsi:type="ti:UndefinedType"/>
+      <parameters name="type">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+      <parameters name="listener">
+        <type xsi:type="ti:UnionType">
+          <targets xsi:type="ti:SimpleType" target="EventListener"/>
+          <targets xsi:type="ti:FunctionType">
+            <returnType xsi:type="ti:UnionType">
+              <targets xsi:type="ti:SimpleType">
+                <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+              </targets>
+              <targets xsi:type="ti:UndefinedType"/>
+            </returnType>
+            <parameters>
+              <type xsi:type="ti:SimpleType" target="Event"/>
+            </parameters>
+          </targets>
+        </type>
+      </parameters>
+      <parameters name="useCapture">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="removeEventListener">
+      <type xsi:type="ti:UndefinedType"/>
+      <parameters name="type">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+      <parameters name="listener">
+        <type xsi:type="ti:UnionType">
+          <targets xsi:type="ti:SimpleType" target="EventListener"/>
+          <targets xsi:type="ti:FunctionType">
+            <returnType xsi:type="ti:UnionType">
+              <targets xsi:type="ti:SimpleType">
+                <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+              </targets>
+              <targets xsi:type="ti:UndefinedType"/>
+            </returnType>
+            <parameters>
+              <type xsi:type="ti:SimpleType" target="Event"/>
+            </parameters>
+          </targets>
+        </type>
+      </parameters>
+      <parameters name="useCapture">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+        </type>
+      </parameters>
+    </members>
+    <members xsi:type="ti:Method" name="dispatchEvent">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+      </type>
+      <parameters name="evt">
+        <type xsi:type="ti:SimpleType" target="Event"/>
+      </parameters>
+    </members>
+  </ti:Type>
+  <ti:TypeLiteral name="EventTarget" target="EventTarget"/>
+  <ti:Type name="EventListener" instantiable="false">
+    <members xsi:type="ti:Method" name="handleEvent">
+      <type xsi:type="ti:UndefinedType"/>
+      <parameters name="evt">
+        <type xsi:type="ti:SimpleType" target="Event"/>
+      </parameters>
+    </members>
+  </ti:Type>
+  <ti:TypeLiteral name="EventListener" target="EventListener"/>
+  <ti:Type name="Event">
+    <members xsi:type="ti:Property" name="AT_TARGET" static="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="BUBBLING_PHASE" static="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="CAPTURING_PHASE" static="true">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="type">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="target">
+      <type xsi:type="ti:SimpleType" target="EventTarget"/>
+    </members>
+    <members xsi:type="ti:Property" name="currentTarget">
+      <type xsi:type="ti:SimpleType" target="EventTarget"/>
+    </members>
+    <members xsi:type="ti:Property" name="eventPhase">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="bubbles">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="cancelable">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="timeStamp">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="state">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Method" name="stopPropagation">
+      <type xsi:type="ti:UndefinedType"/>
+    </members>
+    <members xsi:type="ti:Method" name="preventDefault">
+      <type xsi:type="ti:UndefinedType"/>
+    </members>
+    <members xsi:type="ti:Method" name="initEvent">
+      <type xsi:type="ti:UndefinedType"/>
+      <parameters name="eventTypeArg">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+      <parameters name="canBubbleArg">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+        </type>
+      </parameters>
+      <parameters name="cancelableArg">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+        </type>
+      </parameters>
+    </members>
+  </ti:Type>
+  <ti:TypeLiteral name="Event" target="Event"/>
+  <ti:Type name="CustomEvent">
+    <members xsi:type="ti:Property" name="detail">
+      <type xsi:type="ti:AnyType"/>
+    </members>
+    <members xsi:type="ti:Method" name="initCustomEvent">
+      <parameters name="eventType">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+      <parameters name="bubbles">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+        </type>
+      </parameters>
+      <parameters name="cancelable">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+        </type>
+      </parameters>
+      <parameters name="detail">
+        <type xsi:type="ti:AnyType"/>
+      </parameters>
+    </members>
+    <superTypeExpr target="Event"/>
+  </ti:Type>
+  <ti:TypeLiteral name="CustomEvent" target="CustomEvent"/>
+  <ti:Type name="DocumentEvent" instantiable="false">
+    <members xsi:type="ti:Method" name="createEvent">
+      <type xsi:type="ti:SimpleType" target="Event"/>
+      <parameters name="eventType">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+  </ti:Type>
+  <ti:TypeLiteral name="DocumentEvent" target="DocumentEvent"/>
+  <ti:Type name="UIEvent">
+    <members xsi:type="ti:Property" name="detail">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Method" name="initUIEvent">
+      <type xsi:type="ti:UndefinedType"/>
+      <parameters name="typeArg">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+      <parameters name="canBubbleArg">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+        </type>
+      </parameters>
+      <parameters name="cancelableArg">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+        </type>
+      </parameters>
+      <parameters name="viewArg">
+        <type xsi:type="ti:SimpleType" target="Window"/>
+      </parameters>
+      <parameters name="detailArg">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+        </type>
+      </parameters>
+    </members>
+    <superTypeExpr target="Event"/>
+  </ti:Type>
+  <ti:TypeLiteral name="UIEvent" target="UIEvent"/>
+  <ti:Type name="MouseEvent">
+    <members xsi:type="ti:Property" name="screenX">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="screenY">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="clientX">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="clientY">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="ctrlKey">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="shiftKey">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="altKey">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="metaKey">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="button">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="relatedTarget">
+      <type xsi:type="ti:SimpleType" target="EventTarget"/>
+    </members>
+    <superTypeExpr target="UIEvent"/>
+  </ti:Type>
+  <ti:TypeLiteral name="MouseEvent" target="MouseEvent"/>
+  <ti:Type name="MutationEvent">
+    <members xsi:type="ti:Property" name="relatedNode">
+      <type xsi:type="ti:SimpleType" target="Node"/>
+    </members>
+    <members xsi:type="ti:Property" name="prevValue">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="newValue">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="attrName">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="attrChange">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Method" name="initMutationEvent">
+      <type xsi:type="ti:UndefinedType"/>
+      <parameters name="typeArg">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+      <parameters name="canBubbleArg">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+        </type>
+      </parameters>
+      <parameters name="cancelableArg">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+        </type>
+      </parameters>
+      <parameters name="relatedNodeArg">
+        <type xsi:type="ti:SimpleType" target="Node"/>
+      </parameters>
+      <parameters name="prevValueArg">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+      <parameters name="newValueArg">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+      <parameters name="attrNameArg">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+      <parameters name="attrChangeArg">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number"/>
+        </type>
+      </parameters>
+    </members>
+    <superTypeExpr target="Event"/>
+  </ti:Type>
+  <ti:TypeLiteral name="MutationEvent" target="MutationEvent"/>
+  <ti:Type name="KeyboardEvent">
+    <members xsi:type="ti:Property" name="keyIdentifier">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="ctrlKey">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="shiftKey">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="altKey">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Property" name="metaKey">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+      </type>
+    </members>
+    <members xsi:type="ti:Method" name="getModifierState">
+      <type xsi:type="ti:SimpleType">
+        <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean"/>
+      </type>
+      <parameters name="keyIdentifierArg">
+        <type xsi:type="ti:SimpleType">
+          <target href="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+        </type>
+      </parameters>
+    </members>
+    <superTypeExpr target="UIEvent"/>
+  </ti:Type>
+  <ti:TypeLiteral name="KeyboardEvent" target="KeyboardEvent"/>
+</xmi:XMI>

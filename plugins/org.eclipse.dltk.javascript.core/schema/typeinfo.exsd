@@ -69,6 +69,21 @@
                </appInfo>
             </annotation>
          </attribute>
+         <attribute name="shape" use="default" value="file">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+            <simpleType>
+               <restriction base="string">
+                  <enumeration value="file">
+                  </enumeration>
+                  <enumeration value="dir">
+                  </enumeration>
+               </restriction>
+            </simpleType>
+         </attribute>
       </complexType>
    </element>
 

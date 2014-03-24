@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: DLTK JavaScript Type Libraries
+Bundle-SymbolicName: org.eclipse.dltk.javascript.typelibs;singleton:=true
+Bundle-Version: 5.0.0.qualifier
+Bundle-Vendor: %pluginProvider
+Bundle-Localization: plugin
+Eclipse-BundleShape: dir

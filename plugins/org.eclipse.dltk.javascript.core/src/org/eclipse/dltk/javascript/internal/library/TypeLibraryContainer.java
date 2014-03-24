@@ -11,17 +11,16 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.library;
 
-import static org.eclipse.dltk.core.DLTKCore.newLibraryEntry;
-import static org.eclipse.dltk.core.environment.EnvironmentManager.getLocalEnvironment;
-import static org.eclipse.dltk.core.environment.EnvironmentPathUtils.getFullPath;
-
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.IBuildpathContainer;
 import org.eclipse.dltk.core.IBuildpathContainerExtension2;
 import org.eclipse.dltk.core.IBuildpathEntry;
 import org.eclipse.dltk.core.IModelStatus;
+import org.eclipse.dltk.internal.core.BuildpathEntry;
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 import org.eclipse.dltk.javascript.typeinfo.TypeLibrary;
 import org.eclipse.dltk.javascript.typeinfo.TypeLibraryManager;
@@ -32,6 +31,9 @@ public class TypeLibraryContainer implements IBuildpathContainer,
 		IBuildpathContainerExtension2 {
 
 	public static final String ID = "org.eclipse.dltk.javascript.TypeLibrary";
+
+	public static final IPath ENTRY_PREFIX = new Path(
+			IBuildpathEntry.BUILDPATH_SPECIAL + ID);
 
 	private final IPath containerPath;
 	private IBuildpathEntry[] entries;
@@ -64,10 +66,13 @@ public class TypeLibraryContainer implements IBuildpathContainer,
 		final TypeLibrary library = TypeLibraryManager.getManager().find(
 				containerPath.segment(1), version);
 		if (library != null) {
-			return new IBuildpathEntry[] { newLibraryEntry(
-					getFullPath(getLocalEnvironment(), library.getPath()),
+			return new IBuildpathEntry[] { DLTKCore.newBuiltinEntry(
+					ENTRY_PREFIX.append(library.name()).append(
+							library.version().toString()),
 					IBuildpathEntry.NO_ACCESS_RULES,
-					IBuildpathEntry.NO_EXTRA_ATTRIBUTES, false, true) };
+					IBuildpathEntry.NO_EXTRA_ATTRIBUTES,
+					BuildpathEntry.INCLUDE_ALL, BuildpathEntry.EXCLUDE_NONE,
+					false, true) };
 		} else {
 			return new IBuildpathEntry[0];
 		}

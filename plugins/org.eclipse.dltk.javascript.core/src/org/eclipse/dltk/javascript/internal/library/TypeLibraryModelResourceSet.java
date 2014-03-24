@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.library;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -30,6 +29,8 @@ import org.eclipse.emf.ecore.xmi.XMIResource;
 import com.google.common.io.Closeables;
 
 public class TypeLibraryModelResourceSet extends TypeInfoModelResourceSet {
+
+	static final String SCHEME = "type-library";
 
 	@Override
 	protected Type resolveType(String typeName) {
@@ -50,12 +51,11 @@ public class TypeLibraryModelResourceSet extends TypeInfoModelResourceSet {
 	@Override
 	protected void demandLoadHelper(Resource resource) {
 		final URI uri = resource.getURI();
-		if (uri.isFile()
-				&& TypeLibraryFormat.FILE_EXTENSION.equals(uri.fileExtension())) {
+		if (SCHEME.equals(uri.scheme())) {
 			final InputStream inputStream;
 			try {
 				inputStream = TypeLibraryManager.getManager().openEntry(
-						new File(uri.toFileString()),
+						uri.authority(), uri.query(),
 						TypeLibraryFormat.TYPES_FILE);
 			} catch (IOException e) {
 				handleDemandLoadException(resource, e);
