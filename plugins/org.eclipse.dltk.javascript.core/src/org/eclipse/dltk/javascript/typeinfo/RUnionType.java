@@ -13,6 +13,7 @@ package org.eclipse.dltk.javascript.typeinfo;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -43,6 +44,16 @@ class RUnionType extends RType implements IRUnionType {
 			if (this.targets.containsAll(targets)) {
 				return TypeCompatibility.TRUE;
 			}
+			Set<IRType> compartible = new HashSet<IRType>();
+			for (IRType myTarget : this.targets) {
+				for (IRType theirTarget : targets) {
+					if (myTarget.isAssignableFrom(theirTarget) == TypeCompatibility.TRUE) {
+						compartible.add(theirTarget);
+					}
+				}
+			}
+			if (compartible.size() == targets.size())
+				return TypeCompatibility.TRUE;
 			return TypeCompatibility.FALSE;
 		}
 		for (IRType target : targets) {
