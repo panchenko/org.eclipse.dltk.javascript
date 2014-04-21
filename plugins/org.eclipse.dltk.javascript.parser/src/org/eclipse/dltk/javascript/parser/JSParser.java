@@ -1,4 +1,4 @@
-// $ANTLR 3.0.1 JS.g 2013-02-04 18:32:02
+// $ANTLR 3.0.1 JS.g 2014-04-21 18:13:32
 
 package org.eclipse.dltk.javascript.parser;
 
@@ -1261,7 +1261,7 @@ public class JSParser extends JSBaseParser {
                     stream_identifier.add(identifier21.getTree());
 
                     // AST REWRITE
-                    // elements: AT, identifier
+                    // elements: identifier, AT
                     // token labels: 
                     // rule labels: retval
                     // token list labels: 
@@ -2585,7 +2585,7 @@ public class JSParser extends JSBaseParser {
             int alt14=2;
             int LA14_0 = input.LA(1);
 
-            if ( (LA14_0==EACH||(LA14_0>=GET && LA14_0<=SET)||(LA14_0>=WXML && LA14_0<=CLASS)||(LA14_0>=DEBUGGER && LA14_0<=VOLATILE)||LA14_0==StringLiteral||LA14_0==Identifier||(LA14_0>=DecimalLiteral && LA14_0<=HexIntegerLiteral)) ) {
+            if ( ((LA14_0>=BREAK && LA14_0<=CLASS)||(LA14_0>=DEBUGGER && LA14_0<=VOLATILE)||LA14_0==StringLiteral||LA14_0==Identifier||(LA14_0>=DecimalLiteral && LA14_0<=HexIntegerLiteral)) ) {
                 alt14=1;
             }
             switch (alt14) {
@@ -2606,7 +2606,7 @@ public class JSParser extends JSBaseParser {
                         if ( (LA12_0==COMMA) ) {
                             int LA12_1 = input.LA(2);
 
-                            if ( (LA12_1==EACH||(LA12_1>=GET && LA12_1<=SET)||(LA12_1>=WXML && LA12_1<=CLASS)||(LA12_1>=DEBUGGER && LA12_1<=VOLATILE)||LA12_1==StringLiteral||LA12_1==Identifier||(LA12_1>=DecimalLiteral && LA12_1<=HexIntegerLiteral)) ) {
+                            if ( ((LA12_1>=BREAK && LA12_1<=CLASS)||(LA12_1>=DEBUGGER && LA12_1<=VOLATILE)||LA12_1==StringLiteral||LA12_1==Identifier||(LA12_1>=DecimalLiteral && LA12_1<=HexIntegerLiteral)) ) {
                                 alt12=1;
                             }
 
@@ -2751,7 +2751,33 @@ public class JSParser extends JSBaseParser {
             // JS.g:1022:3: ( nameValuePair | getMethodDeclaration | setMethodDeclaration )
             int alt15=3;
             switch ( input.LA(1) ) {
+            case BREAK:
+            case CASE:
+            case CATCH:
+            case CONTINUE:
+            case DEFAULT:
+            case DELETE:
+            case DO:
+            case ELSE:
+            case FINALLY:
+            case FOR:
             case EACH:
+            case FUNCTION:
+            case IF:
+            case IN:
+            case INSTANCEOF:
+            case NEW:
+            case RETURN:
+            case SWITCH:
+            case THIS:
+            case THROW:
+            case TRY:
+            case TYPEOF:
+            case VAR:
+            case VOID:
+            case WHILE:
+            case WITH:
+            case YIELD:
             case WXML:
             case NAMESPACE:
             case ABSTRACT:
@@ -2797,11 +2823,11 @@ public class JSParser extends JSBaseParser {
                 {
                 int LA15_2 = input.LA(2);
 
-                if ( (LA15_2==EACH||(LA15_2>=GET && LA15_2<=SET)||(LA15_2>=WXML && LA15_2<=CLASS)||(LA15_2>=DEBUGGER && LA15_2<=VOLATILE)||LA15_2==Identifier) ) {
-                    alt15=2;
-                }
-                else if ( (LA15_2==COLON) ) {
+                if ( (LA15_2==COLON) ) {
                     alt15=1;
+                }
+                else if ( (LA15_2==EACH||(LA15_2>=GET && LA15_2<=SET)||(LA15_2>=WXML && LA15_2<=CLASS)||(LA15_2>=DEBUGGER && LA15_2<=VOLATILE)||LA15_2==Identifier) ) {
+                    alt15=2;
                 }
                 else {
                     NoViableAltException nvae =
@@ -2815,11 +2841,11 @@ public class JSParser extends JSBaseParser {
                 {
                 int LA15_3 = input.LA(2);
 
-                if ( (LA15_3==EACH||(LA15_3>=GET && LA15_3<=SET)||(LA15_3>=WXML && LA15_3<=CLASS)||(LA15_3>=DEBUGGER && LA15_3<=VOLATILE)||LA15_3==Identifier) ) {
-                    alt15=3;
-                }
-                else if ( (LA15_3==COLON) ) {
+                if ( (LA15_3==COLON) ) {
                     alt15=1;
+                }
+                else if ( (LA15_3==EACH||(LA15_3>=GET && LA15_3<=SET)||(LA15_3>=WXML && LA15_3<=CLASS)||(LA15_3>=DEBUGGER && LA15_3<=VOLATILE)||LA15_3==Identifier) ) {
+                    alt15=3;
                 }
                 else {
                     NoViableAltException nvae =
@@ -3078,7 +3104,7 @@ public class JSParser extends JSBaseParser {
                      reportError("Comma or expression expected", colon); 
 
                     // AST REWRITE
-                    // elements: assignmentExpression, colon
+                    // elements: colon, assignmentExpression
                     // token labels: colon
                     // rule labels: retval
                     // token list labels: 
@@ -3182,7 +3208,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start propertyName
-    // JS.g:1039:1: propertyName : ( identifier | StringLiteral | numericLiteral );
+    // JS.g:1039:1: propertyName : ( identifier | word= reservedWord -> Identifier[word.start] | StringLiteral | numericLiteral );
     public final propertyName_return propertyName() throws RecognitionException {
         propertyName_return retval = new propertyName_return();
         retval.start = input.LT(1);
@@ -3190,21 +3216,39 @@ public class JSParser extends JSBaseParser {
         Object root_0 = null;
 
         Token StringLiteral72=null;
+        reservedWord_return word = null;
+
         identifier_return identifier71 = null;
 
         numericLiteral_return numericLiteral73 = null;
 
 
         Object StringLiteral72_tree=null;
-
+        RewriteRuleSubtreeStream stream_reservedWord=new RewriteRuleSubtreeStream(adaptor,"rule reservedWord");
         try {
-            // JS.g:1040:2: ( identifier | StringLiteral | numericLiteral )
-            int alt18=3;
+            // JS.g:1040:2: ( identifier | word= reservedWord -> Identifier[word.start] | StringLiteral | numericLiteral )
+            int alt18=4;
             switch ( input.LA(1) ) {
-            case EACH:
-            case GET:
-            case SET:
             case WXML:
+                {
+                alt18=1;
+                }
+                break;
+            case GET:
+                {
+                alt18=1;
+                }
+                break;
+            case SET:
+                {
+                alt18=1;
+                }
+                break;
+            case EACH:
+                {
+                alt18=1;
+                }
+                break;
             case NAMESPACE:
             case ABSTRACT:
             case BOOLEAN:
@@ -3241,21 +3285,51 @@ public class JSParser extends JSBaseParser {
                 alt18=1;
                 }
                 break;
-            case StringLiteral:
+            case BREAK:
+            case CASE:
+            case CATCH:
+            case CONTINUE:
+            case DEFAULT:
+            case DELETE:
+            case DO:
+            case ELSE:
+            case FINALLY:
+            case FOR:
+            case FUNCTION:
+            case IF:
+            case IN:
+            case INSTANCEOF:
+            case NEW:
+            case RETURN:
+            case SWITCH:
+            case THIS:
+            case THROW:
+            case TRY:
+            case TYPEOF:
+            case VAR:
+            case VOID:
+            case WHILE:
+            case WITH:
+            case YIELD:
                 {
                 alt18=2;
+                }
+                break;
+            case StringLiteral:
+                {
+                alt18=3;
                 }
                 break;
             case DecimalLiteral:
             case OctalIntegerLiteral:
             case HexIntegerLiteral:
                 {
-                alt18=3;
+                alt18=4;
                 }
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("1039:1: propertyName : ( identifier | StringLiteral | numericLiteral );", 18, 0, input);
+                    new NoViableAltException("1039:1: propertyName : ( identifier | word= reservedWord -> Identifier[word.start] | StringLiteral | numericLiteral );", 18, 0, input);
 
                 throw nvae;
             }
@@ -3266,7 +3340,7 @@ public class JSParser extends JSBaseParser {
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_identifier_in_propertyName4089);
+                    pushFollow(FOLLOW_identifier_in_propertyName4087);
                     identifier71=identifier();
                     _fsp--;
 
@@ -3275,24 +3349,53 @@ public class JSParser extends JSBaseParser {
                     }
                     break;
                 case 2 :
-                    // JS.g:1041:4: StringLiteral
+                    // JS.g:1041:4: word= reservedWord
+                    {
+                    pushFollow(FOLLOW_reservedWord_in_propertyName4094);
+                    word=reservedWord();
+                    _fsp--;
+
+                    stream_reservedWord.add(word.getTree());
+
+                    // AST REWRITE
+                    // elements: 
+                    // token labels: 
+                    // rule labels: retval
+                    // token list labels: 
+                    // rule list labels: 
+                    retval.tree = root_0;
+                    RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
+
+                    root_0 = (Object)adaptor.nil();
+                    // 1041:22: -> Identifier[word.start]
+                    {
+                        adaptor.addChild(root_0, adaptor.create(Identifier, word.start));
+
+                    }
+
+
+
+                    }
+                    break;
+                case 3 :
+                    // JS.g:1042:4: StringLiteral
                     {
                     root_0 = (Object)adaptor.nil();
 
                     StringLiteral72=(Token)input.LT(1);
-                    match(input,StringLiteral,FOLLOW_StringLiteral_in_propertyName4094); 
+                    match(input,StringLiteral,FOLLOW_StringLiteral_in_propertyName4104); 
                     StringLiteral72_tree = (Object)adaptor.create(StringLiteral72);
                     adaptor.addChild(root_0, StringLiteral72_tree);
 
 
                     }
                     break;
-                case 3 :
-                    // JS.g:1042:4: numericLiteral
+                case 4 :
+                    // JS.g:1043:4: numericLiteral
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_numericLiteral_in_propertyName4099);
+                    pushFollow(FOLLOW_numericLiteral_in_propertyName4109);
                     numericLiteral73=numericLiteral();
                     _fsp--;
 
@@ -3327,7 +3430,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start memberExpression
-    // JS.g:1054:1: memberExpression : ( primaryExpression | functionExpression | newExpression );
+    // JS.g:1055:1: memberExpression : ( primaryExpression | functionExpression | newExpression );
     public final memberExpression_return memberExpression() throws RecognitionException {
         memberExpression_return retval = new memberExpression_return();
         retval.start = input.LT(1);
@@ -3343,7 +3446,7 @@ public class JSParser extends JSBaseParser {
 
 
         try {
-            // JS.g:1055:2: ( primaryExpression | functionExpression | newExpression )
+            // JS.g:1056:2: ( primaryExpression | functionExpression | newExpression )
             int alt19=3;
             int LA19_0 = input.LA(1);
 
@@ -3364,17 +3467,17 @@ public class JSParser extends JSBaseParser {
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("1054:1: memberExpression : ( primaryExpression | functionExpression | newExpression );", 19, 0, input);
+                    new NoViableAltException("1055:1: memberExpression : ( primaryExpression | functionExpression | newExpression );", 19, 0, input);
 
                 throw nvae;
             }
             switch (alt19) {
                 case 1 :
-                    // JS.g:1055:4: primaryExpression
+                    // JS.g:1056:4: primaryExpression
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_primaryExpression_in_memberExpression4117);
+                    pushFollow(FOLLOW_primaryExpression_in_memberExpression4127);
                     primaryExpression74=primaryExpression();
                     _fsp--;
 
@@ -3383,11 +3486,11 @@ public class JSParser extends JSBaseParser {
                     }
                     break;
                 case 2 :
-                    // JS.g:1056:4: functionExpression
+                    // JS.g:1057:4: functionExpression
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_functionExpression_in_memberExpression4122);
+                    pushFollow(FOLLOW_functionExpression_in_memberExpression4132);
                     functionExpression75=functionExpression();
                     _fsp--;
 
@@ -3396,11 +3499,11 @@ public class JSParser extends JSBaseParser {
                     }
                     break;
                 case 3 :
-                    // JS.g:1057:4: newExpression
+                    // JS.g:1058:4: newExpression
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_newExpression_in_memberExpression4127);
+                    pushFollow(FOLLOW_newExpression_in_memberExpression4137);
                     newExpression76=newExpression();
                     _fsp--;
 
@@ -3435,7 +3538,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start newExpression
-    // JS.g:1060:1: newExpression : NEW newExpressionTail ;
+    // JS.g:1061:1: newExpression : NEW newExpressionTail ;
     public final newExpression_return newExpression() throws RecognitionException {
         newExpression_return retval = new newExpression_return();
         retval.start = input.LT(1);
@@ -3449,17 +3552,17 @@ public class JSParser extends JSBaseParser {
         Object NEW77_tree=null;
 
         try {
-            // JS.g:1061:2: ( NEW newExpressionTail )
-            // JS.g:1061:4: NEW newExpressionTail
+            // JS.g:1062:2: ( NEW newExpressionTail )
+            // JS.g:1062:4: NEW newExpressionTail
             {
             root_0 = (Object)adaptor.nil();
 
             NEW77=(Token)input.LT(1);
-            match(input,NEW,FOLLOW_NEW_in_newExpression4138); 
+            match(input,NEW,FOLLOW_NEW_in_newExpression4148); 
             NEW77_tree = (Object)adaptor.create(NEW77);
             root_0 = (Object)adaptor.becomeRoot(NEW77_tree, root_0);
 
-            pushFollow(FOLLOW_newExpressionTail_in_newExpression4141);
+            pushFollow(FOLLOW_newExpressionTail_in_newExpression4151);
             newExpressionTail78=newExpressionTail();
             _fsp--;
 
@@ -3492,7 +3595,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start arguments
-    // JS.g:1065:1: arguments : LPAREN ( assignmentExpression ( COMMA assignmentExpression )* )? RPAREN -> ^( CALL_ARGUMENTS ( assignmentExpression )* ) ;
+    // JS.g:1066:1: arguments : LPAREN ( assignmentExpression ( COMMA assignmentExpression )* )? RPAREN -> ^( CALL_ARGUMENTS ( assignmentExpression )* ) ;
     public final arguments_return arguments() throws RecognitionException {
         arguments_return retval = new arguments_return();
         retval.start = input.LT(1);
@@ -3515,14 +3618,14 @@ public class JSParser extends JSBaseParser {
         RewriteRuleTokenStream stream_LPAREN=new RewriteRuleTokenStream(adaptor,"token LPAREN");
         RewriteRuleSubtreeStream stream_assignmentExpression=new RewriteRuleSubtreeStream(adaptor,"rule assignmentExpression");
         try {
-            // JS.g:1066:2: ( LPAREN ( assignmentExpression ( COMMA assignmentExpression )* )? RPAREN -> ^( CALL_ARGUMENTS ( assignmentExpression )* ) )
-            // JS.g:1066:4: LPAREN ( assignmentExpression ( COMMA assignmentExpression )* )? RPAREN
+            // JS.g:1067:2: ( LPAREN ( assignmentExpression ( COMMA assignmentExpression )* )? RPAREN -> ^( CALL_ARGUMENTS ( assignmentExpression )* ) )
+            // JS.g:1067:4: LPAREN ( assignmentExpression ( COMMA assignmentExpression )* )? RPAREN
             {
             LPAREN79=(Token)input.LT(1);
-            match(input,LPAREN,FOLLOW_LPAREN_in_arguments4154); 
+            match(input,LPAREN,FOLLOW_LPAREN_in_arguments4164); 
             stream_LPAREN.add(LPAREN79);
 
-            // JS.g:1066:11: ( assignmentExpression ( COMMA assignmentExpression )* )?
+            // JS.g:1067:11: ( assignmentExpression ( COMMA assignmentExpression )* )?
             int alt21=2;
             int LA21_0 = input.LA(1);
 
@@ -3537,14 +3640,14 @@ public class JSParser extends JSBaseParser {
             }
             switch (alt21) {
                 case 1 :
-                    // JS.g:1066:13: assignmentExpression ( COMMA assignmentExpression )*
+                    // JS.g:1067:13: assignmentExpression ( COMMA assignmentExpression )*
                     {
-                    pushFollow(FOLLOW_assignmentExpression_in_arguments4158);
+                    pushFollow(FOLLOW_assignmentExpression_in_arguments4168);
                     assignmentExpression80=assignmentExpression();
                     _fsp--;
 
                     stream_assignmentExpression.add(assignmentExpression80.getTree());
-                    // JS.g:1066:34: ( COMMA assignmentExpression )*
+                    // JS.g:1067:34: ( COMMA assignmentExpression )*
                     loop20:
                     do {
                         int alt20=2;
@@ -3557,13 +3660,13 @@ public class JSParser extends JSBaseParser {
 
                         switch (alt20) {
                     	case 1 :
-                    	    // JS.g:1066:36: COMMA assignmentExpression
+                    	    // JS.g:1067:36: COMMA assignmentExpression
                     	    {
                     	    COMMA81=(Token)input.LT(1);
-                    	    match(input,COMMA,FOLLOW_COMMA_in_arguments4162); 
+                    	    match(input,COMMA,FOLLOW_COMMA_in_arguments4172); 
                     	    stream_COMMA.add(COMMA81);
 
-                    	    pushFollow(FOLLOW_assignmentExpression_in_arguments4164);
+                    	    pushFollow(FOLLOW_assignmentExpression_in_arguments4174);
                     	    assignmentExpression82=assignmentExpression();
                     	    _fsp--;
 
@@ -3584,7 +3687,7 @@ public class JSParser extends JSBaseParser {
             }
 
             RPAREN83=(Token)input.LT(1);
-            match(input,RPAREN,FOLLOW_RPAREN_in_arguments4172); 
+            match(input,RPAREN,FOLLOW_RPAREN_in_arguments4182); 
             stream_RPAREN.add(RPAREN83);
 
 
@@ -3598,14 +3701,14 @@ public class JSParser extends JSBaseParser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 1067:2: -> ^( CALL_ARGUMENTS ( assignmentExpression )* )
+            // 1068:2: -> ^( CALL_ARGUMENTS ( assignmentExpression )* )
             {
-                // JS.g:1067:5: ^( CALL_ARGUMENTS ( assignmentExpression )* )
+                // JS.g:1068:5: ^( CALL_ARGUMENTS ( assignmentExpression )* )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(adaptor.create(CALL_ARGUMENTS, "CALL_ARGUMENTS"), root_1);
 
-                // JS.g:1067:23: ( assignmentExpression )*
+                // JS.g:1068:23: ( assignmentExpression )*
                 while ( stream_assignmentExpression.hasNext() ) {
                     adaptor.addChild(root_1, stream_assignmentExpression.next());
 
@@ -3646,7 +3749,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start leftHandSideExpression
-    // JS.g:1070:1: leftHandSideExpression : ( memberExpression -> memberExpression ) ( arguments -> ^( CALL $leftHandSideExpression arguments ) | lb1= LBRACK expression RBRACK -> ^( BYINDEX[$lb1] $leftHandSideExpression expression ) | DOT r= rightHandSideExpression -> ^( BYFIELD $leftHandSideExpression DOT ( $r)? ) | {...}? => DOTDOT r2= rightHandSideExpression2 -> ^( ALLCHILDREN $leftHandSideExpression $r2) | {...}? => COLONCOLON LBRACK expression RBRACK -> ^( LOCALNAME $leftHandSideExpression expression ) | {...}? => COLONCOLON ps= propertySelector -> ^( LOCALNAME $leftHandSideExpression ( $ps)? ) )* ;
+    // JS.g:1071:1: leftHandSideExpression : ( memberExpression -> memberExpression ) ( arguments -> ^( CALL $leftHandSideExpression arguments ) | lb1= LBRACK expression RBRACK -> ^( BYINDEX[$lb1] $leftHandSideExpression expression ) | DOT r= rightHandSideExpression -> ^( BYFIELD $leftHandSideExpression DOT ( $r)? ) | {...}? => DOTDOT r2= rightHandSideExpression2 -> ^( ALLCHILDREN $leftHandSideExpression $r2) | {...}? => COLONCOLON LBRACK expression RBRACK -> ^( LOCALNAME $leftHandSideExpression expression ) | {...}? => COLONCOLON ps= propertySelector -> ^( LOCALNAME $leftHandSideExpression ( $ps)? ) )* ;
     public final leftHandSideExpression_return leftHandSideExpression() throws RecognitionException {
         leftHandSideExpression_return retval = new leftHandSideExpression_return();
         retval.start = input.LT(1);
@@ -3697,13 +3800,13 @@ public class JSParser extends JSBaseParser {
         RewriteRuleSubtreeStream stream_propertySelector=new RewriteRuleSubtreeStream(adaptor,"rule propertySelector");
          pushState(JSParserRule.LEFT_HAND_SIDE_EXPRESSION); 
         try {
-            // JS.g:1072:3: ( ( memberExpression -> memberExpression ) ( arguments -> ^( CALL $leftHandSideExpression arguments ) | lb1= LBRACK expression RBRACK -> ^( BYINDEX[$lb1] $leftHandSideExpression expression ) | DOT r= rightHandSideExpression -> ^( BYFIELD $leftHandSideExpression DOT ( $r)? ) | {...}? => DOTDOT r2= rightHandSideExpression2 -> ^( ALLCHILDREN $leftHandSideExpression $r2) | {...}? => COLONCOLON LBRACK expression RBRACK -> ^( LOCALNAME $leftHandSideExpression expression ) | {...}? => COLONCOLON ps= propertySelector -> ^( LOCALNAME $leftHandSideExpression ( $ps)? ) )* )
-            // JS.g:1073:3: ( memberExpression -> memberExpression ) ( arguments -> ^( CALL $leftHandSideExpression arguments ) | lb1= LBRACK expression RBRACK -> ^( BYINDEX[$lb1] $leftHandSideExpression expression ) | DOT r= rightHandSideExpression -> ^( BYFIELD $leftHandSideExpression DOT ( $r)? ) | {...}? => DOTDOT r2= rightHandSideExpression2 -> ^( ALLCHILDREN $leftHandSideExpression $r2) | {...}? => COLONCOLON LBRACK expression RBRACK -> ^( LOCALNAME $leftHandSideExpression expression ) | {...}? => COLONCOLON ps= propertySelector -> ^( LOCALNAME $leftHandSideExpression ( $ps)? ) )*
+            // JS.g:1073:3: ( ( memberExpression -> memberExpression ) ( arguments -> ^( CALL $leftHandSideExpression arguments ) | lb1= LBRACK expression RBRACK -> ^( BYINDEX[$lb1] $leftHandSideExpression expression ) | DOT r= rightHandSideExpression -> ^( BYFIELD $leftHandSideExpression DOT ( $r)? ) | {...}? => DOTDOT r2= rightHandSideExpression2 -> ^( ALLCHILDREN $leftHandSideExpression $r2) | {...}? => COLONCOLON LBRACK expression RBRACK -> ^( LOCALNAME $leftHandSideExpression expression ) | {...}? => COLONCOLON ps= propertySelector -> ^( LOCALNAME $leftHandSideExpression ( $ps)? ) )* )
+            // JS.g:1074:3: ( memberExpression -> memberExpression ) ( arguments -> ^( CALL $leftHandSideExpression arguments ) | lb1= LBRACK expression RBRACK -> ^( BYINDEX[$lb1] $leftHandSideExpression expression ) | DOT r= rightHandSideExpression -> ^( BYFIELD $leftHandSideExpression DOT ( $r)? ) | {...}? => DOTDOT r2= rightHandSideExpression2 -> ^( ALLCHILDREN $leftHandSideExpression $r2) | {...}? => COLONCOLON LBRACK expression RBRACK -> ^( LOCALNAME $leftHandSideExpression expression ) | {...}? => COLONCOLON ps= propertySelector -> ^( LOCALNAME $leftHandSideExpression ( $ps)? ) )*
             {
-            // JS.g:1073:3: ( memberExpression -> memberExpression )
-            // JS.g:1074:5: memberExpression
+            // JS.g:1074:3: ( memberExpression -> memberExpression )
+            // JS.g:1075:5: memberExpression
             {
-            pushFollow(FOLLOW_memberExpression_in_leftHandSideExpression4210);
+            pushFollow(FOLLOW_memberExpression_in_leftHandSideExpression4220);
             memberExpression84=memberExpression();
             _fsp--;
 
@@ -3719,7 +3822,7 @@ public class JSParser extends JSBaseParser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 1074:25: -> memberExpression
+            // 1075:25: -> memberExpression
             {
                 adaptor.addChild(root_0, stream_memberExpression.next());
 
@@ -3729,7 +3832,7 @@ public class JSParser extends JSBaseParser {
 
             }
 
-            // JS.g:1076:3: ( arguments -> ^( CALL $leftHandSideExpression arguments ) | lb1= LBRACK expression RBRACK -> ^( BYINDEX[$lb1] $leftHandSideExpression expression ) | DOT r= rightHandSideExpression -> ^( BYFIELD $leftHandSideExpression DOT ( $r)? ) | {...}? => DOTDOT r2= rightHandSideExpression2 -> ^( ALLCHILDREN $leftHandSideExpression $r2) | {...}? => COLONCOLON LBRACK expression RBRACK -> ^( LOCALNAME $leftHandSideExpression expression ) | {...}? => COLONCOLON ps= propertySelector -> ^( LOCALNAME $leftHandSideExpression ( $ps)? ) )*
+            // JS.g:1077:3: ( arguments -> ^( CALL $leftHandSideExpression arguments ) | lb1= LBRACK expression RBRACK -> ^( BYINDEX[$lb1] $leftHandSideExpression expression ) | DOT r= rightHandSideExpression -> ^( BYFIELD $leftHandSideExpression DOT ( $r)? ) | {...}? => DOTDOT r2= rightHandSideExpression2 -> ^( ALLCHILDREN $leftHandSideExpression $r2) | {...}? => COLONCOLON LBRACK expression RBRACK -> ^( LOCALNAME $leftHandSideExpression expression ) | {...}? => COLONCOLON ps= propertySelector -> ^( LOCALNAME $leftHandSideExpression ( $ps)? ) )*
             loop22:
             do {
                 int alt22=7;
@@ -3763,9 +3866,9 @@ public class JSParser extends JSBaseParser {
 
                 switch (alt22) {
             	case 1 :
-            	    // JS.g:1077:5: arguments
+            	    // JS.g:1078:5: arguments
             	    {
-            	    pushFollow(FOLLOW_arguments_in_leftHandSideExpression4231);
+            	    pushFollow(FOLLOW_arguments_in_leftHandSideExpression4241);
             	    arguments85=arguments();
             	    _fsp--;
 
@@ -3781,9 +3884,9 @@ public class JSParser extends JSBaseParser {
             	    RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             	    root_0 = (Object)adaptor.nil();
-            	    // 1077:19: -> ^( CALL $leftHandSideExpression arguments )
+            	    // 1078:19: -> ^( CALL $leftHandSideExpression arguments )
             	    {
-            	        // JS.g:1077:22: ^( CALL $leftHandSideExpression arguments )
+            	        // JS.g:1078:22: ^( CALL $leftHandSideExpression arguments )
             	        {
             	        Object root_1 = (Object)adaptor.nil();
             	        root_1 = (Object)adaptor.becomeRoot(adaptor.create(CALL, "CALL"), root_1);
@@ -3801,24 +3904,24 @@ public class JSParser extends JSBaseParser {
             	    }
             	    break;
             	case 2 :
-            	    // JS.g:1078:7: lb1= LBRACK expression RBRACK
+            	    // JS.g:1079:7: lb1= LBRACK expression RBRACK
             	    {
             	    lb1=(Token)input.LT(1);
-            	    match(input,LBRACK,FOLLOW_LBRACK_in_leftHandSideExpression4258); 
+            	    match(input,LBRACK,FOLLOW_LBRACK_in_leftHandSideExpression4268); 
             	    stream_LBRACK.add(lb1);
 
-            	    pushFollow(FOLLOW_expression_in_leftHandSideExpression4260);
+            	    pushFollow(FOLLOW_expression_in_leftHandSideExpression4270);
             	    expression86=expression();
             	    _fsp--;
 
             	    stream_expression.add(expression86.getTree());
             	    RBRACK87=(Token)input.LT(1);
-            	    match(input,RBRACK,FOLLOW_RBRACK_in_leftHandSideExpression4262); 
+            	    match(input,RBRACK,FOLLOW_RBRACK_in_leftHandSideExpression4272); 
             	    stream_RBRACK.add(RBRACK87);
 
 
             	    // AST REWRITE
-            	    // elements: expression, leftHandSideExpression
+            	    // elements: leftHandSideExpression, expression
             	    // token labels: 
             	    // rule labels: retval
             	    // token list labels: 
@@ -3827,9 +3930,9 @@ public class JSParser extends JSBaseParser {
             	    RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             	    root_0 = (Object)adaptor.nil();
-            	    // 1078:37: -> ^( BYINDEX[$lb1] $leftHandSideExpression expression )
+            	    // 1079:37: -> ^( BYINDEX[$lb1] $leftHandSideExpression expression )
             	    {
-            	        // JS.g:1078:40: ^( BYINDEX[$lb1] $leftHandSideExpression expression )
+            	        // JS.g:1079:40: ^( BYINDEX[$lb1] $leftHandSideExpression expression )
             	        {
             	        Object root_1 = (Object)adaptor.nil();
             	        root_1 = (Object)adaptor.becomeRoot(adaptor.create(BYINDEX, lb1), root_1);
@@ -3847,20 +3950,20 @@ public class JSParser extends JSBaseParser {
             	    }
             	    break;
             	case 3 :
-            	    // JS.g:1079:7: DOT r= rightHandSideExpression
+            	    // JS.g:1080:7: DOT r= rightHandSideExpression
             	    {
             	    DOT88=(Token)input.LT(1);
-            	    match(input,DOT,FOLLOW_DOT_in_leftHandSideExpression4285); 
+            	    match(input,DOT,FOLLOW_DOT_in_leftHandSideExpression4295); 
             	    stream_DOT.add(DOT88);
 
-            	    pushFollow(FOLLOW_rightHandSideExpression_in_leftHandSideExpression4289);
+            	    pushFollow(FOLLOW_rightHandSideExpression_in_leftHandSideExpression4299);
             	    r=rightHandSideExpression();
             	    _fsp--;
 
             	    stream_rightHandSideExpression.add(r.getTree());
 
             	    // AST REWRITE
-            	    // elements: DOT, r, leftHandSideExpression
+            	    // elements: r, DOT, leftHandSideExpression
             	    // token labels: 
             	    // rule labels: retval, r
             	    // token list labels: 
@@ -3870,16 +3973,16 @@ public class JSParser extends JSBaseParser {
             	    RewriteRuleSubtreeStream stream_r=new RewriteRuleSubtreeStream(adaptor,"token r",r!=null?r.tree:null);
 
             	    root_0 = (Object)adaptor.nil();
-            	    // 1079:37: -> ^( BYFIELD $leftHandSideExpression DOT ( $r)? )
+            	    // 1080:37: -> ^( BYFIELD $leftHandSideExpression DOT ( $r)? )
             	    {
-            	        // JS.g:1079:40: ^( BYFIELD $leftHandSideExpression DOT ( $r)? )
+            	        // JS.g:1080:40: ^( BYFIELD $leftHandSideExpression DOT ( $r)? )
             	        {
             	        Object root_1 = (Object)adaptor.nil();
             	        root_1 = (Object)adaptor.becomeRoot(adaptor.create(BYFIELD, "BYFIELD"), root_1);
 
             	        adaptor.addChild(root_1, stream_retval.next());
             	        adaptor.addChild(root_1, stream_DOT.next());
-            	        // JS.g:1079:79: ( $r)?
+            	        // JS.g:1080:79: ( $r)?
             	        if ( stream_r.hasNext() ) {
             	            adaptor.addChild(root_1, stream_r.next());
 
@@ -3896,23 +3999,23 @@ public class JSParser extends JSBaseParser {
             	    }
             	    break;
             	case 4 :
-            	    // JS.g:1080:7: {...}? => DOTDOT r2= rightHandSideExpression2
+            	    // JS.g:1081:7: {...}? => DOTDOT r2= rightHandSideExpression2
             	    {
             	    if ( !( isXmlEnabled() ) ) {
             	        throw new FailedPredicateException(input, "leftHandSideExpression", " isXmlEnabled() ");
             	    }
             	    DOTDOT89=(Token)input.LT(1);
-            	    match(input,DOTDOT,FOLLOW_DOTDOT_in_leftHandSideExpression4317); 
+            	    match(input,DOTDOT,FOLLOW_DOTDOT_in_leftHandSideExpression4327); 
             	    stream_DOTDOT.add(DOTDOT89);
 
-            	    pushFollow(FOLLOW_rightHandSideExpression2_in_leftHandSideExpression4321);
+            	    pushFollow(FOLLOW_rightHandSideExpression2_in_leftHandSideExpression4331);
             	    r2=rightHandSideExpression2();
             	    _fsp--;
 
             	    stream_rightHandSideExpression2.add(r2.getTree());
 
             	    // AST REWRITE
-            	    // elements: r2, leftHandSideExpression
+            	    // elements: leftHandSideExpression, r2
             	    // token labels: 
             	    // rule labels: retval, r2
             	    // token list labels: 
@@ -3922,9 +4025,9 @@ public class JSParser extends JSBaseParser {
             	    RewriteRuleSubtreeStream stream_r2=new RewriteRuleSubtreeStream(adaptor,"token r2",r2!=null?r2.tree:null);
 
             	    root_0 = (Object)adaptor.nil();
-            	    // 1080:64: -> ^( ALLCHILDREN $leftHandSideExpression $r2)
+            	    // 1081:64: -> ^( ALLCHILDREN $leftHandSideExpression $r2)
             	    {
-            	        // JS.g:1080:67: ^( ALLCHILDREN $leftHandSideExpression $r2)
+            	        // JS.g:1081:67: ^( ALLCHILDREN $leftHandSideExpression $r2)
             	        {
             	        Object root_1 = (Object)adaptor.nil();
             	        root_1 = (Object)adaptor.becomeRoot(adaptor.create(ALLCHILDREN, "ALLCHILDREN"), root_1);
@@ -3942,31 +4045,31 @@ public class JSParser extends JSBaseParser {
             	    }
             	    break;
             	case 5 :
-            	    // JS.g:1081:7: {...}? => COLONCOLON LBRACK expression RBRACK
+            	    // JS.g:1082:7: {...}? => COLONCOLON LBRACK expression RBRACK
             	    {
             	    if ( !( isXmlEnabled() ) ) {
             	        throw new FailedPredicateException(input, "leftHandSideExpression", " isXmlEnabled() ");
             	    }
             	    COLONCOLON90=(Token)input.LT(1);
-            	    match(input,COLONCOLON,FOLLOW_COLONCOLON_in_leftHandSideExpression4344); 
+            	    match(input,COLONCOLON,FOLLOW_COLONCOLON_in_leftHandSideExpression4354); 
             	    stream_COLONCOLON.add(COLONCOLON90);
 
             	    LBRACK91=(Token)input.LT(1);
-            	    match(input,LBRACK,FOLLOW_LBRACK_in_leftHandSideExpression4346); 
+            	    match(input,LBRACK,FOLLOW_LBRACK_in_leftHandSideExpression4356); 
             	    stream_LBRACK.add(LBRACK91);
 
-            	    pushFollow(FOLLOW_expression_in_leftHandSideExpression4348);
+            	    pushFollow(FOLLOW_expression_in_leftHandSideExpression4358);
             	    expression92=expression();
             	    _fsp--;
 
             	    stream_expression.add(expression92.getTree());
             	    RBRACK93=(Token)input.LT(1);
-            	    match(input,RBRACK,FOLLOW_RBRACK_in_leftHandSideExpression4350); 
+            	    match(input,RBRACK,FOLLOW_RBRACK_in_leftHandSideExpression4360); 
             	    stream_RBRACK.add(RBRACK93);
 
 
             	    // AST REWRITE
-            	    // elements: leftHandSideExpression, expression
+            	    // elements: expression, leftHandSideExpression
             	    // token labels: 
             	    // rule labels: retval
             	    // token list labels: 
@@ -3975,9 +4078,9 @@ public class JSParser extends JSBaseParser {
             	    RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             	    root_0 = (Object)adaptor.nil();
-            	    // 1081:65: -> ^( LOCALNAME $leftHandSideExpression expression )
+            	    // 1082:65: -> ^( LOCALNAME $leftHandSideExpression expression )
             	    {
-            	        // JS.g:1081:68: ^( LOCALNAME $leftHandSideExpression expression )
+            	        // JS.g:1082:68: ^( LOCALNAME $leftHandSideExpression expression )
             	        {
             	        Object root_1 = (Object)adaptor.nil();
             	        root_1 = (Object)adaptor.becomeRoot(adaptor.create(LOCALNAME, "LOCALNAME"), root_1);
@@ -3995,16 +4098,16 @@ public class JSParser extends JSBaseParser {
             	    }
             	    break;
             	case 6 :
-            	    // JS.g:1082:7: {...}? => COLONCOLON ps= propertySelector
+            	    // JS.g:1083:7: {...}? => COLONCOLON ps= propertySelector
             	    {
             	    if ( !( isXmlEnabled() ) ) {
             	        throw new FailedPredicateException(input, "leftHandSideExpression", " isXmlEnabled() ");
             	    }
             	    COLONCOLON94=(Token)input.LT(1);
-            	    match(input,COLONCOLON,FOLLOW_COLONCOLON_in_leftHandSideExpression4372); 
+            	    match(input,COLONCOLON,FOLLOW_COLONCOLON_in_leftHandSideExpression4382); 
             	    stream_COLONCOLON.add(COLONCOLON94);
 
-            	    pushFollow(FOLLOW_propertySelector_in_leftHandSideExpression4376);
+            	    pushFollow(FOLLOW_propertySelector_in_leftHandSideExpression4386);
             	    ps=propertySelector();
             	    _fsp--;
 
@@ -4021,15 +4124,15 @@ public class JSParser extends JSBaseParser {
             	    RewriteRuleSubtreeStream stream_ps=new RewriteRuleSubtreeStream(adaptor,"token ps",ps!=null?ps.tree:null);
 
             	    root_0 = (Object)adaptor.nil();
-            	    // 1082:60: -> ^( LOCALNAME $leftHandSideExpression ( $ps)? )
+            	    // 1083:60: -> ^( LOCALNAME $leftHandSideExpression ( $ps)? )
             	    {
-            	        // JS.g:1082:63: ^( LOCALNAME $leftHandSideExpression ( $ps)? )
+            	        // JS.g:1083:63: ^( LOCALNAME $leftHandSideExpression ( $ps)? )
             	        {
             	        Object root_1 = (Object)adaptor.nil();
             	        root_1 = (Object)adaptor.becomeRoot(adaptor.create(LOCALNAME, "LOCALNAME"), root_1);
 
             	        adaptor.addChild(root_1, stream_retval.next());
-            	        // JS.g:1082:99: ( $ps)?
+            	        // JS.g:1083:99: ( $ps)?
             	        if ( stream_ps.hasNext() ) {
             	            adaptor.addChild(root_1, stream_ps.next());
 
@@ -4079,7 +4182,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start newExpressionTail
-    // JS.g:1089:1: newExpressionTail : ( memberExpression -> memberExpression ) (lb1= LBRACK expression RBRACK -> ^( BYINDEX[$lb1] $newExpressionTail expression ) | DOT r= rightHandSideExpression -> ^( BYFIELD $newExpressionTail DOT ( $r)? ) | {...}? => DOTDOT r2= rightHandSideExpression2 -> ^( ALLCHILDREN $newExpressionTail $r2) | {...}? => COLONCOLON LBRACK expression RBRACK -> ^( LOCALNAME $newExpressionTail expression ) | {...}? => COLONCOLON ps= propertySelector -> ^( LOCALNAME $newExpressionTail ( $ps)? ) )* ( arguments -> ^( CALL $newExpressionTail arguments ) )? ;
+    // JS.g:1090:1: newExpressionTail : ( memberExpression -> memberExpression ) (lb1= LBRACK expression RBRACK -> ^( BYINDEX[$lb1] $newExpressionTail expression ) | DOT r= rightHandSideExpression -> ^( BYFIELD $newExpressionTail DOT ( $r)? ) | {...}? => DOTDOT r2= rightHandSideExpression2 -> ^( ALLCHILDREN $newExpressionTail $r2) | {...}? => COLONCOLON LBRACK expression RBRACK -> ^( LOCALNAME $newExpressionTail expression ) | {...}? => COLONCOLON ps= propertySelector -> ^( LOCALNAME $newExpressionTail ( $ps)? ) )* ( arguments -> ^( CALL $newExpressionTail arguments ) )? ;
     public final newExpressionTail_return newExpressionTail() throws RecognitionException {
         newExpressionTail_return retval = new newExpressionTail_return();
         retval.start = input.LT(1);
@@ -4129,13 +4232,13 @@ public class JSParser extends JSBaseParser {
         RewriteRuleSubtreeStream stream_rightHandSideExpression=new RewriteRuleSubtreeStream(adaptor,"rule rightHandSideExpression");
         RewriteRuleSubtreeStream stream_propertySelector=new RewriteRuleSubtreeStream(adaptor,"rule propertySelector");
         try {
-            // JS.g:1090:3: ( ( memberExpression -> memberExpression ) (lb1= LBRACK expression RBRACK -> ^( BYINDEX[$lb1] $newExpressionTail expression ) | DOT r= rightHandSideExpression -> ^( BYFIELD $newExpressionTail DOT ( $r)? ) | {...}? => DOTDOT r2= rightHandSideExpression2 -> ^( ALLCHILDREN $newExpressionTail $r2) | {...}? => COLONCOLON LBRACK expression RBRACK -> ^( LOCALNAME $newExpressionTail expression ) | {...}? => COLONCOLON ps= propertySelector -> ^( LOCALNAME $newExpressionTail ( $ps)? ) )* ( arguments -> ^( CALL $newExpressionTail arguments ) )? )
-            // JS.g:1091:3: ( memberExpression -> memberExpression ) (lb1= LBRACK expression RBRACK -> ^( BYINDEX[$lb1] $newExpressionTail expression ) | DOT r= rightHandSideExpression -> ^( BYFIELD $newExpressionTail DOT ( $r)? ) | {...}? => DOTDOT r2= rightHandSideExpression2 -> ^( ALLCHILDREN $newExpressionTail $r2) | {...}? => COLONCOLON LBRACK expression RBRACK -> ^( LOCALNAME $newExpressionTail expression ) | {...}? => COLONCOLON ps= propertySelector -> ^( LOCALNAME $newExpressionTail ( $ps)? ) )* ( arguments -> ^( CALL $newExpressionTail arguments ) )?
+            // JS.g:1091:3: ( ( memberExpression -> memberExpression ) (lb1= LBRACK expression RBRACK -> ^( BYINDEX[$lb1] $newExpressionTail expression ) | DOT r= rightHandSideExpression -> ^( BYFIELD $newExpressionTail DOT ( $r)? ) | {...}? => DOTDOT r2= rightHandSideExpression2 -> ^( ALLCHILDREN $newExpressionTail $r2) | {...}? => COLONCOLON LBRACK expression RBRACK -> ^( LOCALNAME $newExpressionTail expression ) | {...}? => COLONCOLON ps= propertySelector -> ^( LOCALNAME $newExpressionTail ( $ps)? ) )* ( arguments -> ^( CALL $newExpressionTail arguments ) )? )
+            // JS.g:1092:3: ( memberExpression -> memberExpression ) (lb1= LBRACK expression RBRACK -> ^( BYINDEX[$lb1] $newExpressionTail expression ) | DOT r= rightHandSideExpression -> ^( BYFIELD $newExpressionTail DOT ( $r)? ) | {...}? => DOTDOT r2= rightHandSideExpression2 -> ^( ALLCHILDREN $newExpressionTail $r2) | {...}? => COLONCOLON LBRACK expression RBRACK -> ^( LOCALNAME $newExpressionTail expression ) | {...}? => COLONCOLON ps= propertySelector -> ^( LOCALNAME $newExpressionTail ( $ps)? ) )* ( arguments -> ^( CALL $newExpressionTail arguments ) )?
             {
-            // JS.g:1091:3: ( memberExpression -> memberExpression )
-            // JS.g:1092:5: memberExpression
+            // JS.g:1092:3: ( memberExpression -> memberExpression )
+            // JS.g:1093:5: memberExpression
             {
-            pushFollow(FOLLOW_memberExpression_in_newExpressionTail4437);
+            pushFollow(FOLLOW_memberExpression_in_newExpressionTail4447);
             memberExpression95=memberExpression();
             _fsp--;
 
@@ -4151,7 +4254,7 @@ public class JSParser extends JSBaseParser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 1092:25: -> memberExpression
+            // 1093:25: -> memberExpression
             {
                 adaptor.addChild(root_0, stream_memberExpression.next());
 
@@ -4161,7 +4264,7 @@ public class JSParser extends JSBaseParser {
 
             }
 
-            // JS.g:1094:3: (lb1= LBRACK expression RBRACK -> ^( BYINDEX[$lb1] $newExpressionTail expression ) | DOT r= rightHandSideExpression -> ^( BYFIELD $newExpressionTail DOT ( $r)? ) | {...}? => DOTDOT r2= rightHandSideExpression2 -> ^( ALLCHILDREN $newExpressionTail $r2) | {...}? => COLONCOLON LBRACK expression RBRACK -> ^( LOCALNAME $newExpressionTail expression ) | {...}? => COLONCOLON ps= propertySelector -> ^( LOCALNAME $newExpressionTail ( $ps)? ) )*
+            // JS.g:1095:3: (lb1= LBRACK expression RBRACK -> ^( BYINDEX[$lb1] $newExpressionTail expression ) | DOT r= rightHandSideExpression -> ^( BYFIELD $newExpressionTail DOT ( $r)? ) | {...}? => DOTDOT r2= rightHandSideExpression2 -> ^( ALLCHILDREN $newExpressionTail $r2) | {...}? => COLONCOLON LBRACK expression RBRACK -> ^( LOCALNAME $newExpressionTail expression ) | {...}? => COLONCOLON ps= propertySelector -> ^( LOCALNAME $newExpressionTail ( $ps)? ) )*
             loop23:
             do {
                 int alt23=6;
@@ -4198,19 +4301,19 @@ public class JSParser extends JSBaseParser {
 
                 switch (alt23) {
             	case 1 :
-            	    // JS.g:1095:5: lb1= LBRACK expression RBRACK
+            	    // JS.g:1096:5: lb1= LBRACK expression RBRACK
             	    {
             	    lb1=(Token)input.LT(1);
-            	    match(input,LBRACK,FOLLOW_LBRACK_in_newExpressionTail4460); 
+            	    match(input,LBRACK,FOLLOW_LBRACK_in_newExpressionTail4470); 
             	    stream_LBRACK.add(lb1);
 
-            	    pushFollow(FOLLOW_expression_in_newExpressionTail4462);
+            	    pushFollow(FOLLOW_expression_in_newExpressionTail4472);
             	    expression96=expression();
             	    _fsp--;
 
             	    stream_expression.add(expression96.getTree());
             	    RBRACK97=(Token)input.LT(1);
-            	    match(input,RBRACK,FOLLOW_RBRACK_in_newExpressionTail4464); 
+            	    match(input,RBRACK,FOLLOW_RBRACK_in_newExpressionTail4474); 
             	    stream_RBRACK.add(RBRACK97);
 
 
@@ -4224,9 +4327,9 @@ public class JSParser extends JSBaseParser {
             	    RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             	    root_0 = (Object)adaptor.nil();
-            	    // 1095:35: -> ^( BYINDEX[$lb1] $newExpressionTail expression )
+            	    // 1096:35: -> ^( BYINDEX[$lb1] $newExpressionTail expression )
             	    {
-            	        // JS.g:1095:38: ^( BYINDEX[$lb1] $newExpressionTail expression )
+            	        // JS.g:1096:38: ^( BYINDEX[$lb1] $newExpressionTail expression )
             	        {
             	        Object root_1 = (Object)adaptor.nil();
             	        root_1 = (Object)adaptor.becomeRoot(adaptor.create(BYINDEX, lb1), root_1);
@@ -4244,20 +4347,20 @@ public class JSParser extends JSBaseParser {
             	    }
             	    break;
             	case 2 :
-            	    // JS.g:1096:7: DOT r= rightHandSideExpression
+            	    // JS.g:1097:7: DOT r= rightHandSideExpression
             	    {
             	    DOT98=(Token)input.LT(1);
-            	    match(input,DOT,FOLLOW_DOT_in_newExpressionTail4487); 
+            	    match(input,DOT,FOLLOW_DOT_in_newExpressionTail4497); 
             	    stream_DOT.add(DOT98);
 
-            	    pushFollow(FOLLOW_rightHandSideExpression_in_newExpressionTail4491);
+            	    pushFollow(FOLLOW_rightHandSideExpression_in_newExpressionTail4501);
             	    r=rightHandSideExpression();
             	    _fsp--;
 
             	    stream_rightHandSideExpression.add(r.getTree());
 
             	    // AST REWRITE
-            	    // elements: DOT, r, newExpressionTail
+            	    // elements: DOT, newExpressionTail, r
             	    // token labels: 
             	    // rule labels: retval, r
             	    // token list labels: 
@@ -4267,16 +4370,16 @@ public class JSParser extends JSBaseParser {
             	    RewriteRuleSubtreeStream stream_r=new RewriteRuleSubtreeStream(adaptor,"token r",r!=null?r.tree:null);
 
             	    root_0 = (Object)adaptor.nil();
-            	    // 1096:37: -> ^( BYFIELD $newExpressionTail DOT ( $r)? )
+            	    // 1097:37: -> ^( BYFIELD $newExpressionTail DOT ( $r)? )
             	    {
-            	        // JS.g:1096:40: ^( BYFIELD $newExpressionTail DOT ( $r)? )
+            	        // JS.g:1097:40: ^( BYFIELD $newExpressionTail DOT ( $r)? )
             	        {
             	        Object root_1 = (Object)adaptor.nil();
             	        root_1 = (Object)adaptor.becomeRoot(adaptor.create(BYFIELD, "BYFIELD"), root_1);
 
             	        adaptor.addChild(root_1, stream_retval.next());
             	        adaptor.addChild(root_1, stream_DOT.next());
-            	        // JS.g:1096:74: ( $r)?
+            	        // JS.g:1097:74: ( $r)?
             	        if ( stream_r.hasNext() ) {
             	            adaptor.addChild(root_1, stream_r.next());
 
@@ -4293,23 +4396,23 @@ public class JSParser extends JSBaseParser {
             	    }
             	    break;
             	case 3 :
-            	    // JS.g:1097:7: {...}? => DOTDOT r2= rightHandSideExpression2
+            	    // JS.g:1098:7: {...}? => DOTDOT r2= rightHandSideExpression2
             	    {
             	    if ( !( isXmlEnabled() ) ) {
             	        throw new FailedPredicateException(input, "newExpressionTail", " isXmlEnabled() ");
             	    }
             	    DOTDOT99=(Token)input.LT(1);
-            	    match(input,DOTDOT,FOLLOW_DOTDOT_in_newExpressionTail4519); 
+            	    match(input,DOTDOT,FOLLOW_DOTDOT_in_newExpressionTail4529); 
             	    stream_DOTDOT.add(DOTDOT99);
 
-            	    pushFollow(FOLLOW_rightHandSideExpression2_in_newExpressionTail4523);
+            	    pushFollow(FOLLOW_rightHandSideExpression2_in_newExpressionTail4533);
             	    r2=rightHandSideExpression2();
             	    _fsp--;
 
             	    stream_rightHandSideExpression2.add(r2.getTree());
 
             	    // AST REWRITE
-            	    // elements: r2, newExpressionTail
+            	    // elements: newExpressionTail, r2
             	    // token labels: 
             	    // rule labels: retval, r2
             	    // token list labels: 
@@ -4319,9 +4422,9 @@ public class JSParser extends JSBaseParser {
             	    RewriteRuleSubtreeStream stream_r2=new RewriteRuleSubtreeStream(adaptor,"token r2",r2!=null?r2.tree:null);
 
             	    root_0 = (Object)adaptor.nil();
-            	    // 1097:64: -> ^( ALLCHILDREN $newExpressionTail $r2)
+            	    // 1098:64: -> ^( ALLCHILDREN $newExpressionTail $r2)
             	    {
-            	        // JS.g:1097:67: ^( ALLCHILDREN $newExpressionTail $r2)
+            	        // JS.g:1098:67: ^( ALLCHILDREN $newExpressionTail $r2)
             	        {
             	        Object root_1 = (Object)adaptor.nil();
             	        root_1 = (Object)adaptor.becomeRoot(adaptor.create(ALLCHILDREN, "ALLCHILDREN"), root_1);
@@ -4339,31 +4442,31 @@ public class JSParser extends JSBaseParser {
             	    }
             	    break;
             	case 4 :
-            	    // JS.g:1098:7: {...}? => COLONCOLON LBRACK expression RBRACK
+            	    // JS.g:1099:7: {...}? => COLONCOLON LBRACK expression RBRACK
             	    {
             	    if ( !( isXmlEnabled() ) ) {
             	        throw new FailedPredicateException(input, "newExpressionTail", " isXmlEnabled() ");
             	    }
             	    COLONCOLON100=(Token)input.LT(1);
-            	    match(input,COLONCOLON,FOLLOW_COLONCOLON_in_newExpressionTail4546); 
+            	    match(input,COLONCOLON,FOLLOW_COLONCOLON_in_newExpressionTail4556); 
             	    stream_COLONCOLON.add(COLONCOLON100);
 
             	    LBRACK101=(Token)input.LT(1);
-            	    match(input,LBRACK,FOLLOW_LBRACK_in_newExpressionTail4548); 
+            	    match(input,LBRACK,FOLLOW_LBRACK_in_newExpressionTail4558); 
             	    stream_LBRACK.add(LBRACK101);
 
-            	    pushFollow(FOLLOW_expression_in_newExpressionTail4550);
+            	    pushFollow(FOLLOW_expression_in_newExpressionTail4560);
             	    expression102=expression();
             	    _fsp--;
 
             	    stream_expression.add(expression102.getTree());
             	    RBRACK103=(Token)input.LT(1);
-            	    match(input,RBRACK,FOLLOW_RBRACK_in_newExpressionTail4552); 
+            	    match(input,RBRACK,FOLLOW_RBRACK_in_newExpressionTail4562); 
             	    stream_RBRACK.add(RBRACK103);
 
 
             	    // AST REWRITE
-            	    // elements: newExpressionTail, expression
+            	    // elements: expression, newExpressionTail
             	    // token labels: 
             	    // rule labels: retval
             	    // token list labels: 
@@ -4372,9 +4475,9 @@ public class JSParser extends JSBaseParser {
             	    RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             	    root_0 = (Object)adaptor.nil();
-            	    // 1098:65: -> ^( LOCALNAME $newExpressionTail expression )
+            	    // 1099:65: -> ^( LOCALNAME $newExpressionTail expression )
             	    {
-            	        // JS.g:1098:68: ^( LOCALNAME $newExpressionTail expression )
+            	        // JS.g:1099:68: ^( LOCALNAME $newExpressionTail expression )
             	        {
             	        Object root_1 = (Object)adaptor.nil();
             	        root_1 = (Object)adaptor.becomeRoot(adaptor.create(LOCALNAME, "LOCALNAME"), root_1);
@@ -4392,16 +4495,16 @@ public class JSParser extends JSBaseParser {
             	    }
             	    break;
             	case 5 :
-            	    // JS.g:1099:7: {...}? => COLONCOLON ps= propertySelector
+            	    // JS.g:1100:7: {...}? => COLONCOLON ps= propertySelector
             	    {
             	    if ( !( isXmlEnabled() ) ) {
             	        throw new FailedPredicateException(input, "newExpressionTail", " isXmlEnabled() ");
             	    }
             	    COLONCOLON104=(Token)input.LT(1);
-            	    match(input,COLONCOLON,FOLLOW_COLONCOLON_in_newExpressionTail4574); 
+            	    match(input,COLONCOLON,FOLLOW_COLONCOLON_in_newExpressionTail4584); 
             	    stream_COLONCOLON.add(COLONCOLON104);
 
-            	    pushFollow(FOLLOW_propertySelector_in_newExpressionTail4578);
+            	    pushFollow(FOLLOW_propertySelector_in_newExpressionTail4588);
             	    ps=propertySelector();
             	    _fsp--;
 
@@ -4418,15 +4521,15 @@ public class JSParser extends JSBaseParser {
             	    RewriteRuleSubtreeStream stream_ps=new RewriteRuleSubtreeStream(adaptor,"token ps",ps!=null?ps.tree:null);
 
             	    root_0 = (Object)adaptor.nil();
-            	    // 1099:60: -> ^( LOCALNAME $newExpressionTail ( $ps)? )
+            	    // 1100:60: -> ^( LOCALNAME $newExpressionTail ( $ps)? )
             	    {
-            	        // JS.g:1099:63: ^( LOCALNAME $newExpressionTail ( $ps)? )
+            	        // JS.g:1100:63: ^( LOCALNAME $newExpressionTail ( $ps)? )
             	        {
             	        Object root_1 = (Object)adaptor.nil();
             	        root_1 = (Object)adaptor.becomeRoot(adaptor.create(LOCALNAME, "LOCALNAME"), root_1);
 
             	        adaptor.addChild(root_1, stream_retval.next());
-            	        // JS.g:1099:94: ( $ps)?
+            	        // JS.g:1100:94: ( $ps)?
             	        if ( stream_ps.hasNext() ) {
             	            adaptor.addChild(root_1, stream_ps.next());
 
@@ -4448,7 +4551,7 @@ public class JSParser extends JSBaseParser {
                 }
             } while (true);
 
-            // JS.g:1101:3: ( arguments -> ^( CALL $newExpressionTail arguments ) )?
+            // JS.g:1102:3: ( arguments -> ^( CALL $newExpressionTail arguments ) )?
             int alt24=2;
             int LA24_0 = input.LA(1);
 
@@ -4457,9 +4560,9 @@ public class JSParser extends JSBaseParser {
             }
             switch (alt24) {
                 case 1 :
-                    // JS.g:1102:5: arguments
+                    // JS.g:1103:5: arguments
                     {
-                    pushFollow(FOLLOW_arguments_in_newExpressionTail4606);
+                    pushFollow(FOLLOW_arguments_in_newExpressionTail4616);
                     arguments105=arguments();
                     _fsp--;
 
@@ -4475,9 +4578,9 @@ public class JSParser extends JSBaseParser {
                     RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
                     root_0 = (Object)adaptor.nil();
-                    // 1102:19: -> ^( CALL $newExpressionTail arguments )
+                    // 1103:19: -> ^( CALL $newExpressionTail arguments )
                     {
-                        // JS.g:1102:22: ^( CALL $newExpressionTail arguments )
+                        // JS.g:1103:22: ^( CALL $newExpressionTail arguments )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot(adaptor.create(CALL, "CALL"), root_1);
@@ -4525,7 +4628,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start rightHandSideExpression
-    // JS.g:1106:1: rightHandSideExpression : ( identifier | {...}? => parenExpression | {...}? => xmlAttribute | {...}? => MUL );
+    // JS.g:1107:1: rightHandSideExpression : ( identifier | word= reservedWord -> Identifier[word.start] | {...}? => parenExpression | {...}? => xmlAttribute | {...}? => MUL );
     public final rightHandSideExpression_return rightHandSideExpression() throws RecognitionException {
         rightHandSideExpression_return retval = new rightHandSideExpression_return();
         retval.start = input.LT(1);
@@ -4533,6 +4636,8 @@ public class JSParser extends JSBaseParser {
         Object root_0 = null;
 
         Token MUL109=null;
+        reservedWord_return word = null;
+
         identifier_return identifier106 = null;
 
         parenExpression_return parenExpression107 = null;
@@ -4541,37 +4646,52 @@ public class JSParser extends JSBaseParser {
 
 
         Object MUL109_tree=null;
-
+        RewriteRuleSubtreeStream stream_reservedWord=new RewriteRuleSubtreeStream(adaptor,"rule reservedWord");
         try {
-            // JS.g:1107:3: ( identifier | {...}? => parenExpression | {...}? => xmlAttribute | {...}? => MUL )
-            int alt25=4;
+            // JS.g:1108:3: ( identifier | word= reservedWord -> Identifier[word.start] | {...}? => parenExpression | {...}? => xmlAttribute | {...}? => MUL )
+            int alt25=5;
             int LA25_0 = input.LA(1);
 
-            if ( (LA25_0==EACH||(LA25_0>=GET && LA25_0<=SET)||(LA25_0>=WXML && LA25_0<=CLASS)||(LA25_0>=DEBUGGER && LA25_0<=VOLATILE)||LA25_0==Identifier) ) {
+            if ( (LA25_0==WXML) ) {
                 alt25=1;
             }
-            else if ( (LA25_0==LPAREN) && ( isXmlEnabled() )) {
+            else if ( (LA25_0==GET) ) {
+                alt25=1;
+            }
+            else if ( (LA25_0==SET) ) {
+                alt25=1;
+            }
+            else if ( (LA25_0==EACH) ) {
+                alt25=1;
+            }
+            else if ( ((LA25_0>=NAMESPACE && LA25_0<=CLASS)||(LA25_0>=DEBUGGER && LA25_0<=VOLATILE)||LA25_0==Identifier) ) {
+                alt25=1;
+            }
+            else if ( ((LA25_0>=BREAK && LA25_0<=FOR)||(LA25_0>=FUNCTION && LA25_0<=WITH)||LA25_0==YIELD) ) {
                 alt25=2;
             }
-            else if ( (LA25_0==AT) && ( isXmlEnabled() )) {
+            else if ( (LA25_0==LPAREN) && ( isXmlEnabled() )) {
                 alt25=3;
             }
-            else if ( (LA25_0==MUL) && ( isXmlEnabled() )) {
+            else if ( (LA25_0==AT) && ( isXmlEnabled() )) {
                 alt25=4;
+            }
+            else if ( (LA25_0==MUL) && ( isXmlEnabled() )) {
+                alt25=5;
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("1106:1: rightHandSideExpression : ( identifier | {...}? => parenExpression | {...}? => xmlAttribute | {...}? => MUL );", 25, 0, input);
+                    new NoViableAltException("1107:1: rightHandSideExpression : ( identifier | word= reservedWord -> Identifier[word.start] | {...}? => parenExpression | {...}? => xmlAttribute | {...}? => MUL );", 25, 0, input);
 
                 throw nvae;
             }
             switch (alt25) {
                 case 1 :
-                    // JS.g:1107:5: identifier
+                    // JS.g:1108:5: identifier
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_identifier_in_rightHandSideExpression4641);
+                    pushFollow(FOLLOW_identifier_in_rightHandSideExpression4651);
                     identifier106=identifier();
                     _fsp--;
 
@@ -4580,14 +4700,43 @@ public class JSParser extends JSBaseParser {
                     }
                     break;
                 case 2 :
-                    // JS.g:1108:5: {...}? => parenExpression
+                    // JS.g:1109:5: word= reservedWord
+                    {
+                    pushFollow(FOLLOW_reservedWord_in_rightHandSideExpression4659);
+                    word=reservedWord();
+                    _fsp--;
+
+                    stream_reservedWord.add(word.getTree());
+
+                    // AST REWRITE
+                    // elements: 
+                    // token labels: 
+                    // rule labels: retval
+                    // token list labels: 
+                    // rule list labels: 
+                    retval.tree = root_0;
+                    RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
+
+                    root_0 = (Object)adaptor.nil();
+                    // 1109:23: -> Identifier[word.start]
+                    {
+                        adaptor.addChild(root_0, adaptor.create(Identifier, word.start));
+
+                    }
+
+
+
+                    }
+                    break;
+                case 3 :
+                    // JS.g:1110:5: {...}? => parenExpression
                     {
                     root_0 = (Object)adaptor.nil();
 
                     if ( !( isXmlEnabled() ) ) {
                         throw new FailedPredicateException(input, "rightHandSideExpression", " isXmlEnabled() ");
                     }
-                    pushFollow(FOLLOW_parenExpression_in_rightHandSideExpression4650);
+                    pushFollow(FOLLOW_parenExpression_in_rightHandSideExpression4673);
                     parenExpression107=parenExpression();
                     _fsp--;
 
@@ -4595,15 +4744,15 @@ public class JSParser extends JSBaseParser {
 
                     }
                     break;
-                case 3 :
-                    // JS.g:1109:5: {...}? => xmlAttribute
+                case 4 :
+                    // JS.g:1111:5: {...}? => xmlAttribute
                     {
                     root_0 = (Object)adaptor.nil();
 
                     if ( !( isXmlEnabled() ) ) {
                         throw new FailedPredicateException(input, "rightHandSideExpression", " isXmlEnabled() ");
                     }
-                    pushFollow(FOLLOW_xmlAttribute_in_rightHandSideExpression4660);
+                    pushFollow(FOLLOW_xmlAttribute_in_rightHandSideExpression4683);
                     xmlAttribute108=xmlAttribute();
                     _fsp--;
 
@@ -4611,8 +4760,8 @@ public class JSParser extends JSBaseParser {
 
                     }
                     break;
-                case 4 :
-                    // JS.g:1110:5: {...}? => MUL
+                case 5 :
+                    // JS.g:1112:5: {...}? => MUL
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -4620,7 +4769,7 @@ public class JSParser extends JSBaseParser {
                         throw new FailedPredicateException(input, "rightHandSideExpression", " isXmlEnabled() ");
                     }
                     MUL109=(Token)input.LT(1);
-                    match(input,MUL,FOLLOW_MUL_in_rightHandSideExpression4669); 
+                    match(input,MUL,FOLLOW_MUL_in_rightHandSideExpression4692); 
                     MUL109_tree = (Object)adaptor.create(MUL109);
                     adaptor.addChild(root_0, MUL109_tree);
 
@@ -4654,7 +4803,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start rightHandSideExpression2
-    // JS.g:1113:1: rightHandSideExpression2 : ( identifier | xmlAttribute | MUL );
+    // JS.g:1115:1: rightHandSideExpression2 : ( identifier | xmlAttribute | MUL );
     public final rightHandSideExpression2_return rightHandSideExpression2() throws RecognitionException {
         rightHandSideExpression2_return retval = new rightHandSideExpression2_return();
         retval.start = input.LT(1);
@@ -4670,7 +4819,7 @@ public class JSParser extends JSBaseParser {
         Object MUL112_tree=null;
 
         try {
-            // JS.g:1114:3: ( identifier | xmlAttribute | MUL )
+            // JS.g:1116:3: ( identifier | xmlAttribute | MUL )
             int alt26=3;
             switch ( input.LA(1) ) {
             case EACH:
@@ -4725,18 +4874,18 @@ public class JSParser extends JSBaseParser {
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("1113:1: rightHandSideExpression2 : ( identifier | xmlAttribute | MUL );", 26, 0, input);
+                    new NoViableAltException("1115:1: rightHandSideExpression2 : ( identifier | xmlAttribute | MUL );", 26, 0, input);
 
                 throw nvae;
             }
 
             switch (alt26) {
                 case 1 :
-                    // JS.g:1114:5: identifier
+                    // JS.g:1116:5: identifier
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_identifier_in_rightHandSideExpression24681);
+                    pushFollow(FOLLOW_identifier_in_rightHandSideExpression24704);
                     identifier110=identifier();
                     _fsp--;
 
@@ -4745,11 +4894,11 @@ public class JSParser extends JSBaseParser {
                     }
                     break;
                 case 2 :
-                    // JS.g:1115:5: xmlAttribute
+                    // JS.g:1117:5: xmlAttribute
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_xmlAttribute_in_rightHandSideExpression24687);
+                    pushFollow(FOLLOW_xmlAttribute_in_rightHandSideExpression24710);
                     xmlAttribute111=xmlAttribute();
                     _fsp--;
 
@@ -4758,12 +4907,12 @@ public class JSParser extends JSBaseParser {
                     }
                     break;
                 case 3 :
-                    // JS.g:1116:5: MUL
+                    // JS.g:1118:5: MUL
                     {
                     root_0 = (Object)adaptor.nil();
 
                     MUL112=(Token)input.LT(1);
-                    match(input,MUL,FOLLOW_MUL_in_rightHandSideExpression24693); 
+                    match(input,MUL,FOLLOW_MUL_in_rightHandSideExpression24716); 
                     MUL112_tree = (Object)adaptor.create(MUL112);
                     adaptor.addChild(root_0, MUL112_tree);
 
@@ -4797,7 +4946,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start postfixExpression
-    // JS.g:1129:1: postfixExpression : leftHandSideExpression ( postfixOperator )? ;
+    // JS.g:1131:1: postfixExpression : leftHandSideExpression ( postfixOperator )? ;
     public final postfixExpression_return postfixExpression() throws RecognitionException {
         postfixExpression_return retval = new postfixExpression_return();
         retval.start = input.LT(1);
@@ -4811,18 +4960,18 @@ public class JSParser extends JSBaseParser {
 
 
         try {
-            // JS.g:1130:2: ( leftHandSideExpression ( postfixOperator )? )
-            // JS.g:1130:4: leftHandSideExpression ( postfixOperator )?
+            // JS.g:1132:2: ( leftHandSideExpression ( postfixOperator )? )
+            // JS.g:1132:4: leftHandSideExpression ( postfixOperator )?
             {
             root_0 = (Object)adaptor.nil();
 
-            pushFollow(FOLLOW_leftHandSideExpression_in_postfixExpression4709);
+            pushFollow(FOLLOW_leftHandSideExpression_in_postfixExpression4732);
             leftHandSideExpression113=leftHandSideExpression();
             _fsp--;
 
             adaptor.addChild(root_0, leftHandSideExpression113.getTree());
              if (input.LA(1) == INC || input.LA(1) == DEC) promoteEOL(null); 
-            // JS.g:1130:95: ( postfixOperator )?
+            // JS.g:1132:95: ( postfixOperator )?
             int alt27=2;
             int LA27_0 = input.LA(1);
 
@@ -4831,9 +4980,9 @@ public class JSParser extends JSBaseParser {
             }
             switch (alt27) {
                 case 1 :
-                    // JS.g:1130:97: postfixOperator
+                    // JS.g:1132:97: postfixOperator
                     {
-                    pushFollow(FOLLOW_postfixOperator_in_postfixExpression4715);
+                    pushFollow(FOLLOW_postfixOperator_in_postfixExpression4738);
                     postfixOperator114=postfixOperator();
                     _fsp--;
 
@@ -4872,7 +5021,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start postfixOperator
-    // JS.g:1133:1: postfixOperator : (op= INC | op= DEC );
+    // JS.g:1135:1: postfixOperator : (op= INC | op= DEC );
     public final postfixOperator_return postfixOperator() throws RecognitionException {
         postfixOperator_return retval = new postfixOperator_return();
         retval.start = input.LT(1);
@@ -4884,7 +5033,7 @@ public class JSParser extends JSBaseParser {
         Object op_tree=null;
 
         try {
-            // JS.g:1134:2: (op= INC | op= DEC )
+            // JS.g:1136:2: (op= INC | op= DEC )
             int alt28=2;
             int LA28_0 = input.LA(1);
 
@@ -4896,18 +5045,18 @@ public class JSParser extends JSBaseParser {
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("1133:1: postfixOperator : (op= INC | op= DEC );", 28, 0, input);
+                    new NoViableAltException("1135:1: postfixOperator : (op= INC | op= DEC );", 28, 0, input);
 
                 throw nvae;
             }
             switch (alt28) {
                 case 1 :
-                    // JS.g:1134:4: op= INC
+                    // JS.g:1136:4: op= INC
                     {
                     root_0 = (Object)adaptor.nil();
 
                     op=(Token)input.LT(1);
-                    match(input,INC,FOLLOW_INC_in_postfixOperator4733); 
+                    match(input,INC,FOLLOW_INC_in_postfixOperator4756); 
                     op_tree = (Object)adaptor.create(op);
                     adaptor.addChild(root_0, op_tree);
 
@@ -4916,12 +5065,12 @@ public class JSParser extends JSBaseParser {
                     }
                     break;
                 case 2 :
-                    // JS.g:1135:4: op= DEC
+                    // JS.g:1137:4: op= DEC
                     {
                     root_0 = (Object)adaptor.nil();
 
                     op=(Token)input.LT(1);
-                    match(input,DEC,FOLLOW_DEC_in_postfixOperator4742); 
+                    match(input,DEC,FOLLOW_DEC_in_postfixOperator4765); 
                     op_tree = (Object)adaptor.create(op);
                     adaptor.addChild(root_0, op_tree);
 
@@ -4956,7 +5105,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start unaryExpression
-    // JS.g:1142:1: unaryExpression : ( postfixExpression | unaryOperator unaryExpression );
+    // JS.g:1144:1: unaryExpression : ( postfixExpression | unaryOperator unaryExpression );
     public final unaryExpression_return unaryExpression() throws RecognitionException {
         unaryExpression_return retval = new unaryExpression_return();
         retval.start = input.LT(1);
@@ -4972,7 +5121,7 @@ public class JSParser extends JSBaseParser {
 
 
         try {
-            // JS.g:1143:2: ( postfixExpression | unaryOperator unaryExpression )
+            // JS.g:1145:2: ( postfixExpression | unaryOperator unaryExpression )
             int alt29=2;
             int LA29_0 = input.LA(1);
 
@@ -4990,17 +5139,17 @@ public class JSParser extends JSBaseParser {
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("1142:1: unaryExpression : ( postfixExpression | unaryOperator unaryExpression );", 29, 0, input);
+                    new NoViableAltException("1144:1: unaryExpression : ( postfixExpression | unaryOperator unaryExpression );", 29, 0, input);
 
                 throw nvae;
             }
             switch (alt29) {
                 case 1 :
-                    // JS.g:1143:4: postfixExpression
+                    // JS.g:1145:4: postfixExpression
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_postfixExpression_in_unaryExpression4759);
+                    pushFollow(FOLLOW_postfixExpression_in_unaryExpression4782);
                     postfixExpression115=postfixExpression();
                     _fsp--;
 
@@ -5009,16 +5158,16 @@ public class JSParser extends JSBaseParser {
                     }
                     break;
                 case 2 :
-                    // JS.g:1144:4: unaryOperator unaryExpression
+                    // JS.g:1146:4: unaryOperator unaryExpression
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_unaryOperator_in_unaryExpression4764);
+                    pushFollow(FOLLOW_unaryOperator_in_unaryExpression4787);
                     unaryOperator116=unaryOperator();
                     _fsp--;
 
                     root_0 = (Object)adaptor.becomeRoot(unaryOperator116.getTree(), root_0);
-                    pushFollow(FOLLOW_unaryExpression_in_unaryExpression4767);
+                    pushFollow(FOLLOW_unaryExpression_in_unaryExpression4790);
                     unaryExpression117=unaryExpression();
                     _fsp--;
 
@@ -5053,7 +5202,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start unaryOperator
-    // JS.g:1147:1: unaryOperator : ( DELETE | VOID | TYPEOF | INC | DEC | op= ADD | op= SUB | INV | NOT | YIELD );
+    // JS.g:1149:1: unaryOperator : ( DELETE | VOID | TYPEOF | INC | DEC | op= ADD | op= SUB | INV | NOT | YIELD );
     public final unaryOperator_return unaryOperator() throws RecognitionException {
         unaryOperator_return retval = new unaryOperator_return();
         retval.start = input.LT(1);
@@ -5081,7 +5230,7 @@ public class JSParser extends JSBaseParser {
         Object YIELD125_tree=null;
 
         try {
-            // JS.g:1148:2: ( DELETE | VOID | TYPEOF | INC | DEC | op= ADD | op= SUB | INV | NOT | YIELD )
+            // JS.g:1150:2: ( DELETE | VOID | TYPEOF | INC | DEC | op= ADD | op= SUB | INV | NOT | YIELD )
             int alt30=10;
             switch ( input.LA(1) ) {
             case DELETE:
@@ -5136,19 +5285,19 @@ public class JSParser extends JSBaseParser {
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("1147:1: unaryOperator : ( DELETE | VOID | TYPEOF | INC | DEC | op= ADD | op= SUB | INV | NOT | YIELD );", 30, 0, input);
+                    new NoViableAltException("1149:1: unaryOperator : ( DELETE | VOID | TYPEOF | INC | DEC | op= ADD | op= SUB | INV | NOT | YIELD );", 30, 0, input);
 
                 throw nvae;
             }
 
             switch (alt30) {
                 case 1 :
-                    // JS.g:1148:4: DELETE
+                    // JS.g:1150:4: DELETE
                     {
                     root_0 = (Object)adaptor.nil();
 
                     DELETE118=(Token)input.LT(1);
-                    match(input,DELETE,FOLLOW_DELETE_in_unaryOperator4779); 
+                    match(input,DELETE,FOLLOW_DELETE_in_unaryOperator4802); 
                     DELETE118_tree = (Object)adaptor.create(DELETE118);
                     adaptor.addChild(root_0, DELETE118_tree);
 
@@ -5156,12 +5305,12 @@ public class JSParser extends JSBaseParser {
                     }
                     break;
                 case 2 :
-                    // JS.g:1149:4: VOID
+                    // JS.g:1151:4: VOID
                     {
                     root_0 = (Object)adaptor.nil();
 
                     VOID119=(Token)input.LT(1);
-                    match(input,VOID,FOLLOW_VOID_in_unaryOperator4784); 
+                    match(input,VOID,FOLLOW_VOID_in_unaryOperator4807); 
                     VOID119_tree = (Object)adaptor.create(VOID119);
                     adaptor.addChild(root_0, VOID119_tree);
 
@@ -5169,12 +5318,12 @@ public class JSParser extends JSBaseParser {
                     }
                     break;
                 case 3 :
-                    // JS.g:1150:4: TYPEOF
+                    // JS.g:1152:4: TYPEOF
                     {
                     root_0 = (Object)adaptor.nil();
 
                     TYPEOF120=(Token)input.LT(1);
-                    match(input,TYPEOF,FOLLOW_TYPEOF_in_unaryOperator4789); 
+                    match(input,TYPEOF,FOLLOW_TYPEOF_in_unaryOperator4812); 
                     TYPEOF120_tree = (Object)adaptor.create(TYPEOF120);
                     adaptor.addChild(root_0, TYPEOF120_tree);
 
@@ -5182,12 +5331,12 @@ public class JSParser extends JSBaseParser {
                     }
                     break;
                 case 4 :
-                    // JS.g:1151:4: INC
+                    // JS.g:1153:4: INC
                     {
                     root_0 = (Object)adaptor.nil();
 
                     INC121=(Token)input.LT(1);
-                    match(input,INC,FOLLOW_INC_in_unaryOperator4794); 
+                    match(input,INC,FOLLOW_INC_in_unaryOperator4817); 
                     INC121_tree = (Object)adaptor.create(INC121);
                     adaptor.addChild(root_0, INC121_tree);
 
@@ -5195,12 +5344,12 @@ public class JSParser extends JSBaseParser {
                     }
                     break;
                 case 5 :
-                    // JS.g:1152:4: DEC
+                    // JS.g:1154:4: DEC
                     {
                     root_0 = (Object)adaptor.nil();
 
                     DEC122=(Token)input.LT(1);
-                    match(input,DEC,FOLLOW_DEC_in_unaryOperator4799); 
+                    match(input,DEC,FOLLOW_DEC_in_unaryOperator4822); 
                     DEC122_tree = (Object)adaptor.create(DEC122);
                     adaptor.addChild(root_0, DEC122_tree);
 
@@ -5208,12 +5357,12 @@ public class JSParser extends JSBaseParser {
                     }
                     break;
                 case 6 :
-                    // JS.g:1153:4: op= ADD
+                    // JS.g:1155:4: op= ADD
                     {
                     root_0 = (Object)adaptor.nil();
 
                     op=(Token)input.LT(1);
-                    match(input,ADD,FOLLOW_ADD_in_unaryOperator4806); 
+                    match(input,ADD,FOLLOW_ADD_in_unaryOperator4829); 
                     op_tree = (Object)adaptor.create(op);
                     adaptor.addChild(root_0, op_tree);
 
@@ -5222,12 +5371,12 @@ public class JSParser extends JSBaseParser {
                     }
                     break;
                 case 7 :
-                    // JS.g:1154:4: op= SUB
+                    // JS.g:1156:4: op= SUB
                     {
                     root_0 = (Object)adaptor.nil();
 
                     op=(Token)input.LT(1);
-                    match(input,SUB,FOLLOW_SUB_in_unaryOperator4815); 
+                    match(input,SUB,FOLLOW_SUB_in_unaryOperator4838); 
                     op_tree = (Object)adaptor.create(op);
                     adaptor.addChild(root_0, op_tree);
 
@@ -5236,12 +5385,12 @@ public class JSParser extends JSBaseParser {
                     }
                     break;
                 case 8 :
-                    // JS.g:1155:4: INV
+                    // JS.g:1157:4: INV
                     {
                     root_0 = (Object)adaptor.nil();
 
                     INV123=(Token)input.LT(1);
-                    match(input,INV,FOLLOW_INV_in_unaryOperator4822); 
+                    match(input,INV,FOLLOW_INV_in_unaryOperator4845); 
                     INV123_tree = (Object)adaptor.create(INV123);
                     adaptor.addChild(root_0, INV123_tree);
 
@@ -5249,12 +5398,12 @@ public class JSParser extends JSBaseParser {
                     }
                     break;
                 case 9 :
-                    // JS.g:1156:4: NOT
+                    // JS.g:1158:4: NOT
                     {
                     root_0 = (Object)adaptor.nil();
 
                     NOT124=(Token)input.LT(1);
-                    match(input,NOT,FOLLOW_NOT_in_unaryOperator4827); 
+                    match(input,NOT,FOLLOW_NOT_in_unaryOperator4850); 
                     NOT124_tree = (Object)adaptor.create(NOT124);
                     adaptor.addChild(root_0, NOT124_tree);
 
@@ -5262,12 +5411,12 @@ public class JSParser extends JSBaseParser {
                     }
                     break;
                 case 10 :
-                    // JS.g:1157:4: YIELD
+                    // JS.g:1159:4: YIELD
                     {
                     root_0 = (Object)adaptor.nil();
 
                     YIELD125=(Token)input.LT(1);
-                    match(input,YIELD,FOLLOW_YIELD_in_unaryOperator4832); 
+                    match(input,YIELD,FOLLOW_YIELD_in_unaryOperator4855); 
                     YIELD125_tree = (Object)adaptor.create(YIELD125);
                     adaptor.addChild(root_0, YIELD125_tree);
 
@@ -5301,7 +5450,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start namespaceStatement
-    // JS.g:1162:1: namespaceStatement : {...}? => DEFAULT WXML NAMESPACE ASSIGN expression semic -> ^( DEFAULT_XML_NAMESPACE DEFAULT WXML ASSIGN expression ) ;
+    // JS.g:1164:1: namespaceStatement : {...}? => DEFAULT WXML NAMESPACE ASSIGN expression semic -> ^( DEFAULT_XML_NAMESPACE DEFAULT WXML ASSIGN expression ) ;
     public final namespaceStatement_return namespaceStatement() throws RecognitionException {
         namespaceStatement_return retval = new namespaceStatement_return();
         retval.start = input.LT(1);
@@ -5328,41 +5477,41 @@ public class JSParser extends JSBaseParser {
         RewriteRuleSubtreeStream stream_expression=new RewriteRuleSubtreeStream(adaptor,"rule expression");
         RewriteRuleSubtreeStream stream_semic=new RewriteRuleSubtreeStream(adaptor,"rule semic");
         try {
-            // JS.g:1163:3: ({...}? => DEFAULT WXML NAMESPACE ASSIGN expression semic -> ^( DEFAULT_XML_NAMESPACE DEFAULT WXML ASSIGN expression ) )
-            // JS.g:1163:5: {...}? => DEFAULT WXML NAMESPACE ASSIGN expression semic
+            // JS.g:1165:3: ({...}? => DEFAULT WXML NAMESPACE ASSIGN expression semic -> ^( DEFAULT_XML_NAMESPACE DEFAULT WXML ASSIGN expression ) )
+            // JS.g:1165:5: {...}? => DEFAULT WXML NAMESPACE ASSIGN expression semic
             {
             if ( !( isXmlEnabled() ) ) {
                 throw new FailedPredicateException(input, "namespaceStatement", " isXmlEnabled() ");
             }
             DEFAULT126=(Token)input.LT(1);
-            match(input,DEFAULT,FOLLOW_DEFAULT_in_namespaceStatement4849); 
+            match(input,DEFAULT,FOLLOW_DEFAULT_in_namespaceStatement4872); 
             stream_DEFAULT.add(DEFAULT126);
 
             WXML127=(Token)input.LT(1);
-            match(input,WXML,FOLLOW_WXML_in_namespaceStatement4851); 
+            match(input,WXML,FOLLOW_WXML_in_namespaceStatement4874); 
             stream_WXML.add(WXML127);
 
             NAMESPACE128=(Token)input.LT(1);
-            match(input,NAMESPACE,FOLLOW_NAMESPACE_in_namespaceStatement4853); 
+            match(input,NAMESPACE,FOLLOW_NAMESPACE_in_namespaceStatement4876); 
             stream_NAMESPACE.add(NAMESPACE128);
 
             ASSIGN129=(Token)input.LT(1);
-            match(input,ASSIGN,FOLLOW_ASSIGN_in_namespaceStatement4855); 
+            match(input,ASSIGN,FOLLOW_ASSIGN_in_namespaceStatement4878); 
             stream_ASSIGN.add(ASSIGN129);
 
-            pushFollow(FOLLOW_expression_in_namespaceStatement4857);
+            pushFollow(FOLLOW_expression_in_namespaceStatement4880);
             expression130=expression();
             _fsp--;
 
             stream_expression.add(expression130.getTree());
-            pushFollow(FOLLOW_semic_in_namespaceStatement4859);
+            pushFollow(FOLLOW_semic_in_namespaceStatement4882);
             semic131=semic();
             _fsp--;
 
             stream_semic.add(semic131.getTree());
 
             // AST REWRITE
-            // elements: expression, DEFAULT, ASSIGN, WXML
+            // elements: WXML, DEFAULT, expression, ASSIGN
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -5371,9 +5520,9 @@ public class JSParser extends JSBaseParser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 1164:5: -> ^( DEFAULT_XML_NAMESPACE DEFAULT WXML ASSIGN expression )
+            // 1166:5: -> ^( DEFAULT_XML_NAMESPACE DEFAULT WXML ASSIGN expression )
             {
-                // JS.g:1164:8: ^( DEFAULT_XML_NAMESPACE DEFAULT WXML ASSIGN expression )
+                // JS.g:1166:8: ^( DEFAULT_XML_NAMESPACE DEFAULT WXML ASSIGN expression )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(adaptor.create(DEFAULT_XML_NAMESPACE, "DEFAULT_XML_NAMESPACE"), root_1);
@@ -5417,7 +5566,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start multiplicativeExpression
-    // JS.g:1169:1: multiplicativeExpression : unaryExpression ( ( MUL | DIV | MOD ) unaryExpression )* ;
+    // JS.g:1171:1: multiplicativeExpression : unaryExpression ( ( MUL | DIV | MOD ) unaryExpression )* ;
     public final multiplicativeExpression_return multiplicativeExpression() throws RecognitionException {
         multiplicativeExpression_return retval = new multiplicativeExpression_return();
         retval.start = input.LT(1);
@@ -5433,17 +5582,17 @@ public class JSParser extends JSBaseParser {
         Object set133_tree=null;
 
         try {
-            // JS.g:1170:2: ( unaryExpression ( ( MUL | DIV | MOD ) unaryExpression )* )
-            // JS.g:1170:4: unaryExpression ( ( MUL | DIV | MOD ) unaryExpression )*
+            // JS.g:1172:2: ( unaryExpression ( ( MUL | DIV | MOD ) unaryExpression )* )
+            // JS.g:1172:4: unaryExpression ( ( MUL | DIV | MOD ) unaryExpression )*
             {
             root_0 = (Object)adaptor.nil();
 
-            pushFollow(FOLLOW_unaryExpression_in_multiplicativeExpression4891);
+            pushFollow(FOLLOW_unaryExpression_in_multiplicativeExpression4914);
             unaryExpression132=unaryExpression();
             _fsp--;
 
             adaptor.addChild(root_0, unaryExpression132.getTree());
-            // JS.g:1170:20: ( ( MUL | DIV | MOD ) unaryExpression )*
+            // JS.g:1172:20: ( ( MUL | DIV | MOD ) unaryExpression )*
             loop31:
             do {
                 int alt31=2;
@@ -5456,7 +5605,7 @@ public class JSParser extends JSBaseParser {
 
                 switch (alt31) {
             	case 1 :
-            	    // JS.g:1170:22: ( MUL | DIV | MOD ) unaryExpression
+            	    // JS.g:1172:22: ( MUL | DIV | MOD ) unaryExpression
             	    {
             	    set133=(Token)input.LT(1);
             	    if ( (input.LA(1)>=MUL && input.LA(1)<=MOD)||input.LA(1)==DIV ) {
@@ -5467,10 +5616,10 @@ public class JSParser extends JSBaseParser {
             	    else {
             	        MismatchedSetException mse =
             	            new MismatchedSetException(null,input);
-            	        recoverFromMismatchedSet(input,mse,FOLLOW_set_in_multiplicativeExpression4895);    throw mse;
+            	        recoverFromMismatchedSet(input,mse,FOLLOW_set_in_multiplicativeExpression4918);    throw mse;
             	    }
 
-            	    pushFollow(FOLLOW_unaryExpression_in_multiplicativeExpression4910);
+            	    pushFollow(FOLLOW_unaryExpression_in_multiplicativeExpression4933);
             	    unaryExpression134=unaryExpression();
             	    _fsp--;
 
@@ -5512,7 +5661,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start additiveExpression
-    // JS.g:1177:1: additiveExpression : multiplicativeExpression ( ( ADD | SUB ) multiplicativeExpression )* ;
+    // JS.g:1179:1: additiveExpression : multiplicativeExpression ( ( ADD | SUB ) multiplicativeExpression )* ;
     public final additiveExpression_return additiveExpression() throws RecognitionException {
         additiveExpression_return retval = new additiveExpression_return();
         retval.start = input.LT(1);
@@ -5528,17 +5677,17 @@ public class JSParser extends JSBaseParser {
         Object set136_tree=null;
 
         try {
-            // JS.g:1178:2: ( multiplicativeExpression ( ( ADD | SUB ) multiplicativeExpression )* )
-            // JS.g:1178:4: multiplicativeExpression ( ( ADD | SUB ) multiplicativeExpression )*
+            // JS.g:1180:2: ( multiplicativeExpression ( ( ADD | SUB ) multiplicativeExpression )* )
+            // JS.g:1180:4: multiplicativeExpression ( ( ADD | SUB ) multiplicativeExpression )*
             {
             root_0 = (Object)adaptor.nil();
 
-            pushFollow(FOLLOW_multiplicativeExpression_in_additiveExpression4928);
+            pushFollow(FOLLOW_multiplicativeExpression_in_additiveExpression4951);
             multiplicativeExpression135=multiplicativeExpression();
             _fsp--;
 
             adaptor.addChild(root_0, multiplicativeExpression135.getTree());
-            // JS.g:1178:29: ( ( ADD | SUB ) multiplicativeExpression )*
+            // JS.g:1180:29: ( ( ADD | SUB ) multiplicativeExpression )*
             loop32:
             do {
                 int alt32=2;
@@ -5551,7 +5700,7 @@ public class JSParser extends JSBaseParser {
 
                 switch (alt32) {
             	case 1 :
-            	    // JS.g:1178:31: ( ADD | SUB ) multiplicativeExpression
+            	    // JS.g:1180:31: ( ADD | SUB ) multiplicativeExpression
             	    {
             	    set136=(Token)input.LT(1);
             	    if ( (input.LA(1)>=ADD && input.LA(1)<=SUB) ) {
@@ -5562,10 +5711,10 @@ public class JSParser extends JSBaseParser {
             	    else {
             	        MismatchedSetException mse =
             	            new MismatchedSetException(null,input);
-            	        recoverFromMismatchedSet(input,mse,FOLLOW_set_in_additiveExpression4932);    throw mse;
+            	        recoverFromMismatchedSet(input,mse,FOLLOW_set_in_additiveExpression4955);    throw mse;
             	    }
 
-            	    pushFollow(FOLLOW_multiplicativeExpression_in_additiveExpression4943);
+            	    pushFollow(FOLLOW_multiplicativeExpression_in_additiveExpression4966);
             	    multiplicativeExpression137=multiplicativeExpression();
             	    _fsp--;
 
@@ -5607,7 +5756,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start shiftExpression
-    // JS.g:1185:1: shiftExpression : additiveExpression ( ( SHL | SHR | SHU ) additiveExpression )* ;
+    // JS.g:1187:1: shiftExpression : additiveExpression ( ( SHL | SHR | SHU ) additiveExpression )* ;
     public final shiftExpression_return shiftExpression() throws RecognitionException {
         shiftExpression_return retval = new shiftExpression_return();
         retval.start = input.LT(1);
@@ -5623,17 +5772,17 @@ public class JSParser extends JSBaseParser {
         Object set139_tree=null;
 
         try {
-            // JS.g:1186:2: ( additiveExpression ( ( SHL | SHR | SHU ) additiveExpression )* )
-            // JS.g:1186:4: additiveExpression ( ( SHL | SHR | SHU ) additiveExpression )*
+            // JS.g:1188:2: ( additiveExpression ( ( SHL | SHR | SHU ) additiveExpression )* )
+            // JS.g:1188:4: additiveExpression ( ( SHL | SHR | SHU ) additiveExpression )*
             {
             root_0 = (Object)adaptor.nil();
 
-            pushFollow(FOLLOW_additiveExpression_in_shiftExpression4962);
+            pushFollow(FOLLOW_additiveExpression_in_shiftExpression4985);
             additiveExpression138=additiveExpression();
             _fsp--;
 
             adaptor.addChild(root_0, additiveExpression138.getTree());
-            // JS.g:1186:23: ( ( SHL | SHR | SHU ) additiveExpression )*
+            // JS.g:1188:23: ( ( SHL | SHR | SHU ) additiveExpression )*
             loop33:
             do {
                 int alt33=2;
@@ -5646,7 +5795,7 @@ public class JSParser extends JSBaseParser {
 
                 switch (alt33) {
             	case 1 :
-            	    // JS.g:1186:25: ( SHL | SHR | SHU ) additiveExpression
+            	    // JS.g:1188:25: ( SHL | SHR | SHU ) additiveExpression
             	    {
             	    set139=(Token)input.LT(1);
             	    if ( (input.LA(1)>=SHL && input.LA(1)<=SHU) ) {
@@ -5657,10 +5806,10 @@ public class JSParser extends JSBaseParser {
             	    else {
             	        MismatchedSetException mse =
             	            new MismatchedSetException(null,input);
-            	        recoverFromMismatchedSet(input,mse,FOLLOW_set_in_shiftExpression4966);    throw mse;
+            	        recoverFromMismatchedSet(input,mse,FOLLOW_set_in_shiftExpression4989);    throw mse;
             	    }
 
-            	    pushFollow(FOLLOW_additiveExpression_in_shiftExpression4981);
+            	    pushFollow(FOLLOW_additiveExpression_in_shiftExpression5004);
             	    additiveExpression140=additiveExpression();
             	    _fsp--;
 
@@ -5702,7 +5851,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start relationalExpression
-    // JS.g:1193:1: relationalExpression : shiftExpression ( ( LT | GT | LTE | GTE | INSTANCEOF | IN ) shiftExpression )* ;
+    // JS.g:1195:1: relationalExpression : shiftExpression ( ( LT | GT | LTE | GTE | INSTANCEOF | IN ) shiftExpression )* ;
     public final relationalExpression_return relationalExpression() throws RecognitionException {
         relationalExpression_return retval = new relationalExpression_return();
         retval.start = input.LT(1);
@@ -5718,17 +5867,17 @@ public class JSParser extends JSBaseParser {
         Object set142_tree=null;
 
         try {
-            // JS.g:1194:2: ( shiftExpression ( ( LT | GT | LTE | GTE | INSTANCEOF | IN ) shiftExpression )* )
-            // JS.g:1194:4: shiftExpression ( ( LT | GT | LTE | GTE | INSTANCEOF | IN ) shiftExpression )*
+            // JS.g:1196:2: ( shiftExpression ( ( LT | GT | LTE | GTE | INSTANCEOF | IN ) shiftExpression )* )
+            // JS.g:1196:4: shiftExpression ( ( LT | GT | LTE | GTE | INSTANCEOF | IN ) shiftExpression )*
             {
             root_0 = (Object)adaptor.nil();
 
-            pushFollow(FOLLOW_shiftExpression_in_relationalExpression5000);
+            pushFollow(FOLLOW_shiftExpression_in_relationalExpression5023);
             shiftExpression141=shiftExpression();
             _fsp--;
 
             adaptor.addChild(root_0, shiftExpression141.getTree());
-            // JS.g:1194:20: ( ( LT | GT | LTE | GTE | INSTANCEOF | IN ) shiftExpression )*
+            // JS.g:1196:20: ( ( LT | GT | LTE | GTE | INSTANCEOF | IN ) shiftExpression )*
             loop34:
             do {
                 int alt34=2;
@@ -5741,7 +5890,7 @@ public class JSParser extends JSBaseParser {
 
                 switch (alt34) {
             	case 1 :
-            	    // JS.g:1194:22: ( LT | GT | LTE | GTE | INSTANCEOF | IN ) shiftExpression
+            	    // JS.g:1196:22: ( LT | GT | LTE | GTE | INSTANCEOF | IN ) shiftExpression
             	    {
             	    set142=(Token)input.LT(1);
             	    if ( (input.LA(1)>=IN && input.LA(1)<=INSTANCEOF)||(input.LA(1)>=LT && input.LA(1)<=GTE) ) {
@@ -5752,10 +5901,10 @@ public class JSParser extends JSBaseParser {
             	    else {
             	        MismatchedSetException mse =
             	            new MismatchedSetException(null,input);
-            	        recoverFromMismatchedSet(input,mse,FOLLOW_set_in_relationalExpression5004);    throw mse;
+            	        recoverFromMismatchedSet(input,mse,FOLLOW_set_in_relationalExpression5027);    throw mse;
             	    }
 
-            	    pushFollow(FOLLOW_shiftExpression_in_relationalExpression5031);
+            	    pushFollow(FOLLOW_shiftExpression_in_relationalExpression5054);
             	    shiftExpression143=shiftExpression();
             	    _fsp--;
 
@@ -5797,7 +5946,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start relationalExpressionNoIn
-    // JS.g:1197:1: relationalExpressionNoIn : shiftExpression ( ( LT | GT | LTE | GTE | INSTANCEOF ) shiftExpression )* ;
+    // JS.g:1199:1: relationalExpressionNoIn : shiftExpression ( ( LT | GT | LTE | GTE | INSTANCEOF ) shiftExpression )* ;
     public final relationalExpressionNoIn_return relationalExpressionNoIn() throws RecognitionException {
         relationalExpressionNoIn_return retval = new relationalExpressionNoIn_return();
         retval.start = input.LT(1);
@@ -5813,17 +5962,17 @@ public class JSParser extends JSBaseParser {
         Object set145_tree=null;
 
         try {
-            // JS.g:1198:2: ( shiftExpression ( ( LT | GT | LTE | GTE | INSTANCEOF ) shiftExpression )* )
-            // JS.g:1198:4: shiftExpression ( ( LT | GT | LTE | GTE | INSTANCEOF ) shiftExpression )*
+            // JS.g:1200:2: ( shiftExpression ( ( LT | GT | LTE | GTE | INSTANCEOF ) shiftExpression )* )
+            // JS.g:1200:4: shiftExpression ( ( LT | GT | LTE | GTE | INSTANCEOF ) shiftExpression )*
             {
             root_0 = (Object)adaptor.nil();
 
-            pushFollow(FOLLOW_shiftExpression_in_relationalExpressionNoIn5045);
+            pushFollow(FOLLOW_shiftExpression_in_relationalExpressionNoIn5068);
             shiftExpression144=shiftExpression();
             _fsp--;
 
             adaptor.addChild(root_0, shiftExpression144.getTree());
-            // JS.g:1198:20: ( ( LT | GT | LTE | GTE | INSTANCEOF ) shiftExpression )*
+            // JS.g:1200:20: ( ( LT | GT | LTE | GTE | INSTANCEOF ) shiftExpression )*
             loop35:
             do {
                 int alt35=2;
@@ -5836,7 +5985,7 @@ public class JSParser extends JSBaseParser {
 
                 switch (alt35) {
             	case 1 :
-            	    // JS.g:1198:22: ( LT | GT | LTE | GTE | INSTANCEOF ) shiftExpression
+            	    // JS.g:1200:22: ( LT | GT | LTE | GTE | INSTANCEOF ) shiftExpression
             	    {
             	    set145=(Token)input.LT(1);
             	    if ( input.LA(1)==INSTANCEOF||(input.LA(1)>=LT && input.LA(1)<=GTE) ) {
@@ -5847,10 +5996,10 @@ public class JSParser extends JSBaseParser {
             	    else {
             	        MismatchedSetException mse =
             	            new MismatchedSetException(null,input);
-            	        recoverFromMismatchedSet(input,mse,FOLLOW_set_in_relationalExpressionNoIn5049);    throw mse;
+            	        recoverFromMismatchedSet(input,mse,FOLLOW_set_in_relationalExpressionNoIn5072);    throw mse;
             	    }
 
-            	    pushFollow(FOLLOW_shiftExpression_in_relationalExpressionNoIn5072);
+            	    pushFollow(FOLLOW_shiftExpression_in_relationalExpressionNoIn5095);
             	    shiftExpression146=shiftExpression();
             	    _fsp--;
 
@@ -5892,7 +6041,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start equalityExpression
-    // JS.g:1205:1: equalityExpression : relationalExpression ( ( EQ | NEQ | SAME | NSAME ) relationalExpression )* ;
+    // JS.g:1207:1: equalityExpression : relationalExpression ( ( EQ | NEQ | SAME | NSAME ) relationalExpression )* ;
     public final equalityExpression_return equalityExpression() throws RecognitionException {
         equalityExpression_return retval = new equalityExpression_return();
         retval.start = input.LT(1);
@@ -5908,17 +6057,17 @@ public class JSParser extends JSBaseParser {
         Object set148_tree=null;
 
         try {
-            // JS.g:1206:2: ( relationalExpression ( ( EQ | NEQ | SAME | NSAME ) relationalExpression )* )
-            // JS.g:1206:4: relationalExpression ( ( EQ | NEQ | SAME | NSAME ) relationalExpression )*
+            // JS.g:1208:2: ( relationalExpression ( ( EQ | NEQ | SAME | NSAME ) relationalExpression )* )
+            // JS.g:1208:4: relationalExpression ( ( EQ | NEQ | SAME | NSAME ) relationalExpression )*
             {
             root_0 = (Object)adaptor.nil();
 
-            pushFollow(FOLLOW_relationalExpression_in_equalityExpression5091);
+            pushFollow(FOLLOW_relationalExpression_in_equalityExpression5114);
             relationalExpression147=relationalExpression();
             _fsp--;
 
             adaptor.addChild(root_0, relationalExpression147.getTree());
-            // JS.g:1206:25: ( ( EQ | NEQ | SAME | NSAME ) relationalExpression )*
+            // JS.g:1208:25: ( ( EQ | NEQ | SAME | NSAME ) relationalExpression )*
             loop36:
             do {
                 int alt36=2;
@@ -5931,7 +6080,7 @@ public class JSParser extends JSBaseParser {
 
                 switch (alt36) {
             	case 1 :
-            	    // JS.g:1206:27: ( EQ | NEQ | SAME | NSAME ) relationalExpression
+            	    // JS.g:1208:27: ( EQ | NEQ | SAME | NSAME ) relationalExpression
             	    {
             	    set148=(Token)input.LT(1);
             	    if ( (input.LA(1)>=EQ && input.LA(1)<=NSAME) ) {
@@ -5942,10 +6091,10 @@ public class JSParser extends JSBaseParser {
             	    else {
             	        MismatchedSetException mse =
             	            new MismatchedSetException(null,input);
-            	        recoverFromMismatchedSet(input,mse,FOLLOW_set_in_equalityExpression5095);    throw mse;
+            	        recoverFromMismatchedSet(input,mse,FOLLOW_set_in_equalityExpression5118);    throw mse;
             	    }
 
-            	    pushFollow(FOLLOW_relationalExpression_in_equalityExpression5114);
+            	    pushFollow(FOLLOW_relationalExpression_in_equalityExpression5137);
             	    relationalExpression149=relationalExpression();
             	    _fsp--;
 
@@ -5987,7 +6136,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start equalityExpressionNoIn
-    // JS.g:1209:1: equalityExpressionNoIn : relationalExpressionNoIn ( ( EQ | NEQ | SAME | NSAME ) relationalExpressionNoIn )* ;
+    // JS.g:1211:1: equalityExpressionNoIn : relationalExpressionNoIn ( ( EQ | NEQ | SAME | NSAME ) relationalExpressionNoIn )* ;
     public final equalityExpressionNoIn_return equalityExpressionNoIn() throws RecognitionException {
         equalityExpressionNoIn_return retval = new equalityExpressionNoIn_return();
         retval.start = input.LT(1);
@@ -6003,17 +6152,17 @@ public class JSParser extends JSBaseParser {
         Object set151_tree=null;
 
         try {
-            // JS.g:1210:2: ( relationalExpressionNoIn ( ( EQ | NEQ | SAME | NSAME ) relationalExpressionNoIn )* )
-            // JS.g:1210:4: relationalExpressionNoIn ( ( EQ | NEQ | SAME | NSAME ) relationalExpressionNoIn )*
+            // JS.g:1212:2: ( relationalExpressionNoIn ( ( EQ | NEQ | SAME | NSAME ) relationalExpressionNoIn )* )
+            // JS.g:1212:4: relationalExpressionNoIn ( ( EQ | NEQ | SAME | NSAME ) relationalExpressionNoIn )*
             {
             root_0 = (Object)adaptor.nil();
 
-            pushFollow(FOLLOW_relationalExpressionNoIn_in_equalityExpressionNoIn5128);
+            pushFollow(FOLLOW_relationalExpressionNoIn_in_equalityExpressionNoIn5151);
             relationalExpressionNoIn150=relationalExpressionNoIn();
             _fsp--;
 
             adaptor.addChild(root_0, relationalExpressionNoIn150.getTree());
-            // JS.g:1210:29: ( ( EQ | NEQ | SAME | NSAME ) relationalExpressionNoIn )*
+            // JS.g:1212:29: ( ( EQ | NEQ | SAME | NSAME ) relationalExpressionNoIn )*
             loop37:
             do {
                 int alt37=2;
@@ -6026,7 +6175,7 @@ public class JSParser extends JSBaseParser {
 
                 switch (alt37) {
             	case 1 :
-            	    // JS.g:1210:31: ( EQ | NEQ | SAME | NSAME ) relationalExpressionNoIn
+            	    // JS.g:1212:31: ( EQ | NEQ | SAME | NSAME ) relationalExpressionNoIn
             	    {
             	    set151=(Token)input.LT(1);
             	    if ( (input.LA(1)>=EQ && input.LA(1)<=NSAME) ) {
@@ -6037,10 +6186,10 @@ public class JSParser extends JSBaseParser {
             	    else {
             	        MismatchedSetException mse =
             	            new MismatchedSetException(null,input);
-            	        recoverFromMismatchedSet(input,mse,FOLLOW_set_in_equalityExpressionNoIn5132);    throw mse;
+            	        recoverFromMismatchedSet(input,mse,FOLLOW_set_in_equalityExpressionNoIn5155);    throw mse;
             	    }
 
-            	    pushFollow(FOLLOW_relationalExpressionNoIn_in_equalityExpressionNoIn5151);
+            	    pushFollow(FOLLOW_relationalExpressionNoIn_in_equalityExpressionNoIn5174);
             	    relationalExpressionNoIn152=relationalExpressionNoIn();
             	    _fsp--;
 
@@ -6082,7 +6231,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start bitwiseANDExpression
-    // JS.g:1217:1: bitwiseANDExpression : equalityExpression ( AND equalityExpression )* ;
+    // JS.g:1219:1: bitwiseANDExpression : equalityExpression ( AND equalityExpression )* ;
     public final bitwiseANDExpression_return bitwiseANDExpression() throws RecognitionException {
         bitwiseANDExpression_return retval = new bitwiseANDExpression_return();
         retval.start = input.LT(1);
@@ -6098,17 +6247,17 @@ public class JSParser extends JSBaseParser {
         Object AND154_tree=null;
 
         try {
-            // JS.g:1218:2: ( equalityExpression ( AND equalityExpression )* )
-            // JS.g:1218:4: equalityExpression ( AND equalityExpression )*
+            // JS.g:1220:2: ( equalityExpression ( AND equalityExpression )* )
+            // JS.g:1220:4: equalityExpression ( AND equalityExpression )*
             {
             root_0 = (Object)adaptor.nil();
 
-            pushFollow(FOLLOW_equalityExpression_in_bitwiseANDExpression5171);
+            pushFollow(FOLLOW_equalityExpression_in_bitwiseANDExpression5194);
             equalityExpression153=equalityExpression();
             _fsp--;
 
             adaptor.addChild(root_0, equalityExpression153.getTree());
-            // JS.g:1218:23: ( AND equalityExpression )*
+            // JS.g:1220:23: ( AND equalityExpression )*
             loop38:
             do {
                 int alt38=2;
@@ -6121,14 +6270,14 @@ public class JSParser extends JSBaseParser {
 
                 switch (alt38) {
             	case 1 :
-            	    // JS.g:1218:25: AND equalityExpression
+            	    // JS.g:1220:25: AND equalityExpression
             	    {
             	    AND154=(Token)input.LT(1);
-            	    match(input,AND,FOLLOW_AND_in_bitwiseANDExpression5175); 
+            	    match(input,AND,FOLLOW_AND_in_bitwiseANDExpression5198); 
             	    AND154_tree = (Object)adaptor.create(AND154);
             	    root_0 = (Object)adaptor.becomeRoot(AND154_tree, root_0);
 
-            	    pushFollow(FOLLOW_equalityExpression_in_bitwiseANDExpression5178);
+            	    pushFollow(FOLLOW_equalityExpression_in_bitwiseANDExpression5201);
             	    equalityExpression155=equalityExpression();
             	    _fsp--;
 
@@ -6170,7 +6319,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start bitwiseANDExpressionNoIn
-    // JS.g:1221:1: bitwiseANDExpressionNoIn : equalityExpressionNoIn ( AND equalityExpressionNoIn )* ;
+    // JS.g:1223:1: bitwiseANDExpressionNoIn : equalityExpressionNoIn ( AND equalityExpressionNoIn )* ;
     public final bitwiseANDExpressionNoIn_return bitwiseANDExpressionNoIn() throws RecognitionException {
         bitwiseANDExpressionNoIn_return retval = new bitwiseANDExpressionNoIn_return();
         retval.start = input.LT(1);
@@ -6186,17 +6335,17 @@ public class JSParser extends JSBaseParser {
         Object AND157_tree=null;
 
         try {
-            // JS.g:1222:2: ( equalityExpressionNoIn ( AND equalityExpressionNoIn )* )
-            // JS.g:1222:4: equalityExpressionNoIn ( AND equalityExpressionNoIn )*
+            // JS.g:1224:2: ( equalityExpressionNoIn ( AND equalityExpressionNoIn )* )
+            // JS.g:1224:4: equalityExpressionNoIn ( AND equalityExpressionNoIn )*
             {
             root_0 = (Object)adaptor.nil();
 
-            pushFollow(FOLLOW_equalityExpressionNoIn_in_bitwiseANDExpressionNoIn5192);
+            pushFollow(FOLLOW_equalityExpressionNoIn_in_bitwiseANDExpressionNoIn5215);
             equalityExpressionNoIn156=equalityExpressionNoIn();
             _fsp--;
 
             adaptor.addChild(root_0, equalityExpressionNoIn156.getTree());
-            // JS.g:1222:27: ( AND equalityExpressionNoIn )*
+            // JS.g:1224:27: ( AND equalityExpressionNoIn )*
             loop39:
             do {
                 int alt39=2;
@@ -6209,14 +6358,14 @@ public class JSParser extends JSBaseParser {
 
                 switch (alt39) {
             	case 1 :
-            	    // JS.g:1222:29: AND equalityExpressionNoIn
+            	    // JS.g:1224:29: AND equalityExpressionNoIn
             	    {
             	    AND157=(Token)input.LT(1);
-            	    match(input,AND,FOLLOW_AND_in_bitwiseANDExpressionNoIn5196); 
+            	    match(input,AND,FOLLOW_AND_in_bitwiseANDExpressionNoIn5219); 
             	    AND157_tree = (Object)adaptor.create(AND157);
             	    root_0 = (Object)adaptor.becomeRoot(AND157_tree, root_0);
 
-            	    pushFollow(FOLLOW_equalityExpressionNoIn_in_bitwiseANDExpressionNoIn5199);
+            	    pushFollow(FOLLOW_equalityExpressionNoIn_in_bitwiseANDExpressionNoIn5222);
             	    equalityExpressionNoIn158=equalityExpressionNoIn();
             	    _fsp--;
 
@@ -6258,7 +6407,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start bitwiseXORExpression
-    // JS.g:1225:1: bitwiseXORExpression : bitwiseANDExpression ( XOR bitwiseANDExpression )* ;
+    // JS.g:1227:1: bitwiseXORExpression : bitwiseANDExpression ( XOR bitwiseANDExpression )* ;
     public final bitwiseXORExpression_return bitwiseXORExpression() throws RecognitionException {
         bitwiseXORExpression_return retval = new bitwiseXORExpression_return();
         retval.start = input.LT(1);
@@ -6274,17 +6423,17 @@ public class JSParser extends JSBaseParser {
         Object XOR160_tree=null;
 
         try {
-            // JS.g:1226:2: ( bitwiseANDExpression ( XOR bitwiseANDExpression )* )
-            // JS.g:1226:4: bitwiseANDExpression ( XOR bitwiseANDExpression )*
+            // JS.g:1228:2: ( bitwiseANDExpression ( XOR bitwiseANDExpression )* )
+            // JS.g:1228:4: bitwiseANDExpression ( XOR bitwiseANDExpression )*
             {
             root_0 = (Object)adaptor.nil();
 
-            pushFollow(FOLLOW_bitwiseANDExpression_in_bitwiseXORExpression5215);
+            pushFollow(FOLLOW_bitwiseANDExpression_in_bitwiseXORExpression5238);
             bitwiseANDExpression159=bitwiseANDExpression();
             _fsp--;
 
             adaptor.addChild(root_0, bitwiseANDExpression159.getTree());
-            // JS.g:1226:25: ( XOR bitwiseANDExpression )*
+            // JS.g:1228:25: ( XOR bitwiseANDExpression )*
             loop40:
             do {
                 int alt40=2;
@@ -6297,14 +6446,14 @@ public class JSParser extends JSBaseParser {
 
                 switch (alt40) {
             	case 1 :
-            	    // JS.g:1226:27: XOR bitwiseANDExpression
+            	    // JS.g:1228:27: XOR bitwiseANDExpression
             	    {
             	    XOR160=(Token)input.LT(1);
-            	    match(input,XOR,FOLLOW_XOR_in_bitwiseXORExpression5219); 
+            	    match(input,XOR,FOLLOW_XOR_in_bitwiseXORExpression5242); 
             	    XOR160_tree = (Object)adaptor.create(XOR160);
             	    root_0 = (Object)adaptor.becomeRoot(XOR160_tree, root_0);
 
-            	    pushFollow(FOLLOW_bitwiseANDExpression_in_bitwiseXORExpression5222);
+            	    pushFollow(FOLLOW_bitwiseANDExpression_in_bitwiseXORExpression5245);
             	    bitwiseANDExpression161=bitwiseANDExpression();
             	    _fsp--;
 
@@ -6346,7 +6495,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start bitwiseXORExpressionNoIn
-    // JS.g:1229:1: bitwiseXORExpressionNoIn : bitwiseANDExpressionNoIn ( XOR bitwiseANDExpressionNoIn )* ;
+    // JS.g:1231:1: bitwiseXORExpressionNoIn : bitwiseANDExpressionNoIn ( XOR bitwiseANDExpressionNoIn )* ;
     public final bitwiseXORExpressionNoIn_return bitwiseXORExpressionNoIn() throws RecognitionException {
         bitwiseXORExpressionNoIn_return retval = new bitwiseXORExpressionNoIn_return();
         retval.start = input.LT(1);
@@ -6362,17 +6511,17 @@ public class JSParser extends JSBaseParser {
         Object XOR163_tree=null;
 
         try {
-            // JS.g:1230:2: ( bitwiseANDExpressionNoIn ( XOR bitwiseANDExpressionNoIn )* )
-            // JS.g:1230:4: bitwiseANDExpressionNoIn ( XOR bitwiseANDExpressionNoIn )*
+            // JS.g:1232:2: ( bitwiseANDExpressionNoIn ( XOR bitwiseANDExpressionNoIn )* )
+            // JS.g:1232:4: bitwiseANDExpressionNoIn ( XOR bitwiseANDExpressionNoIn )*
             {
             root_0 = (Object)adaptor.nil();
 
-            pushFollow(FOLLOW_bitwiseANDExpressionNoIn_in_bitwiseXORExpressionNoIn5238);
+            pushFollow(FOLLOW_bitwiseANDExpressionNoIn_in_bitwiseXORExpressionNoIn5261);
             bitwiseANDExpressionNoIn162=bitwiseANDExpressionNoIn();
             _fsp--;
 
             adaptor.addChild(root_0, bitwiseANDExpressionNoIn162.getTree());
-            // JS.g:1230:29: ( XOR bitwiseANDExpressionNoIn )*
+            // JS.g:1232:29: ( XOR bitwiseANDExpressionNoIn )*
             loop41:
             do {
                 int alt41=2;
@@ -6385,14 +6534,14 @@ public class JSParser extends JSBaseParser {
 
                 switch (alt41) {
             	case 1 :
-            	    // JS.g:1230:31: XOR bitwiseANDExpressionNoIn
+            	    // JS.g:1232:31: XOR bitwiseANDExpressionNoIn
             	    {
             	    XOR163=(Token)input.LT(1);
-            	    match(input,XOR,FOLLOW_XOR_in_bitwiseXORExpressionNoIn5242); 
+            	    match(input,XOR,FOLLOW_XOR_in_bitwiseXORExpressionNoIn5265); 
             	    XOR163_tree = (Object)adaptor.create(XOR163);
             	    root_0 = (Object)adaptor.becomeRoot(XOR163_tree, root_0);
 
-            	    pushFollow(FOLLOW_bitwiseANDExpressionNoIn_in_bitwiseXORExpressionNoIn5245);
+            	    pushFollow(FOLLOW_bitwiseANDExpressionNoIn_in_bitwiseXORExpressionNoIn5268);
             	    bitwiseANDExpressionNoIn164=bitwiseANDExpressionNoIn();
             	    _fsp--;
 
@@ -6434,7 +6583,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start bitwiseORExpression
-    // JS.g:1233:1: bitwiseORExpression : bitwiseXORExpression ( OR bitwiseXORExpression )* ;
+    // JS.g:1235:1: bitwiseORExpression : bitwiseXORExpression ( OR bitwiseXORExpression )* ;
     public final bitwiseORExpression_return bitwiseORExpression() throws RecognitionException {
         bitwiseORExpression_return retval = new bitwiseORExpression_return();
         retval.start = input.LT(1);
@@ -6450,17 +6599,17 @@ public class JSParser extends JSBaseParser {
         Object OR166_tree=null;
 
         try {
-            // JS.g:1234:2: ( bitwiseXORExpression ( OR bitwiseXORExpression )* )
-            // JS.g:1234:4: bitwiseXORExpression ( OR bitwiseXORExpression )*
+            // JS.g:1236:2: ( bitwiseXORExpression ( OR bitwiseXORExpression )* )
+            // JS.g:1236:4: bitwiseXORExpression ( OR bitwiseXORExpression )*
             {
             root_0 = (Object)adaptor.nil();
 
-            pushFollow(FOLLOW_bitwiseXORExpression_in_bitwiseORExpression5260);
+            pushFollow(FOLLOW_bitwiseXORExpression_in_bitwiseORExpression5283);
             bitwiseXORExpression165=bitwiseXORExpression();
             _fsp--;
 
             adaptor.addChild(root_0, bitwiseXORExpression165.getTree());
-            // JS.g:1234:25: ( OR bitwiseXORExpression )*
+            // JS.g:1236:25: ( OR bitwiseXORExpression )*
             loop42:
             do {
                 int alt42=2;
@@ -6473,14 +6622,14 @@ public class JSParser extends JSBaseParser {
 
                 switch (alt42) {
             	case 1 :
-            	    // JS.g:1234:27: OR bitwiseXORExpression
+            	    // JS.g:1236:27: OR bitwiseXORExpression
             	    {
             	    OR166=(Token)input.LT(1);
-            	    match(input,OR,FOLLOW_OR_in_bitwiseORExpression5264); 
+            	    match(input,OR,FOLLOW_OR_in_bitwiseORExpression5287); 
             	    OR166_tree = (Object)adaptor.create(OR166);
             	    root_0 = (Object)adaptor.becomeRoot(OR166_tree, root_0);
 
-            	    pushFollow(FOLLOW_bitwiseXORExpression_in_bitwiseORExpression5267);
+            	    pushFollow(FOLLOW_bitwiseXORExpression_in_bitwiseORExpression5290);
             	    bitwiseXORExpression167=bitwiseXORExpression();
             	    _fsp--;
 
@@ -6522,7 +6671,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start bitwiseORExpressionNoIn
-    // JS.g:1237:1: bitwiseORExpressionNoIn : bitwiseXORExpressionNoIn ( OR bitwiseXORExpressionNoIn )* ;
+    // JS.g:1239:1: bitwiseORExpressionNoIn : bitwiseXORExpressionNoIn ( OR bitwiseXORExpressionNoIn )* ;
     public final bitwiseORExpressionNoIn_return bitwiseORExpressionNoIn() throws RecognitionException {
         bitwiseORExpressionNoIn_return retval = new bitwiseORExpressionNoIn_return();
         retval.start = input.LT(1);
@@ -6538,17 +6687,17 @@ public class JSParser extends JSBaseParser {
         Object OR169_tree=null;
 
         try {
-            // JS.g:1238:2: ( bitwiseXORExpressionNoIn ( OR bitwiseXORExpressionNoIn )* )
-            // JS.g:1238:4: bitwiseXORExpressionNoIn ( OR bitwiseXORExpressionNoIn )*
+            // JS.g:1240:2: ( bitwiseXORExpressionNoIn ( OR bitwiseXORExpressionNoIn )* )
+            // JS.g:1240:4: bitwiseXORExpressionNoIn ( OR bitwiseXORExpressionNoIn )*
             {
             root_0 = (Object)adaptor.nil();
 
-            pushFollow(FOLLOW_bitwiseXORExpressionNoIn_in_bitwiseORExpressionNoIn5282);
+            pushFollow(FOLLOW_bitwiseXORExpressionNoIn_in_bitwiseORExpressionNoIn5305);
             bitwiseXORExpressionNoIn168=bitwiseXORExpressionNoIn();
             _fsp--;
 
             adaptor.addChild(root_0, bitwiseXORExpressionNoIn168.getTree());
-            // JS.g:1238:29: ( OR bitwiseXORExpressionNoIn )*
+            // JS.g:1240:29: ( OR bitwiseXORExpressionNoIn )*
             loop43:
             do {
                 int alt43=2;
@@ -6561,14 +6710,14 @@ public class JSParser extends JSBaseParser {
 
                 switch (alt43) {
             	case 1 :
-            	    // JS.g:1238:31: OR bitwiseXORExpressionNoIn
+            	    // JS.g:1240:31: OR bitwiseXORExpressionNoIn
             	    {
             	    OR169=(Token)input.LT(1);
-            	    match(input,OR,FOLLOW_OR_in_bitwiseORExpressionNoIn5286); 
+            	    match(input,OR,FOLLOW_OR_in_bitwiseORExpressionNoIn5309); 
             	    OR169_tree = (Object)adaptor.create(OR169);
             	    root_0 = (Object)adaptor.becomeRoot(OR169_tree, root_0);
 
-            	    pushFollow(FOLLOW_bitwiseXORExpressionNoIn_in_bitwiseORExpressionNoIn5289);
+            	    pushFollow(FOLLOW_bitwiseXORExpressionNoIn_in_bitwiseORExpressionNoIn5312);
             	    bitwiseXORExpressionNoIn170=bitwiseXORExpressionNoIn();
             	    _fsp--;
 
@@ -6610,7 +6759,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start logicalANDExpression
-    // JS.g:1245:1: logicalANDExpression : bitwiseORExpression ( LAND bitwiseORExpression )* ;
+    // JS.g:1247:1: logicalANDExpression : bitwiseORExpression ( LAND bitwiseORExpression )* ;
     public final logicalANDExpression_return logicalANDExpression() throws RecognitionException {
         logicalANDExpression_return retval = new logicalANDExpression_return();
         retval.start = input.LT(1);
@@ -6626,17 +6775,17 @@ public class JSParser extends JSBaseParser {
         Object LAND172_tree=null;
 
         try {
-            // JS.g:1246:2: ( bitwiseORExpression ( LAND bitwiseORExpression )* )
-            // JS.g:1246:4: bitwiseORExpression ( LAND bitwiseORExpression )*
+            // JS.g:1248:2: ( bitwiseORExpression ( LAND bitwiseORExpression )* )
+            // JS.g:1248:4: bitwiseORExpression ( LAND bitwiseORExpression )*
             {
             root_0 = (Object)adaptor.nil();
 
-            pushFollow(FOLLOW_bitwiseORExpression_in_logicalANDExpression5308);
+            pushFollow(FOLLOW_bitwiseORExpression_in_logicalANDExpression5331);
             bitwiseORExpression171=bitwiseORExpression();
             _fsp--;
 
             adaptor.addChild(root_0, bitwiseORExpression171.getTree());
-            // JS.g:1246:24: ( LAND bitwiseORExpression )*
+            // JS.g:1248:24: ( LAND bitwiseORExpression )*
             loop44:
             do {
                 int alt44=2;
@@ -6649,14 +6798,14 @@ public class JSParser extends JSBaseParser {
 
                 switch (alt44) {
             	case 1 :
-            	    // JS.g:1246:26: LAND bitwiseORExpression
+            	    // JS.g:1248:26: LAND bitwiseORExpression
             	    {
             	    LAND172=(Token)input.LT(1);
-            	    match(input,LAND,FOLLOW_LAND_in_logicalANDExpression5312); 
+            	    match(input,LAND,FOLLOW_LAND_in_logicalANDExpression5335); 
             	    LAND172_tree = (Object)adaptor.create(LAND172);
             	    root_0 = (Object)adaptor.becomeRoot(LAND172_tree, root_0);
 
-            	    pushFollow(FOLLOW_bitwiseORExpression_in_logicalANDExpression5315);
+            	    pushFollow(FOLLOW_bitwiseORExpression_in_logicalANDExpression5338);
             	    bitwiseORExpression173=bitwiseORExpression();
             	    _fsp--;
 
@@ -6698,7 +6847,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start logicalANDExpressionNoIn
-    // JS.g:1249:1: logicalANDExpressionNoIn : bitwiseORExpressionNoIn ( LAND bitwiseORExpressionNoIn )* ;
+    // JS.g:1251:1: logicalANDExpressionNoIn : bitwiseORExpressionNoIn ( LAND bitwiseORExpressionNoIn )* ;
     public final logicalANDExpressionNoIn_return logicalANDExpressionNoIn() throws RecognitionException {
         logicalANDExpressionNoIn_return retval = new logicalANDExpressionNoIn_return();
         retval.start = input.LT(1);
@@ -6714,17 +6863,17 @@ public class JSParser extends JSBaseParser {
         Object LAND175_tree=null;
 
         try {
-            // JS.g:1250:2: ( bitwiseORExpressionNoIn ( LAND bitwiseORExpressionNoIn )* )
-            // JS.g:1250:4: bitwiseORExpressionNoIn ( LAND bitwiseORExpressionNoIn )*
+            // JS.g:1252:2: ( bitwiseORExpressionNoIn ( LAND bitwiseORExpressionNoIn )* )
+            // JS.g:1252:4: bitwiseORExpressionNoIn ( LAND bitwiseORExpressionNoIn )*
             {
             root_0 = (Object)adaptor.nil();
 
-            pushFollow(FOLLOW_bitwiseORExpressionNoIn_in_logicalANDExpressionNoIn5329);
+            pushFollow(FOLLOW_bitwiseORExpressionNoIn_in_logicalANDExpressionNoIn5352);
             bitwiseORExpressionNoIn174=bitwiseORExpressionNoIn();
             _fsp--;
 
             adaptor.addChild(root_0, bitwiseORExpressionNoIn174.getTree());
-            // JS.g:1250:28: ( LAND bitwiseORExpressionNoIn )*
+            // JS.g:1252:28: ( LAND bitwiseORExpressionNoIn )*
             loop45:
             do {
                 int alt45=2;
@@ -6737,14 +6886,14 @@ public class JSParser extends JSBaseParser {
 
                 switch (alt45) {
             	case 1 :
-            	    // JS.g:1250:30: LAND bitwiseORExpressionNoIn
+            	    // JS.g:1252:30: LAND bitwiseORExpressionNoIn
             	    {
             	    LAND175=(Token)input.LT(1);
-            	    match(input,LAND,FOLLOW_LAND_in_logicalANDExpressionNoIn5333); 
+            	    match(input,LAND,FOLLOW_LAND_in_logicalANDExpressionNoIn5356); 
             	    LAND175_tree = (Object)adaptor.create(LAND175);
             	    root_0 = (Object)adaptor.becomeRoot(LAND175_tree, root_0);
 
-            	    pushFollow(FOLLOW_bitwiseORExpressionNoIn_in_logicalANDExpressionNoIn5336);
+            	    pushFollow(FOLLOW_bitwiseORExpressionNoIn_in_logicalANDExpressionNoIn5359);
             	    bitwiseORExpressionNoIn176=bitwiseORExpressionNoIn();
             	    _fsp--;
 
@@ -6786,7 +6935,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start logicalORExpression
-    // JS.g:1253:1: logicalORExpression : logicalANDExpression ( LOR logicalANDExpression )* ;
+    // JS.g:1255:1: logicalORExpression : logicalANDExpression ( LOR logicalANDExpression )* ;
     public final logicalORExpression_return logicalORExpression() throws RecognitionException {
         logicalORExpression_return retval = new logicalORExpression_return();
         retval.start = input.LT(1);
@@ -6802,17 +6951,17 @@ public class JSParser extends JSBaseParser {
         Object LOR178_tree=null;
 
         try {
-            // JS.g:1254:2: ( logicalANDExpression ( LOR logicalANDExpression )* )
-            // JS.g:1254:4: logicalANDExpression ( LOR logicalANDExpression )*
+            // JS.g:1256:2: ( logicalANDExpression ( LOR logicalANDExpression )* )
+            // JS.g:1256:4: logicalANDExpression ( LOR logicalANDExpression )*
             {
             root_0 = (Object)adaptor.nil();
 
-            pushFollow(FOLLOW_logicalANDExpression_in_logicalORExpression5351);
+            pushFollow(FOLLOW_logicalANDExpression_in_logicalORExpression5374);
             logicalANDExpression177=logicalANDExpression();
             _fsp--;
 
             adaptor.addChild(root_0, logicalANDExpression177.getTree());
-            // JS.g:1254:25: ( LOR logicalANDExpression )*
+            // JS.g:1256:25: ( LOR logicalANDExpression )*
             loop46:
             do {
                 int alt46=2;
@@ -6825,14 +6974,14 @@ public class JSParser extends JSBaseParser {
 
                 switch (alt46) {
             	case 1 :
-            	    // JS.g:1254:27: LOR logicalANDExpression
+            	    // JS.g:1256:27: LOR logicalANDExpression
             	    {
             	    LOR178=(Token)input.LT(1);
-            	    match(input,LOR,FOLLOW_LOR_in_logicalORExpression5355); 
+            	    match(input,LOR,FOLLOW_LOR_in_logicalORExpression5378); 
             	    LOR178_tree = (Object)adaptor.create(LOR178);
             	    root_0 = (Object)adaptor.becomeRoot(LOR178_tree, root_0);
 
-            	    pushFollow(FOLLOW_logicalANDExpression_in_logicalORExpression5358);
+            	    pushFollow(FOLLOW_logicalANDExpression_in_logicalORExpression5381);
             	    logicalANDExpression179=logicalANDExpression();
             	    _fsp--;
 
@@ -6874,7 +7023,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start logicalORExpressionNoIn
-    // JS.g:1257:1: logicalORExpressionNoIn : logicalANDExpressionNoIn ( LOR logicalANDExpressionNoIn )* ;
+    // JS.g:1259:1: logicalORExpressionNoIn : logicalANDExpressionNoIn ( LOR logicalANDExpressionNoIn )* ;
     public final logicalORExpressionNoIn_return logicalORExpressionNoIn() throws RecognitionException {
         logicalORExpressionNoIn_return retval = new logicalORExpressionNoIn_return();
         retval.start = input.LT(1);
@@ -6890,17 +7039,17 @@ public class JSParser extends JSBaseParser {
         Object LOR181_tree=null;
 
         try {
-            // JS.g:1258:2: ( logicalANDExpressionNoIn ( LOR logicalANDExpressionNoIn )* )
-            // JS.g:1258:4: logicalANDExpressionNoIn ( LOR logicalANDExpressionNoIn )*
+            // JS.g:1260:2: ( logicalANDExpressionNoIn ( LOR logicalANDExpressionNoIn )* )
+            // JS.g:1260:4: logicalANDExpressionNoIn ( LOR logicalANDExpressionNoIn )*
             {
             root_0 = (Object)adaptor.nil();
 
-            pushFollow(FOLLOW_logicalANDExpressionNoIn_in_logicalORExpressionNoIn5373);
+            pushFollow(FOLLOW_logicalANDExpressionNoIn_in_logicalORExpressionNoIn5396);
             logicalANDExpressionNoIn180=logicalANDExpressionNoIn();
             _fsp--;
 
             adaptor.addChild(root_0, logicalANDExpressionNoIn180.getTree());
-            // JS.g:1258:29: ( LOR logicalANDExpressionNoIn )*
+            // JS.g:1260:29: ( LOR logicalANDExpressionNoIn )*
             loop47:
             do {
                 int alt47=2;
@@ -6913,14 +7062,14 @@ public class JSParser extends JSBaseParser {
 
                 switch (alt47) {
             	case 1 :
-            	    // JS.g:1258:31: LOR logicalANDExpressionNoIn
+            	    // JS.g:1260:31: LOR logicalANDExpressionNoIn
             	    {
             	    LOR181=(Token)input.LT(1);
-            	    match(input,LOR,FOLLOW_LOR_in_logicalORExpressionNoIn5377); 
+            	    match(input,LOR,FOLLOW_LOR_in_logicalORExpressionNoIn5400); 
             	    LOR181_tree = (Object)adaptor.create(LOR181);
             	    root_0 = (Object)adaptor.becomeRoot(LOR181_tree, root_0);
 
-            	    pushFollow(FOLLOW_logicalANDExpressionNoIn_in_logicalORExpressionNoIn5380);
+            	    pushFollow(FOLLOW_logicalANDExpressionNoIn_in_logicalORExpressionNoIn5403);
             	    logicalANDExpressionNoIn182=logicalANDExpressionNoIn();
             	    _fsp--;
 
@@ -6962,7 +7111,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start conditionalExpression
-    // JS.g:1265:1: conditionalExpression : logicalORExpression ( QUE assignmentExpression COLON assignmentExpression )? ;
+    // JS.g:1267:1: conditionalExpression : logicalORExpression ( QUE assignmentExpression COLON assignmentExpression )? ;
     public final conditionalExpression_return conditionalExpression() throws RecognitionException {
         conditionalExpression_return retval = new conditionalExpression_return();
         retval.start = input.LT(1);
@@ -6982,17 +7131,17 @@ public class JSParser extends JSBaseParser {
         Object COLON186_tree=null;
 
         try {
-            // JS.g:1266:2: ( logicalORExpression ( QUE assignmentExpression COLON assignmentExpression )? )
-            // JS.g:1266:4: logicalORExpression ( QUE assignmentExpression COLON assignmentExpression )?
+            // JS.g:1268:2: ( logicalORExpression ( QUE assignmentExpression COLON assignmentExpression )? )
+            // JS.g:1268:4: logicalORExpression ( QUE assignmentExpression COLON assignmentExpression )?
             {
             root_0 = (Object)adaptor.nil();
 
-            pushFollow(FOLLOW_logicalORExpression_in_conditionalExpression5399);
+            pushFollow(FOLLOW_logicalORExpression_in_conditionalExpression5422);
             logicalORExpression183=logicalORExpression();
             _fsp--;
 
             adaptor.addChild(root_0, logicalORExpression183.getTree());
-            // JS.g:1266:24: ( QUE assignmentExpression COLON assignmentExpression )?
+            // JS.g:1268:24: ( QUE assignmentExpression COLON assignmentExpression )?
             int alt48=2;
             int LA48_0 = input.LA(1);
 
@@ -7001,21 +7150,21 @@ public class JSParser extends JSBaseParser {
             }
             switch (alt48) {
                 case 1 :
-                    // JS.g:1266:26: QUE assignmentExpression COLON assignmentExpression
+                    // JS.g:1268:26: QUE assignmentExpression COLON assignmentExpression
                     {
                     QUE184=(Token)input.LT(1);
-                    match(input,QUE,FOLLOW_QUE_in_conditionalExpression5403); 
+                    match(input,QUE,FOLLOW_QUE_in_conditionalExpression5426); 
                     QUE184_tree = (Object)adaptor.create(QUE184);
                     root_0 = (Object)adaptor.becomeRoot(QUE184_tree, root_0);
 
-                    pushFollow(FOLLOW_assignmentExpression_in_conditionalExpression5406);
+                    pushFollow(FOLLOW_assignmentExpression_in_conditionalExpression5429);
                     assignmentExpression185=assignmentExpression();
                     _fsp--;
 
                     adaptor.addChild(root_0, assignmentExpression185.getTree());
                     COLON186=(Token)input.LT(1);
-                    match(input,COLON,FOLLOW_COLON_in_conditionalExpression5408); 
-                    pushFollow(FOLLOW_assignmentExpression_in_conditionalExpression5411);
+                    match(input,COLON,FOLLOW_COLON_in_conditionalExpression5431); 
+                    pushFollow(FOLLOW_assignmentExpression_in_conditionalExpression5434);
                     assignmentExpression187=assignmentExpression();
                     _fsp--;
 
@@ -7054,7 +7203,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start conditionalExpressionNoIn
-    // JS.g:1269:1: conditionalExpressionNoIn : logicalORExpressionNoIn ( QUE assignmentExpressionNoIn COLON assignmentExpressionNoIn )? ;
+    // JS.g:1271:1: conditionalExpressionNoIn : logicalORExpressionNoIn ( QUE assignmentExpressionNoIn COLON assignmentExpressionNoIn )? ;
     public final conditionalExpressionNoIn_return conditionalExpressionNoIn() throws RecognitionException {
         conditionalExpressionNoIn_return retval = new conditionalExpressionNoIn_return();
         retval.start = input.LT(1);
@@ -7074,17 +7223,17 @@ public class JSParser extends JSBaseParser {
         Object COLON191_tree=null;
 
         try {
-            // JS.g:1270:2: ( logicalORExpressionNoIn ( QUE assignmentExpressionNoIn COLON assignmentExpressionNoIn )? )
-            // JS.g:1270:4: logicalORExpressionNoIn ( QUE assignmentExpressionNoIn COLON assignmentExpressionNoIn )?
+            // JS.g:1272:2: ( logicalORExpressionNoIn ( QUE assignmentExpressionNoIn COLON assignmentExpressionNoIn )? )
+            // JS.g:1272:4: logicalORExpressionNoIn ( QUE assignmentExpressionNoIn COLON assignmentExpressionNoIn )?
             {
             root_0 = (Object)adaptor.nil();
 
-            pushFollow(FOLLOW_logicalORExpressionNoIn_in_conditionalExpressionNoIn5425);
+            pushFollow(FOLLOW_logicalORExpressionNoIn_in_conditionalExpressionNoIn5448);
             logicalORExpressionNoIn188=logicalORExpressionNoIn();
             _fsp--;
 
             adaptor.addChild(root_0, logicalORExpressionNoIn188.getTree());
-            // JS.g:1270:28: ( QUE assignmentExpressionNoIn COLON assignmentExpressionNoIn )?
+            // JS.g:1272:28: ( QUE assignmentExpressionNoIn COLON assignmentExpressionNoIn )?
             int alt49=2;
             int LA49_0 = input.LA(1);
 
@@ -7093,21 +7242,21 @@ public class JSParser extends JSBaseParser {
             }
             switch (alt49) {
                 case 1 :
-                    // JS.g:1270:30: QUE assignmentExpressionNoIn COLON assignmentExpressionNoIn
+                    // JS.g:1272:30: QUE assignmentExpressionNoIn COLON assignmentExpressionNoIn
                     {
                     QUE189=(Token)input.LT(1);
-                    match(input,QUE,FOLLOW_QUE_in_conditionalExpressionNoIn5429); 
+                    match(input,QUE,FOLLOW_QUE_in_conditionalExpressionNoIn5452); 
                     QUE189_tree = (Object)adaptor.create(QUE189);
                     root_0 = (Object)adaptor.becomeRoot(QUE189_tree, root_0);
 
-                    pushFollow(FOLLOW_assignmentExpressionNoIn_in_conditionalExpressionNoIn5432);
+                    pushFollow(FOLLOW_assignmentExpressionNoIn_in_conditionalExpressionNoIn5455);
                     assignmentExpressionNoIn190=assignmentExpressionNoIn();
                     _fsp--;
 
                     adaptor.addChild(root_0, assignmentExpressionNoIn190.getTree());
                     COLON191=(Token)input.LT(1);
-                    match(input,COLON,FOLLOW_COLON_in_conditionalExpressionNoIn5434); 
-                    pushFollow(FOLLOW_assignmentExpressionNoIn_in_conditionalExpressionNoIn5437);
+                    match(input,COLON,FOLLOW_COLON_in_conditionalExpressionNoIn5457); 
+                    pushFollow(FOLLOW_assignmentExpressionNoIn_in_conditionalExpressionNoIn5460);
                     assignmentExpressionNoIn192=assignmentExpressionNoIn();
                     _fsp--;
 
@@ -7146,7 +7295,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start assignmentExpression
-    // JS.g:1299:1: assignmentExpression : lhs= conditionalExpression ({...}? assignmentOperator assignmentExpression )? ;
+    // JS.g:1301:1: assignmentExpression : lhs= conditionalExpression ({...}? assignmentOperator assignmentExpression )? ;
     public final assignmentExpression_return assignmentExpression() throws RecognitionException {
         assignmentExpression_return retval = new assignmentExpression_return();
         retval.start = input.LT(1);
@@ -7165,17 +7314,17 @@ public class JSParser extends JSBaseParser {
         	Object[] isLhs = new Object[1];
 
         try {
-            // JS.g:1304:2: (lhs= conditionalExpression ({...}? assignmentOperator assignmentExpression )? )
-            // JS.g:1304:4: lhs= conditionalExpression ({...}? assignmentOperator assignmentExpression )?
+            // JS.g:1306:2: (lhs= conditionalExpression ({...}? assignmentOperator assignmentExpression )? )
+            // JS.g:1306:4: lhs= conditionalExpression ({...}? assignmentOperator assignmentExpression )?
             {
             root_0 = (Object)adaptor.nil();
 
-            pushFollow(FOLLOW_conditionalExpression_in_assignmentExpression5465);
+            pushFollow(FOLLOW_conditionalExpression_in_assignmentExpression5488);
             lhs=conditionalExpression();
             _fsp--;
 
             adaptor.addChild(root_0, lhs.getTree());
-            // JS.g:1305:2: ({...}? assignmentOperator assignmentExpression )?
+            // JS.g:1307:2: ({...}? assignmentOperator assignmentExpression )?
             int alt50=2;
             int LA50_0 = input.LA(1);
 
@@ -7188,17 +7337,17 @@ public class JSParser extends JSBaseParser {
             }
             switch (alt50) {
                 case 1 :
-                    // JS.g:1305:4: {...}? assignmentOperator assignmentExpression
+                    // JS.g:1307:4: {...}? assignmentOperator assignmentExpression
                     {
                     if ( !( isLeftHandSideAssign(lhs, isLhs) ) ) {
                         throw new FailedPredicateException(input, "assignmentExpression", " isLeftHandSideAssign(lhs, isLhs) ");
                     }
-                    pushFollow(FOLLOW_assignmentOperator_in_assignmentExpression5472);
+                    pushFollow(FOLLOW_assignmentOperator_in_assignmentExpression5495);
                     assignmentOperator193=assignmentOperator();
                     _fsp--;
 
                     root_0 = (Object)adaptor.becomeRoot(assignmentOperator193.getTree(), root_0);
-                    pushFollow(FOLLOW_assignmentExpression_in_assignmentExpression5475);
+                    pushFollow(FOLLOW_assignmentExpression_in_assignmentExpression5498);
                     assignmentExpression194=assignmentExpression();
                     _fsp--;
 
@@ -7237,7 +7386,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start assignmentOperator
-    // JS.g:1308:1: assignmentOperator : ( ASSIGN | MULASS | DIVASS | MODASS | ADDASS | SUBASS | SHLASS | SHRASS | SHUASS | ANDASS | XORASS | ORASS );
+    // JS.g:1310:1: assignmentOperator : ( ASSIGN | MULASS | DIVASS | MODASS | ADDASS | SUBASS | SHLASS | SHRASS | SHUASS | ANDASS | XORASS | ORASS );
     public final assignmentOperator_return assignmentOperator() throws RecognitionException {
         assignmentOperator_return retval = new assignmentOperator_return();
         retval.start = input.LT(1);
@@ -7249,7 +7398,7 @@ public class JSParser extends JSBaseParser {
         Object set195_tree=null;
 
         try {
-            // JS.g:1309:3: ( ASSIGN | MULASS | DIVASS | MODASS | ADDASS | SUBASS | SHLASS | SHRASS | SHUASS | ANDASS | XORASS | ORASS )
+            // JS.g:1311:3: ( ASSIGN | MULASS | DIVASS | MODASS | ADDASS | SUBASS | SHLASS | SHRASS | SHUASS | ANDASS | XORASS | ORASS )
             // JS.g:
             {
             root_0 = (Object)adaptor.nil();
@@ -7294,7 +7443,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start assignmentExpressionNoIn
-    // JS.g:1312:1: assignmentExpressionNoIn : lhs= conditionalExpressionNoIn ({...}? assignmentOperator assignmentExpressionNoIn )? ;
+    // JS.g:1314:1: assignmentExpressionNoIn : lhs= conditionalExpressionNoIn ({...}? assignmentOperator assignmentExpressionNoIn )? ;
     public final assignmentExpressionNoIn_return assignmentExpressionNoIn() throws RecognitionException {
         assignmentExpressionNoIn_return retval = new assignmentExpressionNoIn_return();
         retval.start = input.LT(1);
@@ -7313,17 +7462,17 @@ public class JSParser extends JSBaseParser {
         	Object[] isLhs = new Object[1];
 
         try {
-            // JS.g:1317:2: (lhs= conditionalExpressionNoIn ({...}? assignmentOperator assignmentExpressionNoIn )? )
-            // JS.g:1317:4: lhs= conditionalExpressionNoIn ({...}? assignmentOperator assignmentExpressionNoIn )?
+            // JS.g:1319:2: (lhs= conditionalExpressionNoIn ({...}? assignmentOperator assignmentExpressionNoIn )? )
+            // JS.g:1319:4: lhs= conditionalExpressionNoIn ({...}? assignmentOperator assignmentExpressionNoIn )?
             {
             root_0 = (Object)adaptor.nil();
 
-            pushFollow(FOLLOW_conditionalExpressionNoIn_in_assignmentExpressionNoIn5553);
+            pushFollow(FOLLOW_conditionalExpressionNoIn_in_assignmentExpressionNoIn5576);
             lhs=conditionalExpressionNoIn();
             _fsp--;
 
             adaptor.addChild(root_0, lhs.getTree());
-            // JS.g:1318:2: ({...}? assignmentOperator assignmentExpressionNoIn )?
+            // JS.g:1320:2: ({...}? assignmentOperator assignmentExpressionNoIn )?
             int alt51=2;
             int LA51_0 = input.LA(1);
 
@@ -7336,17 +7485,17 @@ public class JSParser extends JSBaseParser {
             }
             switch (alt51) {
                 case 1 :
-                    // JS.g:1318:4: {...}? assignmentOperator assignmentExpressionNoIn
+                    // JS.g:1320:4: {...}? assignmentOperator assignmentExpressionNoIn
                     {
                     if ( !( isLeftHandSideAssign(lhs, isLhs) ) ) {
                         throw new FailedPredicateException(input, "assignmentExpressionNoIn", " isLeftHandSideAssign(lhs, isLhs) ");
                     }
-                    pushFollow(FOLLOW_assignmentOperator_in_assignmentExpressionNoIn5560);
+                    pushFollow(FOLLOW_assignmentOperator_in_assignmentExpressionNoIn5583);
                     assignmentOperator196=assignmentOperator();
                     _fsp--;
 
                     root_0 = (Object)adaptor.becomeRoot(assignmentOperator196.getTree(), root_0);
-                    pushFollow(FOLLOW_assignmentExpressionNoIn_in_assignmentExpressionNoIn5563);
+                    pushFollow(FOLLOW_assignmentExpressionNoIn_in_assignmentExpressionNoIn5586);
                     assignmentExpressionNoIn197=assignmentExpressionNoIn();
                     _fsp--;
 
@@ -7385,7 +7534,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start expression
-    // JS.g:1325:1: expression : exprs+= assignmentExpression ( COMMA exprs+= assignmentExpression )* -> { $exprs.size() > 1 }? ^( CEXPR ( $exprs)+ ) -> $exprs;
+    // JS.g:1327:1: expression : exprs+= assignmentExpression ( COMMA exprs+= assignmentExpression )* -> { $exprs.size() > 1 }? ^( CEXPR ( $exprs)+ ) -> $exprs;
     public final expression_return expression() throws RecognitionException {
         expression_return retval = new expression_return();
         retval.start = input.LT(1);
@@ -7399,10 +7548,10 @@ public class JSParser extends JSBaseParser {
         RewriteRuleTokenStream stream_COMMA=new RewriteRuleTokenStream(adaptor,"token COMMA");
         RewriteRuleSubtreeStream stream_assignmentExpression=new RewriteRuleSubtreeStream(adaptor,"rule assignmentExpression");
         try {
-            // JS.g:1326:2: (exprs+= assignmentExpression ( COMMA exprs+= assignmentExpression )* -> { $exprs.size() > 1 }? ^( CEXPR ( $exprs)+ ) -> $exprs)
-            // JS.g:1326:4: exprs+= assignmentExpression ( COMMA exprs+= assignmentExpression )*
+            // JS.g:1328:2: (exprs+= assignmentExpression ( COMMA exprs+= assignmentExpression )* -> { $exprs.size() > 1 }? ^( CEXPR ( $exprs)+ ) -> $exprs)
+            // JS.g:1328:4: exprs+= assignmentExpression ( COMMA exprs+= assignmentExpression )*
             {
-            pushFollow(FOLLOW_assignmentExpression_in_expression5585);
+            pushFollow(FOLLOW_assignmentExpression_in_expression5608);
             exprs=assignmentExpression();
             _fsp--;
 
@@ -7410,7 +7559,7 @@ public class JSParser extends JSBaseParser {
             if (list_exprs==null) list_exprs=new ArrayList();
             list_exprs.add(exprs);
 
-            // JS.g:1326:32: ( COMMA exprs+= assignmentExpression )*
+            // JS.g:1328:32: ( COMMA exprs+= assignmentExpression )*
             loop52:
             do {
                 int alt52=2;
@@ -7423,13 +7572,13 @@ public class JSParser extends JSBaseParser {
 
                 switch (alt52) {
             	case 1 :
-            	    // JS.g:1326:34: COMMA exprs+= assignmentExpression
+            	    // JS.g:1328:34: COMMA exprs+= assignmentExpression
             	    {
             	    COMMA198=(Token)input.LT(1);
-            	    match(input,COMMA,FOLLOW_COMMA_in_expression5589); 
+            	    match(input,COMMA,FOLLOW_COMMA_in_expression5612); 
             	    stream_COMMA.add(COMMA198);
 
-            	    pushFollow(FOLLOW_assignmentExpression_in_expression5593);
+            	    pushFollow(FOLLOW_assignmentExpression_in_expression5616);
             	    exprs=assignmentExpression();
             	    _fsp--;
 
@@ -7457,9 +7606,9 @@ public class JSParser extends JSBaseParser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
             RewriteRuleSubtreeStream stream_exprs=new RewriteRuleSubtreeStream(adaptor,"token exprs",list_exprs);
             root_0 = (Object)adaptor.nil();
-            // 1327:2: -> { $exprs.size() > 1 }? ^( CEXPR ( $exprs)+ )
+            // 1329:2: -> { $exprs.size() > 1 }? ^( CEXPR ( $exprs)+ )
             if ( list_exprs.size() > 1 ) {
-                // JS.g:1327:28: ^( CEXPR ( $exprs)+ )
+                // JS.g:1329:28: ^( CEXPR ( $exprs)+ )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(adaptor.create(CEXPR, "CEXPR"), root_1);
@@ -7477,7 +7626,7 @@ public class JSParser extends JSBaseParser {
                 }
 
             }
-            else // 1328:2: -> $exprs
+            else // 1330:2: -> $exprs
             {
                 adaptor.addChild(root_0, ((ParserRuleReturnScope)stream_exprs.next()).getTree());
 
@@ -7512,7 +7661,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start expressionNoIn
-    // JS.g:1331:1: expressionNoIn : exprs+= assignmentExpressionNoIn ( COMMA exprs+= assignmentExpressionNoIn )* -> { $exprs.size() > 1 }? ^( CEXPR ( $exprs)+ ) -> $exprs;
+    // JS.g:1333:1: expressionNoIn : exprs+= assignmentExpressionNoIn ( COMMA exprs+= assignmentExpressionNoIn )* -> { $exprs.size() > 1 }? ^( CEXPR ( $exprs)+ ) -> $exprs;
     public final expressionNoIn_return expressionNoIn() throws RecognitionException {
         expressionNoIn_return retval = new expressionNoIn_return();
         retval.start = input.LT(1);
@@ -7526,10 +7675,10 @@ public class JSParser extends JSBaseParser {
         RewriteRuleTokenStream stream_COMMA=new RewriteRuleTokenStream(adaptor,"token COMMA");
         RewriteRuleSubtreeStream stream_assignmentExpressionNoIn=new RewriteRuleSubtreeStream(adaptor,"rule assignmentExpressionNoIn");
         try {
-            // JS.g:1332:2: (exprs+= assignmentExpressionNoIn ( COMMA exprs+= assignmentExpressionNoIn )* -> { $exprs.size() > 1 }? ^( CEXPR ( $exprs)+ ) -> $exprs)
-            // JS.g:1332:4: exprs+= assignmentExpressionNoIn ( COMMA exprs+= assignmentExpressionNoIn )*
+            // JS.g:1334:2: (exprs+= assignmentExpressionNoIn ( COMMA exprs+= assignmentExpressionNoIn )* -> { $exprs.size() > 1 }? ^( CEXPR ( $exprs)+ ) -> $exprs)
+            // JS.g:1334:4: exprs+= assignmentExpressionNoIn ( COMMA exprs+= assignmentExpressionNoIn )*
             {
-            pushFollow(FOLLOW_assignmentExpressionNoIn_in_expressionNoIn5630);
+            pushFollow(FOLLOW_assignmentExpressionNoIn_in_expressionNoIn5653);
             exprs=assignmentExpressionNoIn();
             _fsp--;
 
@@ -7537,7 +7686,7 @@ public class JSParser extends JSBaseParser {
             if (list_exprs==null) list_exprs=new ArrayList();
             list_exprs.add(exprs);
 
-            // JS.g:1332:36: ( COMMA exprs+= assignmentExpressionNoIn )*
+            // JS.g:1334:36: ( COMMA exprs+= assignmentExpressionNoIn )*
             loop53:
             do {
                 int alt53=2;
@@ -7550,13 +7699,13 @@ public class JSParser extends JSBaseParser {
 
                 switch (alt53) {
             	case 1 :
-            	    // JS.g:1332:38: COMMA exprs+= assignmentExpressionNoIn
+            	    // JS.g:1334:38: COMMA exprs+= assignmentExpressionNoIn
             	    {
             	    COMMA199=(Token)input.LT(1);
-            	    match(input,COMMA,FOLLOW_COMMA_in_expressionNoIn5634); 
+            	    match(input,COMMA,FOLLOW_COMMA_in_expressionNoIn5657); 
             	    stream_COMMA.add(COMMA199);
 
-            	    pushFollow(FOLLOW_assignmentExpressionNoIn_in_expressionNoIn5638);
+            	    pushFollow(FOLLOW_assignmentExpressionNoIn_in_expressionNoIn5661);
             	    exprs=assignmentExpressionNoIn();
             	    _fsp--;
 
@@ -7584,9 +7733,9 @@ public class JSParser extends JSBaseParser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
             RewriteRuleSubtreeStream stream_exprs=new RewriteRuleSubtreeStream(adaptor,"token exprs",list_exprs);
             root_0 = (Object)adaptor.nil();
-            // 1333:2: -> { $exprs.size() > 1 }? ^( CEXPR ( $exprs)+ )
+            // 1335:2: -> { $exprs.size() > 1 }? ^( CEXPR ( $exprs)+ )
             if ( list_exprs.size() > 1 ) {
-                // JS.g:1333:28: ^( CEXPR ( $exprs)+ )
+                // JS.g:1335:28: ^( CEXPR ( $exprs)+ )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(adaptor.create(CEXPR, "CEXPR"), root_1);
@@ -7604,7 +7753,7 @@ public class JSParser extends JSBaseParser {
                 }
 
             }
-            else // 1334:2: -> $exprs
+            else // 1336:2: -> $exprs
             {
                 adaptor.addChild(root_0, ((ParserRuleReturnScope)stream_exprs.next()).getTree());
 
@@ -7639,7 +7788,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start semic
-    // JS.g:1359:1: semic : ( SEMIC | EOF | RBRACE | EOL | MultiLineComment );
+    // JS.g:1361:1: semic : ( SEMIC | EOF | RBRACE | EOL | MultiLineComment );
     public final semic_return semic() throws RecognitionException {
         semic_return retval = new semic_return();
         retval.start = input.LT(1);
@@ -7665,7 +7814,7 @@ public class JSParser extends JSBaseParser {
         	promoteEOL(retval);
 
         try {
-            // JS.g:1367:2: ( SEMIC | EOF | RBRACE | EOL | MultiLineComment )
+            // JS.g:1369:2: ( SEMIC | EOF | RBRACE | EOL | MultiLineComment )
             int alt54=5;
             switch ( input.LA(1) ) {
             case SEMIC:
@@ -7695,19 +7844,19 @@ public class JSParser extends JSBaseParser {
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("1359:1: semic : ( SEMIC | EOF | RBRACE | EOL | MultiLineComment );", 54, 0, input);
+                    new NoViableAltException("1361:1: semic : ( SEMIC | EOF | RBRACE | EOL | MultiLineComment );", 54, 0, input);
 
                 throw nvae;
             }
 
             switch (alt54) {
                 case 1 :
-                    // JS.g:1367:4: SEMIC
+                    // JS.g:1369:4: SEMIC
                     {
                     root_0 = (Object)adaptor.nil();
 
                     SEMIC200=(Token)input.LT(1);
-                    match(input,SEMIC,FOLLOW_SEMIC_in_semic5689); 
+                    match(input,SEMIC,FOLLOW_SEMIC_in_semic5712); 
                     SEMIC200_tree = (Object)adaptor.create(SEMIC200);
                     adaptor.addChild(root_0, SEMIC200_tree);
 
@@ -7715,12 +7864,12 @@ public class JSParser extends JSBaseParser {
                     }
                     break;
                 case 2 :
-                    // JS.g:1368:4: EOF
+                    // JS.g:1370:4: EOF
                     {
                     root_0 = (Object)adaptor.nil();
 
                     EOF201=(Token)input.LT(1);
-                    match(input,EOF,FOLLOW_EOF_in_semic5694); 
+                    match(input,EOF,FOLLOW_EOF_in_semic5717); 
                     EOF201_tree = (Object)adaptor.create(EOF201);
                     adaptor.addChild(root_0, EOF201_tree);
 
@@ -7728,12 +7877,12 @@ public class JSParser extends JSBaseParser {
                     }
                     break;
                 case 3 :
-                    // JS.g:1369:4: RBRACE
+                    // JS.g:1371:4: RBRACE
                     {
                     root_0 = (Object)adaptor.nil();
 
                     RBRACE202=(Token)input.LT(1);
-                    match(input,RBRACE,FOLLOW_RBRACE_in_semic5699); 
+                    match(input,RBRACE,FOLLOW_RBRACE_in_semic5722); 
                     RBRACE202_tree = (Object)adaptor.create(RBRACE202);
                     adaptor.addChild(root_0, RBRACE202_tree);
 
@@ -7742,12 +7891,12 @@ public class JSParser extends JSBaseParser {
                     }
                     break;
                 case 4 :
-                    // JS.g:1370:4: EOL
+                    // JS.g:1372:4: EOL
                     {
                     root_0 = (Object)adaptor.nil();
 
                     EOL203=(Token)input.LT(1);
-                    match(input,EOL,FOLLOW_EOL_in_semic5706); 
+                    match(input,EOL,FOLLOW_EOL_in_semic5729); 
                     EOL203_tree = (Object)adaptor.create(EOL203);
                     adaptor.addChild(root_0, EOL203_tree);
 
@@ -7755,12 +7904,12 @@ public class JSParser extends JSBaseParser {
                     }
                     break;
                 case 5 :
-                    // JS.g:1370:10: MultiLineComment
+                    // JS.g:1372:10: MultiLineComment
                     {
                     root_0 = (Object)adaptor.nil();
 
                     MultiLineComment204=(Token)input.LT(1);
-                    match(input,MultiLineComment,FOLLOW_MultiLineComment_in_semic5710); 
+                    match(input,MultiLineComment,FOLLOW_MultiLineComment_in_semic5733); 
                     MultiLineComment204_tree = (Object)adaptor.create(MultiLineComment204);
                     adaptor.addChild(root_0, MultiLineComment204_tree);
 
@@ -7794,7 +7943,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start statement
-    // JS.g:1378:1: statement options {k=1; } : ({...}? block | statementTail );
+    // JS.g:1380:1: statement options {k=1; } : ({...}? block | statementTail );
     public final statement_return statement() throws RecognitionException {
         statement_return retval = new statement_return();
         retval.start = input.LT(1);
@@ -7808,7 +7957,7 @@ public class JSParser extends JSBaseParser {
 
 
         try {
-            // JS.g:1383:2: ({...}? block | statementTail )
+            // JS.g:1385:2: ({...}? block | statementTail )
             int alt55=2;
             int LA55_0 = input.LA(1);
 
@@ -7823,7 +7972,7 @@ public class JSParser extends JSBaseParser {
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("1378:1: statement options {k=1; } : ({...}? block | statementTail );", 55, 1, input);
+                        new NoViableAltException("1380:1: statement options {k=1; } : ({...}? block | statementTail );", 55, 1, input);
 
                     throw nvae;
                 }
@@ -7842,20 +7991,20 @@ public class JSParser extends JSBaseParser {
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("1378:1: statement options {k=1; } : ({...}? block | statementTail );", 55, 0, input);
+                    new NoViableAltException("1380:1: statement options {k=1; } : ({...}? block | statementTail );", 55, 0, input);
 
                 throw nvae;
             }
             switch (alt55) {
                 case 1 :
-                    // JS.g:1383:4: {...}? block
+                    // JS.g:1385:4: {...}? block
                     {
                     root_0 = (Object)adaptor.nil();
 
                     if ( !( input.LA(1) == LBRACE ) ) {
                         throw new FailedPredicateException(input, "statement", " input.LA(1) == LBRACE ");
                     }
-                    pushFollow(FOLLOW_block_in_statement5739);
+                    pushFollow(FOLLOW_block_in_statement5762);
                     block205=block();
                     _fsp--;
 
@@ -7864,11 +8013,11 @@ public class JSParser extends JSBaseParser {
                     }
                     break;
                 case 2 :
-                    // JS.g:1384:4: statementTail
+                    // JS.g:1386:4: statementTail
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_statementTail_in_statement5744);
+                    pushFollow(FOLLOW_statementTail_in_statement5767);
                     statementTail206=statementTail();
                     _fsp--;
 
@@ -7903,7 +8052,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start statementTail
-    // JS.g:1387:1: statementTail : ( variableStatement | emptyStatement | expressionStatement | ifStatement | iterationStatement | continueStatement | breakStatement | returnStatement | withStatement | labelledStatement | switchStatement | throwStatement | tryStatement | constStatement | namespaceStatement );
+    // JS.g:1389:1: statementTail : ( variableStatement | emptyStatement | expressionStatement | ifStatement | iterationStatement | continueStatement | breakStatement | returnStatement | withStatement | labelledStatement | switchStatement | throwStatement | tryStatement | constStatement | namespaceStatement );
     public final statementTail_return statementTail() throws RecognitionException {
         statementTail_return retval = new statementTail_return();
         retval.start = input.LT(1);
@@ -7943,7 +8092,7 @@ public class JSParser extends JSBaseParser {
 
 
         try {
-            // JS.g:1388:2: ( variableStatement | emptyStatement | expressionStatement | ifStatement | iterationStatement | continueStatement | breakStatement | returnStatement | withStatement | labelledStatement | switchStatement | throwStatement | tryStatement | constStatement | namespaceStatement )
+            // JS.g:1390:2: ( variableStatement | emptyStatement | expressionStatement | ifStatement | iterationStatement | continueStatement | breakStatement | returnStatement | withStatement | labelledStatement | switchStatement | throwStatement | tryStatement | constStatement | namespaceStatement )
             int alt56=15;
             int LA56_0 = input.LA(1);
 
@@ -7967,7 +8116,7 @@ public class JSParser extends JSBaseParser {
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("1387:1: statementTail : ( variableStatement | emptyStatement | expressionStatement | ifStatement | iterationStatement | continueStatement | breakStatement | returnStatement | withStatement | labelledStatement | switchStatement | throwStatement | tryStatement | constStatement | namespaceStatement );", 56, 4, input);
+                        new NoViableAltException("1389:1: statementTail : ( variableStatement | emptyStatement | expressionStatement | ifStatement | iterationStatement | continueStatement | breakStatement | returnStatement | withStatement | labelledStatement | switchStatement | throwStatement | tryStatement | constStatement | namespaceStatement );", 56, 4, input);
 
                     throw nvae;
                 }
@@ -7983,7 +8132,7 @@ public class JSParser extends JSBaseParser {
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("1387:1: statementTail : ( variableStatement | emptyStatement | expressionStatement | ifStatement | iterationStatement | continueStatement | breakStatement | returnStatement | withStatement | labelledStatement | switchStatement | throwStatement | tryStatement | constStatement | namespaceStatement );", 56, 5, input);
+                        new NoViableAltException("1389:1: statementTail : ( variableStatement | emptyStatement | expressionStatement | ifStatement | iterationStatement | continueStatement | breakStatement | returnStatement | withStatement | labelledStatement | switchStatement | throwStatement | tryStatement | constStatement | namespaceStatement );", 56, 5, input);
 
                     throw nvae;
                 }
@@ -7999,7 +8148,7 @@ public class JSParser extends JSBaseParser {
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("1387:1: statementTail : ( variableStatement | emptyStatement | expressionStatement | ifStatement | iterationStatement | continueStatement | breakStatement | returnStatement | withStatement | labelledStatement | switchStatement | throwStatement | tryStatement | constStatement | namespaceStatement );", 56, 6, input);
+                        new NoViableAltException("1389:1: statementTail : ( variableStatement | emptyStatement | expressionStatement | ifStatement | iterationStatement | continueStatement | breakStatement | returnStatement | withStatement | labelledStatement | switchStatement | throwStatement | tryStatement | constStatement | namespaceStatement );", 56, 6, input);
 
                     throw nvae;
                 }
@@ -8015,7 +8164,7 @@ public class JSParser extends JSBaseParser {
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("1387:1: statementTail : ( variableStatement | emptyStatement | expressionStatement | ifStatement | iterationStatement | continueStatement | breakStatement | returnStatement | withStatement | labelledStatement | switchStatement | throwStatement | tryStatement | constStatement | namespaceStatement );", 56, 7, input);
+                        new NoViableAltException("1389:1: statementTail : ( variableStatement | emptyStatement | expressionStatement | ifStatement | iterationStatement | continueStatement | breakStatement | returnStatement | withStatement | labelledStatement | switchStatement | throwStatement | tryStatement | constStatement | namespaceStatement );", 56, 7, input);
 
                     throw nvae;
                 }
@@ -8031,7 +8180,7 @@ public class JSParser extends JSBaseParser {
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("1387:1: statementTail : ( variableStatement | emptyStatement | expressionStatement | ifStatement | iterationStatement | continueStatement | breakStatement | returnStatement | withStatement | labelledStatement | switchStatement | throwStatement | tryStatement | constStatement | namespaceStatement );", 56, 8, input);
+                        new NoViableAltException("1389:1: statementTail : ( variableStatement | emptyStatement | expressionStatement | ifStatement | iterationStatement | continueStatement | breakStatement | returnStatement | withStatement | labelledStatement | switchStatement | throwStatement | tryStatement | constStatement | namespaceStatement );", 56, 8, input);
 
                     throw nvae;
                 }
@@ -8039,15 +8188,15 @@ public class JSParser extends JSBaseParser {
             else if ( ((LA56_0>=ABSTRACT && LA56_0<=CLASS)||(LA56_0>=DEBUGGER && LA56_0<=VOLATILE)) ) {
                 int LA56_9 = input.LA(2);
 
-                if ( (LA56_9==EOF||(LA56_9>=IN && LA56_9<=INSTANCEOF)||(LA56_9>=RBRACE && LA56_9<=LPAREN)||LA56_9==LBRACK||(LA56_9>=DOT && LA56_9<=XOR)||(LA56_9>=LAND && LA56_9<=QUE)||(LA56_9>=ASSIGN && LA56_9<=DIVASS)||(LA56_9>=DOTDOT && LA56_9<=COLONCOLON)||(LA56_9>=EOL && LA56_9<=MultiLineComment)) ) {
-                    alt56=3;
-                }
-                else if ( (LA56_9==COLON) ) {
+                if ( (LA56_9==COLON) ) {
                     alt56=10;
+                }
+                else if ( (LA56_9==EOF||(LA56_9>=IN && LA56_9<=INSTANCEOF)||(LA56_9>=RBRACE && LA56_9<=LPAREN)||LA56_9==LBRACK||(LA56_9>=DOT && LA56_9<=XOR)||(LA56_9>=LAND && LA56_9<=QUE)||(LA56_9>=ASSIGN && LA56_9<=DIVASS)||(LA56_9>=DOTDOT && LA56_9<=COLONCOLON)||(LA56_9>=EOL && LA56_9<=MultiLineComment)) ) {
+                    alt56=3;
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("1387:1: statementTail : ( variableStatement | emptyStatement | expressionStatement | ifStatement | iterationStatement | continueStatement | breakStatement | returnStatement | withStatement | labelledStatement | switchStatement | throwStatement | tryStatement | constStatement | namespaceStatement );", 56, 9, input);
+                        new NoViableAltException("1389:1: statementTail : ( variableStatement | emptyStatement | expressionStatement | ifStatement | iterationStatement | continueStatement | breakStatement | returnStatement | withStatement | labelledStatement | switchStatement | throwStatement | tryStatement | constStatement | namespaceStatement );", 56, 9, input);
 
                     throw nvae;
                 }
@@ -8055,15 +8204,15 @@ public class JSParser extends JSBaseParser {
             else if ( (LA56_0==Identifier) ) {
                 int LA56_10 = input.LA(2);
 
-                if ( (LA56_10==COLON) ) {
-                    alt56=10;
-                }
-                else if ( (LA56_10==EOF||(LA56_10>=IN && LA56_10<=INSTANCEOF)||(LA56_10>=RBRACE && LA56_10<=LPAREN)||LA56_10==LBRACK||(LA56_10>=DOT && LA56_10<=XOR)||(LA56_10>=LAND && LA56_10<=QUE)||(LA56_10>=ASSIGN && LA56_10<=DIVASS)||(LA56_10>=DOTDOT && LA56_10<=COLONCOLON)||(LA56_10>=EOL && LA56_10<=MultiLineComment)) ) {
+                if ( (LA56_10==EOF||(LA56_10>=IN && LA56_10<=INSTANCEOF)||(LA56_10>=RBRACE && LA56_10<=LPAREN)||LA56_10==LBRACK||(LA56_10>=DOT && LA56_10<=XOR)||(LA56_10>=LAND && LA56_10<=QUE)||(LA56_10>=ASSIGN && LA56_10<=DIVASS)||(LA56_10>=DOTDOT && LA56_10<=COLONCOLON)||(LA56_10>=EOL && LA56_10<=MultiLineComment)) ) {
                     alt56=3;
+                }
+                else if ( (LA56_10==COLON) ) {
+                    alt56=10;
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("1387:1: statementTail : ( variableStatement | emptyStatement | expressionStatement | ifStatement | iterationStatement | continueStatement | breakStatement | returnStatement | withStatement | labelledStatement | switchStatement | throwStatement | tryStatement | constStatement | namespaceStatement );", 56, 10, input);
+                        new NoViableAltException("1389:1: statementTail : ( variableStatement | emptyStatement | expressionStatement | ifStatement | iterationStatement | continueStatement | breakStatement | returnStatement | withStatement | labelledStatement | switchStatement | throwStatement | tryStatement | constStatement | namespaceStatement );", 56, 10, input);
 
                     throw nvae;
                 }
@@ -8109,17 +8258,17 @@ public class JSParser extends JSBaseParser {
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("1387:1: statementTail : ( variableStatement | emptyStatement | expressionStatement | ifStatement | iterationStatement | continueStatement | breakStatement | returnStatement | withStatement | labelledStatement | switchStatement | throwStatement | tryStatement | constStatement | namespaceStatement );", 56, 0, input);
+                    new NoViableAltException("1389:1: statementTail : ( variableStatement | emptyStatement | expressionStatement | ifStatement | iterationStatement | continueStatement | breakStatement | returnStatement | withStatement | labelledStatement | switchStatement | throwStatement | tryStatement | constStatement | namespaceStatement );", 56, 0, input);
 
                 throw nvae;
             }
             switch (alt56) {
                 case 1 :
-                    // JS.g:1388:4: variableStatement
+                    // JS.g:1390:4: variableStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_variableStatement_in_statementTail5756);
+                    pushFollow(FOLLOW_variableStatement_in_statementTail5779);
                     variableStatement207=variableStatement();
                     _fsp--;
 
@@ -8128,11 +8277,11 @@ public class JSParser extends JSBaseParser {
                     }
                     break;
                 case 2 :
-                    // JS.g:1389:4: emptyStatement
+                    // JS.g:1391:4: emptyStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_emptyStatement_in_statementTail5761);
+                    pushFollow(FOLLOW_emptyStatement_in_statementTail5784);
                     emptyStatement208=emptyStatement();
                     _fsp--;
 
@@ -8141,11 +8290,11 @@ public class JSParser extends JSBaseParser {
                     }
                     break;
                 case 3 :
-                    // JS.g:1390:4: expressionStatement
+                    // JS.g:1392:4: expressionStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_expressionStatement_in_statementTail5766);
+                    pushFollow(FOLLOW_expressionStatement_in_statementTail5789);
                     expressionStatement209=expressionStatement();
                     _fsp--;
 
@@ -8154,11 +8303,11 @@ public class JSParser extends JSBaseParser {
                     }
                     break;
                 case 4 :
-                    // JS.g:1391:4: ifStatement
+                    // JS.g:1393:4: ifStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_ifStatement_in_statementTail5771);
+                    pushFollow(FOLLOW_ifStatement_in_statementTail5794);
                     ifStatement210=ifStatement();
                     _fsp--;
 
@@ -8167,11 +8316,11 @@ public class JSParser extends JSBaseParser {
                     }
                     break;
                 case 5 :
-                    // JS.g:1392:4: iterationStatement
+                    // JS.g:1394:4: iterationStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_iterationStatement_in_statementTail5776);
+                    pushFollow(FOLLOW_iterationStatement_in_statementTail5799);
                     iterationStatement211=iterationStatement();
                     _fsp--;
 
@@ -8180,11 +8329,11 @@ public class JSParser extends JSBaseParser {
                     }
                     break;
                 case 6 :
-                    // JS.g:1393:4: continueStatement
+                    // JS.g:1395:4: continueStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_continueStatement_in_statementTail5781);
+                    pushFollow(FOLLOW_continueStatement_in_statementTail5804);
                     continueStatement212=continueStatement();
                     _fsp--;
 
@@ -8193,11 +8342,11 @@ public class JSParser extends JSBaseParser {
                     }
                     break;
                 case 7 :
-                    // JS.g:1394:4: breakStatement
+                    // JS.g:1396:4: breakStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_breakStatement_in_statementTail5786);
+                    pushFollow(FOLLOW_breakStatement_in_statementTail5809);
                     breakStatement213=breakStatement();
                     _fsp--;
 
@@ -8206,11 +8355,11 @@ public class JSParser extends JSBaseParser {
                     }
                     break;
                 case 8 :
-                    // JS.g:1395:4: returnStatement
+                    // JS.g:1397:4: returnStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_returnStatement_in_statementTail5791);
+                    pushFollow(FOLLOW_returnStatement_in_statementTail5814);
                     returnStatement214=returnStatement();
                     _fsp--;
 
@@ -8219,11 +8368,11 @@ public class JSParser extends JSBaseParser {
                     }
                     break;
                 case 9 :
-                    // JS.g:1396:4: withStatement
+                    // JS.g:1398:4: withStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_withStatement_in_statementTail5796);
+                    pushFollow(FOLLOW_withStatement_in_statementTail5819);
                     withStatement215=withStatement();
                     _fsp--;
 
@@ -8232,11 +8381,11 @@ public class JSParser extends JSBaseParser {
                     }
                     break;
                 case 10 :
-                    // JS.g:1397:4: labelledStatement
+                    // JS.g:1399:4: labelledStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_labelledStatement_in_statementTail5801);
+                    pushFollow(FOLLOW_labelledStatement_in_statementTail5824);
                     labelledStatement216=labelledStatement();
                     _fsp--;
 
@@ -8245,11 +8394,11 @@ public class JSParser extends JSBaseParser {
                     }
                     break;
                 case 11 :
-                    // JS.g:1398:4: switchStatement
+                    // JS.g:1400:4: switchStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_switchStatement_in_statementTail5806);
+                    pushFollow(FOLLOW_switchStatement_in_statementTail5829);
                     switchStatement217=switchStatement();
                     _fsp--;
 
@@ -8258,11 +8407,11 @@ public class JSParser extends JSBaseParser {
                     }
                     break;
                 case 12 :
-                    // JS.g:1399:4: throwStatement
+                    // JS.g:1401:4: throwStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_throwStatement_in_statementTail5811);
+                    pushFollow(FOLLOW_throwStatement_in_statementTail5834);
                     throwStatement218=throwStatement();
                     _fsp--;
 
@@ -8271,11 +8420,11 @@ public class JSParser extends JSBaseParser {
                     }
                     break;
                 case 13 :
-                    // JS.g:1400:4: tryStatement
+                    // JS.g:1402:4: tryStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_tryStatement_in_statementTail5816);
+                    pushFollow(FOLLOW_tryStatement_in_statementTail5839);
                     tryStatement219=tryStatement();
                     _fsp--;
 
@@ -8284,11 +8433,11 @@ public class JSParser extends JSBaseParser {
                     }
                     break;
                 case 14 :
-                    // JS.g:1401:4: constStatement
+                    // JS.g:1403:4: constStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_constStatement_in_statementTail5821);
+                    pushFollow(FOLLOW_constStatement_in_statementTail5844);
                     constStatement220=constStatement();
                     _fsp--;
 
@@ -8297,11 +8446,11 @@ public class JSParser extends JSBaseParser {
                     }
                     break;
                 case 15 :
-                    // JS.g:1402:4: namespaceStatement
+                    // JS.g:1404:4: namespaceStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_namespaceStatement_in_statementTail5826);
+                    pushFollow(FOLLOW_namespaceStatement_in_statementTail5849);
                     namespaceStatement221=namespaceStatement();
                     _fsp--;
 
@@ -8336,7 +8485,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start block
-    // JS.g:1407:1: block : lb= LBRACE ( sourceElement )* RBRACE -> ^( BLOCK[$lb, \"BLOCK\"] ( sourceElement )* ) ;
+    // JS.g:1409:1: block : lb= LBRACE ( sourceElement )* RBRACE -> ^( BLOCK[$lb, \"BLOCK\"] ( sourceElement )* ) ;
     public final block_return block() throws RecognitionException {
         block_return retval = new block_return();
         retval.start = input.LT(1);
@@ -8354,14 +8503,14 @@ public class JSParser extends JSBaseParser {
         RewriteRuleTokenStream stream_LBRACE=new RewriteRuleTokenStream(adaptor,"token LBRACE");
         RewriteRuleSubtreeStream stream_sourceElement=new RewriteRuleSubtreeStream(adaptor,"rule sourceElement");
         try {
-            // JS.g:1408:2: (lb= LBRACE ( sourceElement )* RBRACE -> ^( BLOCK[$lb, \"BLOCK\"] ( sourceElement )* ) )
-            // JS.g:1408:4: lb= LBRACE ( sourceElement )* RBRACE
+            // JS.g:1410:2: (lb= LBRACE ( sourceElement )* RBRACE -> ^( BLOCK[$lb, \"BLOCK\"] ( sourceElement )* ) )
+            // JS.g:1410:4: lb= LBRACE ( sourceElement )* RBRACE
             {
             lb=(Token)input.LT(1);
-            match(input,LBRACE,FOLLOW_LBRACE_in_block5841); 
+            match(input,LBRACE,FOLLOW_LBRACE_in_block5864); 
             stream_LBRACE.add(lb);
 
-            // JS.g:1408:14: ( sourceElement )*
+            // JS.g:1410:14: ( sourceElement )*
             loop57:
             do {
                 int alt57=2;
@@ -8383,9 +8532,9 @@ public class JSParser extends JSBaseParser {
 
                 switch (alt57) {
             	case 1 :
-            	    // JS.g:1408:14: sourceElement
+            	    // JS.g:1410:14: sourceElement
             	    {
-            	    pushFollow(FOLLOW_sourceElement_in_block5843);
+            	    pushFollow(FOLLOW_sourceElement_in_block5866);
             	    sourceElement222=sourceElement();
             	    _fsp--;
 
@@ -8400,7 +8549,7 @@ public class JSParser extends JSBaseParser {
             } while (true);
 
             RBRACE223=(Token)input.LT(1);
-            match(input,RBRACE,FOLLOW_RBRACE_in_block5846); 
+            match(input,RBRACE,FOLLOW_RBRACE_in_block5869); 
             stream_RBRACE.add(RBRACE223);
 
 
@@ -8414,14 +8563,14 @@ public class JSParser extends JSBaseParser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 1409:2: -> ^( BLOCK[$lb, \"BLOCK\"] ( sourceElement )* )
+            // 1411:2: -> ^( BLOCK[$lb, \"BLOCK\"] ( sourceElement )* )
             {
-                // JS.g:1409:5: ^( BLOCK[$lb, \"BLOCK\"] ( sourceElement )* )
+                // JS.g:1411:5: ^( BLOCK[$lb, \"BLOCK\"] ( sourceElement )* )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(adaptor.create(BLOCK, lb,  "BLOCK"), root_1);
 
-                // JS.g:1409:28: ( sourceElement )*
+                // JS.g:1411:28: ( sourceElement )*
                 while ( stream_sourceElement.hasNext() ) {
                     adaptor.addChild(root_1, stream_sourceElement.next());
 
@@ -8462,7 +8611,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start variableStatement
-    // JS.g:1416:1: variableStatement : VAR variableDeclaration ( COMMA variableDeclaration )* semic -> ^( VAR ( variableDeclaration )+ ) ;
+    // JS.g:1418:1: variableStatement : VAR variableDeclaration ( COMMA variableDeclaration )* semic -> ^( VAR ( variableDeclaration )+ ) ;
     public final variableStatement_return variableStatement() throws RecognitionException {
         variableStatement_return retval = new variableStatement_return();
         retval.start = input.LT(1);
@@ -8485,19 +8634,19 @@ public class JSParser extends JSBaseParser {
         RewriteRuleSubtreeStream stream_variableDeclaration=new RewriteRuleSubtreeStream(adaptor,"rule variableDeclaration");
         RewriteRuleSubtreeStream stream_semic=new RewriteRuleSubtreeStream(adaptor,"rule semic");
         try {
-            // JS.g:1417:2: ( VAR variableDeclaration ( COMMA variableDeclaration )* semic -> ^( VAR ( variableDeclaration )+ ) )
-            // JS.g:1417:4: VAR variableDeclaration ( COMMA variableDeclaration )* semic
+            // JS.g:1419:2: ( VAR variableDeclaration ( COMMA variableDeclaration )* semic -> ^( VAR ( variableDeclaration )+ ) )
+            // JS.g:1419:4: VAR variableDeclaration ( COMMA variableDeclaration )* semic
             {
             VAR224=(Token)input.LT(1);
-            match(input,VAR,FOLLOW_VAR_in_variableStatement5875); 
+            match(input,VAR,FOLLOW_VAR_in_variableStatement5898); 
             stream_VAR.add(VAR224);
 
-            pushFollow(FOLLOW_variableDeclaration_in_variableStatement5877);
+            pushFollow(FOLLOW_variableDeclaration_in_variableStatement5900);
             variableDeclaration225=variableDeclaration();
             _fsp--;
 
             stream_variableDeclaration.add(variableDeclaration225.getTree());
-            // JS.g:1417:28: ( COMMA variableDeclaration )*
+            // JS.g:1419:28: ( COMMA variableDeclaration )*
             loop58:
             do {
                 int alt58=2;
@@ -8510,13 +8659,13 @@ public class JSParser extends JSBaseParser {
 
                 switch (alt58) {
             	case 1 :
-            	    // JS.g:1417:30: COMMA variableDeclaration
+            	    // JS.g:1419:30: COMMA variableDeclaration
             	    {
             	    COMMA226=(Token)input.LT(1);
-            	    match(input,COMMA,FOLLOW_COMMA_in_variableStatement5881); 
+            	    match(input,COMMA,FOLLOW_COMMA_in_variableStatement5904); 
             	    stream_COMMA.add(COMMA226);
 
-            	    pushFollow(FOLLOW_variableDeclaration_in_variableStatement5883);
+            	    pushFollow(FOLLOW_variableDeclaration_in_variableStatement5906);
             	    variableDeclaration227=variableDeclaration();
             	    _fsp--;
 
@@ -8530,7 +8679,7 @@ public class JSParser extends JSBaseParser {
                 }
             } while (true);
 
-            pushFollow(FOLLOW_semic_in_variableStatement5888);
+            pushFollow(FOLLOW_semic_in_variableStatement5911);
             semic228=semic();
             _fsp--;
 
@@ -8546,9 +8695,9 @@ public class JSParser extends JSBaseParser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 1418:2: -> ^( VAR ( variableDeclaration )+ )
+            // 1420:2: -> ^( VAR ( variableDeclaration )+ )
             {
-                // JS.g:1418:5: ^( VAR ( variableDeclaration )+ )
+                // JS.g:1420:5: ^( VAR ( variableDeclaration )+ )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(stream_VAR.next(), root_1);
@@ -8596,7 +8745,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start variableDeclaration
-    // JS.g:1421:1: variableDeclaration : identifier ( ASSIGN assignmentExpression )? ;
+    // JS.g:1423:1: variableDeclaration : identifier ( ASSIGN assignmentExpression )? ;
     public final variableDeclaration_return variableDeclaration() throws RecognitionException {
         variableDeclaration_return retval = new variableDeclaration_return();
         retval.start = input.LT(1);
@@ -8612,17 +8761,17 @@ public class JSParser extends JSBaseParser {
         Object ASSIGN230_tree=null;
 
         try {
-            // JS.g:1422:2: ( identifier ( ASSIGN assignmentExpression )? )
-            // JS.g:1422:4: identifier ( ASSIGN assignmentExpression )?
+            // JS.g:1424:2: ( identifier ( ASSIGN assignmentExpression )? )
+            // JS.g:1424:4: identifier ( ASSIGN assignmentExpression )?
             {
             root_0 = (Object)adaptor.nil();
 
-            pushFollow(FOLLOW_identifier_in_variableDeclaration5911);
+            pushFollow(FOLLOW_identifier_in_variableDeclaration5934);
             identifier229=identifier();
             _fsp--;
 
             root_0 = (Object)adaptor.becomeRoot(identifier229.getTree(), root_0);
-            // JS.g:1422:16: ( ASSIGN assignmentExpression )?
+            // JS.g:1424:16: ( ASSIGN assignmentExpression )?
             int alt59=2;
             int LA59_0 = input.LA(1);
 
@@ -8631,14 +8780,14 @@ public class JSParser extends JSBaseParser {
             }
             switch (alt59) {
                 case 1 :
-                    // JS.g:1422:18: ASSIGN assignmentExpression
+                    // JS.g:1424:18: ASSIGN assignmentExpression
                     {
                     ASSIGN230=(Token)input.LT(1);
-                    match(input,ASSIGN,FOLLOW_ASSIGN_in_variableDeclaration5916); 
+                    match(input,ASSIGN,FOLLOW_ASSIGN_in_variableDeclaration5939); 
                     ASSIGN230_tree = (Object)adaptor.create(ASSIGN230);
                     adaptor.addChild(root_0, ASSIGN230_tree);
 
-                    pushFollow(FOLLOW_assignmentExpression_in_variableDeclaration5918);
+                    pushFollow(FOLLOW_assignmentExpression_in_variableDeclaration5941);
                     assignmentExpression231=assignmentExpression();
                     _fsp--;
 
@@ -8677,7 +8826,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start variableDeclarationNoIn
-    // JS.g:1425:1: variableDeclarationNoIn : identifier ( ASSIGN assignmentExpressionNoIn )? ;
+    // JS.g:1427:1: variableDeclarationNoIn : identifier ( ASSIGN assignmentExpressionNoIn )? ;
     public final variableDeclarationNoIn_return variableDeclarationNoIn() throws RecognitionException {
         variableDeclarationNoIn_return retval = new variableDeclarationNoIn_return();
         retval.start = input.LT(1);
@@ -8693,17 +8842,17 @@ public class JSParser extends JSBaseParser {
         Object ASSIGN233_tree=null;
 
         try {
-            // JS.g:1426:2: ( identifier ( ASSIGN assignmentExpressionNoIn )? )
-            // JS.g:1426:4: identifier ( ASSIGN assignmentExpressionNoIn )?
+            // JS.g:1428:2: ( identifier ( ASSIGN assignmentExpressionNoIn )? )
+            // JS.g:1428:4: identifier ( ASSIGN assignmentExpressionNoIn )?
             {
             root_0 = (Object)adaptor.nil();
 
-            pushFollow(FOLLOW_identifier_in_variableDeclarationNoIn5933);
+            pushFollow(FOLLOW_identifier_in_variableDeclarationNoIn5956);
             identifier232=identifier();
             _fsp--;
 
             root_0 = (Object)adaptor.becomeRoot(identifier232.getTree(), root_0);
-            // JS.g:1426:16: ( ASSIGN assignmentExpressionNoIn )?
+            // JS.g:1428:16: ( ASSIGN assignmentExpressionNoIn )?
             int alt60=2;
             int LA60_0 = input.LA(1);
 
@@ -8712,14 +8861,14 @@ public class JSParser extends JSBaseParser {
             }
             switch (alt60) {
                 case 1 :
-                    // JS.g:1426:18: ASSIGN assignmentExpressionNoIn
+                    // JS.g:1428:18: ASSIGN assignmentExpressionNoIn
                     {
                     ASSIGN233=(Token)input.LT(1);
-                    match(input,ASSIGN,FOLLOW_ASSIGN_in_variableDeclarationNoIn5938); 
+                    match(input,ASSIGN,FOLLOW_ASSIGN_in_variableDeclarationNoIn5961); 
                     ASSIGN233_tree = (Object)adaptor.create(ASSIGN233);
                     adaptor.addChild(root_0, ASSIGN233_tree);
 
-                    pushFollow(FOLLOW_assignmentExpressionNoIn_in_variableDeclarationNoIn5940);
+                    pushFollow(FOLLOW_assignmentExpressionNoIn_in_variableDeclarationNoIn5963);
                     assignmentExpressionNoIn234=assignmentExpressionNoIn();
                     _fsp--;
 
@@ -8758,7 +8907,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start constStatement
-    // JS.g:1429:1: constStatement : CONST variableDeclaration ( COMMA variableDeclaration )* semic -> ^( CONST ( variableDeclaration )+ ) ;
+    // JS.g:1431:1: constStatement : CONST variableDeclaration ( COMMA variableDeclaration )* semic -> ^( CONST ( variableDeclaration )+ ) ;
     public final constStatement_return constStatement() throws RecognitionException {
         constStatement_return retval = new constStatement_return();
         retval.start = input.LT(1);
@@ -8781,19 +8930,19 @@ public class JSParser extends JSBaseParser {
         RewriteRuleSubtreeStream stream_variableDeclaration=new RewriteRuleSubtreeStream(adaptor,"rule variableDeclaration");
         RewriteRuleSubtreeStream stream_semic=new RewriteRuleSubtreeStream(adaptor,"rule semic");
         try {
-            // JS.g:1430:3: ( CONST variableDeclaration ( COMMA variableDeclaration )* semic -> ^( CONST ( variableDeclaration )+ ) )
-            // JS.g:1430:5: CONST variableDeclaration ( COMMA variableDeclaration )* semic
+            // JS.g:1432:3: ( CONST variableDeclaration ( COMMA variableDeclaration )* semic -> ^( CONST ( variableDeclaration )+ ) )
+            // JS.g:1432:5: CONST variableDeclaration ( COMMA variableDeclaration )* semic
             {
             CONST235=(Token)input.LT(1);
-            match(input,CONST,FOLLOW_CONST_in_constStatement5955); 
+            match(input,CONST,FOLLOW_CONST_in_constStatement5978); 
             stream_CONST.add(CONST235);
 
-            pushFollow(FOLLOW_variableDeclaration_in_constStatement5957);
+            pushFollow(FOLLOW_variableDeclaration_in_constStatement5980);
             variableDeclaration236=variableDeclaration();
             _fsp--;
 
             stream_variableDeclaration.add(variableDeclaration236.getTree());
-            // JS.g:1430:31: ( COMMA variableDeclaration )*
+            // JS.g:1432:31: ( COMMA variableDeclaration )*
             loop61:
             do {
                 int alt61=2;
@@ -8806,13 +8955,13 @@ public class JSParser extends JSBaseParser {
 
                 switch (alt61) {
             	case 1 :
-            	    // JS.g:1430:33: COMMA variableDeclaration
+            	    // JS.g:1432:33: COMMA variableDeclaration
             	    {
             	    COMMA237=(Token)input.LT(1);
-            	    match(input,COMMA,FOLLOW_COMMA_in_constStatement5961); 
+            	    match(input,COMMA,FOLLOW_COMMA_in_constStatement5984); 
             	    stream_COMMA.add(COMMA237);
 
-            	    pushFollow(FOLLOW_variableDeclaration_in_constStatement5963);
+            	    pushFollow(FOLLOW_variableDeclaration_in_constStatement5986);
             	    variableDeclaration238=variableDeclaration();
             	    _fsp--;
 
@@ -8826,14 +8975,14 @@ public class JSParser extends JSBaseParser {
                 }
             } while (true);
 
-            pushFollow(FOLLOW_semic_in_constStatement5968);
+            pushFollow(FOLLOW_semic_in_constStatement5991);
             semic239=semic();
             _fsp--;
 
             stream_semic.add(semic239.getTree());
 
             // AST REWRITE
-            // elements: CONST, variableDeclaration
+            // elements: variableDeclaration, CONST
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -8842,9 +8991,9 @@ public class JSParser extends JSBaseParser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 1431:3: -> ^( CONST ( variableDeclaration )+ )
+            // 1433:3: -> ^( CONST ( variableDeclaration )+ )
             {
-                // JS.g:1431:6: ^( CONST ( variableDeclaration )+ )
+                // JS.g:1433:6: ^( CONST ( variableDeclaration )+ )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(stream_CONST.next(), root_1);
@@ -8892,7 +9041,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start emptyStatement
-    // JS.g:1438:1: emptyStatement : SEMIC -> EMPTY_STATEMENT[$SEMIC] ;
+    // JS.g:1440:1: emptyStatement : SEMIC -> EMPTY_STATEMENT[$SEMIC] ;
     public final emptyStatement_return emptyStatement() throws RecognitionException {
         emptyStatement_return retval = new emptyStatement_return();
         retval.start = input.LT(1);
@@ -8905,11 +9054,11 @@ public class JSParser extends JSBaseParser {
         RewriteRuleTokenStream stream_SEMIC=new RewriteRuleTokenStream(adaptor,"token SEMIC");
 
         try {
-            // JS.g:1439:2: ( SEMIC -> EMPTY_STATEMENT[$SEMIC] )
-            // JS.g:1439:4: SEMIC
+            // JS.g:1441:2: ( SEMIC -> EMPTY_STATEMENT[$SEMIC] )
+            // JS.g:1441:4: SEMIC
             {
             SEMIC240=(Token)input.LT(1);
-            match(input,SEMIC,FOLLOW_SEMIC_in_emptyStatement5998); 
+            match(input,SEMIC,FOLLOW_SEMIC_in_emptyStatement6021); 
             stream_SEMIC.add(SEMIC240);
 
 
@@ -8923,7 +9072,7 @@ public class JSParser extends JSBaseParser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 1439:10: -> EMPTY_STATEMENT[$SEMIC]
+            // 1441:10: -> EMPTY_STATEMENT[$SEMIC]
             {
                 adaptor.addChild(root_0, adaptor.create(EMPTY_STATEMENT, SEMIC240));
 
@@ -8958,7 +9107,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start expressionStatement
-    // JS.g:1452:1: expressionStatement : expression semic ;
+    // JS.g:1454:1: expressionStatement : expression semic ;
     public final expressionStatement_return expressionStatement() throws RecognitionException {
         expressionStatement_return retval = new expressionStatement_return();
         retval.start = input.LT(1);
@@ -8972,17 +9121,17 @@ public class JSParser extends JSBaseParser {
 
 
         try {
-            // JS.g:1453:2: ( expression semic )
-            // JS.g:1453:4: expression semic
+            // JS.g:1455:2: ( expression semic )
+            // JS.g:1455:4: expression semic
             {
             root_0 = (Object)adaptor.nil();
 
-            pushFollow(FOLLOW_expression_in_expressionStatement6021);
+            pushFollow(FOLLOW_expression_in_expressionStatement6044);
             expression241=expression();
             _fsp--;
 
             adaptor.addChild(root_0, expression241.getTree());
-            pushFollow(FOLLOW_semic_in_expressionStatement6023);
+            pushFollow(FOLLOW_semic_in_expressionStatement6046);
             semic242=semic();
             _fsp--;
 
@@ -9014,7 +9163,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start ifStatement
-    // JS.g:1460:1: ifStatement : IF LPAREN expression RPAREN statement ({...}? ELSE statement )? -> ^( IF expression ( statement )+ ) ;
+    // JS.g:1462:1: ifStatement : IF LPAREN expression RPAREN statement ({...}? ELSE statement )? -> ^( IF expression ( statement )+ ) ;
     public final ifStatement_return ifStatement() throws RecognitionException {
         ifStatement_return retval = new ifStatement_return();
         retval.start = input.LT(1);
@@ -9043,32 +9192,32 @@ public class JSParser extends JSBaseParser {
         RewriteRuleSubtreeStream stream_expression=new RewriteRuleSubtreeStream(adaptor,"rule expression");
         RewriteRuleSubtreeStream stream_statement=new RewriteRuleSubtreeStream(adaptor,"rule statement");
         try {
-            // JS.g:1462:2: ( IF LPAREN expression RPAREN statement ({...}? ELSE statement )? -> ^( IF expression ( statement )+ ) )
-            // JS.g:1462:4: IF LPAREN expression RPAREN statement ({...}? ELSE statement )?
+            // JS.g:1464:2: ( IF LPAREN expression RPAREN statement ({...}? ELSE statement )? -> ^( IF expression ( statement )+ ) )
+            // JS.g:1464:4: IF LPAREN expression RPAREN statement ({...}? ELSE statement )?
             {
             IF243=(Token)input.LT(1);
-            match(input,IF,FOLLOW_IF_in_ifStatement6041); 
+            match(input,IF,FOLLOW_IF_in_ifStatement6064); 
             stream_IF.add(IF243);
 
             LPAREN244=(Token)input.LT(1);
-            match(input,LPAREN,FOLLOW_LPAREN_in_ifStatement6043); 
+            match(input,LPAREN,FOLLOW_LPAREN_in_ifStatement6066); 
             stream_LPAREN.add(LPAREN244);
 
-            pushFollow(FOLLOW_expression_in_ifStatement6045);
+            pushFollow(FOLLOW_expression_in_ifStatement6068);
             expression245=expression();
             _fsp--;
 
             stream_expression.add(expression245.getTree());
             RPAREN246=(Token)input.LT(1);
-            match(input,RPAREN,FOLLOW_RPAREN_in_ifStatement6047); 
+            match(input,RPAREN,FOLLOW_RPAREN_in_ifStatement6070); 
             stream_RPAREN.add(RPAREN246);
 
-            pushFollow(FOLLOW_statement_in_ifStatement6049);
+            pushFollow(FOLLOW_statement_in_ifStatement6072);
             statement247=statement();
             _fsp--;
 
             stream_statement.add(statement247.getTree());
-            // JS.g:1462:42: ({...}? ELSE statement )?
+            // JS.g:1464:42: ({...}? ELSE statement )?
             int alt62=2;
             int LA62_0 = input.LA(1);
 
@@ -9081,16 +9230,16 @@ public class JSParser extends JSBaseParser {
             }
             switch (alt62) {
                 case 1 :
-                    // JS.g:1462:44: {...}? ELSE statement
+                    // JS.g:1464:44: {...}? ELSE statement
                     {
                     if ( !( input.LA(1) == ELSE ) ) {
                         throw new FailedPredicateException(input, "ifStatement", " input.LA(1) == ELSE ");
                     }
                     ELSE248=(Token)input.LT(1);
-                    match(input,ELSE,FOLLOW_ELSE_in_ifStatement6055); 
+                    match(input,ELSE,FOLLOW_ELSE_in_ifStatement6078); 
                     stream_ELSE.add(ELSE248);
 
-                    pushFollow(FOLLOW_statement_in_ifStatement6057);
+                    pushFollow(FOLLOW_statement_in_ifStatement6080);
                     statement249=statement();
                     _fsp--;
 
@@ -9103,7 +9252,7 @@ public class JSParser extends JSBaseParser {
 
 
             // AST REWRITE
-            // elements: expression, statement, IF
+            // elements: expression, IF, statement
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -9112,9 +9261,9 @@ public class JSParser extends JSBaseParser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 1463:2: -> ^( IF expression ( statement )+ )
+            // 1465:2: -> ^( IF expression ( statement )+ )
             {
-                // JS.g:1463:5: ^( IF expression ( statement )+ )
+                // JS.g:1465:5: ^( IF expression ( statement )+ )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(stream_IF.next(), root_1);
@@ -9163,7 +9312,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start iterationStatement
-    // JS.g:1470:1: iterationStatement : ( doStatement | whileStatement | forEachStatement | forStatement );
+    // JS.g:1472:1: iterationStatement : ( doStatement | whileStatement | forEachStatement | forStatement );
     public final iterationStatement_return iterationStatement() throws RecognitionException {
         iterationStatement_return retval = new iterationStatement_return();
         retval.start = input.LT(1);
@@ -9181,7 +9330,7 @@ public class JSParser extends JSBaseParser {
 
 
         try {
-            // JS.g:1471:2: ( doStatement | whileStatement | forEachStatement | forStatement )
+            // JS.g:1473:2: ( doStatement | whileStatement | forEachStatement | forStatement )
             int alt63=4;
             switch ( input.LA(1) ) {
             case DO:
@@ -9198,15 +9347,15 @@ public class JSParser extends JSBaseParser {
                 {
                 int LA63_3 = input.LA(2);
 
-                if ( (LA63_3==EACH) ) {
-                    alt63=3;
-                }
-                else if ( (LA63_3==LPAREN) ) {
+                if ( (LA63_3==LPAREN) ) {
                     alt63=4;
+                }
+                else if ( (LA63_3==EACH) ) {
+                    alt63=3;
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("1470:1: iterationStatement : ( doStatement | whileStatement | forEachStatement | forStatement );", 63, 3, input);
+                        new NoViableAltException("1472:1: iterationStatement : ( doStatement | whileStatement | forEachStatement | forStatement );", 63, 3, input);
 
                     throw nvae;
                 }
@@ -9214,18 +9363,18 @@ public class JSParser extends JSBaseParser {
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("1470:1: iterationStatement : ( doStatement | whileStatement | forEachStatement | forStatement );", 63, 0, input);
+                    new NoViableAltException("1472:1: iterationStatement : ( doStatement | whileStatement | forEachStatement | forStatement );", 63, 0, input);
 
                 throw nvae;
             }
 
             switch (alt63) {
                 case 1 :
-                    // JS.g:1471:4: doStatement
+                    // JS.g:1473:4: doStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_doStatement_in_iterationStatement6090);
+                    pushFollow(FOLLOW_doStatement_in_iterationStatement6113);
                     doStatement250=doStatement();
                     _fsp--;
 
@@ -9234,11 +9383,11 @@ public class JSParser extends JSBaseParser {
                     }
                     break;
                 case 2 :
-                    // JS.g:1472:4: whileStatement
+                    // JS.g:1474:4: whileStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_whileStatement_in_iterationStatement6095);
+                    pushFollow(FOLLOW_whileStatement_in_iterationStatement6118);
                     whileStatement251=whileStatement();
                     _fsp--;
 
@@ -9247,11 +9396,11 @@ public class JSParser extends JSBaseParser {
                     }
                     break;
                 case 3 :
-                    // JS.g:1473:4: forEachStatement
+                    // JS.g:1475:4: forEachStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_forEachStatement_in_iterationStatement6100);
+                    pushFollow(FOLLOW_forEachStatement_in_iterationStatement6123);
                     forEachStatement252=forEachStatement();
                     _fsp--;
 
@@ -9260,11 +9409,11 @@ public class JSParser extends JSBaseParser {
                     }
                     break;
                 case 4 :
-                    // JS.g:1474:4: forStatement
+                    // JS.g:1476:4: forStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_forStatement_in_iterationStatement6105);
+                    pushFollow(FOLLOW_forStatement_in_iterationStatement6128);
                     forStatement253=forStatement();
                     _fsp--;
 
@@ -9299,7 +9448,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start doStatement
-    // JS.g:1477:1: doStatement : DO statement WHILE LPAREN expression RPAREN semic -> ^( DO statement expression ) ;
+    // JS.g:1479:1: doStatement : DO statement WHILE LPAREN expression RPAREN semic -> ^( DO statement expression ) ;
     public final doStatement_return doStatement() throws RecognitionException {
         doStatement_return retval = new doStatement_return();
         retval.start = input.LT(1);
@@ -9329,43 +9478,43 @@ public class JSParser extends JSBaseParser {
         RewriteRuleSubtreeStream stream_expression=new RewriteRuleSubtreeStream(adaptor,"rule expression");
         RewriteRuleSubtreeStream stream_semic=new RewriteRuleSubtreeStream(adaptor,"rule semic");
         try {
-            // JS.g:1478:2: ( DO statement WHILE LPAREN expression RPAREN semic -> ^( DO statement expression ) )
-            // JS.g:1478:4: DO statement WHILE LPAREN expression RPAREN semic
+            // JS.g:1480:2: ( DO statement WHILE LPAREN expression RPAREN semic -> ^( DO statement expression ) )
+            // JS.g:1480:4: DO statement WHILE LPAREN expression RPAREN semic
             {
             DO254=(Token)input.LT(1);
-            match(input,DO,FOLLOW_DO_in_doStatement6117); 
+            match(input,DO,FOLLOW_DO_in_doStatement6140); 
             stream_DO.add(DO254);
 
-            pushFollow(FOLLOW_statement_in_doStatement6119);
+            pushFollow(FOLLOW_statement_in_doStatement6142);
             statement255=statement();
             _fsp--;
 
             stream_statement.add(statement255.getTree());
             WHILE256=(Token)input.LT(1);
-            match(input,WHILE,FOLLOW_WHILE_in_doStatement6121); 
+            match(input,WHILE,FOLLOW_WHILE_in_doStatement6144); 
             stream_WHILE.add(WHILE256);
 
             LPAREN257=(Token)input.LT(1);
-            match(input,LPAREN,FOLLOW_LPAREN_in_doStatement6123); 
+            match(input,LPAREN,FOLLOW_LPAREN_in_doStatement6146); 
             stream_LPAREN.add(LPAREN257);
 
-            pushFollow(FOLLOW_expression_in_doStatement6125);
+            pushFollow(FOLLOW_expression_in_doStatement6148);
             expression258=expression();
             _fsp--;
 
             stream_expression.add(expression258.getTree());
             RPAREN259=(Token)input.LT(1);
-            match(input,RPAREN,FOLLOW_RPAREN_in_doStatement6127); 
+            match(input,RPAREN,FOLLOW_RPAREN_in_doStatement6150); 
             stream_RPAREN.add(RPAREN259);
 
-            pushFollow(FOLLOW_semic_in_doStatement6129);
+            pushFollow(FOLLOW_semic_in_doStatement6152);
             semic260=semic();
             _fsp--;
 
             stream_semic.add(semic260.getTree());
 
             // AST REWRITE
-            // elements: statement, expression, DO
+            // elements: DO, statement, expression
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -9374,9 +9523,9 @@ public class JSParser extends JSBaseParser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 1479:2: -> ^( DO statement expression )
+            // 1481:2: -> ^( DO statement expression )
             {
-                // JS.g:1479:5: ^( DO statement expression )
+                // JS.g:1481:5: ^( DO statement expression )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(stream_DO.next(), root_1);
@@ -9418,7 +9567,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start whileStatement
-    // JS.g:1482:1: whileStatement : WHILE LPAREN expression RPAREN statement ;
+    // JS.g:1484:1: whileStatement : WHILE LPAREN expression RPAREN statement ;
     public final whileStatement_return whileStatement() throws RecognitionException {
         whileStatement_return retval = new whileStatement_return();
         retval.start = input.LT(1);
@@ -9438,26 +9587,26 @@ public class JSParser extends JSBaseParser {
         Object RPAREN264_tree=null;
 
         try {
-            // JS.g:1483:2: ( WHILE LPAREN expression RPAREN statement )
-            // JS.g:1483:4: WHILE LPAREN expression RPAREN statement
+            // JS.g:1485:2: ( WHILE LPAREN expression RPAREN statement )
+            // JS.g:1485:4: WHILE LPAREN expression RPAREN statement
             {
             root_0 = (Object)adaptor.nil();
 
             WHILE261=(Token)input.LT(1);
-            match(input,WHILE,FOLLOW_WHILE_in_whileStatement6154); 
+            match(input,WHILE,FOLLOW_WHILE_in_whileStatement6177); 
             WHILE261_tree = (Object)adaptor.create(WHILE261);
             root_0 = (Object)adaptor.becomeRoot(WHILE261_tree, root_0);
 
             LPAREN262=(Token)input.LT(1);
-            match(input,LPAREN,FOLLOW_LPAREN_in_whileStatement6157); 
-            pushFollow(FOLLOW_expression_in_whileStatement6160);
+            match(input,LPAREN,FOLLOW_LPAREN_in_whileStatement6180); 
+            pushFollow(FOLLOW_expression_in_whileStatement6183);
             expression263=expression();
             _fsp--;
 
             adaptor.addChild(root_0, expression263.getTree());
             RPAREN264=(Token)input.LT(1);
-            match(input,RPAREN,FOLLOW_RPAREN_in_whileStatement6162); 
-            pushFollow(FOLLOW_statement_in_whileStatement6165);
+            match(input,RPAREN,FOLLOW_RPAREN_in_whileStatement6185); 
+            pushFollow(FOLLOW_statement_in_whileStatement6188);
             statement265=statement();
             _fsp--;
 
@@ -9490,7 +9639,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start forEachStatement
-    // JS.g:1528:1: forEachStatement : forKeyword= FOR EACH LPAREN forEachControl RPAREN statement -> ^( FOREACH[$forKeyword] forEachControl statement ) ;
+    // JS.g:1530:1: forEachStatement : forKeyword= FOR EACH LPAREN forEachControl RPAREN statement -> ^( FOREACH[$forKeyword] forEachControl statement ) ;
     public final forEachStatement_return forEachStatement() throws RecognitionException {
         forEachStatement_return retval = new forEachStatement_return();
         retval.start = input.LT(1);
@@ -9517,31 +9666,31 @@ public class JSParser extends JSBaseParser {
         RewriteRuleSubtreeStream stream_statement=new RewriteRuleSubtreeStream(adaptor,"rule statement");
         RewriteRuleSubtreeStream stream_forEachControl=new RewriteRuleSubtreeStream(adaptor,"rule forEachControl");
         try {
-            // JS.g:1529:3: (forKeyword= FOR EACH LPAREN forEachControl RPAREN statement -> ^( FOREACH[$forKeyword] forEachControl statement ) )
-            // JS.g:1529:5: forKeyword= FOR EACH LPAREN forEachControl RPAREN statement
+            // JS.g:1531:3: (forKeyword= FOR EACH LPAREN forEachControl RPAREN statement -> ^( FOREACH[$forKeyword] forEachControl statement ) )
+            // JS.g:1531:5: forKeyword= FOR EACH LPAREN forEachControl RPAREN statement
             {
             forKeyword=(Token)input.LT(1);
-            match(input,FOR,FOLLOW_FOR_in_forEachStatement6182); 
+            match(input,FOR,FOLLOW_FOR_in_forEachStatement6205); 
             stream_FOR.add(forKeyword);
 
             EACH266=(Token)input.LT(1);
-            match(input,EACH,FOLLOW_EACH_in_forEachStatement6184); 
+            match(input,EACH,FOLLOW_EACH_in_forEachStatement6207); 
             stream_EACH.add(EACH266);
 
             LPAREN267=(Token)input.LT(1);
-            match(input,LPAREN,FOLLOW_LPAREN_in_forEachStatement6186); 
+            match(input,LPAREN,FOLLOW_LPAREN_in_forEachStatement6209); 
             stream_LPAREN.add(LPAREN267);
 
-            pushFollow(FOLLOW_forEachControl_in_forEachStatement6188);
+            pushFollow(FOLLOW_forEachControl_in_forEachStatement6211);
             forEachControl268=forEachControl();
             _fsp--;
 
             stream_forEachControl.add(forEachControl268.getTree());
             RPAREN269=(Token)input.LT(1);
-            match(input,RPAREN,FOLLOW_RPAREN_in_forEachStatement6190); 
+            match(input,RPAREN,FOLLOW_RPAREN_in_forEachStatement6213); 
             stream_RPAREN.add(RPAREN269);
 
-            pushFollow(FOLLOW_statement_in_forEachStatement6192);
+            pushFollow(FOLLOW_statement_in_forEachStatement6215);
             statement270=statement();
             _fsp--;
 
@@ -9557,9 +9706,9 @@ public class JSParser extends JSBaseParser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 1530:4: -> ^( FOREACH[$forKeyword] forEachControl statement )
+            // 1532:4: -> ^( FOREACH[$forKeyword] forEachControl statement )
             {
-                // JS.g:1530:7: ^( FOREACH[$forKeyword] forEachControl statement )
+                // JS.g:1532:7: ^( FOREACH[$forKeyword] forEachControl statement )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(adaptor.create(FOREACH, forKeyword), root_1);
@@ -9601,7 +9750,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start forEachControl
-    // JS.g:1533:1: forEachControl : ( forControlVar | forControlExpression );
+    // JS.g:1535:1: forEachControl : ( forControlVar | forControlExpression );
     public final forEachControl_return forEachControl() throws RecognitionException {
         forEachControl_return retval = new forEachControl_return();
         retval.start = input.LT(1);
@@ -9615,7 +9764,7 @@ public class JSParser extends JSBaseParser {
 
 
         try {
-            // JS.g:1534:3: ( forControlVar | forControlExpression )
+            // JS.g:1536:3: ( forControlVar | forControlExpression )
             int alt64=2;
             int LA64_0 = input.LA(1);
 
@@ -9633,17 +9782,17 @@ public class JSParser extends JSBaseParser {
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("1533:1: forEachControl : ( forControlVar | forControlExpression );", 64, 0, input);
+                    new NoViableAltException("1535:1: forEachControl : ( forControlVar | forControlExpression );", 64, 0, input);
 
                 throw nvae;
             }
             switch (alt64) {
                 case 1 :
-                    // JS.g:1534:5: forControlVar
+                    // JS.g:1536:5: forControlVar
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_forControlVar_in_forEachControl6220);
+                    pushFollow(FOLLOW_forControlVar_in_forEachControl6243);
                     forControlVar271=forControlVar();
                     _fsp--;
 
@@ -9652,11 +9801,11 @@ public class JSParser extends JSBaseParser {
                     }
                     break;
                 case 2 :
-                    // JS.g:1535:5: forControlExpression
+                    // JS.g:1537:5: forControlExpression
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_forControlExpression_in_forEachControl6226);
+                    pushFollow(FOLLOW_forControlExpression_in_forEachControl6249);
                     forControlExpression272=forControlExpression();
                     _fsp--;
 
@@ -9691,7 +9840,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start forStatement
-    // JS.g:1538:1: forStatement : FOR LPAREN forControl RPAREN statement ;
+    // JS.g:1540:1: forStatement : FOR LPAREN forControl RPAREN statement ;
     public final forStatement_return forStatement() throws RecognitionException {
         forStatement_return retval = new forStatement_return();
         retval.start = input.LT(1);
@@ -9711,26 +9860,26 @@ public class JSParser extends JSBaseParser {
         Object RPAREN276_tree=null;
 
         try {
-            // JS.g:1539:2: ( FOR LPAREN forControl RPAREN statement )
-            // JS.g:1539:4: FOR LPAREN forControl RPAREN statement
+            // JS.g:1541:2: ( FOR LPAREN forControl RPAREN statement )
+            // JS.g:1541:4: FOR LPAREN forControl RPAREN statement
             {
             root_0 = (Object)adaptor.nil();
 
             FOR273=(Token)input.LT(1);
-            match(input,FOR,FOLLOW_FOR_in_forStatement6238); 
+            match(input,FOR,FOLLOW_FOR_in_forStatement6261); 
             FOR273_tree = (Object)adaptor.create(FOR273);
             root_0 = (Object)adaptor.becomeRoot(FOR273_tree, root_0);
 
             LPAREN274=(Token)input.LT(1);
-            match(input,LPAREN,FOLLOW_LPAREN_in_forStatement6241); 
-            pushFollow(FOLLOW_forControl_in_forStatement6244);
+            match(input,LPAREN,FOLLOW_LPAREN_in_forStatement6264); 
+            pushFollow(FOLLOW_forControl_in_forStatement6267);
             forControl275=forControl();
             _fsp--;
 
             adaptor.addChild(root_0, forControl275.getTree());
             RPAREN276=(Token)input.LT(1);
-            match(input,RPAREN,FOLLOW_RPAREN_in_forStatement6246); 
-            pushFollow(FOLLOW_statement_in_forStatement6249);
+            match(input,RPAREN,FOLLOW_RPAREN_in_forStatement6269); 
+            pushFollow(FOLLOW_statement_in_forStatement6272);
             statement277=statement();
             _fsp--;
 
@@ -9763,7 +9912,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start forControl
-    // JS.g:1542:1: forControl : ( forControlVar | forControlExpression | forControlSemic );
+    // JS.g:1544:1: forControl : ( forControlVar | forControlExpression | forControlSemic );
     public final forControl_return forControl() throws RecognitionException {
         forControl_return retval = new forControl_return();
         retval.start = input.LT(1);
@@ -9779,7 +9928,7 @@ public class JSParser extends JSBaseParser {
 
 
         try {
-            // JS.g:1543:2: ( forControlVar | forControlExpression | forControlSemic )
+            // JS.g:1545:2: ( forControlVar | forControlExpression | forControlSemic )
             int alt65=3;
             int LA65_0 = input.LA(1);
 
@@ -9800,17 +9949,17 @@ public class JSParser extends JSBaseParser {
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("1542:1: forControl : ( forControlVar | forControlExpression | forControlSemic );", 65, 0, input);
+                    new NoViableAltException("1544:1: forControl : ( forControlVar | forControlExpression | forControlSemic );", 65, 0, input);
 
                 throw nvae;
             }
             switch (alt65) {
                 case 1 :
-                    // JS.g:1543:4: forControlVar
+                    // JS.g:1545:4: forControlVar
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_forControlVar_in_forControl6260);
+                    pushFollow(FOLLOW_forControlVar_in_forControl6283);
                     forControlVar278=forControlVar();
                     _fsp--;
 
@@ -9819,11 +9968,11 @@ public class JSParser extends JSBaseParser {
                     }
                     break;
                 case 2 :
-                    // JS.g:1544:4: forControlExpression
+                    // JS.g:1546:4: forControlExpression
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_forControlExpression_in_forControl6265);
+                    pushFollow(FOLLOW_forControlExpression_in_forControl6288);
                     forControlExpression279=forControlExpression();
                     _fsp--;
 
@@ -9832,11 +9981,11 @@ public class JSParser extends JSBaseParser {
                     }
                     break;
                 case 3 :
-                    // JS.g:1545:4: forControlSemic
+                    // JS.g:1547:4: forControlSemic
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_forControlSemic_in_forControl6270);
+                    pushFollow(FOLLOW_forControlSemic_in_forControl6293);
                     forControlSemic280=forControlSemic();
                     _fsp--;
 
@@ -9871,7 +10020,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start forControlVar
-    // JS.g:1548:1: forControlVar : VAR variableDeclarationNoIn ( ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) ) | ( ( COMMA variableDeclarationNoIn )* semi1= SEMIC (ex1= expression )? semi2= SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( $semi1) ^( EXPR ( $ex1)? ) ^( $semi2) ^( EXPR ( $ex2)? ) ) ) ) ;
+    // JS.g:1550:1: forControlVar : VAR variableDeclarationNoIn ( ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) ) | ( ( COMMA variableDeclarationNoIn )* semi1= SEMIC (ex1= expression )? semi2= SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( $semi1) ^( EXPR ( $ex1)? ) ^( $semi2) ^( EXPR ( $ex2)? ) ) ) ) ;
     public final forControlVar_return forControlVar() throws RecognitionException {
         forControlVar_return retval = new forControlVar_return();
         retval.start = input.LT(1);
@@ -9906,19 +10055,19 @@ public class JSParser extends JSBaseParser {
         RewriteRuleSubtreeStream stream_expression=new RewriteRuleSubtreeStream(adaptor,"rule expression");
         RewriteRuleSubtreeStream stream_variableDeclarationNoIn=new RewriteRuleSubtreeStream(adaptor,"rule variableDeclarationNoIn");
         try {
-            // JS.g:1549:2: ( VAR variableDeclarationNoIn ( ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) ) | ( ( COMMA variableDeclarationNoIn )* semi1= SEMIC (ex1= expression )? semi2= SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( $semi1) ^( EXPR ( $ex1)? ) ^( $semi2) ^( EXPR ( $ex2)? ) ) ) ) )
-            // JS.g:1549:4: VAR variableDeclarationNoIn ( ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) ) | ( ( COMMA variableDeclarationNoIn )* semi1= SEMIC (ex1= expression )? semi2= SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( $semi1) ^( EXPR ( $ex1)? ) ^( $semi2) ^( EXPR ( $ex2)? ) ) ) )
+            // JS.g:1551:2: ( VAR variableDeclarationNoIn ( ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) ) | ( ( COMMA variableDeclarationNoIn )* semi1= SEMIC (ex1= expression )? semi2= SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( $semi1) ^( EXPR ( $ex1)? ) ^( $semi2) ^( EXPR ( $ex2)? ) ) ) ) )
+            // JS.g:1551:4: VAR variableDeclarationNoIn ( ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) ) | ( ( COMMA variableDeclarationNoIn )* semi1= SEMIC (ex1= expression )? semi2= SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( $semi1) ^( EXPR ( $ex1)? ) ^( $semi2) ^( EXPR ( $ex2)? ) ) ) )
             {
             VAR281=(Token)input.LT(1);
-            match(input,VAR,FOLLOW_VAR_in_forControlVar6281); 
+            match(input,VAR,FOLLOW_VAR_in_forControlVar6304); 
             stream_VAR.add(VAR281);
 
-            pushFollow(FOLLOW_variableDeclarationNoIn_in_forControlVar6283);
+            pushFollow(FOLLOW_variableDeclarationNoIn_in_forControlVar6306);
             variableDeclarationNoIn282=variableDeclarationNoIn();
             _fsp--;
 
             stream_variableDeclarationNoIn.add(variableDeclarationNoIn282.getTree());
-            // JS.g:1550:2: ( ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) ) | ( ( COMMA variableDeclarationNoIn )* semi1= SEMIC (ex1= expression )? semi2= SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( $semi1) ^( EXPR ( $ex1)? ) ^( $semi2) ^( EXPR ( $ex2)? ) ) ) )
+            // JS.g:1552:2: ( ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) ) | ( ( COMMA variableDeclarationNoIn )* semi1= SEMIC (ex1= expression )? semi2= SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( $semi1) ^( EXPR ( $ex1)? ) ^( $semi2) ^( EXPR ( $ex2)? ) ) ) )
             int alt69=2;
             int LA69_0 = input.LA(1);
 
@@ -9930,29 +10079,29 @@ public class JSParser extends JSBaseParser {
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("1550:2: ( ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) ) | ( ( COMMA variableDeclarationNoIn )* semi1= SEMIC (ex1= expression )? semi2= SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( $semi1) ^( EXPR ( $ex1)? ) ^( $semi2) ^( EXPR ( $ex2)? ) ) ) )", 69, 0, input);
+                    new NoViableAltException("1552:2: ( ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) ) | ( ( COMMA variableDeclarationNoIn )* semi1= SEMIC (ex1= expression )? semi2= SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( $semi1) ^( EXPR ( $ex1)? ) ^( $semi2) ^( EXPR ( $ex2)? ) ) ) )", 69, 0, input);
 
                 throw nvae;
             }
             switch (alt69) {
                 case 1 :
-                    // JS.g:1551:3: ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) )
+                    // JS.g:1553:3: ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) )
                     {
-                    // JS.g:1551:3: ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) )
-                    // JS.g:1552:4: IN expression
+                    // JS.g:1553:3: ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) )
+                    // JS.g:1554:4: IN expression
                     {
                     IN283=(Token)input.LT(1);
-                    match(input,IN,FOLLOW_IN_in_forControlVar6295); 
+                    match(input,IN,FOLLOW_IN_in_forControlVar6318); 
                     stream_IN.add(IN283);
 
-                    pushFollow(FOLLOW_expression_in_forControlVar6297);
+                    pushFollow(FOLLOW_expression_in_forControlVar6320);
                     expression284=expression();
                     _fsp--;
 
                     stream_expression.add(expression284.getTree());
 
                     // AST REWRITE
-                    // elements: expression, variableDeclarationNoIn, VAR
+                    // elements: variableDeclarationNoIn, expression, VAR
                     // token labels: 
                     // rule labels: retval
                     // token list labels: 
@@ -9961,14 +10110,14 @@ public class JSParser extends JSBaseParser {
                     RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
                     root_0 = (Object)adaptor.nil();
-                    // 1553:4: -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) )
+                    // 1555:4: -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) )
                     {
-                        // JS.g:1553:7: ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) )
+                        // JS.g:1555:7: ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot(adaptor.create(FORITER, "FORITER"), root_1);
 
-                        // JS.g:1553:18: ^( VAR variableDeclarationNoIn )
+                        // JS.g:1555:18: ^( VAR variableDeclarationNoIn )
                         {
                         Object root_2 = (Object)adaptor.nil();
                         root_2 = (Object)adaptor.becomeRoot(stream_VAR.next(), root_2);
@@ -9977,7 +10126,7 @@ public class JSParser extends JSBaseParser {
 
                         adaptor.addChild(root_1, root_2);
                         }
-                        // JS.g:1553:51: ^( EXPR expression )
+                        // JS.g:1555:51: ^( EXPR expression )
                         {
                         Object root_2 = (Object)adaptor.nil();
                         root_2 = (Object)adaptor.becomeRoot(adaptor.create(EXPR, "EXPR"), root_2);
@@ -10000,12 +10149,12 @@ public class JSParser extends JSBaseParser {
                     }
                     break;
                 case 2 :
-                    // JS.g:1556:3: ( ( COMMA variableDeclarationNoIn )* semi1= SEMIC (ex1= expression )? semi2= SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( $semi1) ^( EXPR ( $ex1)? ) ^( $semi2) ^( EXPR ( $ex2)? ) ) )
+                    // JS.g:1558:3: ( ( COMMA variableDeclarationNoIn )* semi1= SEMIC (ex1= expression )? semi2= SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( $semi1) ^( EXPR ( $ex1)? ) ^( $semi2) ^( EXPR ( $ex2)? ) ) )
                     {
-                    // JS.g:1556:3: ( ( COMMA variableDeclarationNoIn )* semi1= SEMIC (ex1= expression )? semi2= SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( $semi1) ^( EXPR ( $ex1)? ) ^( $semi2) ^( EXPR ( $ex2)? ) ) )
-                    // JS.g:1557:4: ( COMMA variableDeclarationNoIn )* semi1= SEMIC (ex1= expression )? semi2= SEMIC (ex2= expression )?
+                    // JS.g:1558:3: ( ( COMMA variableDeclarationNoIn )* semi1= SEMIC (ex1= expression )? semi2= SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( $semi1) ^( EXPR ( $ex1)? ) ^( $semi2) ^( EXPR ( $ex2)? ) ) )
+                    // JS.g:1559:4: ( COMMA variableDeclarationNoIn )* semi1= SEMIC (ex1= expression )? semi2= SEMIC (ex2= expression )?
                     {
-                    // JS.g:1557:4: ( COMMA variableDeclarationNoIn )*
+                    // JS.g:1559:4: ( COMMA variableDeclarationNoIn )*
                     loop66:
                     do {
                         int alt66=2;
@@ -10018,13 +10167,13 @@ public class JSParser extends JSBaseParser {
 
                         switch (alt66) {
                     	case 1 :
-                    	    // JS.g:1557:6: COMMA variableDeclarationNoIn
+                    	    // JS.g:1559:6: COMMA variableDeclarationNoIn
                     	    {
                     	    COMMA285=(Token)input.LT(1);
-                    	    match(input,COMMA,FOLLOW_COMMA_in_forControlVar6343); 
+                    	    match(input,COMMA,FOLLOW_COMMA_in_forControlVar6366); 
                     	    stream_COMMA.add(COMMA285);
 
-                    	    pushFollow(FOLLOW_variableDeclarationNoIn_in_forControlVar6345);
+                    	    pushFollow(FOLLOW_variableDeclarationNoIn_in_forControlVar6368);
                     	    variableDeclarationNoIn286=variableDeclarationNoIn();
                     	    _fsp--;
 
@@ -10039,10 +10188,10 @@ public class JSParser extends JSBaseParser {
                     } while (true);
 
                     semi1=(Token)input.LT(1);
-                    match(input,SEMIC,FOLLOW_SEMIC_in_forControlVar6352); 
+                    match(input,SEMIC,FOLLOW_SEMIC_in_forControlVar6375); 
                     stream_SEMIC.add(semi1);
 
-                    // JS.g:1557:54: (ex1= expression )?
+                    // JS.g:1559:54: (ex1= expression )?
                     int alt67=2;
                     int LA67_0 = input.LA(1);
 
@@ -10057,9 +10206,9 @@ public class JSParser extends JSBaseParser {
                     }
                     switch (alt67) {
                         case 1 :
-                            // JS.g:1557:54: ex1= expression
+                            // JS.g:1559:54: ex1= expression
                             {
-                            pushFollow(FOLLOW_expression_in_forControlVar6356);
+                            pushFollow(FOLLOW_expression_in_forControlVar6379);
                             ex1=expression();
                             _fsp--;
 
@@ -10071,10 +10220,10 @@ public class JSParser extends JSBaseParser {
                     }
 
                     semi2=(Token)input.LT(1);
-                    match(input,SEMIC,FOLLOW_SEMIC_in_forControlVar6361); 
+                    match(input,SEMIC,FOLLOW_SEMIC_in_forControlVar6384); 
                     stream_SEMIC.add(semi2);
 
-                    // JS.g:1557:82: (ex2= expression )?
+                    // JS.g:1559:82: (ex2= expression )?
                     int alt68=2;
                     int LA68_0 = input.LA(1);
 
@@ -10089,9 +10238,9 @@ public class JSParser extends JSBaseParser {
                     }
                     switch (alt68) {
                         case 1 :
-                            // JS.g:1557:82: ex2= expression
+                            // JS.g:1559:82: ex2= expression
                             {
-                            pushFollow(FOLLOW_expression_in_forControlVar6365);
+                            pushFollow(FOLLOW_expression_in_forControlVar6388);
                             ex2=expression();
                             _fsp--;
 
@@ -10104,7 +10253,7 @@ public class JSParser extends JSBaseParser {
 
 
                     // AST REWRITE
-                    // elements: ex1, semi2, semi1, variableDeclarationNoIn, VAR, ex2
+                    // elements: semi2, semi1, VAR, variableDeclarationNoIn, ex2, ex1
                     // token labels: semi2, semi1
                     // rule labels: retval, ex2, ex1
                     // token list labels: 
@@ -10117,14 +10266,14 @@ public class JSParser extends JSBaseParser {
                     RewriteRuleSubtreeStream stream_ex1=new RewriteRuleSubtreeStream(adaptor,"token ex1",ex1!=null?ex1.tree:null);
 
                     root_0 = (Object)adaptor.nil();
-                    // 1558:4: -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( $semi1) ^( EXPR ( $ex1)? ) ^( $semi2) ^( EXPR ( $ex2)? ) )
+                    // 1560:4: -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( $semi1) ^( EXPR ( $ex1)? ) ^( $semi2) ^( EXPR ( $ex2)? ) )
                     {
-                        // JS.g:1558:7: ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( $semi1) ^( EXPR ( $ex1)? ) ^( $semi2) ^( EXPR ( $ex2)? ) )
+                        // JS.g:1560:7: ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( $semi1) ^( EXPR ( $ex1)? ) ^( $semi2) ^( EXPR ( $ex2)? ) )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot(adaptor.create(FORSTEP, "FORSTEP"), root_1);
 
-                        // JS.g:1558:18: ^( VAR ( variableDeclarationNoIn )+ )
+                        // JS.g:1560:18: ^( VAR ( variableDeclarationNoIn )+ )
                         {
                         Object root_2 = (Object)adaptor.nil();
                         root_2 = (Object)adaptor.becomeRoot(stream_VAR.next(), root_2);
@@ -10140,19 +10289,19 @@ public class JSParser extends JSBaseParser {
 
                         adaptor.addChild(root_1, root_2);
                         }
-                        // JS.g:1558:52: ^( $semi1)
+                        // JS.g:1560:52: ^( $semi1)
                         {
                         Object root_2 = (Object)adaptor.nil();
                         root_2 = (Object)adaptor.becomeRoot(stream_semi1.next(), root_2);
 
                         adaptor.addChild(root_1, root_2);
                         }
-                        // JS.g:1558:64: ^( EXPR ( $ex1)? )
+                        // JS.g:1560:64: ^( EXPR ( $ex1)? )
                         {
                         Object root_2 = (Object)adaptor.nil();
                         root_2 = (Object)adaptor.becomeRoot(adaptor.create(EXPR, "EXPR"), root_2);
 
-                        // JS.g:1558:72: ( $ex1)?
+                        // JS.g:1560:72: ( $ex1)?
                         if ( stream_ex1.hasNext() ) {
                             adaptor.addChild(root_2, stream_ex1.next());
 
@@ -10161,19 +10310,19 @@ public class JSParser extends JSBaseParser {
 
                         adaptor.addChild(root_1, root_2);
                         }
-                        // JS.g:1558:80: ^( $semi2)
+                        // JS.g:1560:80: ^( $semi2)
                         {
                         Object root_2 = (Object)adaptor.nil();
                         root_2 = (Object)adaptor.becomeRoot(stream_semi2.next(), root_2);
 
                         adaptor.addChild(root_1, root_2);
                         }
-                        // JS.g:1558:92: ^( EXPR ( $ex2)? )
+                        // JS.g:1560:92: ^( EXPR ( $ex2)? )
                         {
                         Object root_2 = (Object)adaptor.nil();
                         root_2 = (Object)adaptor.becomeRoot(adaptor.create(EXPR, "EXPR"), root_2);
 
-                        // JS.g:1558:100: ( $ex2)?
+                        // JS.g:1560:100: ( $ex2)?
                         if ( stream_ex2.hasNext() ) {
                             adaptor.addChild(root_2, stream_ex2.next());
 
@@ -10226,7 +10375,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start forControlExpression
-    // JS.g:1563:1: forControlExpression : ex1= expressionNoIn ({...}? ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) ) | (semi1= SEMIC (ex2= expression )? semi2= SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( $semi1) ^( EXPR ( $ex2)? ) ^( $semi2) ^( EXPR ( $ex3)? ) ) ) ) ;
+    // JS.g:1565:1: forControlExpression : ex1= expressionNoIn ({...}? ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) ) | (semi1= SEMIC (ex2= expression )? semi2= SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( $semi1) ^( EXPR ( $ex2)? ) ^( $semi2) ^( EXPR ( $ex3)? ) ) ) ) ;
     public final forControlExpression_return forControlExpression() throws RecognitionException {
         forControlExpression_return retval = new forControlExpression_return();
         retval.start = input.LT(1);
@@ -10254,15 +10403,15 @@ public class JSParser extends JSBaseParser {
         	Object[] isLhs = new Object[1];
 
         try {
-            // JS.g:1568:2: (ex1= expressionNoIn ({...}? ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) ) | (semi1= SEMIC (ex2= expression )? semi2= SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( $semi1) ^( EXPR ( $ex2)? ) ^( $semi2) ^( EXPR ( $ex3)? ) ) ) ) )
-            // JS.g:1568:4: ex1= expressionNoIn ({...}? ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) ) | (semi1= SEMIC (ex2= expression )? semi2= SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( $semi1) ^( EXPR ( $ex2)? ) ^( $semi2) ^( EXPR ( $ex3)? ) ) ) )
+            // JS.g:1570:2: (ex1= expressionNoIn ({...}? ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) ) | (semi1= SEMIC (ex2= expression )? semi2= SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( $semi1) ^( EXPR ( $ex2)? ) ^( $semi2) ^( EXPR ( $ex3)? ) ) ) ) )
+            // JS.g:1570:4: ex1= expressionNoIn ({...}? ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) ) | (semi1= SEMIC (ex2= expression )? semi2= SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( $semi1) ^( EXPR ( $ex2)? ) ^( $semi2) ^( EXPR ( $ex3)? ) ) ) )
             {
-            pushFollow(FOLLOW_expressionNoIn_in_forControlExpression6445);
+            pushFollow(FOLLOW_expressionNoIn_in_forControlExpression6468);
             ex1=expressionNoIn();
             _fsp--;
 
             stream_expressionNoIn.add(ex1.getTree());
-            // JS.g:1569:2: ({...}? ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) ) | (semi1= SEMIC (ex2= expression )? semi2= SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( $semi1) ^( EXPR ( $ex2)? ) ^( $semi2) ^( EXPR ( $ex3)? ) ) ) )
+            // JS.g:1571:2: ({...}? ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) ) | (semi1= SEMIC (ex2= expression )? semi2= SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( $semi1) ^( EXPR ( $ex2)? ) ^( $semi2) ^( EXPR ( $ex3)? ) ) ) )
             int alt72=2;
             int LA72_0 = input.LA(1);
 
@@ -10274,25 +10423,25 @@ public class JSParser extends JSBaseParser {
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("1569:2: ({...}? ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) ) | (semi1= SEMIC (ex2= expression )? semi2= SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( $semi1) ^( EXPR ( $ex2)? ) ^( $semi2) ^( EXPR ( $ex3)? ) ) ) )", 72, 0, input);
+                    new NoViableAltException("1571:2: ({...}? ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) ) | (semi1= SEMIC (ex2= expression )? semi2= SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( $semi1) ^( EXPR ( $ex2)? ) ^( $semi2) ^( EXPR ( $ex3)? ) ) ) )", 72, 0, input);
 
                 throw nvae;
             }
             switch (alt72) {
                 case 1 :
-                    // JS.g:1570:3: {...}? ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) )
+                    // JS.g:1572:3: {...}? ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) )
                     {
                     if ( !( isLeftHandSideIn(ex1, isLhs) ) ) {
                         throw new FailedPredicateException(input, "forControlExpression", " isLeftHandSideIn(ex1, isLhs) ");
                     }
-                    // JS.g:1570:37: ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) )
-                    // JS.g:1571:4: IN ex2= expression
+                    // JS.g:1572:37: ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) )
+                    // JS.g:1573:4: IN ex2= expression
                     {
                     IN287=(Token)input.LT(1);
-                    match(input,IN,FOLLOW_IN_in_forControlExpression6460); 
+                    match(input,IN,FOLLOW_IN_in_forControlExpression6483); 
                     stream_IN.add(IN287);
 
-                    pushFollow(FOLLOW_expression_in_forControlExpression6464);
+                    pushFollow(FOLLOW_expression_in_forControlExpression6487);
                     ex2=expression();
                     _fsp--;
 
@@ -10310,14 +10459,14 @@ public class JSParser extends JSBaseParser {
                     RewriteRuleSubtreeStream stream_ex1=new RewriteRuleSubtreeStream(adaptor,"token ex1",ex1!=null?ex1.tree:null);
 
                     root_0 = (Object)adaptor.nil();
-                    // 1572:4: -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) )
+                    // 1574:4: -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) )
                     {
-                        // JS.g:1572:7: ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) )
+                        // JS.g:1574:7: ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot(adaptor.create(FORITER, "FORITER"), root_1);
 
-                        // JS.g:1572:18: ^( EXPR $ex1)
+                        // JS.g:1574:18: ^( EXPR $ex1)
                         {
                         Object root_2 = (Object)adaptor.nil();
                         root_2 = (Object)adaptor.becomeRoot(adaptor.create(EXPR, "EXPR"), root_2);
@@ -10326,7 +10475,7 @@ public class JSParser extends JSBaseParser {
 
                         adaptor.addChild(root_1, root_2);
                         }
-                        // JS.g:1572:33: ^( EXPR $ex2)
+                        // JS.g:1574:33: ^( EXPR $ex2)
                         {
                         Object root_2 = (Object)adaptor.nil();
                         root_2 = (Object)adaptor.becomeRoot(adaptor.create(EXPR, "EXPR"), root_2);
@@ -10349,16 +10498,16 @@ public class JSParser extends JSBaseParser {
                     }
                     break;
                 case 2 :
-                    // JS.g:1575:3: (semi1= SEMIC (ex2= expression )? semi2= SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( $semi1) ^( EXPR ( $ex2)? ) ^( $semi2) ^( EXPR ( $ex3)? ) ) )
+                    // JS.g:1577:3: (semi1= SEMIC (ex2= expression )? semi2= SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( $semi1) ^( EXPR ( $ex2)? ) ^( $semi2) ^( EXPR ( $ex3)? ) ) )
                     {
-                    // JS.g:1575:3: (semi1= SEMIC (ex2= expression )? semi2= SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( $semi1) ^( EXPR ( $ex2)? ) ^( $semi2) ^( EXPR ( $ex3)? ) ) )
-                    // JS.g:1576:4: semi1= SEMIC (ex2= expression )? semi2= SEMIC (ex3= expression )?
+                    // JS.g:1577:3: (semi1= SEMIC (ex2= expression )? semi2= SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( $semi1) ^( EXPR ( $ex2)? ) ^( $semi2) ^( EXPR ( $ex3)? ) ) )
+                    // JS.g:1578:4: semi1= SEMIC (ex2= expression )? semi2= SEMIC (ex3= expression )?
                     {
                     semi1=(Token)input.LT(1);
-                    match(input,SEMIC,FOLLOW_SEMIC_in_forControlExpression6512); 
+                    match(input,SEMIC,FOLLOW_SEMIC_in_forControlExpression6535); 
                     stream_SEMIC.add(semi1);
 
-                    // JS.g:1576:19: (ex2= expression )?
+                    // JS.g:1578:19: (ex2= expression )?
                     int alt70=2;
                     int LA70_0 = input.LA(1);
 
@@ -10373,9 +10522,9 @@ public class JSParser extends JSBaseParser {
                     }
                     switch (alt70) {
                         case 1 :
-                            // JS.g:1576:19: ex2= expression
+                            // JS.g:1578:19: ex2= expression
                             {
-                            pushFollow(FOLLOW_expression_in_forControlExpression6516);
+                            pushFollow(FOLLOW_expression_in_forControlExpression6539);
                             ex2=expression();
                             _fsp--;
 
@@ -10387,10 +10536,10 @@ public class JSParser extends JSBaseParser {
                     }
 
                     semi2=(Token)input.LT(1);
-                    match(input,SEMIC,FOLLOW_SEMIC_in_forControlExpression6521); 
+                    match(input,SEMIC,FOLLOW_SEMIC_in_forControlExpression6544); 
                     stream_SEMIC.add(semi2);
 
-                    // JS.g:1576:47: (ex3= expression )?
+                    // JS.g:1578:47: (ex3= expression )?
                     int alt71=2;
                     int LA71_0 = input.LA(1);
 
@@ -10405,9 +10554,9 @@ public class JSParser extends JSBaseParser {
                     }
                     switch (alt71) {
                         case 1 :
-                            // JS.g:1576:47: ex3= expression
+                            // JS.g:1578:47: ex3= expression
                             {
-                            pushFollow(FOLLOW_expression_in_forControlExpression6525);
+                            pushFollow(FOLLOW_expression_in_forControlExpression6548);
                             ex3=expression();
                             _fsp--;
 
@@ -10420,7 +10569,7 @@ public class JSParser extends JSBaseParser {
 
 
                     // AST REWRITE
-                    // elements: ex1, semi2, ex2, semi1, ex3
+                    // elements: semi2, semi1, ex1, ex2, ex3
                     // token labels: semi2, semi1
                     // rule labels: retval, ex3, ex2, ex1
                     // token list labels: 
@@ -10434,14 +10583,14 @@ public class JSParser extends JSBaseParser {
                     RewriteRuleSubtreeStream stream_ex1=new RewriteRuleSubtreeStream(adaptor,"token ex1",ex1!=null?ex1.tree:null);
 
                     root_0 = (Object)adaptor.nil();
-                    // 1577:4: -> ^( FORSTEP ^( EXPR $ex1) ^( $semi1) ^( EXPR ( $ex2)? ) ^( $semi2) ^( EXPR ( $ex3)? ) )
+                    // 1579:4: -> ^( FORSTEP ^( EXPR $ex1) ^( $semi1) ^( EXPR ( $ex2)? ) ^( $semi2) ^( EXPR ( $ex3)? ) )
                     {
-                        // JS.g:1577:7: ^( FORSTEP ^( EXPR $ex1) ^( $semi1) ^( EXPR ( $ex2)? ) ^( $semi2) ^( EXPR ( $ex3)? ) )
+                        // JS.g:1579:7: ^( FORSTEP ^( EXPR $ex1) ^( $semi1) ^( EXPR ( $ex2)? ) ^( $semi2) ^( EXPR ( $ex3)? ) )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot(adaptor.create(FORSTEP, "FORSTEP"), root_1);
 
-                        // JS.g:1577:18: ^( EXPR $ex1)
+                        // JS.g:1579:18: ^( EXPR $ex1)
                         {
                         Object root_2 = (Object)adaptor.nil();
                         root_2 = (Object)adaptor.becomeRoot(adaptor.create(EXPR, "EXPR"), root_2);
@@ -10450,19 +10599,19 @@ public class JSParser extends JSBaseParser {
 
                         adaptor.addChild(root_1, root_2);
                         }
-                        // JS.g:1577:33: ^( $semi1)
+                        // JS.g:1579:33: ^( $semi1)
                         {
                         Object root_2 = (Object)adaptor.nil();
                         root_2 = (Object)adaptor.becomeRoot(stream_semi1.next(), root_2);
 
                         adaptor.addChild(root_1, root_2);
                         }
-                        // JS.g:1577:45: ^( EXPR ( $ex2)? )
+                        // JS.g:1579:45: ^( EXPR ( $ex2)? )
                         {
                         Object root_2 = (Object)adaptor.nil();
                         root_2 = (Object)adaptor.becomeRoot(adaptor.create(EXPR, "EXPR"), root_2);
 
-                        // JS.g:1577:53: ( $ex2)?
+                        // JS.g:1579:53: ( $ex2)?
                         if ( stream_ex2.hasNext() ) {
                             adaptor.addChild(root_2, stream_ex2.next());
 
@@ -10471,19 +10620,19 @@ public class JSParser extends JSBaseParser {
 
                         adaptor.addChild(root_1, root_2);
                         }
-                        // JS.g:1577:61: ^( $semi2)
+                        // JS.g:1579:61: ^( $semi2)
                         {
                         Object root_2 = (Object)adaptor.nil();
                         root_2 = (Object)adaptor.becomeRoot(stream_semi2.next(), root_2);
 
                         adaptor.addChild(root_1, root_2);
                         }
-                        // JS.g:1577:73: ^( EXPR ( $ex3)? )
+                        // JS.g:1579:73: ^( EXPR ( $ex3)? )
                         {
                         Object root_2 = (Object)adaptor.nil();
                         root_2 = (Object)adaptor.becomeRoot(adaptor.create(EXPR, "EXPR"), root_2);
 
-                        // JS.g:1577:81: ( $ex3)?
+                        // JS.g:1579:81: ( $ex3)?
                         if ( stream_ex3.hasNext() ) {
                             adaptor.addChild(root_2, stream_ex3.next());
 
@@ -10536,7 +10685,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start forControlSemic
-    // JS.g:1582:1: forControlSemic : semi1= SEMIC (ex1= expression )? semi2= SEMIC (ex2= expression )? -> ^( FORSTEP ^( EXPR ) ^( $semi1) ^( EXPR ( $ex1)? ) ^( $semi2) ^( EXPR ( $ex2)? ) ) ;
+    // JS.g:1584:1: forControlSemic : semi1= SEMIC (ex1= expression )? semi2= SEMIC (ex2= expression )? -> ^( FORSTEP ^( EXPR ) ^( $semi1) ^( EXPR ( $ex1)? ) ^( $semi2) ^( EXPR ( $ex2)? ) ) ;
     public final forControlSemic_return forControlSemic() throws RecognitionException {
         forControlSemic_return retval = new forControlSemic_return();
         retval.start = input.LT(1);
@@ -10555,14 +10704,14 @@ public class JSParser extends JSBaseParser {
         RewriteRuleTokenStream stream_SEMIC=new RewriteRuleTokenStream(adaptor,"token SEMIC");
         RewriteRuleSubtreeStream stream_expression=new RewriteRuleSubtreeStream(adaptor,"rule expression");
         try {
-            // JS.g:1583:2: (semi1= SEMIC (ex1= expression )? semi2= SEMIC (ex2= expression )? -> ^( FORSTEP ^( EXPR ) ^( $semi1) ^( EXPR ( $ex1)? ) ^( $semi2) ^( EXPR ( $ex2)? ) ) )
-            // JS.g:1583:4: semi1= SEMIC (ex1= expression )? semi2= SEMIC (ex2= expression )?
+            // JS.g:1585:2: (semi1= SEMIC (ex1= expression )? semi2= SEMIC (ex2= expression )? -> ^( FORSTEP ^( EXPR ) ^( $semi1) ^( EXPR ( $ex1)? ) ^( $semi2) ^( EXPR ( $ex2)? ) ) )
+            // JS.g:1585:4: semi1= SEMIC (ex1= expression )? semi2= SEMIC (ex2= expression )?
             {
             semi1=(Token)input.LT(1);
-            match(input,SEMIC,FOLLOW_SEMIC_in_forControlSemic6600); 
+            match(input,SEMIC,FOLLOW_SEMIC_in_forControlSemic6623); 
             stream_SEMIC.add(semi1);
 
-            // JS.g:1583:19: (ex1= expression )?
+            // JS.g:1585:19: (ex1= expression )?
             int alt73=2;
             int LA73_0 = input.LA(1);
 
@@ -10577,9 +10726,9 @@ public class JSParser extends JSBaseParser {
             }
             switch (alt73) {
                 case 1 :
-                    // JS.g:1583:19: ex1= expression
+                    // JS.g:1585:19: ex1= expression
                     {
-                    pushFollow(FOLLOW_expression_in_forControlSemic6604);
+                    pushFollow(FOLLOW_expression_in_forControlSemic6627);
                     ex1=expression();
                     _fsp--;
 
@@ -10591,10 +10740,10 @@ public class JSParser extends JSBaseParser {
             }
 
             semi2=(Token)input.LT(1);
-            match(input,SEMIC,FOLLOW_SEMIC_in_forControlSemic6609); 
+            match(input,SEMIC,FOLLOW_SEMIC_in_forControlSemic6632); 
             stream_SEMIC.add(semi2);
 
-            // JS.g:1583:47: (ex2= expression )?
+            // JS.g:1585:47: (ex2= expression )?
             int alt74=2;
             int LA74_0 = input.LA(1);
 
@@ -10609,9 +10758,9 @@ public class JSParser extends JSBaseParser {
             }
             switch (alt74) {
                 case 1 :
-                    // JS.g:1583:47: ex2= expression
+                    // JS.g:1585:47: ex2= expression
                     {
-                    pushFollow(FOLLOW_expression_in_forControlSemic6613);
+                    pushFollow(FOLLOW_expression_in_forControlSemic6636);
                     ex2=expression();
                     _fsp--;
 
@@ -10624,7 +10773,7 @@ public class JSParser extends JSBaseParser {
 
 
             // AST REWRITE
-            // elements: ex2, semi1, semi2, ex1
+            // elements: ex1, semi1, ex2, semi2
             // token labels: semi2, semi1
             // rule labels: retval, ex2, ex1
             // token list labels: 
@@ -10637,33 +10786,33 @@ public class JSParser extends JSBaseParser {
             RewriteRuleSubtreeStream stream_ex1=new RewriteRuleSubtreeStream(adaptor,"token ex1",ex1!=null?ex1.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 1584:2: -> ^( FORSTEP ^( EXPR ) ^( $semi1) ^( EXPR ( $ex1)? ) ^( $semi2) ^( EXPR ( $ex2)? ) )
+            // 1586:2: -> ^( FORSTEP ^( EXPR ) ^( $semi1) ^( EXPR ( $ex1)? ) ^( $semi2) ^( EXPR ( $ex2)? ) )
             {
-                // JS.g:1584:5: ^( FORSTEP ^( EXPR ) ^( $semi1) ^( EXPR ( $ex1)? ) ^( $semi2) ^( EXPR ( $ex2)? ) )
+                // JS.g:1586:5: ^( FORSTEP ^( EXPR ) ^( $semi1) ^( EXPR ( $ex1)? ) ^( $semi2) ^( EXPR ( $ex2)? ) )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(adaptor.create(FORSTEP, "FORSTEP"), root_1);
 
-                // JS.g:1584:16: ^( EXPR )
+                // JS.g:1586:16: ^( EXPR )
                 {
                 Object root_2 = (Object)adaptor.nil();
                 root_2 = (Object)adaptor.becomeRoot(adaptor.create(EXPR, "EXPR"), root_2);
 
                 adaptor.addChild(root_1, root_2);
                 }
-                // JS.g:1584:26: ^( $semi1)
+                // JS.g:1586:26: ^( $semi1)
                 {
                 Object root_2 = (Object)adaptor.nil();
                 root_2 = (Object)adaptor.becomeRoot(stream_semi1.next(), root_2);
 
                 adaptor.addChild(root_1, root_2);
                 }
-                // JS.g:1584:38: ^( EXPR ( $ex1)? )
+                // JS.g:1586:38: ^( EXPR ( $ex1)? )
                 {
                 Object root_2 = (Object)adaptor.nil();
                 root_2 = (Object)adaptor.becomeRoot(adaptor.create(EXPR, "EXPR"), root_2);
 
-                // JS.g:1584:46: ( $ex1)?
+                // JS.g:1586:46: ( $ex1)?
                 if ( stream_ex1.hasNext() ) {
                     adaptor.addChild(root_2, stream_ex1.next());
 
@@ -10672,19 +10821,19 @@ public class JSParser extends JSBaseParser {
 
                 adaptor.addChild(root_1, root_2);
                 }
-                // JS.g:1584:54: ^( $semi2)
+                // JS.g:1586:54: ^( $semi2)
                 {
                 Object root_2 = (Object)adaptor.nil();
                 root_2 = (Object)adaptor.becomeRoot(stream_semi2.next(), root_2);
 
                 adaptor.addChild(root_1, root_2);
                 }
-                // JS.g:1584:66: ^( EXPR ( $ex2)? )
+                // JS.g:1586:66: ^( EXPR ( $ex2)? )
                 {
                 Object root_2 = (Object)adaptor.nil();
                 root_2 = (Object)adaptor.becomeRoot(adaptor.create(EXPR, "EXPR"), root_2);
 
-                // JS.g:1584:74: ( $ex2)?
+                // JS.g:1586:74: ( $ex2)?
                 if ( stream_ex2.hasNext() ) {
                     adaptor.addChild(root_2, stream_ex2.next());
 
@@ -10728,7 +10877,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start continueStatement
-    // JS.g:1596:1: continueStatement : CONTINUE ( Identifier )? semic ;
+    // JS.g:1598:1: continueStatement : CONTINUE ( Identifier )? semic ;
     public final continueStatement_return continueStatement() throws RecognitionException {
         continueStatement_return retval = new continueStatement_return();
         retval.start = input.LT(1);
@@ -10744,18 +10893,18 @@ public class JSParser extends JSBaseParser {
         Object Identifier289_tree=null;
 
         try {
-            // JS.g:1597:2: ( CONTINUE ( Identifier )? semic )
-            // JS.g:1597:4: CONTINUE ( Identifier )? semic
+            // JS.g:1599:2: ( CONTINUE ( Identifier )? semic )
+            // JS.g:1599:4: CONTINUE ( Identifier )? semic
             {
             root_0 = (Object)adaptor.nil();
 
             CONTINUE288=(Token)input.LT(1);
-            match(input,CONTINUE,FOLLOW_CONTINUE_in_continueStatement6681); 
+            match(input,CONTINUE,FOLLOW_CONTINUE_in_continueStatement6704); 
             CONTINUE288_tree = (Object)adaptor.create(CONTINUE288);
             root_0 = (Object)adaptor.becomeRoot(CONTINUE288_tree, root_0);
 
              if (input.LA(1) == Identifier) promoteEOL(null); 
-            // JS.g:1597:67: ( Identifier )?
+            // JS.g:1599:67: ( Identifier )?
             int alt75=2;
             int LA75_0 = input.LA(1);
 
@@ -10764,10 +10913,10 @@ public class JSParser extends JSBaseParser {
             }
             switch (alt75) {
                 case 1 :
-                    // JS.g:1597:67: Identifier
+                    // JS.g:1599:67: Identifier
                     {
                     Identifier289=(Token)input.LT(1);
-                    match(input,Identifier,FOLLOW_Identifier_in_continueStatement6686); 
+                    match(input,Identifier,FOLLOW_Identifier_in_continueStatement6709); 
                     Identifier289_tree = (Object)adaptor.create(Identifier289);
                     adaptor.addChild(root_0, Identifier289_tree);
 
@@ -10777,7 +10926,7 @@ public class JSParser extends JSBaseParser {
 
             }
 
-            pushFollow(FOLLOW_semic_in_continueStatement6689);
+            pushFollow(FOLLOW_semic_in_continueStatement6712);
             semic290=semic();
             _fsp--;
 
@@ -10809,7 +10958,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start breakStatement
-    // JS.g:1609:1: breakStatement : BREAK ( Identifier )? semic ;
+    // JS.g:1611:1: breakStatement : BREAK ( Identifier )? semic ;
     public final breakStatement_return breakStatement() throws RecognitionException {
         breakStatement_return retval = new breakStatement_return();
         retval.start = input.LT(1);
@@ -10825,18 +10974,18 @@ public class JSParser extends JSBaseParser {
         Object Identifier292_tree=null;
 
         try {
-            // JS.g:1610:2: ( BREAK ( Identifier )? semic )
-            // JS.g:1610:4: BREAK ( Identifier )? semic
+            // JS.g:1612:2: ( BREAK ( Identifier )? semic )
+            // JS.g:1612:4: BREAK ( Identifier )? semic
             {
             root_0 = (Object)adaptor.nil();
 
             BREAK291=(Token)input.LT(1);
-            match(input,BREAK,FOLLOW_BREAK_in_breakStatement6708); 
+            match(input,BREAK,FOLLOW_BREAK_in_breakStatement6731); 
             BREAK291_tree = (Object)adaptor.create(BREAK291);
             root_0 = (Object)adaptor.becomeRoot(BREAK291_tree, root_0);
 
              if (input.LA(1) == Identifier) promoteEOL(null); 
-            // JS.g:1610:64: ( Identifier )?
+            // JS.g:1612:64: ( Identifier )?
             int alt76=2;
             int LA76_0 = input.LA(1);
 
@@ -10845,10 +10994,10 @@ public class JSParser extends JSBaseParser {
             }
             switch (alt76) {
                 case 1 :
-                    // JS.g:1610:64: Identifier
+                    // JS.g:1612:64: Identifier
                     {
                     Identifier292=(Token)input.LT(1);
-                    match(input,Identifier,FOLLOW_Identifier_in_breakStatement6713); 
+                    match(input,Identifier,FOLLOW_Identifier_in_breakStatement6736); 
                     Identifier292_tree = (Object)adaptor.create(Identifier292);
                     adaptor.addChild(root_0, Identifier292_tree);
 
@@ -10858,7 +11007,7 @@ public class JSParser extends JSBaseParser {
 
             }
 
-            pushFollow(FOLLOW_semic_in_breakStatement6716);
+            pushFollow(FOLLOW_semic_in_breakStatement6739);
             semic293=semic();
             _fsp--;
 
@@ -10890,7 +11039,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start returnStatement
-    // JS.g:1630:1: returnStatement : RETURN ( expression )? semic ;
+    // JS.g:1632:1: returnStatement : RETURN ( expression )? semic ;
     public final returnStatement_return returnStatement() throws RecognitionException {
         returnStatement_return retval = new returnStatement_return();
         retval.start = input.LT(1);
@@ -10906,18 +11055,18 @@ public class JSParser extends JSBaseParser {
         Object RETURN294_tree=null;
 
         try {
-            // JS.g:1631:2: ( RETURN ( expression )? semic )
-            // JS.g:1631:4: RETURN ( expression )? semic
+            // JS.g:1633:2: ( RETURN ( expression )? semic )
+            // JS.g:1633:4: RETURN ( expression )? semic
             {
             root_0 = (Object)adaptor.nil();
 
             RETURN294=(Token)input.LT(1);
-            match(input,RETURN,FOLLOW_RETURN_in_returnStatement6735); 
+            match(input,RETURN,FOLLOW_RETURN_in_returnStatement6758); 
             RETURN294_tree = (Object)adaptor.create(RETURN294);
             root_0 = (Object)adaptor.becomeRoot(RETURN294_tree, root_0);
 
              promoteEOL(null); 
-            // JS.g:1631:34: ( expression )?
+            // JS.g:1633:34: ( expression )?
             int alt77=2;
             int LA77_0 = input.LA(1);
 
@@ -10932,9 +11081,9 @@ public class JSParser extends JSBaseParser {
             }
             switch (alt77) {
                 case 1 :
-                    // JS.g:1631:34: expression
+                    // JS.g:1633:34: expression
                     {
-                    pushFollow(FOLLOW_expression_in_returnStatement6740);
+                    pushFollow(FOLLOW_expression_in_returnStatement6763);
                     expression295=expression();
                     _fsp--;
 
@@ -10945,7 +11094,7 @@ public class JSParser extends JSBaseParser {
 
             }
 
-            pushFollow(FOLLOW_semic_in_returnStatement6743);
+            pushFollow(FOLLOW_semic_in_returnStatement6766);
             semic296=semic();
             _fsp--;
 
@@ -10977,7 +11126,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start withStatement
-    // JS.g:1638:1: withStatement : WITH LPAREN expression RPAREN statement ;
+    // JS.g:1640:1: withStatement : WITH LPAREN expression RPAREN statement ;
     public final withStatement_return withStatement() throws RecognitionException {
         withStatement_return retval = new withStatement_return();
         retval.start = input.LT(1);
@@ -10997,26 +11146,26 @@ public class JSParser extends JSBaseParser {
         Object RPAREN300_tree=null;
 
         try {
-            // JS.g:1639:2: ( WITH LPAREN expression RPAREN statement )
-            // JS.g:1639:4: WITH LPAREN expression RPAREN statement
+            // JS.g:1641:2: ( WITH LPAREN expression RPAREN statement )
+            // JS.g:1641:4: WITH LPAREN expression RPAREN statement
             {
             root_0 = (Object)adaptor.nil();
 
             WITH297=(Token)input.LT(1);
-            match(input,WITH,FOLLOW_WITH_in_withStatement6760); 
+            match(input,WITH,FOLLOW_WITH_in_withStatement6783); 
             WITH297_tree = (Object)adaptor.create(WITH297);
             root_0 = (Object)adaptor.becomeRoot(WITH297_tree, root_0);
 
             LPAREN298=(Token)input.LT(1);
-            match(input,LPAREN,FOLLOW_LPAREN_in_withStatement6763); 
-            pushFollow(FOLLOW_expression_in_withStatement6766);
+            match(input,LPAREN,FOLLOW_LPAREN_in_withStatement6786); 
+            pushFollow(FOLLOW_expression_in_withStatement6789);
             expression299=expression();
             _fsp--;
 
             adaptor.addChild(root_0, expression299.getTree());
             RPAREN300=(Token)input.LT(1);
-            match(input,RPAREN,FOLLOW_RPAREN_in_withStatement6768); 
-            pushFollow(FOLLOW_statement_in_withStatement6771);
+            match(input,RPAREN,FOLLOW_RPAREN_in_withStatement6791); 
+            pushFollow(FOLLOW_statement_in_withStatement6794);
             statement301=statement();
             _fsp--;
 
@@ -11049,7 +11198,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start switchStatement
-    // JS.g:1646:1: switchStatement : SWITCH LPAREN expression RPAREN LBRACE ( defaultClause | caseClause )* RBRACE -> ^( SWITCH expression ( defaultClause )* ( caseClause )* ) ;
+    // JS.g:1648:1: switchStatement : SWITCH LPAREN expression RPAREN LBRACE ( defaultClause | caseClause )* RBRACE -> ^( SWITCH expression ( defaultClause )* ( caseClause )* ) ;
     public final switchStatement_return switchStatement() throws RecognitionException {
         switchStatement_return retval = new switchStatement_return();
         retval.start = input.LT(1);
@@ -11082,31 +11231,31 @@ public class JSParser extends JSBaseParser {
         RewriteRuleSubtreeStream stream_caseClause=new RewriteRuleSubtreeStream(adaptor,"rule caseClause");
         RewriteRuleSubtreeStream stream_defaultClause=new RewriteRuleSubtreeStream(adaptor,"rule defaultClause");
         try {
-            // JS.g:1647:2: ( SWITCH LPAREN expression RPAREN LBRACE ( defaultClause | caseClause )* RBRACE -> ^( SWITCH expression ( defaultClause )* ( caseClause )* ) )
-            // JS.g:1647:4: SWITCH LPAREN expression RPAREN LBRACE ( defaultClause | caseClause )* RBRACE
+            // JS.g:1649:2: ( SWITCH LPAREN expression RPAREN LBRACE ( defaultClause | caseClause )* RBRACE -> ^( SWITCH expression ( defaultClause )* ( caseClause )* ) )
+            // JS.g:1649:4: SWITCH LPAREN expression RPAREN LBRACE ( defaultClause | caseClause )* RBRACE
             {
             SWITCH302=(Token)input.LT(1);
-            match(input,SWITCH,FOLLOW_SWITCH_in_switchStatement6787); 
+            match(input,SWITCH,FOLLOW_SWITCH_in_switchStatement6810); 
             stream_SWITCH.add(SWITCH302);
 
             LPAREN303=(Token)input.LT(1);
-            match(input,LPAREN,FOLLOW_LPAREN_in_switchStatement6789); 
+            match(input,LPAREN,FOLLOW_LPAREN_in_switchStatement6812); 
             stream_LPAREN.add(LPAREN303);
 
-            pushFollow(FOLLOW_expression_in_switchStatement6791);
+            pushFollow(FOLLOW_expression_in_switchStatement6814);
             expression304=expression();
             _fsp--;
 
             stream_expression.add(expression304.getTree());
             RPAREN305=(Token)input.LT(1);
-            match(input,RPAREN,FOLLOW_RPAREN_in_switchStatement6793); 
+            match(input,RPAREN,FOLLOW_RPAREN_in_switchStatement6816); 
             stream_RPAREN.add(RPAREN305);
 
             LBRACE306=(Token)input.LT(1);
-            match(input,LBRACE,FOLLOW_LBRACE_in_switchStatement6795); 
+            match(input,LBRACE,FOLLOW_LBRACE_in_switchStatement6818); 
             stream_LBRACE.add(LBRACE306);
 
-            // JS.g:1647:43: ( defaultClause | caseClause )*
+            // JS.g:1649:43: ( defaultClause | caseClause )*
             loop78:
             do {
                 int alt78=3;
@@ -11122,9 +11271,9 @@ public class JSParser extends JSBaseParser {
 
                 switch (alt78) {
             	case 1 :
-            	    // JS.g:1647:45: defaultClause
+            	    // JS.g:1649:45: defaultClause
             	    {
-            	    pushFollow(FOLLOW_defaultClause_in_switchStatement6799);
+            	    pushFollow(FOLLOW_defaultClause_in_switchStatement6822);
             	    defaultClause307=defaultClause();
             	    _fsp--;
 
@@ -11133,9 +11282,9 @@ public class JSParser extends JSBaseParser {
             	    }
             	    break;
             	case 2 :
-            	    // JS.g:1647:61: caseClause
+            	    // JS.g:1649:61: caseClause
             	    {
-            	    pushFollow(FOLLOW_caseClause_in_switchStatement6803);
+            	    pushFollow(FOLLOW_caseClause_in_switchStatement6826);
             	    caseClause308=caseClause();
             	    _fsp--;
 
@@ -11150,12 +11299,12 @@ public class JSParser extends JSBaseParser {
             } while (true);
 
             RBRACE309=(Token)input.LT(1);
-            match(input,RBRACE,FOLLOW_RBRACE_in_switchStatement6808); 
+            match(input,RBRACE,FOLLOW_RBRACE_in_switchStatement6831); 
             stream_RBRACE.add(RBRACE309);
 
 
             // AST REWRITE
-            // elements: SWITCH, expression, caseClause, defaultClause
+            // elements: SWITCH, defaultClause, expression, caseClause
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -11164,21 +11313,21 @@ public class JSParser extends JSBaseParser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 1648:2: -> ^( SWITCH expression ( defaultClause )* ( caseClause )* )
+            // 1650:2: -> ^( SWITCH expression ( defaultClause )* ( caseClause )* )
             {
-                // JS.g:1648:5: ^( SWITCH expression ( defaultClause )* ( caseClause )* )
+                // JS.g:1650:5: ^( SWITCH expression ( defaultClause )* ( caseClause )* )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(stream_SWITCH.next(), root_1);
 
                 adaptor.addChild(root_1, stream_expression.next());
-                // JS.g:1648:26: ( defaultClause )*
+                // JS.g:1650:26: ( defaultClause )*
                 while ( stream_defaultClause.hasNext() ) {
                     adaptor.addChild(root_1, stream_defaultClause.next());
 
                 }
                 stream_defaultClause.reset();
-                // JS.g:1648:41: ( caseClause )*
+                // JS.g:1650:41: ( caseClause )*
                 while ( stream_caseClause.hasNext() ) {
                     adaptor.addChild(root_1, stream_caseClause.next());
 
@@ -11219,7 +11368,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start caseClause
-    // JS.g:1651:1: caseClause : CASE expression COLON ( statement )* ;
+    // JS.g:1653:1: caseClause : CASE expression COLON ( statement )* ;
     public final caseClause_return caseClause() throws RecognitionException {
         caseClause_return retval = new caseClause_return();
         retval.start = input.LT(1);
@@ -11237,24 +11386,24 @@ public class JSParser extends JSBaseParser {
         Object COLON312_tree=null;
 
         try {
-            // JS.g:1652:2: ( CASE expression COLON ( statement )* )
-            // JS.g:1652:4: CASE expression COLON ( statement )*
+            // JS.g:1654:2: ( CASE expression COLON ( statement )* )
+            // JS.g:1654:4: CASE expression COLON ( statement )*
             {
             root_0 = (Object)adaptor.nil();
 
             CASE310=(Token)input.LT(1);
-            match(input,CASE,FOLLOW_CASE_in_caseClause6836); 
+            match(input,CASE,FOLLOW_CASE_in_caseClause6859); 
             CASE310_tree = (Object)adaptor.create(CASE310);
             root_0 = (Object)adaptor.becomeRoot(CASE310_tree, root_0);
 
-            pushFollow(FOLLOW_expression_in_caseClause6839);
+            pushFollow(FOLLOW_expression_in_caseClause6862);
             expression311=expression();
             _fsp--;
 
             adaptor.addChild(root_0, expression311.getTree());
             COLON312=(Token)input.LT(1);
-            match(input,COLON,FOLLOW_COLON_in_caseClause6841); 
-            // JS.g:1652:28: ( statement )*
+            match(input,COLON,FOLLOW_COLON_in_caseClause6864); 
+            // JS.g:1654:28: ( statement )*
             loop79:
             do {
                 int alt79=2;
@@ -11282,9 +11431,9 @@ public class JSParser extends JSBaseParser {
 
                 switch (alt79) {
             	case 1 :
-            	    // JS.g:1652:28: statement
+            	    // JS.g:1654:28: statement
             	    {
-            	    pushFollow(FOLLOW_statement_in_caseClause6844);
+            	    pushFollow(FOLLOW_statement_in_caseClause6867);
             	    statement313=statement();
             	    _fsp--;
 
@@ -11326,7 +11475,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start defaultClause
-    // JS.g:1655:1: defaultClause : DEFAULT COLON ( statement )* ;
+    // JS.g:1657:1: defaultClause : DEFAULT COLON ( statement )* ;
     public final defaultClause_return defaultClause() throws RecognitionException {
         defaultClause_return retval = new defaultClause_return();
         retval.start = input.LT(1);
@@ -11342,19 +11491,19 @@ public class JSParser extends JSBaseParser {
         Object COLON315_tree=null;
 
         try {
-            // JS.g:1656:2: ( DEFAULT COLON ( statement )* )
-            // JS.g:1656:4: DEFAULT COLON ( statement )*
+            // JS.g:1658:2: ( DEFAULT COLON ( statement )* )
+            // JS.g:1658:4: DEFAULT COLON ( statement )*
             {
             root_0 = (Object)adaptor.nil();
 
             DEFAULT314=(Token)input.LT(1);
-            match(input,DEFAULT,FOLLOW_DEFAULT_in_defaultClause6857); 
+            match(input,DEFAULT,FOLLOW_DEFAULT_in_defaultClause6880); 
             DEFAULT314_tree = (Object)adaptor.create(DEFAULT314);
             root_0 = (Object)adaptor.becomeRoot(DEFAULT314_tree, root_0);
 
             COLON315=(Token)input.LT(1);
-            match(input,COLON,FOLLOW_COLON_in_defaultClause6860); 
-            // JS.g:1656:20: ( statement )*
+            match(input,COLON,FOLLOW_COLON_in_defaultClause6883); 
+            // JS.g:1658:20: ( statement )*
             loop80:
             do {
                 int alt80=2;
@@ -11382,9 +11531,9 @@ public class JSParser extends JSBaseParser {
 
                 switch (alt80) {
             	case 1 :
-            	    // JS.g:1656:20: statement
+            	    // JS.g:1658:20: statement
             	    {
-            	    pushFollow(FOLLOW_statement_in_defaultClause6863);
+            	    pushFollow(FOLLOW_statement_in_defaultClause6886);
             	    statement316=statement();
             	    _fsp--;
 
@@ -11426,7 +11575,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start labelledStatement
-    // JS.g:1663:1: labelledStatement : identifier COLON sourceElement -> ^( LABELLED identifier sourceElement ) ;
+    // JS.g:1665:1: labelledStatement : identifier COLON sourceElement -> ^( LABELLED identifier sourceElement ) ;
     public final labelledStatement_return labelledStatement() throws RecognitionException {
         labelledStatement_return retval = new labelledStatement_return();
         retval.start = input.LT(1);
@@ -11444,19 +11593,19 @@ public class JSParser extends JSBaseParser {
         RewriteRuleSubtreeStream stream_sourceElement=new RewriteRuleSubtreeStream(adaptor,"rule sourceElement");
         RewriteRuleSubtreeStream stream_identifier=new RewriteRuleSubtreeStream(adaptor,"rule identifier");
         try {
-            // JS.g:1664:2: ( identifier COLON sourceElement -> ^( LABELLED identifier sourceElement ) )
-            // JS.g:1664:4: identifier COLON sourceElement
+            // JS.g:1666:2: ( identifier COLON sourceElement -> ^( LABELLED identifier sourceElement ) )
+            // JS.g:1666:4: identifier COLON sourceElement
             {
-            pushFollow(FOLLOW_identifier_in_labelledStatement6880);
+            pushFollow(FOLLOW_identifier_in_labelledStatement6903);
             identifier317=identifier();
             _fsp--;
 
             stream_identifier.add(identifier317.getTree());
             COLON318=(Token)input.LT(1);
-            match(input,COLON,FOLLOW_COLON_in_labelledStatement6882); 
+            match(input,COLON,FOLLOW_COLON_in_labelledStatement6905); 
             stream_COLON.add(COLON318);
 
-            pushFollow(FOLLOW_sourceElement_in_labelledStatement6884);
+            pushFollow(FOLLOW_sourceElement_in_labelledStatement6907);
             sourceElement319=sourceElement();
             _fsp--;
 
@@ -11472,9 +11621,9 @@ public class JSParser extends JSBaseParser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 1665:2: -> ^( LABELLED identifier sourceElement )
+            // 1667:2: -> ^( LABELLED identifier sourceElement )
             {
-                // JS.g:1665:5: ^( LABELLED identifier sourceElement )
+                // JS.g:1667:5: ^( LABELLED identifier sourceElement )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(adaptor.create(LABELLED, "LABELLED"), root_1);
@@ -11516,7 +11665,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start throwStatement
-    // JS.g:1687:1: throwStatement : THROW expression semic ;
+    // JS.g:1689:1: throwStatement : THROW expression semic ;
     public final throwStatement_return throwStatement() throws RecognitionException {
         throwStatement_return retval = new throwStatement_return();
         retval.start = input.LT(1);
@@ -11532,23 +11681,23 @@ public class JSParser extends JSBaseParser {
         Object THROW320_tree=null;
 
         try {
-            // JS.g:1688:2: ( THROW expression semic )
-            // JS.g:1688:4: THROW expression semic
+            // JS.g:1690:2: ( THROW expression semic )
+            // JS.g:1690:4: THROW expression semic
             {
             root_0 = (Object)adaptor.nil();
 
             THROW320=(Token)input.LT(1);
-            match(input,THROW,FOLLOW_THROW_in_throwStatement6915); 
+            match(input,THROW,FOLLOW_THROW_in_throwStatement6938); 
             THROW320_tree = (Object)adaptor.create(THROW320);
             root_0 = (Object)adaptor.becomeRoot(THROW320_tree, root_0);
 
              promoteEOL(null); 
-            pushFollow(FOLLOW_expression_in_throwStatement6920);
+            pushFollow(FOLLOW_expression_in_throwStatement6943);
             expression321=expression();
             _fsp--;
 
             adaptor.addChild(root_0, expression321.getTree());
-            pushFollow(FOLLOW_semic_in_throwStatement6922);
+            pushFollow(FOLLOW_semic_in_throwStatement6945);
             semic322=semic();
             _fsp--;
 
@@ -11580,7 +11729,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start tryStatement
-    // JS.g:1695:1: tryStatement : TRY block ( ( catchClause )+ ( finallyClause )? | finallyClause ) ;
+    // JS.g:1697:1: tryStatement : TRY block ( ( catchClause )+ ( finallyClause )? | finallyClause ) ;
     public final tryStatement_return tryStatement() throws RecognitionException {
         tryStatement_return retval = new tryStatement_return();
         retval.start = input.LT(1);
@@ -11600,22 +11749,22 @@ public class JSParser extends JSBaseParser {
         Object TRY323_tree=null;
 
         try {
-            // JS.g:1696:2: ( TRY block ( ( catchClause )+ ( finallyClause )? | finallyClause ) )
-            // JS.g:1696:4: TRY block ( ( catchClause )+ ( finallyClause )? | finallyClause )
+            // JS.g:1698:2: ( TRY block ( ( catchClause )+ ( finallyClause )? | finallyClause ) )
+            // JS.g:1698:4: TRY block ( ( catchClause )+ ( finallyClause )? | finallyClause )
             {
             root_0 = (Object)adaptor.nil();
 
             TRY323=(Token)input.LT(1);
-            match(input,TRY,FOLLOW_TRY_in_tryStatement6939); 
+            match(input,TRY,FOLLOW_TRY_in_tryStatement6962); 
             TRY323_tree = (Object)adaptor.create(TRY323);
             root_0 = (Object)adaptor.becomeRoot(TRY323_tree, root_0);
 
-            pushFollow(FOLLOW_block_in_tryStatement6942);
+            pushFollow(FOLLOW_block_in_tryStatement6965);
             block324=block();
             _fsp--;
 
             adaptor.addChild(root_0, block324.getTree());
-            // JS.g:1696:15: ( ( catchClause )+ ( finallyClause )? | finallyClause )
+            // JS.g:1698:15: ( ( catchClause )+ ( finallyClause )? | finallyClause )
             int alt83=2;
             int LA83_0 = input.LA(1);
 
@@ -11627,15 +11776,15 @@ public class JSParser extends JSBaseParser {
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("1696:15: ( ( catchClause )+ ( finallyClause )? | finallyClause )", 83, 0, input);
+                    new NoViableAltException("1698:15: ( ( catchClause )+ ( finallyClause )? | finallyClause )", 83, 0, input);
 
                 throw nvae;
             }
             switch (alt83) {
                 case 1 :
-                    // JS.g:1696:17: ( catchClause )+ ( finallyClause )?
+                    // JS.g:1698:17: ( catchClause )+ ( finallyClause )?
                     {
-                    // JS.g:1696:17: ( catchClause )+
+                    // JS.g:1698:17: ( catchClause )+
                     int cnt81=0;
                     loop81:
                     do {
@@ -11649,9 +11798,9 @@ public class JSParser extends JSBaseParser {
 
                         switch (alt81) {
                     	case 1 :
-                    	    // JS.g:1696:17: catchClause
+                    	    // JS.g:1698:17: catchClause
                     	    {
-                    	    pushFollow(FOLLOW_catchClause_in_tryStatement6946);
+                    	    pushFollow(FOLLOW_catchClause_in_tryStatement6969);
                     	    catchClause325=catchClause();
                     	    _fsp--;
 
@@ -11669,7 +11818,7 @@ public class JSParser extends JSBaseParser {
                         cnt81++;
                     } while (true);
 
-                    // JS.g:1696:30: ( finallyClause )?
+                    // JS.g:1698:30: ( finallyClause )?
                     int alt82=2;
                     int LA82_0 = input.LA(1);
 
@@ -11678,9 +11827,9 @@ public class JSParser extends JSBaseParser {
                     }
                     switch (alt82) {
                         case 1 :
-                            // JS.g:1696:30: finallyClause
+                            // JS.g:1698:30: finallyClause
                             {
-                            pushFollow(FOLLOW_finallyClause_in_tryStatement6949);
+                            pushFollow(FOLLOW_finallyClause_in_tryStatement6972);
                             finallyClause326=finallyClause();
                             _fsp--;
 
@@ -11695,9 +11844,9 @@ public class JSParser extends JSBaseParser {
                     }
                     break;
                 case 2 :
-                    // JS.g:1696:47: finallyClause
+                    // JS.g:1698:47: finallyClause
                     {
-                    pushFollow(FOLLOW_finallyClause_in_tryStatement6954);
+                    pushFollow(FOLLOW_finallyClause_in_tryStatement6977);
                     finallyClause327=finallyClause();
                     _fsp--;
 
@@ -11736,7 +11885,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start catchClause
-    // JS.g:1699:1: catchClause : CATCH LPAREN identifier ( catchFilter )? RPAREN block ;
+    // JS.g:1701:1: catchClause : CATCH LPAREN identifier ( catchFilter )? RPAREN block ;
     public final catchClause_return catchClause() throws RecognitionException {
         catchClause_return retval = new catchClause_return();
         retval.start = input.LT(1);
@@ -11758,24 +11907,24 @@ public class JSParser extends JSBaseParser {
         Object RPAREN332_tree=null;
 
         try {
-            // JS.g:1700:2: ( CATCH LPAREN identifier ( catchFilter )? RPAREN block )
-            // JS.g:1700:4: CATCH LPAREN identifier ( catchFilter )? RPAREN block
+            // JS.g:1702:2: ( CATCH LPAREN identifier ( catchFilter )? RPAREN block )
+            // JS.g:1702:4: CATCH LPAREN identifier ( catchFilter )? RPAREN block
             {
             root_0 = (Object)adaptor.nil();
 
             CATCH328=(Token)input.LT(1);
-            match(input,CATCH,FOLLOW_CATCH_in_catchClause6968); 
+            match(input,CATCH,FOLLOW_CATCH_in_catchClause6991); 
             CATCH328_tree = (Object)adaptor.create(CATCH328);
             root_0 = (Object)adaptor.becomeRoot(CATCH328_tree, root_0);
 
             LPAREN329=(Token)input.LT(1);
-            match(input,LPAREN,FOLLOW_LPAREN_in_catchClause6971); 
-            pushFollow(FOLLOW_identifier_in_catchClause6974);
+            match(input,LPAREN,FOLLOW_LPAREN_in_catchClause6994); 
+            pushFollow(FOLLOW_identifier_in_catchClause6997);
             identifier330=identifier();
             _fsp--;
 
             adaptor.addChild(root_0, identifier330.getTree());
-            // JS.g:1700:30: ( catchFilter )?
+            // JS.g:1702:30: ( catchFilter )?
             int alt84=2;
             int LA84_0 = input.LA(1);
 
@@ -11784,9 +11933,9 @@ public class JSParser extends JSBaseParser {
             }
             switch (alt84) {
                 case 1 :
-                    // JS.g:1700:30: catchFilter
+                    // JS.g:1702:30: catchFilter
                     {
-                    pushFollow(FOLLOW_catchFilter_in_catchClause6976);
+                    pushFollow(FOLLOW_catchFilter_in_catchClause6999);
                     catchFilter331=catchFilter();
                     _fsp--;
 
@@ -11798,8 +11947,8 @@ public class JSParser extends JSBaseParser {
             }
 
             RPAREN332=(Token)input.LT(1);
-            match(input,RPAREN,FOLLOW_RPAREN_in_catchClause6979); 
-            pushFollow(FOLLOW_block_in_catchClause6982);
+            match(input,RPAREN,FOLLOW_RPAREN_in_catchClause7002); 
+            pushFollow(FOLLOW_block_in_catchClause7005);
             block333=block();
             _fsp--;
 
@@ -11832,7 +11981,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start catchFilter
-    // JS.g:1703:1: catchFilter : IF expression ;
+    // JS.g:1705:1: catchFilter : IF expression ;
     public final catchFilter_return catchFilter() throws RecognitionException {
         catchFilter_return retval = new catchFilter_return();
         retval.start = input.LT(1);
@@ -11846,17 +11995,17 @@ public class JSParser extends JSBaseParser {
         Object IF334_tree=null;
 
         try {
-            // JS.g:1704:2: ( IF expression )
-            // JS.g:1704:4: IF expression
+            // JS.g:1706:2: ( IF expression )
+            // JS.g:1706:4: IF expression
             {
             root_0 = (Object)adaptor.nil();
 
             IF334=(Token)input.LT(1);
-            match(input,IF,FOLLOW_IF_in_catchFilter6993); 
+            match(input,IF,FOLLOW_IF_in_catchFilter7016); 
             IF334_tree = (Object)adaptor.create(IF334);
             adaptor.addChild(root_0, IF334_tree);
 
-            pushFollow(FOLLOW_expression_in_catchFilter6995);
+            pushFollow(FOLLOW_expression_in_catchFilter7018);
             expression335=expression();
             _fsp--;
 
@@ -11889,7 +12038,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start finallyClause
-    // JS.g:1707:1: finallyClause : FINALLY block ;
+    // JS.g:1709:1: finallyClause : FINALLY block ;
     public final finallyClause_return finallyClause() throws RecognitionException {
         finallyClause_return retval = new finallyClause_return();
         retval.start = input.LT(1);
@@ -11903,17 +12052,17 @@ public class JSParser extends JSBaseParser {
         Object FINALLY336_tree=null;
 
         try {
-            // JS.g:1708:2: ( FINALLY block )
-            // JS.g:1708:4: FINALLY block
+            // JS.g:1710:2: ( FINALLY block )
+            // JS.g:1710:4: FINALLY block
             {
             root_0 = (Object)adaptor.nil();
 
             FINALLY336=(Token)input.LT(1);
-            match(input,FINALLY,FOLLOW_FINALLY_in_finallyClause7007); 
+            match(input,FINALLY,FOLLOW_FINALLY_in_finallyClause7030); 
             FINALLY336_tree = (Object)adaptor.create(FINALLY336);
             root_0 = (Object)adaptor.becomeRoot(FINALLY336_tree, root_0);
 
-            pushFollow(FOLLOW_block_in_finallyClause7010);
+            pushFollow(FOLLOW_block_in_finallyClause7033);
             block337=block();
             _fsp--;
 
@@ -11946,7 +12095,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start functionDeclaration
-    // JS.g:1721:1: functionDeclaration : function= FUNCTION name= identifier formalParameterList functionBody -> ^( FUNCTION_DECLARATION[$function] $name formalParameterList functionBody ) ;
+    // JS.g:1723:1: functionDeclaration : function= FUNCTION name= identifier formalParameterList functionBody -> ^( FUNCTION_DECLARATION[$function] $name formalParameterList functionBody ) ;
     public final functionDeclaration_return functionDeclaration() throws RecognitionException {
         functionDeclaration_return retval = new functionDeclaration_return();
         retval.start = input.LT(1);
@@ -11967,31 +12116,31 @@ public class JSParser extends JSBaseParser {
         RewriteRuleSubtreeStream stream_identifier=new RewriteRuleSubtreeStream(adaptor,"rule identifier");
         RewriteRuleSubtreeStream stream_formalParameterList=new RewriteRuleSubtreeStream(adaptor,"rule formalParameterList");
         try {
-            // JS.g:1722:2: (function= FUNCTION name= identifier formalParameterList functionBody -> ^( FUNCTION_DECLARATION[$function] $name formalParameterList functionBody ) )
-            // JS.g:1722:4: function= FUNCTION name= identifier formalParameterList functionBody
+            // JS.g:1724:2: (function= FUNCTION name= identifier formalParameterList functionBody -> ^( FUNCTION_DECLARATION[$function] $name formalParameterList functionBody ) )
+            // JS.g:1724:4: function= FUNCTION name= identifier formalParameterList functionBody
             {
             function=(Token)input.LT(1);
-            match(input,FUNCTION,FOLLOW_FUNCTION_in_functionDeclaration7033); 
+            match(input,FUNCTION,FOLLOW_FUNCTION_in_functionDeclaration7056); 
             stream_FUNCTION.add(function);
 
-            pushFollow(FOLLOW_identifier_in_functionDeclaration7037);
+            pushFollow(FOLLOW_identifier_in_functionDeclaration7060);
             name=identifier();
             _fsp--;
 
             stream_identifier.add(name.getTree());
-            pushFollow(FOLLOW_formalParameterList_in_functionDeclaration7039);
+            pushFollow(FOLLOW_formalParameterList_in_functionDeclaration7062);
             formalParameterList338=formalParameterList();
             _fsp--;
 
             stream_formalParameterList.add(formalParameterList338.getTree());
-            pushFollow(FOLLOW_functionBody_in_functionDeclaration7041);
+            pushFollow(FOLLOW_functionBody_in_functionDeclaration7064);
             functionBody339=functionBody();
             _fsp--;
 
             stream_functionBody.add(functionBody339.getTree());
 
             // AST REWRITE
-            // elements: name, formalParameterList, functionBody
+            // elements: functionBody, name, formalParameterList
             // token labels: 
             // rule labels: retval, name
             // token list labels: 
@@ -12001,9 +12150,9 @@ public class JSParser extends JSBaseParser {
             RewriteRuleSubtreeStream stream_name=new RewriteRuleSubtreeStream(adaptor,"token name",name!=null?name.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 1723:2: -> ^( FUNCTION_DECLARATION[$function] $name formalParameterList functionBody )
+            // 1725:2: -> ^( FUNCTION_DECLARATION[$function] $name formalParameterList functionBody )
             {
-                // JS.g:1723:5: ^( FUNCTION_DECLARATION[$function] $name formalParameterList functionBody )
+                // JS.g:1725:5: ^( FUNCTION_DECLARATION[$function] $name formalParameterList functionBody )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(adaptor.create(FUNCTION_DECLARATION, function), root_1);
@@ -12046,7 +12195,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start functionExpression
-    // JS.g:1726:1: functionExpression : FUNCTION (name= identifier )? formalParameterList functionBody -> ^( FUNCTION ( $name)? formalParameterList functionBody ) ;
+    // JS.g:1728:1: functionExpression : FUNCTION (name= identifier )? formalParameterList functionBody -> ^( FUNCTION ( $name)? formalParameterList functionBody ) ;
     public final functionExpression_return functionExpression() throws RecognitionException {
         functionExpression_return retval = new functionExpression_return();
         retval.start = input.LT(1);
@@ -12067,14 +12216,14 @@ public class JSParser extends JSBaseParser {
         RewriteRuleSubtreeStream stream_identifier=new RewriteRuleSubtreeStream(adaptor,"rule identifier");
         RewriteRuleSubtreeStream stream_formalParameterList=new RewriteRuleSubtreeStream(adaptor,"rule formalParameterList");
         try {
-            // JS.g:1727:2: ( FUNCTION (name= identifier )? formalParameterList functionBody -> ^( FUNCTION ( $name)? formalParameterList functionBody ) )
-            // JS.g:1727:4: FUNCTION (name= identifier )? formalParameterList functionBody
+            // JS.g:1729:2: ( FUNCTION (name= identifier )? formalParameterList functionBody -> ^( FUNCTION ( $name)? formalParameterList functionBody ) )
+            // JS.g:1729:4: FUNCTION (name= identifier )? formalParameterList functionBody
             {
             FUNCTION340=(Token)input.LT(1);
-            match(input,FUNCTION,FOLLOW_FUNCTION_in_functionExpression7069); 
+            match(input,FUNCTION,FOLLOW_FUNCTION_in_functionExpression7092); 
             stream_FUNCTION.add(FUNCTION340);
 
-            // JS.g:1727:17: (name= identifier )?
+            // JS.g:1729:17: (name= identifier )?
             int alt85=2;
             int LA85_0 = input.LA(1);
 
@@ -12083,9 +12232,9 @@ public class JSParser extends JSBaseParser {
             }
             switch (alt85) {
                 case 1 :
-                    // JS.g:1727:17: name= identifier
+                    // JS.g:1729:17: name= identifier
                     {
-                    pushFollow(FOLLOW_identifier_in_functionExpression7073);
+                    pushFollow(FOLLOW_identifier_in_functionExpression7096);
                     name=identifier();
                     _fsp--;
 
@@ -12096,19 +12245,19 @@ public class JSParser extends JSBaseParser {
 
             }
 
-            pushFollow(FOLLOW_formalParameterList_in_functionExpression7076);
+            pushFollow(FOLLOW_formalParameterList_in_functionExpression7099);
             formalParameterList341=formalParameterList();
             _fsp--;
 
             stream_formalParameterList.add(formalParameterList341.getTree());
-            pushFollow(FOLLOW_functionBody_in_functionExpression7078);
+            pushFollow(FOLLOW_functionBody_in_functionExpression7101);
             functionBody342=functionBody();
             _fsp--;
 
             stream_functionBody.add(functionBody342.getTree());
 
             // AST REWRITE
-            // elements: name, functionBody, formalParameterList, FUNCTION
+            // elements: FUNCTION, functionBody, formalParameterList, name
             // token labels: 
             // rule labels: retval, name
             // token list labels: 
@@ -12118,14 +12267,14 @@ public class JSParser extends JSBaseParser {
             RewriteRuleSubtreeStream stream_name=new RewriteRuleSubtreeStream(adaptor,"token name",name!=null?name.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 1728:2: -> ^( FUNCTION ( $name)? formalParameterList functionBody )
+            // 1730:2: -> ^( FUNCTION ( $name)? formalParameterList functionBody )
             {
-                // JS.g:1728:5: ^( FUNCTION ( $name)? formalParameterList functionBody )
+                // JS.g:1730:5: ^( FUNCTION ( $name)? formalParameterList functionBody )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(stream_FUNCTION.next(), root_1);
 
-                // JS.g:1728:17: ( $name)?
+                // JS.g:1730:17: ( $name)?
                 if ( stream_name.hasNext() ) {
                     adaptor.addChild(root_1, stream_name.next());
 
@@ -12168,7 +12317,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start formalParameter
-    // JS.g:1731:1: formalParameter : identifier ;
+    // JS.g:1733:1: formalParameter : identifier ;
     public final formalParameter_return formalParameter() throws RecognitionException {
         formalParameter_return retval = new formalParameter_return();
         retval.start = input.LT(1);
@@ -12180,12 +12329,12 @@ public class JSParser extends JSBaseParser {
 
 
         try {
-            // JS.g:1732:2: ( identifier )
-            // JS.g:1732:4: identifier
+            // JS.g:1734:2: ( identifier )
+            // JS.g:1734:4: identifier
             {
             root_0 = (Object)adaptor.nil();
 
-            pushFollow(FOLLOW_identifier_in_formalParameter7106);
+            pushFollow(FOLLOW_identifier_in_formalParameter7129);
             identifier343=identifier();
             _fsp--;
 
@@ -12218,7 +12367,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start formalParameterList
-    // JS.g:1735:1: formalParameterList : LPAREN ( formalParameter ( COMMA formalParameter )* )? RPAREN -> ^( ARGUMENTS ( formalParameter )* ) ;
+    // JS.g:1737:1: formalParameterList : LPAREN ( formalParameter ( COMMA formalParameter )* )? RPAREN -> ^( ARGUMENTS ( formalParameter )* ) ;
     public final formalParameterList_return formalParameterList() throws RecognitionException {
         formalParameterList_return retval = new formalParameterList_return();
         retval.start = input.LT(1);
@@ -12241,14 +12390,14 @@ public class JSParser extends JSBaseParser {
         RewriteRuleTokenStream stream_LPAREN=new RewriteRuleTokenStream(adaptor,"token LPAREN");
         RewriteRuleSubtreeStream stream_formalParameter=new RewriteRuleSubtreeStream(adaptor,"rule formalParameter");
         try {
-            // JS.g:1736:2: ( LPAREN ( formalParameter ( COMMA formalParameter )* )? RPAREN -> ^( ARGUMENTS ( formalParameter )* ) )
-            // JS.g:1736:4: LPAREN ( formalParameter ( COMMA formalParameter )* )? RPAREN
+            // JS.g:1738:2: ( LPAREN ( formalParameter ( COMMA formalParameter )* )? RPAREN -> ^( ARGUMENTS ( formalParameter )* ) )
+            // JS.g:1738:4: LPAREN ( formalParameter ( COMMA formalParameter )* )? RPAREN
             {
             LPAREN344=(Token)input.LT(1);
-            match(input,LPAREN,FOLLOW_LPAREN_in_formalParameterList7118); 
+            match(input,LPAREN,FOLLOW_LPAREN_in_formalParameterList7141); 
             stream_LPAREN.add(LPAREN344);
 
-            // JS.g:1736:11: ( formalParameter ( COMMA formalParameter )* )?
+            // JS.g:1738:11: ( formalParameter ( COMMA formalParameter )* )?
             int alt87=2;
             int LA87_0 = input.LA(1);
 
@@ -12257,14 +12406,14 @@ public class JSParser extends JSBaseParser {
             }
             switch (alt87) {
                 case 1 :
-                    // JS.g:1736:13: formalParameter ( COMMA formalParameter )*
+                    // JS.g:1738:13: formalParameter ( COMMA formalParameter )*
                     {
-                    pushFollow(FOLLOW_formalParameter_in_formalParameterList7122);
+                    pushFollow(FOLLOW_formalParameter_in_formalParameterList7145);
                     formalParameter345=formalParameter();
                     _fsp--;
 
                     stream_formalParameter.add(formalParameter345.getTree());
-                    // JS.g:1736:29: ( COMMA formalParameter )*
+                    // JS.g:1738:29: ( COMMA formalParameter )*
                     loop86:
                     do {
                         int alt86=2;
@@ -12277,13 +12426,13 @@ public class JSParser extends JSBaseParser {
 
                         switch (alt86) {
                     	case 1 :
-                    	    // JS.g:1736:31: COMMA formalParameter
+                    	    // JS.g:1738:31: COMMA formalParameter
                     	    {
                     	    COMMA346=(Token)input.LT(1);
-                    	    match(input,COMMA,FOLLOW_COMMA_in_formalParameterList7126); 
+                    	    match(input,COMMA,FOLLOW_COMMA_in_formalParameterList7149); 
                     	    stream_COMMA.add(COMMA346);
 
-                    	    pushFollow(FOLLOW_formalParameter_in_formalParameterList7128);
+                    	    pushFollow(FOLLOW_formalParameter_in_formalParameterList7151);
                     	    formalParameter347=formalParameter();
                     	    _fsp--;
 
@@ -12304,7 +12453,7 @@ public class JSParser extends JSBaseParser {
             }
 
             RPAREN348=(Token)input.LT(1);
-            match(input,RPAREN,FOLLOW_RPAREN_in_formalParameterList7136); 
+            match(input,RPAREN,FOLLOW_RPAREN_in_formalParameterList7159); 
             stream_RPAREN.add(RPAREN348);
 
 
@@ -12318,14 +12467,14 @@ public class JSParser extends JSBaseParser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 1737:2: -> ^( ARGUMENTS ( formalParameter )* )
+            // 1739:2: -> ^( ARGUMENTS ( formalParameter )* )
             {
-                // JS.g:1737:5: ^( ARGUMENTS ( formalParameter )* )
+                // JS.g:1739:5: ^( ARGUMENTS ( formalParameter )* )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(adaptor.create(ARGUMENTS, "ARGUMENTS"), root_1);
 
-                // JS.g:1737:18: ( formalParameter )*
+                // JS.g:1739:18: ( formalParameter )*
                 while ( stream_formalParameter.hasNext() ) {
                     adaptor.addChild(root_1, stream_formalParameter.next());
 
@@ -12366,7 +12515,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start functionBody
-    // JS.g:1740:1: functionBody : lb= LBRACE ( sourceElement )* RBRACE -> ^( BLOCK[$lb, \"BLOCK\"] ( sourceElement )* ) ;
+    // JS.g:1742:1: functionBody : lb= LBRACE ( sourceElement )* RBRACE -> ^( BLOCK[$lb, \"BLOCK\"] ( sourceElement )* ) ;
     public final functionBody_return functionBody() throws RecognitionException {
         functionBody_return retval = new functionBody_return();
         retval.start = input.LT(1);
@@ -12385,14 +12534,14 @@ public class JSParser extends JSBaseParser {
         RewriteRuleSubtreeStream stream_sourceElement=new RewriteRuleSubtreeStream(adaptor,"rule sourceElement");
          pushState(JSParserRule.FUNCTION_BODY); 
         try {
-            // JS.g:1742:2: (lb= LBRACE ( sourceElement )* RBRACE -> ^( BLOCK[$lb, \"BLOCK\"] ( sourceElement )* ) )
-            // JS.g:1742:4: lb= LBRACE ( sourceElement )* RBRACE
+            // JS.g:1744:2: (lb= LBRACE ( sourceElement )* RBRACE -> ^( BLOCK[$lb, \"BLOCK\"] ( sourceElement )* ) )
+            // JS.g:1744:4: lb= LBRACE ( sourceElement )* RBRACE
             {
             lb=(Token)input.LT(1);
-            match(input,LBRACE,FOLLOW_LBRACE_in_functionBody7166); 
+            match(input,LBRACE,FOLLOW_LBRACE_in_functionBody7189); 
             stream_LBRACE.add(lb);
 
-            // JS.g:1742:14: ( sourceElement )*
+            // JS.g:1744:14: ( sourceElement )*
             loop88:
             do {
                 int alt88=2;
@@ -12414,9 +12563,9 @@ public class JSParser extends JSBaseParser {
 
                 switch (alt88) {
             	case 1 :
-            	    // JS.g:1742:14: sourceElement
+            	    // JS.g:1744:14: sourceElement
             	    {
-            	    pushFollow(FOLLOW_sourceElement_in_functionBody7168);
+            	    pushFollow(FOLLOW_sourceElement_in_functionBody7191);
             	    sourceElement349=sourceElement();
             	    _fsp--;
 
@@ -12431,7 +12580,7 @@ public class JSParser extends JSBaseParser {
             } while (true);
 
             RBRACE350=(Token)input.LT(1);
-            match(input,RBRACE,FOLLOW_RBRACE_in_functionBody7171); 
+            match(input,RBRACE,FOLLOW_RBRACE_in_functionBody7194); 
             stream_RBRACE.add(RBRACE350);
 
 
@@ -12445,14 +12594,14 @@ public class JSParser extends JSBaseParser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 1743:2: -> ^( BLOCK[$lb, \"BLOCK\"] ( sourceElement )* )
+            // 1745:2: -> ^( BLOCK[$lb, \"BLOCK\"] ( sourceElement )* )
             {
-                // JS.g:1743:5: ^( BLOCK[$lb, \"BLOCK\"] ( sourceElement )* )
+                // JS.g:1745:5: ^( BLOCK[$lb, \"BLOCK\"] ( sourceElement )* )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(adaptor.create(BLOCK, lb,  "BLOCK"), root_1);
 
-                // JS.g:1743:28: ( sourceElement )*
+                // JS.g:1745:28: ( sourceElement )*
                 while ( stream_sourceElement.hasNext() ) {
                     adaptor.addChild(root_1, stream_sourceElement.next());
 
@@ -12494,7 +12643,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start getMethodDeclaration
-    // JS.g:1752:1: getMethodDeclaration : get= GET name= identifier LPAREN RPAREN functionBody -> ^( GETTER[$get] identifier functionBody ) ;
+    // JS.g:1754:1: getMethodDeclaration : get= GET name= identifier LPAREN RPAREN functionBody -> ^( GETTER[$get] identifier functionBody ) ;
     public final getMethodDeclaration_return getMethodDeclaration() throws RecognitionException {
         getMethodDeclaration_return retval = new getMethodDeclaration_return();
         retval.start = input.LT(1);
@@ -12518,27 +12667,27 @@ public class JSParser extends JSBaseParser {
         RewriteRuleSubtreeStream stream_functionBody=new RewriteRuleSubtreeStream(adaptor,"rule functionBody");
         RewriteRuleSubtreeStream stream_identifier=new RewriteRuleSubtreeStream(adaptor,"rule identifier");
         try {
-            // JS.g:1753:3: (get= GET name= identifier LPAREN RPAREN functionBody -> ^( GETTER[$get] identifier functionBody ) )
-            // JS.g:1753:5: get= GET name= identifier LPAREN RPAREN functionBody
+            // JS.g:1755:3: (get= GET name= identifier LPAREN RPAREN functionBody -> ^( GETTER[$get] identifier functionBody ) )
+            // JS.g:1755:5: get= GET name= identifier LPAREN RPAREN functionBody
             {
             get=(Token)input.LT(1);
-            match(input,GET,FOLLOW_GET_in_getMethodDeclaration7208); 
+            match(input,GET,FOLLOW_GET_in_getMethodDeclaration7231); 
             stream_GET.add(get);
 
-            pushFollow(FOLLOW_identifier_in_getMethodDeclaration7212);
+            pushFollow(FOLLOW_identifier_in_getMethodDeclaration7235);
             name=identifier();
             _fsp--;
 
             stream_identifier.add(name.getTree());
             LPAREN351=(Token)input.LT(1);
-            match(input,LPAREN,FOLLOW_LPAREN_in_getMethodDeclaration7214); 
+            match(input,LPAREN,FOLLOW_LPAREN_in_getMethodDeclaration7237); 
             stream_LPAREN.add(LPAREN351);
 
             RPAREN352=(Token)input.LT(1);
-            match(input,RPAREN,FOLLOW_RPAREN_in_getMethodDeclaration7216); 
+            match(input,RPAREN,FOLLOW_RPAREN_in_getMethodDeclaration7239); 
             stream_RPAREN.add(RPAREN352);
 
-            pushFollow(FOLLOW_functionBody_in_getMethodDeclaration7218);
+            pushFollow(FOLLOW_functionBody_in_getMethodDeclaration7241);
             functionBody353=functionBody();
             _fsp--;
 
@@ -12554,9 +12703,9 @@ public class JSParser extends JSBaseParser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 1754:4: -> ^( GETTER[$get] identifier functionBody )
+            // 1756:4: -> ^( GETTER[$get] identifier functionBody )
             {
-                // JS.g:1754:7: ^( GETTER[$get] identifier functionBody )
+                // JS.g:1756:7: ^( GETTER[$get] identifier functionBody )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(adaptor.create(GETTER, get), root_1);
@@ -12598,7 +12747,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start setMethodDeclaration
-    // JS.g:1757:1: setMethodDeclaration : set= SET name= identifier LPAREN param= identifier RPAREN functionBody -> ^( SETTER[$set] $name $param functionBody ) ;
+    // JS.g:1759:1: setMethodDeclaration : set= SET name= identifier LPAREN param= identifier RPAREN functionBody -> ^( SETTER[$set] $name $param functionBody ) ;
     public final setMethodDeclaration_return setMethodDeclaration() throws RecognitionException {
         setMethodDeclaration_return retval = new setMethodDeclaration_return();
         retval.start = input.LT(1);
@@ -12624,39 +12773,39 @@ public class JSParser extends JSBaseParser {
         RewriteRuleSubtreeStream stream_functionBody=new RewriteRuleSubtreeStream(adaptor,"rule functionBody");
         RewriteRuleSubtreeStream stream_identifier=new RewriteRuleSubtreeStream(adaptor,"rule identifier");
         try {
-            // JS.g:1758:3: (set= SET name= identifier LPAREN param= identifier RPAREN functionBody -> ^( SETTER[$set] $name $param functionBody ) )
-            // JS.g:1758:5: set= SET name= identifier LPAREN param= identifier RPAREN functionBody
+            // JS.g:1760:3: (set= SET name= identifier LPAREN param= identifier RPAREN functionBody -> ^( SETTER[$set] $name $param functionBody ) )
+            // JS.g:1760:5: set= SET name= identifier LPAREN param= identifier RPAREN functionBody
             {
             set=(Token)input.LT(1);
-            match(input,SET,FOLLOW_SET_in_setMethodDeclaration7249); 
+            match(input,SET,FOLLOW_SET_in_setMethodDeclaration7272); 
             stream_SET.add(set);
 
-            pushFollow(FOLLOW_identifier_in_setMethodDeclaration7253);
+            pushFollow(FOLLOW_identifier_in_setMethodDeclaration7276);
             name=identifier();
             _fsp--;
 
             stream_identifier.add(name.getTree());
             LPAREN354=(Token)input.LT(1);
-            match(input,LPAREN,FOLLOW_LPAREN_in_setMethodDeclaration7255); 
+            match(input,LPAREN,FOLLOW_LPAREN_in_setMethodDeclaration7278); 
             stream_LPAREN.add(LPAREN354);
 
-            pushFollow(FOLLOW_identifier_in_setMethodDeclaration7259);
+            pushFollow(FOLLOW_identifier_in_setMethodDeclaration7282);
             param=identifier();
             _fsp--;
 
             stream_identifier.add(param.getTree());
             RPAREN355=(Token)input.LT(1);
-            match(input,RPAREN,FOLLOW_RPAREN_in_setMethodDeclaration7261); 
+            match(input,RPAREN,FOLLOW_RPAREN_in_setMethodDeclaration7284); 
             stream_RPAREN.add(RPAREN355);
 
-            pushFollow(FOLLOW_functionBody_in_setMethodDeclaration7263);
+            pushFollow(FOLLOW_functionBody_in_setMethodDeclaration7286);
             functionBody356=functionBody();
             _fsp--;
 
             stream_functionBody.add(functionBody356.getTree());
 
             // AST REWRITE
-            // elements: functionBody, param, name
+            // elements: param, functionBody, name
             // token labels: 
             // rule labels: retval, param, name
             // token list labels: 
@@ -12667,9 +12816,9 @@ public class JSParser extends JSBaseParser {
             RewriteRuleSubtreeStream stream_name=new RewriteRuleSubtreeStream(adaptor,"token name",name!=null?name.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 1759:5: -> ^( SETTER[$set] $name $param functionBody )
+            // 1761:5: -> ^( SETTER[$set] $name $param functionBody )
             {
-                // JS.g:1759:8: ^( SETTER[$set] $name $param functionBody )
+                // JS.g:1761:8: ^( SETTER[$set] $name $param functionBody )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(adaptor.create(SETTER, set), root_1);
@@ -12712,7 +12861,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start program
-    // JS.g:1766:1: program : sourceElementSync ( sourceElement sourceElementSync )* EOF ;
+    // JS.g:1768:1: program : sourceElementSync ( sourceElement sourceElementSync )* EOF ;
     public final program_return program() throws RecognitionException {
         program_return retval = new program_return();
         retval.start = input.LT(1);
@@ -12731,17 +12880,17 @@ public class JSParser extends JSBaseParser {
 
          pushState(JSParserRule.PROGRAM); 
         try {
-            // JS.g:1768:2: ( sourceElementSync ( sourceElement sourceElementSync )* EOF )
-            // JS.g:1768:4: sourceElementSync ( sourceElement sourceElementSync )* EOF
+            // JS.g:1770:2: ( sourceElementSync ( sourceElement sourceElementSync )* EOF )
+            // JS.g:1770:4: sourceElementSync ( sourceElement sourceElementSync )* EOF
             {
             root_0 = (Object)adaptor.nil();
 
-            pushFollow(FOLLOW_sourceElementSync_in_program7304);
+            pushFollow(FOLLOW_sourceElementSync_in_program7327);
             sourceElementSync357=sourceElementSync();
             _fsp--;
 
             adaptor.addChild(root_0, sourceElementSync357.getTree());
-            // JS.g:1768:22: ( sourceElement sourceElementSync )*
+            // JS.g:1770:22: ( sourceElement sourceElementSync )*
             loop89:
             do {
                 int alt89=2;
@@ -12763,14 +12912,14 @@ public class JSParser extends JSBaseParser {
 
                 switch (alt89) {
             	case 1 :
-            	    // JS.g:1768:23: sourceElement sourceElementSync
+            	    // JS.g:1770:23: sourceElement sourceElementSync
             	    {
-            	    pushFollow(FOLLOW_sourceElement_in_program7307);
+            	    pushFollow(FOLLOW_sourceElement_in_program7330);
             	    sourceElement358=sourceElement();
             	    _fsp--;
 
             	    adaptor.addChild(root_0, sourceElement358.getTree());
-            	    pushFollow(FOLLOW_sourceElementSync_in_program7309);
+            	    pushFollow(FOLLOW_sourceElementSync_in_program7332);
             	    sourceElementSync359=sourceElementSync();
             	    _fsp--;
 
@@ -12785,7 +12934,7 @@ public class JSParser extends JSBaseParser {
             } while (true);
 
             EOF360=(Token)input.LT(1);
-            match(input,EOF,FOLLOW_EOF_in_program7313); 
+            match(input,EOF,FOLLOW_EOF_in_program7336); 
 
             }
 
@@ -12814,7 +12963,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start sourceElementSync
-    // JS.g:1771:1: sourceElementSync : ;
+    // JS.g:1773:1: sourceElementSync : ;
     public final sourceElementSync_return sourceElementSync() throws RecognitionException {
         sourceElementSync_return retval = new sourceElementSync_return();
         retval.start = input.LT(1);
@@ -12825,8 +12974,8 @@ public class JSParser extends JSBaseParser {
         	syncToSet();
 
         try {
-            // JS.g:1775:2: ()
-            // JS.g:1776:3: 
+            // JS.g:1777:2: ()
+            // JS.g:1778:3: 
             {
             root_0 = (Object)adaptor.nil();
 
@@ -12850,7 +12999,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start sourceElement
-    // JS.g:1783:1: sourceElement options {k=1; } : ({...}? functionDeclaration | statement );
+    // JS.g:1785:1: sourceElement options {k=1; } : ({...}? functionDeclaration | statement );
     public final sourceElement_return sourceElement() throws RecognitionException {
         sourceElement_return retval = new sourceElement_return();
         retval.start = input.LT(1);
@@ -12864,7 +13013,7 @@ public class JSParser extends JSBaseParser {
 
 
         try {
-            // JS.g:1788:2: ({...}? functionDeclaration | statement )
+            // JS.g:1790:2: ({...}? functionDeclaration | statement )
             int alt90=2;
             int LA90_0 = input.LA(1);
 
@@ -12879,7 +13028,7 @@ public class JSParser extends JSBaseParser {
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("1783:1: sourceElement options {k=1; } : ({...}? functionDeclaration | statement );", 90, 1, input);
+                        new NoViableAltException("1785:1: sourceElement options {k=1; } : ({...}? functionDeclaration | statement );", 90, 1, input);
 
                     throw nvae;
                 }
@@ -12898,20 +13047,20 @@ public class JSParser extends JSBaseParser {
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("1783:1: sourceElement options {k=1; } : ({...}? functionDeclaration | statement );", 90, 0, input);
+                    new NoViableAltException("1785:1: sourceElement options {k=1; } : ({...}? functionDeclaration | statement );", 90, 0, input);
 
                 throw nvae;
             }
             switch (alt90) {
                 case 1 :
-                    // JS.g:1788:4: {...}? functionDeclaration
+                    // JS.g:1790:4: {...}? functionDeclaration
                     {
                     root_0 = (Object)adaptor.nil();
 
                     if ( !( input.LA(1) == FUNCTION ) ) {
                         throw new FailedPredicateException(input, "sourceElement", " input.LA(1) == FUNCTION ");
                     }
-                    pushFollow(FOLLOW_functionDeclaration_in_sourceElement7358);
+                    pushFollow(FOLLOW_functionDeclaration_in_sourceElement7381);
                     functionDeclaration361=functionDeclaration();
                     _fsp--;
 
@@ -12920,11 +13069,11 @@ public class JSParser extends JSBaseParser {
                     }
                     break;
                 case 2 :
-                    // JS.g:1789:4: statement
+                    // JS.g:1791:4: statement
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_statement_in_sourceElement7363);
+                    pushFollow(FOLLOW_statement_in_sourceElement7386);
                     statement362=statement();
                     _fsp--;
 
@@ -12959,7 +13108,7 @@ public class JSParser extends JSBaseParser {
     };
 
     // $ANTLR start standaloneExpression
-    // JS.g:1794:1: standaloneExpression : expression EOF ;
+    // JS.g:1796:1: standaloneExpression : expression EOF ;
     public final standaloneExpression_return standaloneExpression() throws RecognitionException {
         standaloneExpression_return retval = new standaloneExpression_return();
         retval.start = input.LT(1);
@@ -12974,18 +13123,18 @@ public class JSParser extends JSBaseParser {
 
          pushState(JSParserRule.EXPRESSION); 
         try {
-            // JS.g:1796:2: ( expression EOF )
-            // JS.g:1796:4: expression EOF
+            // JS.g:1798:2: ( expression EOF )
+            // JS.g:1798:4: expression EOF
             {
             root_0 = (Object)adaptor.nil();
 
-            pushFollow(FOLLOW_expression_in_standaloneExpression7381);
+            pushFollow(FOLLOW_expression_in_standaloneExpression7404);
             expression363=expression();
             _fsp--;
 
             adaptor.addChild(root_0, expression363.getTree());
             EOF364=(Token)input.LT(1);
-            match(input,EOF,FOLLOW_EOF_in_standaloneExpression7383); 
+            match(input,EOF,FOLLOW_EOF_in_standaloneExpression7406); 
 
             }
 
@@ -13071,9 +13220,9 @@ public class JSParser extends JSBaseParser {
     public static final BitSet FOLLOW_arrayItem_in_arrayLiteral3853 = new BitSet(new long[]{0x0000000000000000L,0x0000000000002400L});
     public static final BitSet FOLLOW_RBRACK_in_arrayLiteral3864 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_assignmentExpression_in_arrayItem3894 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_LBRACE_in_objectLiteral3926 = new BitSet(new long[]{0xFFFFF7F600020000L,0x000000000000005FL,0x0708200000000000L});
+    public static final BitSet FOLLOW_LBRACE_in_objectLiteral3926 = new BitSet(new long[]{0xFFFFF7FFFFFFFF80L,0x000000000000005FL,0x0708200000000000L});
     public static final BitSet FOLLOW_objectPropertyInitializer_in_objectLiteral3930 = new BitSet(new long[]{0x0000000000000000L,0x0000000000002040L});
-    public static final BitSet FOLLOW_COMMA_in_objectLiteral3934 = new BitSet(new long[]{0xFFFFF7F600020000L,0x000000000000001FL,0x0708200000000000L});
+    public static final BitSet FOLLOW_COMMA_in_objectLiteral3934 = new BitSet(new long[]{0xFFFFF7FFFFFFFF80L,0x000000000000001FL,0x0708200000000000L});
     public static final BitSet FOLLOW_objectPropertyInitializer_in_objectLiteral3936 = new BitSet(new long[]{0x0000000000000000L,0x0000000000002040L});
     public static final BitSet FOLLOW_COMMA_in_objectLiteral3941 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000040L});
     public static final BitSet FOLLOW_RBRACE_in_objectLiteral3946 = new BitSet(new long[]{0x0000000000000002L});
@@ -13089,342 +13238,344 @@ public class JSParser extends JSBaseParser {
     public static final BitSet FOLLOW_identifier_in_nameValuePairFix4056 = new BitSet(new long[]{0x0000000000000000L,0x0000008000000000L});
     public static final BitSet FOLLOW_COLON_in_nameValuePairFix4058 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
     public static final BitSet FOLLOW_assignmentExpression_in_nameValuePairFix4060 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_identifier_in_propertyName4089 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_StringLiteral_in_propertyName4094 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_numericLiteral_in_propertyName4099 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_primaryExpression_in_memberExpression4117 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_functionExpression_in_memberExpression4122 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_newExpression_in_memberExpression4127 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_NEW_in_newExpression4138 = new BitSet(new long[]{0xFFFFF7F602460070L,0x03200000000002BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_newExpressionTail_in_newExpression4141 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_LPAREN_in_arguments4154 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC003BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_assignmentExpression_in_arguments4158 = new BitSet(new long[]{0x0000000000000000L,0x0000000000002100L});
-    public static final BitSet FOLLOW_COMMA_in_arguments4162 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_assignmentExpression_in_arguments4164 = new BitSet(new long[]{0x0000000000000000L,0x0000000000002100L});
-    public static final BitSet FOLLOW_RPAREN_in_arguments4172 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_memberExpression_in_leftHandSideExpression4210 = new BitSet(new long[]{0x0000000000000002L,0x00C0000000000A80L});
-    public static final BitSet FOLLOW_arguments_in_leftHandSideExpression4231 = new BitSet(new long[]{0x0000000000000002L,0x00C0000000000A80L});
-    public static final BitSet FOLLOW_LBRACK_in_leftHandSideExpression4258 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_expression_in_leftHandSideExpression4260 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000400L});
-    public static final BitSet FOLLOW_RBRACK_in_leftHandSideExpression4262 = new BitSet(new long[]{0x0000000000000002L,0x00C0000000000A80L});
-    public static final BitSet FOLLOW_DOT_in_leftHandSideExpression4285 = new BitSet(new long[]{0xFFFFF7F600020000L,0x002000000100009FL,0x0008000000000000L});
-    public static final BitSet FOLLOW_rightHandSideExpression_in_leftHandSideExpression4289 = new BitSet(new long[]{0x0000000000000002L,0x00C0000000000A80L});
-    public static final BitSet FOLLOW_DOTDOT_in_leftHandSideExpression4317 = new BitSet(new long[]{0xFFFFF7F600020000L,0x002000000100001FL,0x0008000000000000L});
-    public static final BitSet FOLLOW_rightHandSideExpression2_in_leftHandSideExpression4321 = new BitSet(new long[]{0x0000000000000002L,0x00C0000000000A80L});
-    public static final BitSet FOLLOW_COLONCOLON_in_leftHandSideExpression4344 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000200L});
-    public static final BitSet FOLLOW_LBRACK_in_leftHandSideExpression4346 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_expression_in_leftHandSideExpression4348 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000400L});
-    public static final BitSet FOLLOW_RBRACK_in_leftHandSideExpression4350 = new BitSet(new long[]{0x0000000000000002L,0x00C0000000000A80L});
-    public static final BitSet FOLLOW_COLONCOLON_in_leftHandSideExpression4372 = new BitSet(new long[]{0xFFFFF7F600020000L,0x000000000100001FL,0x0008000000000000L});
-    public static final BitSet FOLLOW_propertySelector_in_leftHandSideExpression4376 = new BitSet(new long[]{0x0000000000000002L,0x00C0000000000A80L});
-    public static final BitSet FOLLOW_memberExpression_in_newExpressionTail4437 = new BitSet(new long[]{0x0000000000000002L,0x00C0000000000A80L});
-    public static final BitSet FOLLOW_LBRACK_in_newExpressionTail4460 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_expression_in_newExpressionTail4462 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000400L});
-    public static final BitSet FOLLOW_RBRACK_in_newExpressionTail4464 = new BitSet(new long[]{0x0000000000000002L,0x00C0000000000A80L});
-    public static final BitSet FOLLOW_DOT_in_newExpressionTail4487 = new BitSet(new long[]{0xFFFFF7F600020000L,0x002000000100009FL,0x0008000000000000L});
-    public static final BitSet FOLLOW_rightHandSideExpression_in_newExpressionTail4491 = new BitSet(new long[]{0x0000000000000002L,0x00C0000000000A80L});
-    public static final BitSet FOLLOW_DOTDOT_in_newExpressionTail4519 = new BitSet(new long[]{0xFFFFF7F600020000L,0x002000000100001FL,0x0008000000000000L});
-    public static final BitSet FOLLOW_rightHandSideExpression2_in_newExpressionTail4523 = new BitSet(new long[]{0x0000000000000002L,0x00C0000000000A80L});
-    public static final BitSet FOLLOW_COLONCOLON_in_newExpressionTail4546 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000200L});
-    public static final BitSet FOLLOW_LBRACK_in_newExpressionTail4548 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_expression_in_newExpressionTail4550 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000400L});
-    public static final BitSet FOLLOW_RBRACK_in_newExpressionTail4552 = new BitSet(new long[]{0x0000000000000002L,0x00C0000000000A80L});
-    public static final BitSet FOLLOW_COLONCOLON_in_newExpressionTail4574 = new BitSet(new long[]{0xFFFFF7F600020000L,0x000000000100001FL,0x0008000000000000L});
-    public static final BitSet FOLLOW_propertySelector_in_newExpressionTail4578 = new BitSet(new long[]{0x0000000000000002L,0x00C0000000000A80L});
-    public static final BitSet FOLLOW_arguments_in_newExpressionTail4606 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_identifier_in_rightHandSideExpression4641 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_parenExpression_in_rightHandSideExpression4650 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_xmlAttribute_in_rightHandSideExpression4660 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_MUL_in_rightHandSideExpression4669 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_identifier_in_rightHandSideExpression24681 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_xmlAttribute_in_rightHandSideExpression24687 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_MUL_in_rightHandSideExpression24693 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_leftHandSideExpression_in_postfixExpression4709 = new BitSet(new long[]{0x0000000000000002L,0x000000000C000000L});
-    public static final BitSet FOLLOW_postfixOperator_in_postfixExpression4715 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_INC_in_postfixOperator4733 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_DEC_in_postfixOperator4742 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_postfixExpression_in_unaryExpression4759 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_unaryOperator_in_unaryExpression4764 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_unaryExpression_in_unaryExpression4767 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_DELETE_in_unaryOperator4779 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_VOID_in_unaryOperator4784 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_TYPEOF_in_unaryOperator4789 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_INC_in_unaryOperator4794 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_DEC_in_unaryOperator4799 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ADD_in_unaryOperator4806 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_SUB_in_unaryOperator4815 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_INV_in_unaryOperator4822 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_NOT_in_unaryOperator4827 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_YIELD_in_unaryOperator4832 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_DEFAULT_in_namespaceStatement4849 = new BitSet(new long[]{0x0000001000000000L});
-    public static final BitSet FOLLOW_WXML_in_namespaceStatement4851 = new BitSet(new long[]{0x0000002000000000L});
-    public static final BitSet FOLLOW_NAMESPACE_in_namespaceStatement4853 = new BitSet(new long[]{0x0000000000000000L,0x0000010000000000L});
-    public static final BitSet FOLLOW_ASSIGN_in_namespaceStatement4855 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_expression_in_namespaceStatement4857 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001040L,0x00000C0000000000L});
-    public static final BitSet FOLLOW_semic_in_namespaceStatement4859 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_unaryExpression_in_multiplicativeExpression4891 = new BitSet(new long[]{0x0000000000000002L,0x0008000003000000L});
-    public static final BitSet FOLLOW_set_in_multiplicativeExpression4895 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_unaryExpression_in_multiplicativeExpression4910 = new BitSet(new long[]{0x0000000000000002L,0x0008000003000000L});
-    public static final BitSet FOLLOW_multiplicativeExpression_in_additiveExpression4928 = new BitSet(new long[]{0x0000000000000002L,0x0000000000C00000L});
-    public static final BitSet FOLLOW_set_in_additiveExpression4932 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_multiplicativeExpression_in_additiveExpression4943 = new BitSet(new long[]{0x0000000000000002L,0x0000000000C00000L});
-    public static final BitSet FOLLOW_additiveExpression_in_shiftExpression4962 = new BitSet(new long[]{0x0000000000000002L,0x0000000070000000L});
-    public static final BitSet FOLLOW_set_in_shiftExpression4966 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_additiveExpression_in_shiftExpression4981 = new BitSet(new long[]{0x0000000000000002L,0x0000000070000000L});
-    public static final BitSet FOLLOW_shiftExpression_in_relationalExpression5000 = new BitSet(new long[]{0x0000000000300002L,0x000000000003C000L});
-    public static final BitSet FOLLOW_set_in_relationalExpression5004 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_shiftExpression_in_relationalExpression5031 = new BitSet(new long[]{0x0000000000300002L,0x000000000003C000L});
-    public static final BitSet FOLLOW_shiftExpression_in_relationalExpressionNoIn5045 = new BitSet(new long[]{0x0000000000200002L,0x000000000003C000L});
-    public static final BitSet FOLLOW_set_in_relationalExpressionNoIn5049 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_shiftExpression_in_relationalExpressionNoIn5072 = new BitSet(new long[]{0x0000000000200002L,0x000000000003C000L});
-    public static final BitSet FOLLOW_relationalExpression_in_equalityExpression5091 = new BitSet(new long[]{0x0000000000000002L,0x00000000003C0000L});
-    public static final BitSet FOLLOW_set_in_equalityExpression5095 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_identifier_in_propertyName4087 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_reservedWord_in_propertyName4094 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_StringLiteral_in_propertyName4104 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_numericLiteral_in_propertyName4109 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_primaryExpression_in_memberExpression4127 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_functionExpression_in_memberExpression4132 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_newExpression_in_memberExpression4137 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_NEW_in_newExpression4148 = new BitSet(new long[]{0xFFFFF7F602460070L,0x03200000000002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_newExpressionTail_in_newExpression4151 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_LPAREN_in_arguments4164 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC003BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_assignmentExpression_in_arguments4168 = new BitSet(new long[]{0x0000000000000000L,0x0000000000002100L});
+    public static final BitSet FOLLOW_COMMA_in_arguments4172 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_assignmentExpression_in_arguments4174 = new BitSet(new long[]{0x0000000000000000L,0x0000000000002100L});
+    public static final BitSet FOLLOW_RPAREN_in_arguments4182 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_memberExpression_in_leftHandSideExpression4220 = new BitSet(new long[]{0x0000000000000002L,0x00C0000000000A80L});
+    public static final BitSet FOLLOW_arguments_in_leftHandSideExpression4241 = new BitSet(new long[]{0x0000000000000002L,0x00C0000000000A80L});
+    public static final BitSet FOLLOW_LBRACK_in_leftHandSideExpression4268 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_expression_in_leftHandSideExpression4270 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000400L});
+    public static final BitSet FOLLOW_RBRACK_in_leftHandSideExpression4272 = new BitSet(new long[]{0x0000000000000002L,0x00C0000000000A80L});
+    public static final BitSet FOLLOW_DOT_in_leftHandSideExpression4295 = new BitSet(new long[]{0xFFFFF7FFFFFFFF80L,0x002000000100009FL,0x0008000000000000L});
+    public static final BitSet FOLLOW_rightHandSideExpression_in_leftHandSideExpression4299 = new BitSet(new long[]{0x0000000000000002L,0x00C0000000000A80L});
+    public static final BitSet FOLLOW_DOTDOT_in_leftHandSideExpression4327 = new BitSet(new long[]{0xFFFFF7F600020000L,0x002000000100001FL,0x0008000000000000L});
+    public static final BitSet FOLLOW_rightHandSideExpression2_in_leftHandSideExpression4331 = new BitSet(new long[]{0x0000000000000002L,0x00C0000000000A80L});
+    public static final BitSet FOLLOW_COLONCOLON_in_leftHandSideExpression4354 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000200L});
+    public static final BitSet FOLLOW_LBRACK_in_leftHandSideExpression4356 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_expression_in_leftHandSideExpression4358 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000400L});
+    public static final BitSet FOLLOW_RBRACK_in_leftHandSideExpression4360 = new BitSet(new long[]{0x0000000000000002L,0x00C0000000000A80L});
+    public static final BitSet FOLLOW_COLONCOLON_in_leftHandSideExpression4382 = new BitSet(new long[]{0xFFFFF7F600020000L,0x000000000100001FL,0x0008000000000000L});
+    public static final BitSet FOLLOW_propertySelector_in_leftHandSideExpression4386 = new BitSet(new long[]{0x0000000000000002L,0x00C0000000000A80L});
+    public static final BitSet FOLLOW_memberExpression_in_newExpressionTail4447 = new BitSet(new long[]{0x0000000000000002L,0x00C0000000000A80L});
+    public static final BitSet FOLLOW_LBRACK_in_newExpressionTail4470 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_expression_in_newExpressionTail4472 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000400L});
+    public static final BitSet FOLLOW_RBRACK_in_newExpressionTail4474 = new BitSet(new long[]{0x0000000000000002L,0x00C0000000000A80L});
+    public static final BitSet FOLLOW_DOT_in_newExpressionTail4497 = new BitSet(new long[]{0xFFFFF7FFFFFFFF80L,0x002000000100009FL,0x0008000000000000L});
+    public static final BitSet FOLLOW_rightHandSideExpression_in_newExpressionTail4501 = new BitSet(new long[]{0x0000000000000002L,0x00C0000000000A80L});
+    public static final BitSet FOLLOW_DOTDOT_in_newExpressionTail4529 = new BitSet(new long[]{0xFFFFF7F600020000L,0x002000000100001FL,0x0008000000000000L});
+    public static final BitSet FOLLOW_rightHandSideExpression2_in_newExpressionTail4533 = new BitSet(new long[]{0x0000000000000002L,0x00C0000000000A80L});
+    public static final BitSet FOLLOW_COLONCOLON_in_newExpressionTail4556 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000200L});
+    public static final BitSet FOLLOW_LBRACK_in_newExpressionTail4558 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_expression_in_newExpressionTail4560 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000400L});
+    public static final BitSet FOLLOW_RBRACK_in_newExpressionTail4562 = new BitSet(new long[]{0x0000000000000002L,0x00C0000000000A80L});
+    public static final BitSet FOLLOW_COLONCOLON_in_newExpressionTail4584 = new BitSet(new long[]{0xFFFFF7F600020000L,0x000000000100001FL,0x0008000000000000L});
+    public static final BitSet FOLLOW_propertySelector_in_newExpressionTail4588 = new BitSet(new long[]{0x0000000000000002L,0x00C0000000000A80L});
+    public static final BitSet FOLLOW_arguments_in_newExpressionTail4616 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_identifier_in_rightHandSideExpression4651 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_reservedWord_in_rightHandSideExpression4659 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_parenExpression_in_rightHandSideExpression4673 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_xmlAttribute_in_rightHandSideExpression4683 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_MUL_in_rightHandSideExpression4692 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_identifier_in_rightHandSideExpression24704 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_xmlAttribute_in_rightHandSideExpression24710 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_MUL_in_rightHandSideExpression24716 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_leftHandSideExpression_in_postfixExpression4732 = new BitSet(new long[]{0x0000000000000002L,0x000000000C000000L});
+    public static final BitSet FOLLOW_postfixOperator_in_postfixExpression4738 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_INC_in_postfixOperator4756 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_DEC_in_postfixOperator4765 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_postfixExpression_in_unaryExpression4782 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_unaryOperator_in_unaryExpression4787 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_unaryExpression_in_unaryExpression4790 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_DELETE_in_unaryOperator4802 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_VOID_in_unaryOperator4807 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_TYPEOF_in_unaryOperator4812 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_INC_in_unaryOperator4817 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_DEC_in_unaryOperator4822 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ADD_in_unaryOperator4829 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_SUB_in_unaryOperator4838 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_INV_in_unaryOperator4845 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_NOT_in_unaryOperator4850 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_YIELD_in_unaryOperator4855 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_DEFAULT_in_namespaceStatement4872 = new BitSet(new long[]{0x0000001000000000L});
+    public static final BitSet FOLLOW_WXML_in_namespaceStatement4874 = new BitSet(new long[]{0x0000002000000000L});
+    public static final BitSet FOLLOW_NAMESPACE_in_namespaceStatement4876 = new BitSet(new long[]{0x0000000000000000L,0x0000010000000000L});
+    public static final BitSet FOLLOW_ASSIGN_in_namespaceStatement4878 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_expression_in_namespaceStatement4880 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001040L,0x00000C0000000000L});
+    public static final BitSet FOLLOW_semic_in_namespaceStatement4882 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_unaryExpression_in_multiplicativeExpression4914 = new BitSet(new long[]{0x0000000000000002L,0x0008000003000000L});
+    public static final BitSet FOLLOW_set_in_multiplicativeExpression4918 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_unaryExpression_in_multiplicativeExpression4933 = new BitSet(new long[]{0x0000000000000002L,0x0008000003000000L});
+    public static final BitSet FOLLOW_multiplicativeExpression_in_additiveExpression4951 = new BitSet(new long[]{0x0000000000000002L,0x0000000000C00000L});
+    public static final BitSet FOLLOW_set_in_additiveExpression4955 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_multiplicativeExpression_in_additiveExpression4966 = new BitSet(new long[]{0x0000000000000002L,0x0000000000C00000L});
+    public static final BitSet FOLLOW_additiveExpression_in_shiftExpression4985 = new BitSet(new long[]{0x0000000000000002L,0x0000000070000000L});
+    public static final BitSet FOLLOW_set_in_shiftExpression4989 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_additiveExpression_in_shiftExpression5004 = new BitSet(new long[]{0x0000000000000002L,0x0000000070000000L});
+    public static final BitSet FOLLOW_shiftExpression_in_relationalExpression5023 = new BitSet(new long[]{0x0000000000300002L,0x000000000003C000L});
+    public static final BitSet FOLLOW_set_in_relationalExpression5027 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_shiftExpression_in_relationalExpression5054 = new BitSet(new long[]{0x0000000000300002L,0x000000000003C000L});
+    public static final BitSet FOLLOW_shiftExpression_in_relationalExpressionNoIn5068 = new BitSet(new long[]{0x0000000000200002L,0x000000000003C000L});
+    public static final BitSet FOLLOW_set_in_relationalExpressionNoIn5072 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_shiftExpression_in_relationalExpressionNoIn5095 = new BitSet(new long[]{0x0000000000200002L,0x000000000003C000L});
     public static final BitSet FOLLOW_relationalExpression_in_equalityExpression5114 = new BitSet(new long[]{0x0000000000000002L,0x00000000003C0000L});
-    public static final BitSet FOLLOW_relationalExpressionNoIn_in_equalityExpressionNoIn5128 = new BitSet(new long[]{0x0000000000000002L,0x00000000003C0000L});
-    public static final BitSet FOLLOW_set_in_equalityExpressionNoIn5132 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_set_in_equalityExpression5118 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_relationalExpression_in_equalityExpression5137 = new BitSet(new long[]{0x0000000000000002L,0x00000000003C0000L});
     public static final BitSet FOLLOW_relationalExpressionNoIn_in_equalityExpressionNoIn5151 = new BitSet(new long[]{0x0000000000000002L,0x00000000003C0000L});
-    public static final BitSet FOLLOW_equalityExpression_in_bitwiseANDExpression5171 = new BitSet(new long[]{0x0000000000000002L,0x0000000080000000L});
-    public static final BitSet FOLLOW_AND_in_bitwiseANDExpression5175 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_equalityExpression_in_bitwiseANDExpression5178 = new BitSet(new long[]{0x0000000000000002L,0x0000000080000000L});
-    public static final BitSet FOLLOW_equalityExpressionNoIn_in_bitwiseANDExpressionNoIn5192 = new BitSet(new long[]{0x0000000000000002L,0x0000000080000000L});
-    public static final BitSet FOLLOW_AND_in_bitwiseANDExpressionNoIn5196 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_equalityExpressionNoIn_in_bitwiseANDExpressionNoIn5199 = new BitSet(new long[]{0x0000000000000002L,0x0000000080000000L});
-    public static final BitSet FOLLOW_bitwiseANDExpression_in_bitwiseXORExpression5215 = new BitSet(new long[]{0x0000000000000002L,0x0000000200000000L});
-    public static final BitSet FOLLOW_XOR_in_bitwiseXORExpression5219 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_bitwiseANDExpression_in_bitwiseXORExpression5222 = new BitSet(new long[]{0x0000000000000002L,0x0000000200000000L});
-    public static final BitSet FOLLOW_bitwiseANDExpressionNoIn_in_bitwiseXORExpressionNoIn5238 = new BitSet(new long[]{0x0000000000000002L,0x0000000200000000L});
-    public static final BitSet FOLLOW_XOR_in_bitwiseXORExpressionNoIn5242 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_bitwiseANDExpressionNoIn_in_bitwiseXORExpressionNoIn5245 = new BitSet(new long[]{0x0000000000000002L,0x0000000200000000L});
-    public static final BitSet FOLLOW_bitwiseXORExpression_in_bitwiseORExpression5260 = new BitSet(new long[]{0x0000000000000002L,0x0000000100000000L});
-    public static final BitSet FOLLOW_OR_in_bitwiseORExpression5264 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_bitwiseXORExpression_in_bitwiseORExpression5267 = new BitSet(new long[]{0x0000000000000002L,0x0000000100000000L});
-    public static final BitSet FOLLOW_bitwiseXORExpressionNoIn_in_bitwiseORExpressionNoIn5282 = new BitSet(new long[]{0x0000000000000002L,0x0000000100000000L});
-    public static final BitSet FOLLOW_OR_in_bitwiseORExpressionNoIn5286 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_bitwiseXORExpressionNoIn_in_bitwiseORExpressionNoIn5289 = new BitSet(new long[]{0x0000000000000002L,0x0000000100000000L});
-    public static final BitSet FOLLOW_bitwiseORExpression_in_logicalANDExpression5308 = new BitSet(new long[]{0x0000000000000002L,0x0000001000000000L});
-    public static final BitSet FOLLOW_LAND_in_logicalANDExpression5312 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_bitwiseORExpression_in_logicalANDExpression5315 = new BitSet(new long[]{0x0000000000000002L,0x0000001000000000L});
-    public static final BitSet FOLLOW_bitwiseORExpressionNoIn_in_logicalANDExpressionNoIn5329 = new BitSet(new long[]{0x0000000000000002L,0x0000001000000000L});
-    public static final BitSet FOLLOW_LAND_in_logicalANDExpressionNoIn5333 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_bitwiseORExpressionNoIn_in_logicalANDExpressionNoIn5336 = new BitSet(new long[]{0x0000000000000002L,0x0000001000000000L});
-    public static final BitSet FOLLOW_logicalANDExpression_in_logicalORExpression5351 = new BitSet(new long[]{0x0000000000000002L,0x0000002000000000L});
-    public static final BitSet FOLLOW_LOR_in_logicalORExpression5355 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_logicalANDExpression_in_logicalORExpression5358 = new BitSet(new long[]{0x0000000000000002L,0x0000002000000000L});
-    public static final BitSet FOLLOW_logicalANDExpressionNoIn_in_logicalORExpressionNoIn5373 = new BitSet(new long[]{0x0000000000000002L,0x0000002000000000L});
-    public static final BitSet FOLLOW_LOR_in_logicalORExpressionNoIn5377 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_logicalANDExpressionNoIn_in_logicalORExpressionNoIn5380 = new BitSet(new long[]{0x0000000000000002L,0x0000002000000000L});
-    public static final BitSet FOLLOW_logicalORExpression_in_conditionalExpression5399 = new BitSet(new long[]{0x0000000000000002L,0x0000004000000000L});
-    public static final BitSet FOLLOW_QUE_in_conditionalExpression5403 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_assignmentExpression_in_conditionalExpression5406 = new BitSet(new long[]{0x0000000000000000L,0x0000008000000000L});
-    public static final BitSet FOLLOW_COLON_in_conditionalExpression5408 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_assignmentExpression_in_conditionalExpression5411 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_logicalORExpressionNoIn_in_conditionalExpressionNoIn5425 = new BitSet(new long[]{0x0000000000000002L,0x0000004000000000L});
-    public static final BitSet FOLLOW_QUE_in_conditionalExpressionNoIn5429 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_assignmentExpressionNoIn_in_conditionalExpressionNoIn5432 = new BitSet(new long[]{0x0000000000000000L,0x0000008000000000L});
-    public static final BitSet FOLLOW_COLON_in_conditionalExpressionNoIn5434 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_assignmentExpressionNoIn_in_conditionalExpressionNoIn5437 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_conditionalExpression_in_assignmentExpression5465 = new BitSet(new long[]{0x0000000000000002L,0x0017FF0000000000L});
-    public static final BitSet FOLLOW_assignmentOperator_in_assignmentExpression5472 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_assignmentExpression_in_assignmentExpression5475 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_set_in_equalityExpressionNoIn5155 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_relationalExpressionNoIn_in_equalityExpressionNoIn5174 = new BitSet(new long[]{0x0000000000000002L,0x00000000003C0000L});
+    public static final BitSet FOLLOW_equalityExpression_in_bitwiseANDExpression5194 = new BitSet(new long[]{0x0000000000000002L,0x0000000080000000L});
+    public static final BitSet FOLLOW_AND_in_bitwiseANDExpression5198 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_equalityExpression_in_bitwiseANDExpression5201 = new BitSet(new long[]{0x0000000000000002L,0x0000000080000000L});
+    public static final BitSet FOLLOW_equalityExpressionNoIn_in_bitwiseANDExpressionNoIn5215 = new BitSet(new long[]{0x0000000000000002L,0x0000000080000000L});
+    public static final BitSet FOLLOW_AND_in_bitwiseANDExpressionNoIn5219 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_equalityExpressionNoIn_in_bitwiseANDExpressionNoIn5222 = new BitSet(new long[]{0x0000000000000002L,0x0000000080000000L});
+    public static final BitSet FOLLOW_bitwiseANDExpression_in_bitwiseXORExpression5238 = new BitSet(new long[]{0x0000000000000002L,0x0000000200000000L});
+    public static final BitSet FOLLOW_XOR_in_bitwiseXORExpression5242 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_bitwiseANDExpression_in_bitwiseXORExpression5245 = new BitSet(new long[]{0x0000000000000002L,0x0000000200000000L});
+    public static final BitSet FOLLOW_bitwiseANDExpressionNoIn_in_bitwiseXORExpressionNoIn5261 = new BitSet(new long[]{0x0000000000000002L,0x0000000200000000L});
+    public static final BitSet FOLLOW_XOR_in_bitwiseXORExpressionNoIn5265 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_bitwiseANDExpressionNoIn_in_bitwiseXORExpressionNoIn5268 = new BitSet(new long[]{0x0000000000000002L,0x0000000200000000L});
+    public static final BitSet FOLLOW_bitwiseXORExpression_in_bitwiseORExpression5283 = new BitSet(new long[]{0x0000000000000002L,0x0000000100000000L});
+    public static final BitSet FOLLOW_OR_in_bitwiseORExpression5287 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_bitwiseXORExpression_in_bitwiseORExpression5290 = new BitSet(new long[]{0x0000000000000002L,0x0000000100000000L});
+    public static final BitSet FOLLOW_bitwiseXORExpressionNoIn_in_bitwiseORExpressionNoIn5305 = new BitSet(new long[]{0x0000000000000002L,0x0000000100000000L});
+    public static final BitSet FOLLOW_OR_in_bitwiseORExpressionNoIn5309 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_bitwiseXORExpressionNoIn_in_bitwiseORExpressionNoIn5312 = new BitSet(new long[]{0x0000000000000002L,0x0000000100000000L});
+    public static final BitSet FOLLOW_bitwiseORExpression_in_logicalANDExpression5331 = new BitSet(new long[]{0x0000000000000002L,0x0000001000000000L});
+    public static final BitSet FOLLOW_LAND_in_logicalANDExpression5335 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_bitwiseORExpression_in_logicalANDExpression5338 = new BitSet(new long[]{0x0000000000000002L,0x0000001000000000L});
+    public static final BitSet FOLLOW_bitwiseORExpressionNoIn_in_logicalANDExpressionNoIn5352 = new BitSet(new long[]{0x0000000000000002L,0x0000001000000000L});
+    public static final BitSet FOLLOW_LAND_in_logicalANDExpressionNoIn5356 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_bitwiseORExpressionNoIn_in_logicalANDExpressionNoIn5359 = new BitSet(new long[]{0x0000000000000002L,0x0000001000000000L});
+    public static final BitSet FOLLOW_logicalANDExpression_in_logicalORExpression5374 = new BitSet(new long[]{0x0000000000000002L,0x0000002000000000L});
+    public static final BitSet FOLLOW_LOR_in_logicalORExpression5378 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_logicalANDExpression_in_logicalORExpression5381 = new BitSet(new long[]{0x0000000000000002L,0x0000002000000000L});
+    public static final BitSet FOLLOW_logicalANDExpressionNoIn_in_logicalORExpressionNoIn5396 = new BitSet(new long[]{0x0000000000000002L,0x0000002000000000L});
+    public static final BitSet FOLLOW_LOR_in_logicalORExpressionNoIn5400 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_logicalANDExpressionNoIn_in_logicalORExpressionNoIn5403 = new BitSet(new long[]{0x0000000000000002L,0x0000002000000000L});
+    public static final BitSet FOLLOW_logicalORExpression_in_conditionalExpression5422 = new BitSet(new long[]{0x0000000000000002L,0x0000004000000000L});
+    public static final BitSet FOLLOW_QUE_in_conditionalExpression5426 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_assignmentExpression_in_conditionalExpression5429 = new BitSet(new long[]{0x0000000000000000L,0x0000008000000000L});
+    public static final BitSet FOLLOW_COLON_in_conditionalExpression5431 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_assignmentExpression_in_conditionalExpression5434 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_logicalORExpressionNoIn_in_conditionalExpressionNoIn5448 = new BitSet(new long[]{0x0000000000000002L,0x0000004000000000L});
+    public static final BitSet FOLLOW_QUE_in_conditionalExpressionNoIn5452 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_assignmentExpressionNoIn_in_conditionalExpressionNoIn5455 = new BitSet(new long[]{0x0000000000000000L,0x0000008000000000L});
+    public static final BitSet FOLLOW_COLON_in_conditionalExpressionNoIn5457 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_assignmentExpressionNoIn_in_conditionalExpressionNoIn5460 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_conditionalExpression_in_assignmentExpression5488 = new BitSet(new long[]{0x0000000000000002L,0x0017FF0000000000L});
+    public static final BitSet FOLLOW_assignmentOperator_in_assignmentExpression5495 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_assignmentExpression_in_assignmentExpression5498 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_set_in_assignmentOperator0 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_conditionalExpressionNoIn_in_assignmentExpressionNoIn5553 = new BitSet(new long[]{0x0000000000000002L,0x0017FF0000000000L});
-    public static final BitSet FOLLOW_assignmentOperator_in_assignmentExpressionNoIn5560 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_assignmentExpressionNoIn_in_assignmentExpressionNoIn5563 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_assignmentExpression_in_expression5585 = new BitSet(new long[]{0x0000000000000002L,0x0000000000002000L});
-    public static final BitSet FOLLOW_COMMA_in_expression5589 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_assignmentExpression_in_expression5593 = new BitSet(new long[]{0x0000000000000002L,0x0000000000002000L});
-    public static final BitSet FOLLOW_assignmentExpressionNoIn_in_expressionNoIn5630 = new BitSet(new long[]{0x0000000000000002L,0x0000000000002000L});
-    public static final BitSet FOLLOW_COMMA_in_expressionNoIn5634 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_assignmentExpressionNoIn_in_expressionNoIn5638 = new BitSet(new long[]{0x0000000000000002L,0x0000000000002000L});
-    public static final BitSet FOLLOW_SEMIC_in_semic5689 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_EOF_in_semic5694 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RBRACE_in_semic5699 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_EOL_in_semic5706 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_MultiLineComment_in_semic5710 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_block_in_statement5739 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_statementTail_in_statement5744 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_variableStatement_in_statementTail5756 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_emptyStatement_in_statementTail5761 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_expressionStatement_in_statementTail5766 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ifStatement_in_statementTail5771 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_iterationStatement_in_statementTail5776 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_continueStatement_in_statementTail5781 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_breakStatement_in_statementTail5786 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_returnStatement_in_statementTail5791 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_withStatement_in_statementTail5796 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_labelledStatement_in_statementTail5801 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_switchStatement_in_statementTail5806 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_throwStatement_in_statementTail5811 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_tryStatement_in_statementTail5816 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_constStatement_in_statementTail5821 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_namespaceStatement_in_statementTail5826 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_LBRACE_in_block5841 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF0L,0x0320000C0CC012FFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_sourceElement_in_block5843 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF0L,0x0320000C0CC012FFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_RBRACE_in_block5846 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_VAR_in_variableStatement5875 = new BitSet(new long[]{0xFFFFF7F600020000L,0x000000000000001FL,0x0008000000000000L});
-    public static final BitSet FOLLOW_variableDeclaration_in_variableStatement5877 = new BitSet(new long[]{0x0000000000000000L,0x0000000000003040L,0x00000C0000000000L});
-    public static final BitSet FOLLOW_COMMA_in_variableStatement5881 = new BitSet(new long[]{0xFFFFF7F600020000L,0x000000000000001FL,0x0008000000000000L});
-    public static final BitSet FOLLOW_variableDeclaration_in_variableStatement5883 = new BitSet(new long[]{0x0000000000000000L,0x0000000000003040L,0x00000C0000000000L});
-    public static final BitSet FOLLOW_semic_in_variableStatement5888 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_identifier_in_variableDeclaration5911 = new BitSet(new long[]{0x0000000000000002L,0x0000010000000000L});
-    public static final BitSet FOLLOW_ASSIGN_in_variableDeclaration5916 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_assignmentExpression_in_variableDeclaration5918 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_identifier_in_variableDeclarationNoIn5933 = new BitSet(new long[]{0x0000000000000002L,0x0000010000000000L});
-    public static final BitSet FOLLOW_ASSIGN_in_variableDeclarationNoIn5938 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_assignmentExpressionNoIn_in_variableDeclarationNoIn5940 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_CONST_in_constStatement5955 = new BitSet(new long[]{0xFFFFF7F600020000L,0x000000000000001FL,0x0008000000000000L});
-    public static final BitSet FOLLOW_variableDeclaration_in_constStatement5957 = new BitSet(new long[]{0x0000000000000000L,0x0000000000003040L,0x00000C0000000000L});
-    public static final BitSet FOLLOW_COMMA_in_constStatement5961 = new BitSet(new long[]{0xFFFFF7F600020000L,0x000000000000001FL,0x0008000000000000L});
-    public static final BitSet FOLLOW_variableDeclaration_in_constStatement5963 = new BitSet(new long[]{0x0000000000000000L,0x0000000000003040L,0x00000C0000000000L});
-    public static final BitSet FOLLOW_semic_in_constStatement5968 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_SEMIC_in_emptyStatement5998 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_expression_in_expressionStatement6021 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001040L,0x00000C0000000000L});
-    public static final BitSet FOLLOW_semic_in_expressionStatement6023 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_IF_in_ifStatement6041 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000080L});
-    public static final BitSet FOLLOW_LPAREN_in_ifStatement6043 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_expression_in_ifStatement6045 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000100L});
-    public static final BitSet FOLLOW_RPAREN_in_ifStatement6047 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF0L,0x0320000C0CC012BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_statement_in_ifStatement6049 = new BitSet(new long[]{0x0000000000004002L});
-    public static final BitSet FOLLOW_ELSE_in_ifStatement6055 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF0L,0x0320000C0CC012BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_statement_in_ifStatement6057 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_doStatement_in_iterationStatement6090 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_whileStatement_in_iterationStatement6095 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_forEachStatement_in_iterationStatement6100 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_forStatement_in_iterationStatement6105 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_DO_in_doStatement6117 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF0L,0x0320000C0CC012BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_statement_in_doStatement6119 = new BitSet(new long[]{0x0000000080000000L});
-    public static final BitSet FOLLOW_WHILE_in_doStatement6121 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000080L});
-    public static final BitSet FOLLOW_LPAREN_in_doStatement6123 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_expression_in_doStatement6125 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000100L});
-    public static final BitSet FOLLOW_RPAREN_in_doStatement6127 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001040L,0x00000C0000000000L});
-    public static final BitSet FOLLOW_semic_in_doStatement6129 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_WHILE_in_whileStatement6154 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000080L});
-    public static final BitSet FOLLOW_LPAREN_in_whileStatement6157 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_expression_in_whileStatement6160 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000100L});
-    public static final BitSet FOLLOW_RPAREN_in_whileStatement6162 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF0L,0x0320000C0CC012BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_statement_in_whileStatement6165 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_FOR_in_forEachStatement6182 = new BitSet(new long[]{0x0000000000020000L});
-    public static final BitSet FOLLOW_EACH_in_forEachStatement6184 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000080L});
-    public static final BitSet FOLLOW_LPAREN_in_forEachStatement6186 = new BitSet(new long[]{0xFFFFF7FE72461070L,0x0320000C0CC002BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_forEachControl_in_forEachStatement6188 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000100L});
-    public static final BitSet FOLLOW_RPAREN_in_forEachStatement6190 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF0L,0x0320000C0CC012BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_statement_in_forEachStatement6192 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_forControlVar_in_forEachControl6220 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_forControlExpression_in_forEachControl6226 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_FOR_in_forStatement6238 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000080L});
-    public static final BitSet FOLLOW_LPAREN_in_forStatement6241 = new BitSet(new long[]{0xFFFFF7FE72461070L,0x0320000C0CC012BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_forControl_in_forStatement6244 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000100L});
-    public static final BitSet FOLLOW_RPAREN_in_forStatement6246 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF0L,0x0320000C0CC012BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_statement_in_forStatement6249 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_forControlVar_in_forControl6260 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_forControlExpression_in_forControl6265 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_forControlSemic_in_forControl6270 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_VAR_in_forControlVar6281 = new BitSet(new long[]{0xFFFFF7F600020000L,0x000000000000001FL,0x0008000000000000L});
-    public static final BitSet FOLLOW_variableDeclarationNoIn_in_forControlVar6283 = new BitSet(new long[]{0x0000000000100000L,0x0000000000003000L});
-    public static final BitSet FOLLOW_IN_in_forControlVar6295 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_expression_in_forControlVar6297 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_COMMA_in_forControlVar6343 = new BitSet(new long[]{0xFFFFF7F600020000L,0x000000000000001FL,0x0008000000000000L});
-    public static final BitSet FOLLOW_variableDeclarationNoIn_in_forControlVar6345 = new BitSet(new long[]{0x0000000000000000L,0x0000000000003000L});
-    public static final BitSet FOLLOW_SEMIC_in_forControlVar6352 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC012BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_expression_in_forControlVar6356 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
-    public static final BitSet FOLLOW_SEMIC_in_forControlVar6361 = new BitSet(new long[]{0xFFFFF7FE52461072L,0x0320000C0CC002BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_expression_in_forControlVar6365 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_expressionNoIn_in_forControlExpression6445 = new BitSet(new long[]{0x0000000000100000L,0x0000000000001000L});
-    public static final BitSet FOLLOW_IN_in_forControlExpression6460 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_expression_in_forControlExpression6464 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_SEMIC_in_forControlExpression6512 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC012BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_expression_in_forControlExpression6516 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
-    public static final BitSet FOLLOW_SEMIC_in_forControlExpression6521 = new BitSet(new long[]{0xFFFFF7FE52461072L,0x0320000C0CC002BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_expression_in_forControlExpression6525 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_SEMIC_in_forControlSemic6600 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC012BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_expression_in_forControlSemic6604 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
-    public static final BitSet FOLLOW_SEMIC_in_forControlSemic6609 = new BitSet(new long[]{0xFFFFF7FE52461072L,0x0320000C0CC002BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_expression_in_forControlSemic6613 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_CONTINUE_in_continueStatement6681 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001040L,0x00080C0000000000L});
-    public static final BitSet FOLLOW_Identifier_in_continueStatement6686 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001040L,0x00000C0000000000L});
-    public static final BitSet FOLLOW_semic_in_continueStatement6689 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_BREAK_in_breakStatement6708 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001040L,0x00080C0000000000L});
-    public static final BitSet FOLLOW_Identifier_in_breakStatement6713 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001040L,0x00000C0000000000L});
-    public static final BitSet FOLLOW_semic_in_breakStatement6716 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RETURN_in_returnStatement6735 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC012FFL,0x07182C0000000000L});
-    public static final BitSet FOLLOW_expression_in_returnStatement6740 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001040L,0x00000C0000000000L});
-    public static final BitSet FOLLOW_semic_in_returnStatement6743 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_WITH_in_withStatement6760 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000080L});
-    public static final BitSet FOLLOW_LPAREN_in_withStatement6763 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_expression_in_withStatement6766 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000100L});
-    public static final BitSet FOLLOW_RPAREN_in_withStatement6768 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF0L,0x0320000C0CC012BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_statement_in_withStatement6771 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_SWITCH_in_switchStatement6787 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000080L});
-    public static final BitSet FOLLOW_LPAREN_in_switchStatement6789 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_expression_in_switchStatement6791 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000100L});
-    public static final BitSet FOLLOW_RPAREN_in_switchStatement6793 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000020L});
-    public static final BitSet FOLLOW_LBRACE_in_switchStatement6795 = new BitSet(new long[]{0x0000000000000900L,0x0000000000000040L});
-    public static final BitSet FOLLOW_defaultClause_in_switchStatement6799 = new BitSet(new long[]{0x0000000000000900L,0x0000000000000040L});
-    public static final BitSet FOLLOW_caseClause_in_switchStatement6803 = new BitSet(new long[]{0x0000000000000900L,0x0000000000000040L});
-    public static final BitSet FOLLOW_RBRACE_in_switchStatement6808 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_CASE_in_caseClause6836 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_expression_in_caseClause6839 = new BitSet(new long[]{0x0000000000000000L,0x0000008000000000L});
-    public static final BitSet FOLLOW_COLON_in_caseClause6841 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF2L,0x0320000C0CC012BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_statement_in_caseClause6844 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF2L,0x0320000C0CC012BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_DEFAULT_in_defaultClause6857 = new BitSet(new long[]{0x0000000000000000L,0x0000008000000000L});
-    public static final BitSet FOLLOW_COLON_in_defaultClause6860 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF2L,0x0320000C0CC012BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_statement_in_defaultClause6863 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF2L,0x0320000C0CC012BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_identifier_in_labelledStatement6880 = new BitSet(new long[]{0x0000000000000000L,0x0000008000000000L});
-    public static final BitSet FOLLOW_COLON_in_labelledStatement6882 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF0L,0x0320000C0CC012BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_sourceElement_in_labelledStatement6884 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_THROW_in_throwStatement6915 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_expression_in_throwStatement6920 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001040L,0x00000C0000000000L});
-    public static final BitSet FOLLOW_semic_in_throwStatement6922 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_TRY_in_tryStatement6939 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000020L});
-    public static final BitSet FOLLOW_block_in_tryStatement6942 = new BitSet(new long[]{0x0000000000008200L});
-    public static final BitSet FOLLOW_catchClause_in_tryStatement6946 = new BitSet(new long[]{0x0000000000008202L});
-    public static final BitSet FOLLOW_finallyClause_in_tryStatement6949 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_finallyClause_in_tryStatement6954 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_CATCH_in_catchClause6968 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000080L});
-    public static final BitSet FOLLOW_LPAREN_in_catchClause6971 = new BitSet(new long[]{0xFFFFF7F600020000L,0x000000000000001FL,0x0008000000000000L});
-    public static final BitSet FOLLOW_identifier_in_catchClause6974 = new BitSet(new long[]{0x0000000000080000L,0x0000000000000100L});
-    public static final BitSet FOLLOW_catchFilter_in_catchClause6976 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000100L});
-    public static final BitSet FOLLOW_RPAREN_in_catchClause6979 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000020L});
-    public static final BitSet FOLLOW_block_in_catchClause6982 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_IF_in_catchFilter6993 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_expression_in_catchFilter6995 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_FINALLY_in_finallyClause7007 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000020L});
-    public static final BitSet FOLLOW_block_in_finallyClause7010 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_FUNCTION_in_functionDeclaration7033 = new BitSet(new long[]{0xFFFFF7F600020000L,0x000000000000001FL,0x0008000000000000L});
-    public static final BitSet FOLLOW_identifier_in_functionDeclaration7037 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000080L});
-    public static final BitSet FOLLOW_formalParameterList_in_functionDeclaration7039 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000020L});
-    public static final BitSet FOLLOW_functionBody_in_functionDeclaration7041 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_FUNCTION_in_functionExpression7069 = new BitSet(new long[]{0xFFFFF7F600020000L,0x000000000000009FL,0x0008000000000000L});
-    public static final BitSet FOLLOW_identifier_in_functionExpression7073 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000080L});
-    public static final BitSet FOLLOW_formalParameterList_in_functionExpression7076 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000020L});
-    public static final BitSet FOLLOW_functionBody_in_functionExpression7078 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_identifier_in_formalParameter7106 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_LPAREN_in_formalParameterList7118 = new BitSet(new long[]{0xFFFFF7F600020000L,0x000000000000011FL,0x0008000000000000L});
-    public static final BitSet FOLLOW_formalParameter_in_formalParameterList7122 = new BitSet(new long[]{0x0000000000000000L,0x0000000000002100L});
-    public static final BitSet FOLLOW_COMMA_in_formalParameterList7126 = new BitSet(new long[]{0xFFFFF7F600020000L,0x000000000000001FL,0x0008000000000000L});
-    public static final BitSet FOLLOW_formalParameter_in_formalParameterList7128 = new BitSet(new long[]{0x0000000000000000L,0x0000000000002100L});
-    public static final BitSet FOLLOW_RPAREN_in_formalParameterList7136 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_LBRACE_in_functionBody7166 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF0L,0x0320000C0CC012FFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_sourceElement_in_functionBody7168 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF0L,0x0320000C0CC012FFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_RBRACE_in_functionBody7171 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_GET_in_getMethodDeclaration7208 = new BitSet(new long[]{0xFFFFF7F600020000L,0x000000000000001FL,0x0008000000000000L});
-    public static final BitSet FOLLOW_identifier_in_getMethodDeclaration7212 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000080L});
-    public static final BitSet FOLLOW_LPAREN_in_getMethodDeclaration7214 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000100L});
-    public static final BitSet FOLLOW_RPAREN_in_getMethodDeclaration7216 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000020L});
-    public static final BitSet FOLLOW_functionBody_in_getMethodDeclaration7218 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_SET_in_setMethodDeclaration7249 = new BitSet(new long[]{0xFFFFF7F600020000L,0x000000000000001FL,0x0008000000000000L});
-    public static final BitSet FOLLOW_identifier_in_setMethodDeclaration7253 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000080L});
-    public static final BitSet FOLLOW_LPAREN_in_setMethodDeclaration7255 = new BitSet(new long[]{0xFFFFF7F600020000L,0x000000000000001FL,0x0008000000000000L});
-    public static final BitSet FOLLOW_identifier_in_setMethodDeclaration7259 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000100L});
-    public static final BitSet FOLLOW_RPAREN_in_setMethodDeclaration7261 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000020L});
-    public static final BitSet FOLLOW_functionBody_in_setMethodDeclaration7263 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_sourceElementSync_in_program7304 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF0L,0x0320000C0CC012BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_sourceElement_in_program7307 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF0L,0x0320000C0CC012BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_sourceElementSync_in_program7309 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF0L,0x0320000C0CC012BFL,0x0718200000000000L});
-    public static final BitSet FOLLOW_EOF_in_program7313 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_functionDeclaration_in_sourceElement7358 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_statement_in_sourceElement7363 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_expression_in_standaloneExpression7381 = new BitSet(new long[]{0x0000000000000000L});
-    public static final BitSet FOLLOW_EOF_in_standaloneExpression7383 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_conditionalExpressionNoIn_in_assignmentExpressionNoIn5576 = new BitSet(new long[]{0x0000000000000002L,0x0017FF0000000000L});
+    public static final BitSet FOLLOW_assignmentOperator_in_assignmentExpressionNoIn5583 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_assignmentExpressionNoIn_in_assignmentExpressionNoIn5586 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_assignmentExpression_in_expression5608 = new BitSet(new long[]{0x0000000000000002L,0x0000000000002000L});
+    public static final BitSet FOLLOW_COMMA_in_expression5612 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_assignmentExpression_in_expression5616 = new BitSet(new long[]{0x0000000000000002L,0x0000000000002000L});
+    public static final BitSet FOLLOW_assignmentExpressionNoIn_in_expressionNoIn5653 = new BitSet(new long[]{0x0000000000000002L,0x0000000000002000L});
+    public static final BitSet FOLLOW_COMMA_in_expressionNoIn5657 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_assignmentExpressionNoIn_in_expressionNoIn5661 = new BitSet(new long[]{0x0000000000000002L,0x0000000000002000L});
+    public static final BitSet FOLLOW_SEMIC_in_semic5712 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_EOF_in_semic5717 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RBRACE_in_semic5722 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_EOL_in_semic5729 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_MultiLineComment_in_semic5733 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_block_in_statement5762 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_statementTail_in_statement5767 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_variableStatement_in_statementTail5779 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_emptyStatement_in_statementTail5784 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_expressionStatement_in_statementTail5789 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ifStatement_in_statementTail5794 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_iterationStatement_in_statementTail5799 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_continueStatement_in_statementTail5804 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_breakStatement_in_statementTail5809 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_returnStatement_in_statementTail5814 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_withStatement_in_statementTail5819 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_labelledStatement_in_statementTail5824 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_switchStatement_in_statementTail5829 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_throwStatement_in_statementTail5834 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_tryStatement_in_statementTail5839 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_constStatement_in_statementTail5844 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_namespaceStatement_in_statementTail5849 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_LBRACE_in_block5864 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF0L,0x0320000C0CC012FFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_sourceElement_in_block5866 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF0L,0x0320000C0CC012FFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_RBRACE_in_block5869 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_VAR_in_variableStatement5898 = new BitSet(new long[]{0xFFFFF7F600020000L,0x000000000000001FL,0x0008000000000000L});
+    public static final BitSet FOLLOW_variableDeclaration_in_variableStatement5900 = new BitSet(new long[]{0x0000000000000000L,0x0000000000003040L,0x00000C0000000000L});
+    public static final BitSet FOLLOW_COMMA_in_variableStatement5904 = new BitSet(new long[]{0xFFFFF7F600020000L,0x000000000000001FL,0x0008000000000000L});
+    public static final BitSet FOLLOW_variableDeclaration_in_variableStatement5906 = new BitSet(new long[]{0x0000000000000000L,0x0000000000003040L,0x00000C0000000000L});
+    public static final BitSet FOLLOW_semic_in_variableStatement5911 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_identifier_in_variableDeclaration5934 = new BitSet(new long[]{0x0000000000000002L,0x0000010000000000L});
+    public static final BitSet FOLLOW_ASSIGN_in_variableDeclaration5939 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_assignmentExpression_in_variableDeclaration5941 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_identifier_in_variableDeclarationNoIn5956 = new BitSet(new long[]{0x0000000000000002L,0x0000010000000000L});
+    public static final BitSet FOLLOW_ASSIGN_in_variableDeclarationNoIn5961 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_assignmentExpressionNoIn_in_variableDeclarationNoIn5963 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_CONST_in_constStatement5978 = new BitSet(new long[]{0xFFFFF7F600020000L,0x000000000000001FL,0x0008000000000000L});
+    public static final BitSet FOLLOW_variableDeclaration_in_constStatement5980 = new BitSet(new long[]{0x0000000000000000L,0x0000000000003040L,0x00000C0000000000L});
+    public static final BitSet FOLLOW_COMMA_in_constStatement5984 = new BitSet(new long[]{0xFFFFF7F600020000L,0x000000000000001FL,0x0008000000000000L});
+    public static final BitSet FOLLOW_variableDeclaration_in_constStatement5986 = new BitSet(new long[]{0x0000000000000000L,0x0000000000003040L,0x00000C0000000000L});
+    public static final BitSet FOLLOW_semic_in_constStatement5991 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_SEMIC_in_emptyStatement6021 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_expression_in_expressionStatement6044 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001040L,0x00000C0000000000L});
+    public static final BitSet FOLLOW_semic_in_expressionStatement6046 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_IF_in_ifStatement6064 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000080L});
+    public static final BitSet FOLLOW_LPAREN_in_ifStatement6066 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_expression_in_ifStatement6068 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000100L});
+    public static final BitSet FOLLOW_RPAREN_in_ifStatement6070 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF0L,0x0320000C0CC012BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_statement_in_ifStatement6072 = new BitSet(new long[]{0x0000000000004002L});
+    public static final BitSet FOLLOW_ELSE_in_ifStatement6078 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF0L,0x0320000C0CC012BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_statement_in_ifStatement6080 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_doStatement_in_iterationStatement6113 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_whileStatement_in_iterationStatement6118 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_forEachStatement_in_iterationStatement6123 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_forStatement_in_iterationStatement6128 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_DO_in_doStatement6140 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF0L,0x0320000C0CC012BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_statement_in_doStatement6142 = new BitSet(new long[]{0x0000000080000000L});
+    public static final BitSet FOLLOW_WHILE_in_doStatement6144 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000080L});
+    public static final BitSet FOLLOW_LPAREN_in_doStatement6146 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_expression_in_doStatement6148 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000100L});
+    public static final BitSet FOLLOW_RPAREN_in_doStatement6150 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001040L,0x00000C0000000000L});
+    public static final BitSet FOLLOW_semic_in_doStatement6152 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_WHILE_in_whileStatement6177 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000080L});
+    public static final BitSet FOLLOW_LPAREN_in_whileStatement6180 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_expression_in_whileStatement6183 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000100L});
+    public static final BitSet FOLLOW_RPAREN_in_whileStatement6185 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF0L,0x0320000C0CC012BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_statement_in_whileStatement6188 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_FOR_in_forEachStatement6205 = new BitSet(new long[]{0x0000000000020000L});
+    public static final BitSet FOLLOW_EACH_in_forEachStatement6207 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000080L});
+    public static final BitSet FOLLOW_LPAREN_in_forEachStatement6209 = new BitSet(new long[]{0xFFFFF7FE72461070L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_forEachControl_in_forEachStatement6211 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000100L});
+    public static final BitSet FOLLOW_RPAREN_in_forEachStatement6213 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF0L,0x0320000C0CC012BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_statement_in_forEachStatement6215 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_forControlVar_in_forEachControl6243 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_forControlExpression_in_forEachControl6249 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_FOR_in_forStatement6261 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000080L});
+    public static final BitSet FOLLOW_LPAREN_in_forStatement6264 = new BitSet(new long[]{0xFFFFF7FE72461070L,0x0320000C0CC012BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_forControl_in_forStatement6267 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000100L});
+    public static final BitSet FOLLOW_RPAREN_in_forStatement6269 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF0L,0x0320000C0CC012BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_statement_in_forStatement6272 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_forControlVar_in_forControl6283 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_forControlExpression_in_forControl6288 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_forControlSemic_in_forControl6293 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_VAR_in_forControlVar6304 = new BitSet(new long[]{0xFFFFF7F600020000L,0x000000000000001FL,0x0008000000000000L});
+    public static final BitSet FOLLOW_variableDeclarationNoIn_in_forControlVar6306 = new BitSet(new long[]{0x0000000000100000L,0x0000000000003000L});
+    public static final BitSet FOLLOW_IN_in_forControlVar6318 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_expression_in_forControlVar6320 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_COMMA_in_forControlVar6366 = new BitSet(new long[]{0xFFFFF7F600020000L,0x000000000000001FL,0x0008000000000000L});
+    public static final BitSet FOLLOW_variableDeclarationNoIn_in_forControlVar6368 = new BitSet(new long[]{0x0000000000000000L,0x0000000000003000L});
+    public static final BitSet FOLLOW_SEMIC_in_forControlVar6375 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC012BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_expression_in_forControlVar6379 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
+    public static final BitSet FOLLOW_SEMIC_in_forControlVar6384 = new BitSet(new long[]{0xFFFFF7FE52461072L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_expression_in_forControlVar6388 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_expressionNoIn_in_forControlExpression6468 = new BitSet(new long[]{0x0000000000100000L,0x0000000000001000L});
+    public static final BitSet FOLLOW_IN_in_forControlExpression6483 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_expression_in_forControlExpression6487 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_SEMIC_in_forControlExpression6535 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC012BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_expression_in_forControlExpression6539 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
+    public static final BitSet FOLLOW_SEMIC_in_forControlExpression6544 = new BitSet(new long[]{0xFFFFF7FE52461072L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_expression_in_forControlExpression6548 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_SEMIC_in_forControlSemic6623 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC012BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_expression_in_forControlSemic6627 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
+    public static final BitSet FOLLOW_SEMIC_in_forControlSemic6632 = new BitSet(new long[]{0xFFFFF7FE52461072L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_expression_in_forControlSemic6636 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_CONTINUE_in_continueStatement6704 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001040L,0x00080C0000000000L});
+    public static final BitSet FOLLOW_Identifier_in_continueStatement6709 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001040L,0x00000C0000000000L});
+    public static final BitSet FOLLOW_semic_in_continueStatement6712 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_BREAK_in_breakStatement6731 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001040L,0x00080C0000000000L});
+    public static final BitSet FOLLOW_Identifier_in_breakStatement6736 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001040L,0x00000C0000000000L});
+    public static final BitSet FOLLOW_semic_in_breakStatement6739 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RETURN_in_returnStatement6758 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC012FFL,0x07182C0000000000L});
+    public static final BitSet FOLLOW_expression_in_returnStatement6763 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001040L,0x00000C0000000000L});
+    public static final BitSet FOLLOW_semic_in_returnStatement6766 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_WITH_in_withStatement6783 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000080L});
+    public static final BitSet FOLLOW_LPAREN_in_withStatement6786 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_expression_in_withStatement6789 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000100L});
+    public static final BitSet FOLLOW_RPAREN_in_withStatement6791 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF0L,0x0320000C0CC012BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_statement_in_withStatement6794 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_SWITCH_in_switchStatement6810 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000080L});
+    public static final BitSet FOLLOW_LPAREN_in_switchStatement6812 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_expression_in_switchStatement6814 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000100L});
+    public static final BitSet FOLLOW_RPAREN_in_switchStatement6816 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000020L});
+    public static final BitSet FOLLOW_LBRACE_in_switchStatement6818 = new BitSet(new long[]{0x0000000000000900L,0x0000000000000040L});
+    public static final BitSet FOLLOW_defaultClause_in_switchStatement6822 = new BitSet(new long[]{0x0000000000000900L,0x0000000000000040L});
+    public static final BitSet FOLLOW_caseClause_in_switchStatement6826 = new BitSet(new long[]{0x0000000000000900L,0x0000000000000040L});
+    public static final BitSet FOLLOW_RBRACE_in_switchStatement6831 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_CASE_in_caseClause6859 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_expression_in_caseClause6862 = new BitSet(new long[]{0x0000000000000000L,0x0000008000000000L});
+    public static final BitSet FOLLOW_COLON_in_caseClause6864 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF2L,0x0320000C0CC012BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_statement_in_caseClause6867 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF2L,0x0320000C0CC012BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_DEFAULT_in_defaultClause6880 = new BitSet(new long[]{0x0000000000000000L,0x0000008000000000L});
+    public static final BitSet FOLLOW_COLON_in_defaultClause6883 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF2L,0x0320000C0CC012BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_statement_in_defaultClause6886 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF2L,0x0320000C0CC012BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_identifier_in_labelledStatement6903 = new BitSet(new long[]{0x0000000000000000L,0x0000008000000000L});
+    public static final BitSet FOLLOW_COLON_in_labelledStatement6905 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF0L,0x0320000C0CC012BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_sourceElement_in_labelledStatement6907 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_THROW_in_throwStatement6938 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_expression_in_throwStatement6943 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001040L,0x00000C0000000000L});
+    public static final BitSet FOLLOW_semic_in_throwStatement6945 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_TRY_in_tryStatement6962 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000020L});
+    public static final BitSet FOLLOW_block_in_tryStatement6965 = new BitSet(new long[]{0x0000000000008200L});
+    public static final BitSet FOLLOW_catchClause_in_tryStatement6969 = new BitSet(new long[]{0x0000000000008202L});
+    public static final BitSet FOLLOW_finallyClause_in_tryStatement6972 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_finallyClause_in_tryStatement6977 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_CATCH_in_catchClause6991 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000080L});
+    public static final BitSet FOLLOW_LPAREN_in_catchClause6994 = new BitSet(new long[]{0xFFFFF7F600020000L,0x000000000000001FL,0x0008000000000000L});
+    public static final BitSet FOLLOW_identifier_in_catchClause6997 = new BitSet(new long[]{0x0000000000080000L,0x0000000000000100L});
+    public static final BitSet FOLLOW_catchFilter_in_catchClause6999 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000100L});
+    public static final BitSet FOLLOW_RPAREN_in_catchClause7002 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000020L});
+    public static final BitSet FOLLOW_block_in_catchClause7005 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_IF_in_catchFilter7016 = new BitSet(new long[]{0xFFFFF7FE52461070L,0x0320000C0CC002BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_expression_in_catchFilter7018 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_FINALLY_in_finallyClause7030 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000020L});
+    public static final BitSet FOLLOW_block_in_finallyClause7033 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_FUNCTION_in_functionDeclaration7056 = new BitSet(new long[]{0xFFFFF7F600020000L,0x000000000000001FL,0x0008000000000000L});
+    public static final BitSet FOLLOW_identifier_in_functionDeclaration7060 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000080L});
+    public static final BitSet FOLLOW_formalParameterList_in_functionDeclaration7062 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000020L});
+    public static final BitSet FOLLOW_functionBody_in_functionDeclaration7064 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_FUNCTION_in_functionExpression7092 = new BitSet(new long[]{0xFFFFF7F600020000L,0x000000000000009FL,0x0008000000000000L});
+    public static final BitSet FOLLOW_identifier_in_functionExpression7096 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000080L});
+    public static final BitSet FOLLOW_formalParameterList_in_functionExpression7099 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000020L});
+    public static final BitSet FOLLOW_functionBody_in_functionExpression7101 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_identifier_in_formalParameter7129 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_LPAREN_in_formalParameterList7141 = new BitSet(new long[]{0xFFFFF7F600020000L,0x000000000000011FL,0x0008000000000000L});
+    public static final BitSet FOLLOW_formalParameter_in_formalParameterList7145 = new BitSet(new long[]{0x0000000000000000L,0x0000000000002100L});
+    public static final BitSet FOLLOW_COMMA_in_formalParameterList7149 = new BitSet(new long[]{0xFFFFF7F600020000L,0x000000000000001FL,0x0008000000000000L});
+    public static final BitSet FOLLOW_formalParameter_in_formalParameterList7151 = new BitSet(new long[]{0x0000000000000000L,0x0000000000002100L});
+    public static final BitSet FOLLOW_RPAREN_in_formalParameterList7159 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_LBRACE_in_functionBody7189 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF0L,0x0320000C0CC012FFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_sourceElement_in_functionBody7191 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF0L,0x0320000C0CC012FFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_RBRACE_in_functionBody7194 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_GET_in_getMethodDeclaration7231 = new BitSet(new long[]{0xFFFFF7F600020000L,0x000000000000001FL,0x0008000000000000L});
+    public static final BitSet FOLLOW_identifier_in_getMethodDeclaration7235 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000080L});
+    public static final BitSet FOLLOW_LPAREN_in_getMethodDeclaration7237 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000100L});
+    public static final BitSet FOLLOW_RPAREN_in_getMethodDeclaration7239 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000020L});
+    public static final BitSet FOLLOW_functionBody_in_getMethodDeclaration7241 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_SET_in_setMethodDeclaration7272 = new BitSet(new long[]{0xFFFFF7F600020000L,0x000000000000001FL,0x0008000000000000L});
+    public static final BitSet FOLLOW_identifier_in_setMethodDeclaration7276 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000080L});
+    public static final BitSet FOLLOW_LPAREN_in_setMethodDeclaration7278 = new BitSet(new long[]{0xFFFFF7F600020000L,0x000000000000001FL,0x0008000000000000L});
+    public static final BitSet FOLLOW_identifier_in_setMethodDeclaration7282 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000100L});
+    public static final BitSet FOLLOW_RPAREN_in_setMethodDeclaration7284 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000020L});
+    public static final BitSet FOLLOW_functionBody_in_setMethodDeclaration7286 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_sourceElementSync_in_program7327 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF0L,0x0320000C0CC012BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_sourceElement_in_program7330 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF0L,0x0320000C0CC012BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_sourceElementSync_in_program7332 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF0L,0x0320000C0CC012BFL,0x0718200000000000L});
+    public static final BitSet FOLLOW_EOF_in_program7336 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_functionDeclaration_in_sourceElement7381 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_statement_in_sourceElement7386 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_expression_in_standaloneExpression7404 = new BitSet(new long[]{0x0000000000000000L});
+    public static final BitSet FOLLOW_EOF_in_standaloneExpression7406 = new BitSet(new long[]{0x0000000000000002L});
 
 }

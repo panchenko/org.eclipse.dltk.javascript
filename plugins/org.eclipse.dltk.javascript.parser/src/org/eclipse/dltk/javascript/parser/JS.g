@@ -1038,6 +1038,7 @@ nameValuePairFix
 
 propertyName
 	: identifier
+	| word=reservedWord -> Identifier[word.start]
 	| StringLiteral
 	| numericLiteral
 	;
@@ -1105,6 +1106,7 @@ newExpressionTail
 
 rightHandSideExpression
   : identifier
+  | word=reservedWord -> Identifier[word.start]
   | { isXmlEnabled() }?=> parenExpression 
   | { isXmlEnabled() }?=> xmlAttribute
   | { isXmlEnabled() }?=> MUL

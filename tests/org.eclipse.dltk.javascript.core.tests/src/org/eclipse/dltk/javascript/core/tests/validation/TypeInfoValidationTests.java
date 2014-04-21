@@ -3971,4 +3971,24 @@ public void testFunctionCallFromUnion() {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 1, problems.size());
 	}
+	
+	public void testUnionTypeWithArray() {
+		final StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @param {Array<Array<*>|Number>} a");
+		code.add(" */");
+		code.add("function call(a) {}");
+		code.add("function test() {");
+		code.add("	var array1 = [1,2];");
+		code.add("	call(array1);");
+		code.add("	var array2 = [[1,2]];");
+		code.add("	call(array2);");
+		code.add("	var array3 = [[1,2],1];");
+		code.add("	call(array3);");
+		code.add("	var array4 = [['1','2'],1];");
+		code.add("	call(array4);");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
 }

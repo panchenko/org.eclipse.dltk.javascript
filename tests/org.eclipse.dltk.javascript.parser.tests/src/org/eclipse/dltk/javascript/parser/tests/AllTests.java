@@ -37,6 +37,7 @@ public class AllTests {
 		suite.addTestSuite(Bug20110503.class);
 		suite.addTestSuite(ForTests.class);
 		suite.addTestSuite(StringPoolTest.class);
+		suite.addTestSuite(KeywordTest.class);
 		// $JUnit-END$
 		return suite;
 	}
