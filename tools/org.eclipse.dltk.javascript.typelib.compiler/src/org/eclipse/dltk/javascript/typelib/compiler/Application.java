@@ -27,6 +27,7 @@ import org.eclipse.equinox.app.IApplicationContext;
 
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 
 public class Application implements IApplication {
 
@@ -77,14 +78,58 @@ public class Application implements IApplication {
 				ImmutableMap.of(TypeLibraryFormat.NAME_HEADER, "jQuery", TypeLibraryFormat.VERSION_HEADER, "1.9"));
 	}
 
+	private static final ImmutableSet<String> IGNORE = ImmutableSet
+			.<String> builder()
+			.add("Window.Components")
+			.add("Window.content")
+			.add("Window.controllers")
+			.add("Window.directories")
+			.add("Window.dialogArguments")
+			.add("Window.pkcs11")
+			.add("Window.updateCommands")
+			.add("Window.setImmediate")
+			.add("Window.clearImmediate")
+			.add("Window.ActiveXObject")
+			.add("Window.clipboardData")
+			.add("Window.maxConnectionsPer1_0Server")
+			.add("Window.maxConnectionsPerServer")
+			.add("Window.scrollByLines")
+			.add("Window.scrollByPages")
+			.build();
+
 	/**
 	 * @throws IOException
 	 */
 	private void compileDOM() throws IOException {
-		final AbstractTypeLibraryCompiler compiler = new ClosureCompiler();
+		final ClosureCompiler compiler = new ClosureCompiler();
 		compiler.load(new File("/home/alex/DLTK/closure-compiler/externs/w3c_dom1.js"), Charsets.UTF_8);
 		compiler.load(new File("/home/alex/DLTK/closure-compiler/externs/w3c_dom2.js"), Charsets.UTF_8);
 		compiler.load(new File("/home/alex/DLTK/closure-compiler/externs/w3c_event.js"), Charsets.UTF_8);
+		compiler.load(new File("/home/alex/DLTK/closure-compiler/externs/w3c_css.js"), Charsets.UTF_8);
+		final ClosureCompiler windowCompiler = new ClosureCompiler();
+		windowCompiler.expectType("Window");
+		windowCompiler.load(new File("/home/alex/DLTK/closure-compiler/externs/ie_dom.js"), Charsets.UTF_8);
+		windowCompiler.load(new File("/home/alex/DLTK/closure-compiler/externs/gecko_dom.js"), Charsets.UTF_8);
+		for (String name : new String[] { "Window", "Navigator", "PluginArray", "Plugin", "History", "Selection", "Location" }) {
+			final Type type = windowCompiler.getType(name);
+			if (type != null) {
+				for (Iterator<Member> i = type.getMembers().iterator(); i.hasNext();) {
+					final Member member = i.next();
+					if (IGNORE.contains(type.getName() + "." + member.getName())) {
+						i.remove();
+					}
+				}
+				final Type main = compiler.getType(name);
+				if (main != null) {
+					windowCompiler.info("Merging %s members", name);
+					main.getMembers().addAll(type.getMembers());
+				} else {
+					compiler.addType(type);
+				}
+			} else {
+				windowCompiler.warn(null, "Type %s not found", name);
+			}
+		}
 		compiler.resolveTypes();
 		compiler.save(
 				new File("/home/alex/DLTK/org.eclipse.dltk.javascript/plugins/org.eclipse.dltk.javascript.typelibs/dom"),

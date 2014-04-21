@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typelib.compiler;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Predicates.instanceOf;
 
 import java.io.File;
@@ -20,7 +21,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Formatter;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -35,6 +36,7 @@ import org.eclipse.dltk.javascript.parser.JavaScriptParserProblems;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
+import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
@@ -44,6 +46,9 @@ import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelResourceSet;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeLiteral;
+import org.eclipse.dltk.javascript.typeinfo.model.TypedElement;
+import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.xmi.XMIResource;
 
@@ -61,6 +66,7 @@ import com.google.common.io.Files;
 public abstract class AbstractTypeLibraryCompiler {
 	private final XMIResource resource = TypeInfoManager.newResource();
 	private final Map<String, Type> types = new HashMap<String, Type>();
+	private final Set<String> expectedTypes = new HashSet<String>();
 	private String file;
 	private ISourceLineTracker lineTracker;
 
@@ -103,6 +109,7 @@ public abstract class AbstractTypeLibraryCompiler {
 
 	public void reset() {
 		types.clear();
+		expectedTypes.clear();
 	}
 
 	public void resolveTypes() {
@@ -116,8 +123,10 @@ public abstract class AbstractTypeLibraryCompiler {
 				shortNames.put(type.getName().substring(pos + 1), type);
 			}
 		}
+		cleanTypeExpressions();
+		optimizeTypeExpressions();
 		final Set<String> proxies = Sets.newHashSet();
-		for (Iterator<EObject> i = resource.getAllContents(); i.hasNext();) {
+		for (TreeIterator<EObject> i = resource.getAllContents(); i.hasNext();) {
 			final EObject o = i.next();
 			if (o instanceof SimpleType) {
 				final SimpleType simple = (SimpleType) o;
@@ -136,6 +145,9 @@ public abstract class AbstractTypeLibraryCompiler {
 						simple.setTarget(candidate);
 						continue;
 					}
+					if ("undefined".equals(name)) {
+						System.out.println(o);
+					}
 					proxies.add(name);
 				}
 			} else if (o instanceof Type) {
@@ -153,6 +165,49 @@ public abstract class AbstractTypeLibraryCompiler {
 				error(null, "Proxy resolution failed for " + intersection);
 			}
 		}
+	}
+
+	private void cleanTypeExpressions() {
+		for (TreeIterator<EObject> i = resource.getAllContents(); i.hasNext();) {
+			final EObject o = i.next();
+			if (o instanceof UnionType) {
+				i.prune();
+				final UnionType unionType = (UnionType) o;
+				for (SimpleType simpleType : Iterables.filter(unionType.getTargets(), SimpleType.class)) {
+					if ("null".equals(simpleType.getName()) || "undefined?".equals(simpleType.getName())) {
+						unionType.getTargets().remove(simpleType);
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	protected void optimizeTypeExpressions() {
+		for (TreeIterator<EObject> i = resource.getAllContents(); i.hasNext();) {
+			final EObject o = i.next();
+			if (o instanceof TypedElement) {
+				final TypedElement typed = (TypedElement) o;
+				final JSType type = typed.getType();
+				if (type != null) {
+					final JSType optimized = optimizeTypeExpression(type);
+					if (optimized != type) {
+						i.prune();
+						typed.setType(optimized);
+					}
+				}
+			}
+		}
+	}
+
+	protected JSType optimizeTypeExpression(JSType type) {
+		if (type instanceof UnionType) {
+			final UnionType unionType = (UnionType) type;
+			if (unionType.getTargets().size() == 1) {
+				return unionType.getTargets().get(0);
+			}
+		}
+		return type;
 	}
 
 	public void renameType(String oldName, String newName) {
@@ -211,6 +266,7 @@ public abstract class AbstractTypeLibraryCompiler {
 	}
 
 	protected void addType(Type type) {
+		checkArgument(!types.containsKey(type.getName()), "Type %s already registered", type.getName());
 		types.put(type.getName(), type);
 		resource.getContents().add(type);
 		final TypeLiteral literal = TypeInfoModelFactory.eINSTANCE.createTypeLiteral();
@@ -219,16 +275,26 @@ public abstract class AbstractTypeLibraryCompiler {
 		resource.getContents().add(literal);
 	}
 
+	public void expectType(String name) {
+		expectedTypes.add(name);
+	}
+
 	protected static String fqName(Member member) {
 		final Type type = member.getDeclaringType();
 		return (type != null ? type.getName() : "?") + "." + member.getName();
 	}
 
 	protected boolean addToType(ISourceNode expression, Member member, String typeName) {
-		final Type type = getType(typeName);
+		Type type = getType(typeName);
 		if (type == null) {
-			warn(expression, "Declaring type %s not found", typeName);
-			return false;
+			if (expectedTypes.contains(typeName)) {
+				type = TypeInfoModelFactory.eINSTANCE.createType();
+				type.setName(typeName);
+				addType(type);
+			} else {
+				warn(expression, "Declaring type %s not found", typeName);
+				return false;
+			}
 		}
 		final Collection<Member> duplicates = findMembers(type, member.getName(), member.isStatic());
 		if (!(member instanceof Method ? Collections2.filter(duplicates, instanceOf(Property.class)) : duplicates).isEmpty()) {
