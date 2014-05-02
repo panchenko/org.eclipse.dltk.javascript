@@ -586,6 +586,9 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 						|| "apply".equals(method.getName())) {
 					Object x = reference.getParent().getAttribute(
 							IReferenceAttributes.ELEMENT);
+					if (x == null)
+						x = reference.getParent().getAttribute(
+								IReferenceAttributes.R_METHOD);
 					if (x instanceof IRMethod) {
 						return ConstantValue.of(((IRMethod) x).getType());
 					}

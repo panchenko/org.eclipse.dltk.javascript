@@ -3991,4 +3991,25 @@ public void testFunctionCallFromUnion() {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
+	
+	public void test2ApplyMethodOnPrototypeMethod() {
+		final StringList code = new StringList();
+		code.add("function MyConstuctor() {}");
+		code.add("/**");
+		code.add(" * @return {String}");
+		code.add(" */");
+		code.add(" MyConstuctor.prototype.newMessage = function(message, params) {");
+		code.add("	 return ''");
+		code.add(" }");
+		code.add("/**");
+		code.add(" * @param {String} text");
+		code.add(" */");
+		code.add("function meth2(text) {}");
+		code.add("function testMeth() {");
+		code.add("	var o = new MyConstuctor()");
+		code.add("	meth2(o.newMessage.apply(null,[1,2]))");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
 }
