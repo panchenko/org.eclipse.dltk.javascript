@@ -19,6 +19,8 @@
       label="%featureName"
       version="5.1.0.qualifier"
       provider-name="%providerName"
+      license-feature="org.eclipse.license"
+      license-feature-version="1.0.1.qualifier"
       image="eclipse_update_120.jpg">
 
    <description url="http://www.eclipse.org/dltk">
@@ -38,7 +40,7 @@ http://www.eclipse.org/legal/epl-v10.html
    </license>
 
    <requires>
-      <import feature="org.eclipse.dltk.core" version="5.0.0" match="compatible"/>
+      <import feature="org.eclipse.dltk.core" version="5.1.0" match="compatible"/>
    </requires>
 
    <plugin
