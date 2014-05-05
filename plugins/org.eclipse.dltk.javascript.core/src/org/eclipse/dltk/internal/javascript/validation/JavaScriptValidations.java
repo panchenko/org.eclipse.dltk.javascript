@@ -12,6 +12,8 @@
 package org.eclipse.dltk.internal.javascript.validation;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -31,10 +33,13 @@ import org.eclipse.dltk.javascript.parser.JSProblemReporter;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
 import org.eclipse.dltk.javascript.parser.Reporter;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
+import org.eclipse.dltk.javascript.typeinfo.IRConstructor;
 import org.eclipse.dltk.javascript.typeinfo.IRMethod;
 import org.eclipse.dltk.javascript.typeinfo.IRParameter;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
+import org.eclipse.dltk.javascript.typeinfo.RModelBuilder;
+import org.eclipse.dltk.javascript.typeinfo.RTypes;
 import org.eclipse.dltk.javascript.typeinfo.TypeCompatibility;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 import org.eclipse.osgi.util.NLS;
@@ -111,6 +116,7 @@ public class JavaScriptValidations {
 	 * @param arguments
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public static <METHOD extends IRMethod> METHOD selectMethod(
 			List<METHOD> methods, IValueReference[] arguments, boolean fallback) {
 		if (methods.size() == 1) {
@@ -126,8 +132,9 @@ public class JavaScriptValidations {
 			}
 		}
 		if (matches != null) {
+			METHOD firstMatch = matches.get(0);
 			if (matches.size() == 1) {
-				return matches.get(0);
+				return firstMatch;
 			}
 			OUTER: for (METHOD method : matches) {
 				final List<IRParameter> parameters = method.getParameters();
@@ -143,6 +150,32 @@ public class JavaScriptValidations {
 						continue OUTER;
 				}
 				return method;
+			}
+			// if it still didn't match then the argument is maybe of union type
+			// and matches 1 of the methods at runtime (but not a specific one
+			// at design time). just make 1 method of the matched methods.
+			if (!(firstMatch instanceof IRConstructor)) {
+				Collection<IRType>[] paramType = new Collection[firstMatch
+						.getParameterCount()];
+				for (METHOD method : matches) {
+					List<IRParameter> parameters = method.getParameters();
+					for (int i = 0; i < Math.min(arguments.length,
+							parameters.size()); i++) {
+						if (paramType[i] == null)
+							paramType[i] = new ArrayList<IRType>();
+						paramType[i].add(parameters.get(i).getType());
+					}
+				}
+				List<IRParameter> parameters = firstMatch.getParameters();
+				IRParameter[] params = new IRParameter[paramType.length];
+				for (int i = 0; i < parameters.size(); i++) {
+					IRParameter param = parameters.get(i);
+					params[i] = RModelBuilder.createParameter(param.getName(),
+							RTypes.union(paramType[i]), param.getKind());
+				}
+				return (METHOD) RModelBuilder.method(firstMatch.getName(),
+						firstMatch.getType(), Arrays.asList(params),
+						firstMatch.getVisibility(), firstMatch.getSource());
 			}
 		}
 		return fallback ? methods.get(0) : null;
