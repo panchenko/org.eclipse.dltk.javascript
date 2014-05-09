@@ -4012,4 +4012,21 @@ public void testFunctionCallFromUnion() {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
+	
+	
+	public void test2PrototypeWithGetSetProperty() {
+		final StringList code = new StringList();
+		code.add("function x(){}");
+		code.add("x.prototype = Object.create(Object.prototype, {");
+		code.add("  bar: {");
+		code.add("    configurable: false,");
+		code.add("    get: function() { return 10 },");
+		code.add("    set: function(value) {  }");
+		code.add("}});");
+		code.add("var p = new x();");
+		code.add("var o = p.bar;");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+
+	}
 }

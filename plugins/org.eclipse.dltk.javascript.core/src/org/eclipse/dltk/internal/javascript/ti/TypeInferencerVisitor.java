@@ -620,6 +620,19 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 												.getType(), valueMember
 												.getSource()));
 									}
+									valueMember = ((IRRecordType) member
+											.getType()).getMember("get");
+									if (valueMember != null) {
+										IRType valueType = valueMember
+												.getType();
+										if (valueType instanceof IRFunctionType) {
+											valueType = ((IRFunctionType) valueType)
+													.getReturnType();
+										}
+										newMembers.add(new RRecordMember(member
+												.getName(), valueType,
+												valueMember.getSource()));
+									}
 								}
 							}
 							if (newMembers.size() > 0) {
