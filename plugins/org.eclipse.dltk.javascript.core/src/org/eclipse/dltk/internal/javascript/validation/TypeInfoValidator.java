@@ -1391,6 +1391,15 @@ public class TypeInfoValidator implements IBuildParticipant,
 			}
 		}
 
+		private void reportDeprecatedRecordMember(ASTNode node,
+				IValueReference reference, IRRecordMember method) {
+			IRType type = JavaScriptValidations.typeOf(reference.getParent());
+			final String msg = NLS.bind(ValidationMessages.DeprecatedProperty,
+					method.getName(), type != null ? type.getName() : null);
+			reporter.reportProblem(JavaScriptProblems.DEPRECATED_PROPERTY, msg,
+					node.sourceStart(), node.sourceEnd());
+		}
+
 		private void reportMethodParameterError(ASTNode methodNode,
 				IValueReference[] arguments, IRMethod method) {
 			if (method.getDeclaringType() != null) {
@@ -2003,6 +2012,9 @@ public class TypeInfoValidator implements IBuildParticipant,
 						else if (member instanceof IRMethod)
 							reportDeprecatedMethod(propName, result,
 									(IRMethod) member);
+						else if (member instanceof IRRecordMember)
+							reportDeprecatedRecordMember(propName, result,
+									(IRRecordMember) member);
 					}
 				} else if (!member.isVisible()) {
 					final IRProperty parentProperty = ValueReferenceUtil
@@ -2043,7 +2055,7 @@ public class TypeInfoValidator implements IBuildParticipant,
 					// result.getName(), type.getName()), propName
 					// .sourceStart(), propName.sourceEnd());
 				} else if (member.getVisibility() != Visibility.PUBLIC) {
-					validateAccessibility(propName, member);
+					validateAccessibility(propName, result, member);
 				}
 			} else if ((!exists && !result.exists())
 					&& !isDynamicArrayAccess(result)) {

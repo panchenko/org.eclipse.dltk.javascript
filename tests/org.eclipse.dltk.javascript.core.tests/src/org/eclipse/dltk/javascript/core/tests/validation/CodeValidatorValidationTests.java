@@ -1,5 +1,7 @@
 package org.eclipse.dltk.javascript.core.tests.validation;
 
+import static org.eclipse.dltk.core.tests.TestSupport.notYetImplemented;
+
 import java.util.Set;
 
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
@@ -263,4 +265,55 @@ public class CodeValidatorValidationTests extends AbstractValidationTest {
 		assertEquals(problemIds.toString(), 0, problemIds.size());
 	}
 
+	public void testPrototypeChainWithPropetiesWithTypeDeclarationDeprected() {
+		final StringList code = new StringList();
+		code.add("function BaseEntity() {}");
+		code.add("/**");
+		code.add(" * @extends {BaseEntity}");
+		code.add(" */");
+		code.add("function ExtendedEntity() {}");
+		code.add("ExtendedEntity.prototype = Object.create(BaseEntity.prototype, {");
+		code.add("/**");
+		code.add(" * @type {String}");
+		code.add(" * @deprecated");
+		code.add(" */");
+		code.add("foo: {configurable: false,get: function() { return 10 },set: function(value){ },value: null},");
+		code.add("bar:{ writable:true, configurable:true, value: 'hello' }});");
+		code.add("function test() {");
+		code.add("	var x = new ExtendedEntity();");
+		code.add("	x.foo;");
+		code.add("}");
+		final Set<IProblemIdentifier> problemIds = extractIds(validate(code
+				.toString()));
+		assertEquals(problemIds.toString(), 1, problemIds.size());
+		assertTrue(problemIds.toString(),
+				problemIds.contains(JavaScriptProblems.DEPRECATED_PROPERTY));
+	}
+	
+	public void testPrototypeChainWithPropetiesDeprected() {
+		final StringList code = new StringList();
+		code.add("function BaseEntity() {}");
+		code.add("/**");
+		code.add(" * @extends {BaseEntity}");
+		code.add(" */");
+		code.add("function ExtendedEntity() {}");
+		code.add("ExtendedEntity.prototype = Object.create(BaseEntity.prototype, {");
+		code.add("/**");
+		code.add(" * @type {String}");
+		code.add(" */");
+		code.add("foo: {configurable: false,get: function() { return 10 },set: function(value){ },value: null},");
+		code.add("/**");
+		code.add(" * @deprecated");  
+		code.add(" */");
+		code.add("bar:{ writable:true, configurable:true, value: 'hello' }});");
+		code.add("function test() {");
+		code.add("	var x = new ExtendedEntity();");
+		code.add("	x.bar;");
+		code.add("}");
+		final Set<IProblemIdentifier> problemIds = extractIds(validate(code
+				.toString()));
+		assertEquals(problemIds.toString(), 1, problemIds.size());
+		assertTrue(problemIds.toString(),
+				problemIds.contains(JavaScriptProblems.DEPRECATED_PROPERTY));
+	}
 }
