@@ -48,8 +48,17 @@ class RLocalType extends RType implements IRLocalType {
 		return PhantomValueReference.REFERENCE;
 	}
 
+	private HashSet<String> recusionCheck = new HashSet<String>();
+	
 	public IValueReference getDirectChild(String name) {
-		return getChild(this, name, new HashSet<IRType>());
+		if (recusionCheck.contains(name))
+			return null;
+		recusionCheck.add(name);
+		try {
+			return getChild(this, name, new HashSet<IRType>());
+		} finally {
+			recusionCheck.remove(name);
+		}
 	}
 
 	/**
@@ -57,7 +66,7 @@ class RLocalType extends RType implements IRLocalType {
 	 * @param declaredTypes
 	 * @param set
 	 */
-	private IValueReference getChildFromDeclaredTypes(String name,
+	private static IValueReference getChildFromDeclaredTypes(String name,
 			JSTypeSet declaredTypes, HashSet<IRType> set) {
 		for (IRType irType : declaredTypes) {
 			if (irType instanceof RLocalType) {
@@ -69,7 +78,7 @@ class RLocalType extends RType implements IRLocalType {
 		return null;
 	}
 
-	private IValueReference getChild(RLocalType irType, String name,
+	private static IValueReference getChild(RLocalType irType, String name,
 			HashSet<IRType> set) {
 		if (set.add(irType)) {
 			IValueReference declaredValue = irType.getValue();
