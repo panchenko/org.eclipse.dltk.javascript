@@ -348,6 +348,11 @@ public class TypeInferencer2 extends TypeSystemImpl implements
 		return null;
 	}
 
+	public void configureTopValueCollection(IValueCollection valueCollection) {
+		GlobalThisTypeDetector.configureTopValueCollection(this,
+				valueCollection);
+	}
+
 	public IModelElement getModelElement() {
 		return source != null ? source.getModelElement() : null;
 	}

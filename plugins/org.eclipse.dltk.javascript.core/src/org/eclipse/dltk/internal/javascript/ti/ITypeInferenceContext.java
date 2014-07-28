@@ -31,6 +31,8 @@ public interface ITypeInferenceContext extends ITypeInfoContext, IAdaptable {
 
 	IValueCollection getTopValueCollection();
 
+	void configureTopValueCollection(IValueCollection valueCollection);
+
 	IModelBuilder[] getModelBuilders();
 
 	ITypeProvider[] getTypeProviders();

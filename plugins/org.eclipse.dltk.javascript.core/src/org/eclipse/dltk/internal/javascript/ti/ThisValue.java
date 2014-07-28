@@ -20,6 +20,15 @@ import org.eclipse.dltk.javascript.typeinfo.IRType;
  * Value representing "this" in function bodies.
  */
 public class ThisValue extends AnonymousReferenceValue {
+
+	public ThisValue() {
+		super();
+	}
+
+	protected ThisValue(IValue value) {
+		super(value);
+	}
+
 	@Override
 	protected String getToStringPrefix() {
 		final IRType declaredType = getDeclaredType();

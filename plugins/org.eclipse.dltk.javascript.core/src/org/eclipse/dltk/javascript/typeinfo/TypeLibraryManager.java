@@ -57,6 +57,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.Version;
 import org.osgi.service.prefs.BackingStoreException;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.io.Closeables;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
@@ -210,7 +211,8 @@ public class TypeLibraryManager {
 					"Type library {0} manifest contains invalid version {1}",
 					libraryFile, versionString), e);
 		}
-		return new LibraryRecord(libraryFile, kind, name, version, false);
+		return new LibraryRecord(libraryFile, kind, name, version, false,
+				manifest);
 	}
 
 	private LibraryRecord loadLibraryDir(File libraryDir, TypeLibrary.Kind kind)
@@ -255,7 +257,8 @@ public class TypeLibraryManager {
 					"Type library {0} manifest contains invalid version {1}",
 					libraryDir, versionString), e);
 		}
-		return new LibraryRecord(libraryDir, kind, name, version, true);
+		return new LibraryRecord(libraryDir, kind, name, version, true,
+				manifest);
 	}
 
 	/**
@@ -392,14 +395,32 @@ public class TypeLibraryManager {
 		final String name;
 		final Version version;
 		final boolean directory;
+		final ImmutableMap<String, String> attributes;
 
 		LibraryRecord(File file, TypeLibrary.Kind kind, String name,
-				Version version, boolean directory) {
+				Version version, boolean directory, Properties manifest) {
 			this.file = file;
 			this.kind = kind;
 			this.name = name;
 			this.version = version;
 			this.directory = directory;
+			this.attributes = copyAttributes(manifest);
+		}
+
+		private static ImmutableMap<String, String> copyAttributes(
+				Properties manifest) {
+			final ImmutableMap.Builder<String, String> builder = ImmutableMap
+					.builder();
+			for (String key : manifest.stringPropertyNames()) {
+				if (!TypeLibraryFormat.NAME_HEADER.equals(key)
+						&& !TypeLibraryFormat.VERSION_HEADER.equals(key)) {
+					final Object value = manifest.get(key);
+					if (value instanceof String) {
+						builder.put(key, (String) value);
+					}
+				}
+			}
+			return builder.build();
 		}
 
 		public String name() {
@@ -425,6 +446,11 @@ public class TypeLibraryManager {
 
 		public IPath getPath() {
 			return new Path(file.getAbsolutePath());
+		}
+
+		@Override
+		public ImmutableMap<String, String> attributes() {
+			return attributes;
 		}
 	}
 

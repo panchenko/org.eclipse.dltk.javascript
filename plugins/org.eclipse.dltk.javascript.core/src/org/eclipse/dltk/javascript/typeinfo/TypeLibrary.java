@@ -16,6 +16,8 @@ import java.io.File;
 import org.eclipse.core.runtime.IPath;
 import org.osgi.framework.Version;
 
+import com.google.common.collect.ImmutableMap;
+
 /**
  * @since 5.1
  * @noimplement This interface is not intended to be implemented by clients.
@@ -34,4 +36,6 @@ public interface TypeLibrary {
 	public File getFile();
 
 	public IPath getPath();
+
+	ImmutableMap<String, String> attributes();
 }

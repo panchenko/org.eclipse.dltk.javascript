@@ -18,6 +18,7 @@ import org.eclipse.dltk.javascript.core.Types;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinfo.IRMember;
+import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.TypeMode;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
@@ -30,6 +31,11 @@ public class TopValueCollection extends ValueCollection {
 
 		public TopValue(ITypeInferenceContext context) {
 			this.context = context;
+		}
+
+		@Override
+		public JSTypeSet getTypes() {
+			return JSTypeSet.emptySet();
 		}
 
 		private final Map<String, IValue> memberCache = new HashMap<String, IValue>();
@@ -100,16 +106,17 @@ public class TopValueCollection extends ValueCollection {
 	 */
 	public TopValueCollection(final ITypeInferenceContext context) {
 		super(null, new TopValue(context));
-		this.thisValue = new TopValueThis(this);
+		this.thisValue = new ThisValue(getValue());
 
 		IValueCollection topValueCollection = context.getTopValueCollection();
 		if (topValueCollection instanceof IValueProvider) {
 			getValue().addValue(
 					((IValueProvider) topValueCollection).getValue());
 		}
+		context.configureTopValueCollection(this);
 	}
 
-	private final TopValueThis thisValue;
+	private final ThisValue thisValue;
 
 	@Override
 	public IValueReference getThis() {

@@ -696,6 +696,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 				doCompletionOnType(TypeMode.CODE, reporter);
 			}
 			reportGlobals(reporter);
+			reporter.reportValueTypeMembers(collection.getThis());
 		}
 		if ((globalOptions & OPTION_KEYWORDS) != 0) {
 			if (!requestor.isIgnored(CompletionProposal.KEYWORD)) {

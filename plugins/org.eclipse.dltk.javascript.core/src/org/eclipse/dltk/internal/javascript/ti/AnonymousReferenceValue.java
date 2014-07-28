@@ -17,6 +17,14 @@ package org.eclipse.dltk.internal.javascript.ti;
  */
 public class AnonymousReferenceValue extends AnonymousValue {
 
+	public AnonymousReferenceValue() {
+		super();
+	}
+
+	protected AnonymousReferenceValue(IValue value) {
+		super(value);
+	}
+
 	@Override
 	public boolean isReference() {
 		return true;
