@@ -181,7 +181,17 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 	 */
 	public JSMethod(FunctionStatement node, ReferenceSource source) {
 		super(node.getArguments().size());
-		initialize(node, source, node.getName());
+		Identifier nameNode = node.getName();
+		if (nameNode == null && node.getParent() instanceof BinaryOperation) {
+			Expression left = ((BinaryOperation) node.getParent())
+					.getLeftExpression();
+			if (left instanceof PropertyExpression) {
+				Expression property = ((PropertyExpression) left).getProperty();
+				if (property instanceof Identifier)
+					nameNode = (Identifier) property;
+			}
+		}
+		initialize(node, source, nameNode);
 	}
 
 	public JSMethod(FunctionStatement node, ReferenceSource source,

@@ -32,6 +32,7 @@ import org.eclipse.dltk.javascript.core.Types;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
+import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinference.ValueReferenceUtil;
 import org.eclipse.dltk.javascript.typeinfo.IRClassType;
 import org.eclipse.dltk.javascript.typeinfo.IRFunctionType;
@@ -1351,6 +1352,20 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IValueReference test = collection.getChild("y");
 		Set<String> directChildren = test.getDirectChildren();
 		assertFalse(directChildren.contains("test"));
+	}
+	
+	public void testReferenceToPropertyAssignedFunction() {
+		final StringList code = new StringList();
+		code.add("var p ={};");
+		code.add("p.object.myfunc = function(){};");
+		code.add("p.object.myfunc();");
+		final IValueCollection collection = inference(code.toString());
+		IValueReference func = collection.getChild("p").getChild("object").getChild("myfunc");
+		assertTrue(func.exists());
+		
+		ReferenceLocation location = func.getLocation();
+		assertEquals(20, location.getNameStart());
+		assertEquals(26, location.getNameEnd());
 	}
 
 }

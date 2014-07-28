@@ -3991,4 +3991,42 @@ public void testFunctionCallFromUnion() {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
+	
+	public void test2ApplyMethodOnPrototypeMethod() {
+		final StringList code = new StringList();
+		code.add("function MyConstuctor() {}");
+		code.add("/**");
+		code.add(" * @return {String}");
+		code.add(" */");
+		code.add(" MyConstuctor.prototype.newMessage = function(message, params) {");
+		code.add("	 return ''");
+		code.add(" }");
+		code.add("/**");
+		code.add(" * @param {String} text");
+		code.add(" */");
+		code.add("function meth2(text) {}");
+		code.add("function testMeth() {");
+		code.add("	var o = new MyConstuctor()");
+		code.add("	meth2(o.newMessage.apply(null,[1,2]))");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
+	
+	public void test2PrototypeWithGetSetProperty() {
+		final StringList code = new StringList();
+		code.add("function x(){}");
+		code.add("x.prototype = Object.create(Object.prototype, {");
+		code.add("  bar: {");
+		code.add("    configurable: false,");
+		code.add("    get: function() { return 10 },");
+		code.add("    set: function(value) {  }");
+		code.add("}});");
+		code.add("var p = new x();");
+		code.add("var o = p.bar;");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+
+	}
 }

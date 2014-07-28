@@ -11,7 +11,7 @@ public class JavaScriptCorePreferenceInitializer extends
 
 	@Override
 	public void initializeDefaultPreferences() {
-		final IEclipsePreferences preferences = new DefaultScope()
+		final IEclipsePreferences preferences = DefaultScope.INSTANCE
 				.getNode(JavaScriptPlugin.PLUGIN_ID);
 		TaskTagUtils.initializeDefaultValues(preferences);
 	}

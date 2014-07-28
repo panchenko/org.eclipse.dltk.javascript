@@ -1140,5 +1140,79 @@ public class CodeCompletion extends AbstractCompletionTest {
 		
 //		assertFalse(names.contains("protectedMethod"));
 	}
+	
+	
+	public void testPrototypeChainWithPropetiesWithTypeDeclaration() {
+		final StringList code = new StringList();
+		code.add("function BaseEntity() {}");
+		code.add("/**");
+		code.add(" * @extends {BaseEntity}");
+		code.add(" */");
+		code.add("function ExtendedEntity() {}");
+		code.add("ExtendedEntity.prototype = Object.create(BaseEntity.prototype, {");
+		code.add("/**");
+		code.add(" * @type {String}");
+		code.add(" */");
+		code.add("foo: {configurable: false,get: function() { return 10 },set: function(value){ },value: null},");
+		code.add("bar:{ writable:true, configurable:true, value: 'hello' }});");
+		code.add("function test() {");
+		code.add("	var x = new ExtendedEntity();");
+		code.add("	x.");
+		code.add("}");
+		
+		final IModuleSource module = new TestModule(code.toString());
+		final List<CompletionProposal> results = new ArrayList<CompletionProposal>();
+		final ICompletionEngine completionEngine = createEngine(results,
+				JSCompletionEngine.OPTION_KEYWORDS);
+		completionEngine.complete(module, lastPositionInFile("x.", module), 0);
+		assertEquals(9, results.size());
+		
+		HashSet<String> names = new HashSet<String>(16);
+		for (CompletionProposal cp : results) {
+			names.add(cp.getName());
+		}
+		
+		assertTrue(names.contains("foo"));
+		assertTrue(names.contains("bar"));
+	}
+	
+	public void testPrototypeChainWithPropetiesWithTypeDeclarationProtected() {
+		if (notYetImplemented(this)) return;
+		final StringList code = new StringList();
+		code.add("function BaseEntity() {}");
+		code.add("/**");
+		code.add(" * @extends {BaseEntity}");
+		code.add(" */");
+		code.add("function ExtendedEntity() {}");
+		code.add("ExtendedEntity.prototype = Object.create(BaseEntity.prototype, {");
+		code.add("/**");
+		code.add(" * @type {String}");
+		code.add(" * @protected");
+		code.add(" */");
+		code.add("foo: {configurable: false,get: function() { return 10 },set: function(value){ },value: null},");
+		code.add("/**");
+		code.add(" * @protected");  
+		code.add(" */");
+		code.add("bar:{ writable:true, configurable:true, value: 'hello' }});");
+		code.add("function test() {");
+		code.add("	var x = new ExtendedEntity();");
+		code.add("	x.;");
+		code.add("}");
+		
+		final IModuleSource module = new TestModule(code.toString());
+		final List<CompletionProposal> results = new ArrayList<CompletionProposal>();
+		final ICompletionEngine completionEngine = createEngine(results,
+				JSCompletionEngine.OPTION_KEYWORDS);
+		completionEngine.complete(module, lastPositionInFile("x.", module), 0);
+		assertEquals(9, results.size());
+		
+		HashSet<String> names = new HashSet<String>(16);
+		for (CompletionProposal cp : results) {
+			names.add(cp.getName());
+		}
+		
+		assertFalse(names.contains("foo"));
+		assertFalse(names.contains("bar"));
+	}
 }
 

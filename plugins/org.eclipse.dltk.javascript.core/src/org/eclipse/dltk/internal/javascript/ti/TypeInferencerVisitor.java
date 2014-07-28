@@ -586,6 +586,9 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 						|| "apply".equals(method.getName())) {
 					Object x = reference.getParent().getAttribute(
 							IReferenceAttributes.ELEMENT);
+					if (x == null)
+						x = reference.getParent().getAttribute(
+								IReferenceAttributes.R_METHOD);
 					if (x instanceof IRMethod) {
 						return ConstantValue.of(((IRMethod) x).getType());
 					}
@@ -614,9 +617,24 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 									if (valueMember != null) {
 										newMembers.add(new RRecordMember(member
 												.getName(), valueMember
-												.getType(), valueMember
+														.getType(), member
 												.getSource()));
 									}
+									valueMember = ((IRRecordType) member
+											.getType()).getMember("get");
+									if (valueMember != null) {
+										IRType valueType = valueMember
+												.getType();
+										if (valueType instanceof IRFunctionType) {
+											valueType = ((IRFunctionType) valueType)
+													.getReturnType();
+										}
+										newMembers.add(new RRecordMember(member
+												.getName(), valueType,
+												valueMember.getSource()));
+									}
+								} else {
+									newMembers.add(member);
 								}
 							}
 							if (newMembers.size() > 0) {
@@ -1436,6 +1454,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 									JSDocSupport.TYPE_TAGS, reporter,
 									getTypeChecker());
 							jsdocSupport.parseDeprecation(source, tags,
+									reporter);
+							jsdocSupport.parseAccessModifiers(source, tags,
 									reporter);
 						}
 					}
