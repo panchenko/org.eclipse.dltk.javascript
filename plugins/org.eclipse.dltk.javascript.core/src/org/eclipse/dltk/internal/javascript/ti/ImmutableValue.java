@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
@@ -290,16 +291,19 @@ public class ImmutableValue implements IValue, IValue2 {
 				value = ElementValue.findMemberA(declaredType, name, resolve);
 				if (value != null) {
 					if (elementValues == null)
-						elementValues = new HashMap<String, IValue>(4, 0.9f);
+						elementValues = new ConcurrentHashMap<String, IValue>(
+								4, 0.9f);
 					elementValues.put(name, value);
 					return value;
+
 				}
 			}
 			for (IRType type : types) {
 				value = ElementValue.findMemberA(type, name, resolve);
 				if (value != null) {
 					if (elementValues == null)
-						elementValues = new HashMap<String, IValue>(4, 0.9f);
+						elementValues = new ConcurrentHashMap<String, IValue>(
+								4, 0.9f);
 					if (resolve && value instanceof ElementValue) {
 						value = ((ElementValue) value).resolveValue();
 					}

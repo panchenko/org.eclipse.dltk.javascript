@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.eclipse.dltk.annotations.Internal;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
@@ -356,7 +357,7 @@ public abstract class ElementValue implements IValue {
 
 	static class TypeValue extends ElementValue implements IValue {
 
-		private final Map<String, IValue> children = new HashMap<String, IValue>(
+		private final Map<String, IValue> children = new ConcurrentHashMap<String, IValue>(
 				4, 0.9f);
 
 		private final JSTypeSet types;
