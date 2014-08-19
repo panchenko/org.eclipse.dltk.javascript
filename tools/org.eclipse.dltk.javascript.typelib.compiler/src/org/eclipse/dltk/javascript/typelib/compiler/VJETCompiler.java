@@ -374,7 +374,7 @@ public class VJETCompiler extends AbstractTypeLibraryCompiler {
 				public String apply(Parameter input) {
 					return input.getName();
 				}
-			}).toImmutableList();
+			}).toList();
 			returnType = method.getType() != null ? method.getType().toRType(typeSystem) : RTypes.undefined();
 		}
 

@@ -54,7 +54,7 @@ public class JSCodeAssistUITest extends Assert {
 			List<ICompletionProposal> proposals, Class<T> proposalClass,
 			Predicate<T> predicate) {
 		return FluentIterable.from(proposals).filter(proposalClass)
-				.filter(predicate).toImmutableList();
+				.filter(predicate).toList();
 	}
 
 	private List<ScriptTemplateProposal> filterProposalsWithJSDoc(
@@ -68,7 +68,6 @@ public class JSCodeAssistUITest extends Assert {
 				});
 	}
 
-	@SuppressWarnings("unchecked")
 	private static Matcher<String> stringHasValue() {
 		return CoreMatchers.allOf(CoreMatchers.<String> notNullValue(String.class),
 				CoreMatchers.not(""));
