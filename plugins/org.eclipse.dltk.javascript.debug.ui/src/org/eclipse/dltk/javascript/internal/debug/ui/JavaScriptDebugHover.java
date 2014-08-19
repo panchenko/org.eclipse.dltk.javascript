@@ -100,7 +100,8 @@ public class JavaScriptDebugHover extends ScriptDebugHover {
 				.getDbgpSession().getCoreCommands();
 
 		try {
-			IDbgpProperty property = propCmds.getProperty(snippet);
+			IDbgpProperty property = propCmds.getProperty(snippet,
+					frame.getLevel());
 			return getResultText(snippet,
 					ScriptValue.createValue(frame, property));
 		} catch (Exception e) {
